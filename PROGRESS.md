@@ -16,7 +16,7 @@
 | 10 | Shop System Part 2 (cart, request order, abandoned-request) | ✅ Complete |
 | 11 | Rental System Part 1 (availability, pricing, instant quote) | ✅ Complete |
 | 12 | Rental System Part 2 (booking request, digital contracts) | ✅ Complete |
-| 13 | Events, Blog & Testimonials | ⬜ Not started |
+| 13 | Events, Blog & Testimonials | ✅ Complete |
 | 14 | Authentication & Customer Accounts | ⬜ Not started |
 | 15 | Admin Dashboard Part 1 (commerce ops) | ⬜ Not started |
 | 16 | Admin Dashboard Part 2 (CRM, content, governance) | ⬜ Not started |
@@ -251,3 +251,20 @@
 - Full `next build` not completed locally — cold three.js compile exceeds the runnable window (same condition since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** Contracts render as styled HTML (print-to-PDF ready); server-side PDF generation to R2 + emailing the signed copy are layered in **Phase 17**. The signing page is reachable by its unguessable contract number for guests now; it also surfaces in the customer account in **Phase 14**. Bookings stay TENTATIVE until an admin confirms them (Phase 15), which is the only thing that converts the hold to HARD and blocks the calendar — consistent with the request-based, no-online-payment model.
+
+---
+
+## Phase 13 — Events, Blog & Testimonials ✅
+
+**Delivered:**
+- **Events** — `/events` (upcoming + past grids, capacity-aware "spots left" badges) and `/events/[slug]` (cover, description, gallery, sticky registration card); `registerForEvent` action writes a PENDING `EventRegistration`, respects the registration toggle and remaining capacity; SSG via `getEventSlugs`
+- **Blog** — `/blog` index with sidebar (categories w/ counts, popular tags, search), `/blog/category/[slug]`, `/blog/tag/[slug]`, and `/blog/[slug]` article (author, reading time, tags, related posts); shared `BlogView`; JSON title/excerpt search; SSG for posts/categories/tags
+- **Testimonials** — `/testimonials` grid + "leave a review" form; `submitTestimonial` action stores a PENDING, locale-keyed quote for moderation
+- Cards/forms: `EventCard`, `PostCard`, `TestimonialCard`, `RegistrationForm`, `TestimonialForm`, `BlogSearch`; data layers `server/data/{events,blog,testimonials}.ts`
+- EN/FR strings for `Events`/`EventDetail`/`EventRegistration`/`Blog`/`Testimonials` (ICU plurals)
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · boundaries reviewed (forms client; pages + cards server; cached reads for categories/tags/testimonials)
+- Full `next build` not completed locally — cold three.js compile exceeds the runnable window (same condition since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** Registrations, reviews, and testimonials are all **request/moderation-based** (PENDING → approved/confirmed in admin, Phases 15–16) — no payment, consistent with the site model. Blog post bodies render the localized `content` string as paragraphs; the **rich-text editor + media embeds come with the admin in Phase 16**. Confirmation emails for registrations are wired in Phase 17 (SMTP).
