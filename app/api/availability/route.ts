@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAvailabilityWindow, checkRange } from "@/server/data/availability";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,6 +11,14 @@ export const dynamic = "force-dynamic";
  *   GET ?productId=&from=&days=  → blocked dates for the calendar window
  */
 export async function GET(request: Request) {
+  const limit = rateLimit(clientKey(request, "availability"), 60, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSec) } },
+    );
+  }
+
   const { searchParams } = new URL(request.url);
   const productId = searchParams.get("productId");
   if (!productId) {

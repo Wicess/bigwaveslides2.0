@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
 import { searchProducts } from "@/server/data/products";
 import { getLocalized } from "@/lib/localized";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 /** Live, typo-tolerant product search for the shop search box. */
 export async function GET(request: Request) {
+  const limit = rateLimit(clientKey(request, "search"), 40, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { results: [] },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSec) } },
+    );
+  }
+
   const { searchParams } = new URL(request.url);
   const q = (searchParams.get("q") ?? "").trim();
   const locale = searchParams.get("locale") ?? "en";

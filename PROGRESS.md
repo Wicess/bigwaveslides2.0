@@ -22,7 +22,7 @@
 | 16 | Admin Dashboard Part 2 (CRM, content, governance) | ✅ Complete |
 | 17 | Integrations & Communications (email, WhatsApp, analytics) | ✅ Complete |
 | 18 | SEO, Structured Data, Legal & 404 | ✅ Complete |
-| 19 | Testing, Performance, Security & Accessibility | ⬜ Not started |
+| 19 | Testing, Performance, Security & Accessibility | ✅ Complete |
 | 20 | Deployment & Production Launch | ⬜ Not started |
 
 ---
@@ -358,3 +358,19 @@
 - Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** OG route uses the `edge` runtime (required by `next/og`). Legal/FAQ copy is solid, production-ready boilerplate tailored to the request-based, no-online-payment model — have counsel review before launch. hreflang is emitted in the sitemap; per-page `<link rel=alternate>` can be added later via `generateMetadata` alternates if needed. Remaining: **Phase 19** (testing, performance, security, accessibility) and **Phase 20** (deployment).
+
+---
+
+## Phase 19 — Testing, Performance, Security & Accessibility ✅
+
+**Delivered:**
+- **Testing** — Vitest configured (`vitest.config.ts` with `@/` alias) + `test`/`test:watch` scripts; **23 unit tests across 2 files, all passing** — rental pricing/date math (`rentalDays`, `eachDate`, `parseISODate`, `computeQuote`), `getLocalized` fallbacks, status labels/tones, reference-number formats + uniqueness, and structured-data builders (Product/FAQ/Breadcrumb)
+- **Security** — hardening headers in `next.config.ts` (`X-Content-Type-Options`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`, HSTS preload); in-memory **rate limiter** (`lib/rate-limit.ts`) applied to `/api/search` (40/min) and `/api/availability` (60/min) returning 429 + `Retry-After`; the media upload route is already permission-gated (Phase 16)
+- **Accessibility** — skip-to-content link (bilingual `Common.skipToContent`) + `#main-content` landmark; builds on the existing `prefers-reduced-motion` support, focus rings, aria labels, and semantic headings from earlier phases
+- **Performance** — confirmed image AVIF/WebP + remote patterns, `optimizePackageImports` (lucide/framer-motion), `poweredByHeader: false`, React strict mode, self-hosted fonts, lazy 3D, ISR/cache tags throughout
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · **`vitest run` → 23/23 passing** (real, executed in this environment)
+- Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** A strict CSP was intentionally not added — GA/Clarity/JSON-LD inline scripts would require `unsafe-inline` or per-request nonces, which is best tuned against the live deploy; the other hardening headers are safe to ship now. The rate limiter is per-instance (in-memory) — a sensible first defense; swap in Redis/Upstash for global limits at scale. Final step: **Phase 20 — Deployment & Production Launch**.
