@@ -9,6 +9,13 @@ Work top to bottom. Most steps are one‑time. Estimated time: **60–90 minutes
 
 ---
 
+> **Already configured locally.** Neon (DATABASE_URL/DIRECT_URL) and Cloudflare
+> R2 credentials are already in `.env.local` from the build phase, so local dev
+> works out of the box. Sections 1–2 below are only reference for *where those
+> came from* — for launch you mainly need to copy the same values into Vercel
+> (Section A) and supply the Hostinger mailbox password. You do **not** need to
+> recreate the Neon DB or R2 bucket.
+
 ## 0. Accounts you'll need
 
 | Service | Purpose | Free tier OK? |
