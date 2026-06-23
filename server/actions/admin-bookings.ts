@@ -4,6 +4,8 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requirePermission, logActivity } from "@/lib/admin-auth";
+import { notifyStatusUpdate } from "@/lib/notifications";
+import { statusLabel } from "@/lib/status-labels";
 
 const BOOKING_STATUS = ["REQUESTED", "CONFIRMED", "COMPLETED", "DECLINED", "CANCELLED"] as const;
 const PAYMENT_STATUS = ["PENDING", "INVOICE_SENT", "DEPOSIT_PAID", "PAID_IN_FULL", "CANCELLED"] as const;
@@ -38,7 +40,7 @@ export async function updateBooking(input: UpdateBookingInput): Promise<AdminAct
   try {
     const holdType = status === "CONFIRMED" || status === "COMPLETED" ? "HARD" : "TENTATIVE";
 
-    await prisma.booking.update({
+    const updated = await prisma.booking.update({
       where: { id },
       data: {
         status,
@@ -47,6 +49,7 @@ export async function updateBooking(input: UpdateBookingInput): Promise<AdminAct
         invoiceNote: invoiceNote || null,
         ...(paymentStatus === "PAID_IN_FULL" ? { paidAt: new Date() } : {}),
       },
+      select: { bookingNumber: true, guestName: true, guestEmail: true },
     });
 
     // Advance the contract when the booking is confirmed.
@@ -62,6 +65,18 @@ export async function updateBooking(input: UpdateBookingInput): Promise<AdminAct
       entityId: id,
       summary: `Booking set to ${status} (${holdType} hold)`,
     });
+
+    if (updated.guestEmail) {
+      await notifyStatusUpdate({
+        email: updated.guestEmail,
+        name: updated.guestName ?? "there",
+        reference: updated.bookingNumber,
+        kind: "booking",
+        statusLabel: statusLabel(status, "en"),
+        note: invoiceNote || undefined,
+      });
+    }
+
     revalidatePath(`/admin/bookings/${id}`);
     revalidatePath("/admin/bookings");
     return { ok: true };

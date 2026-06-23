@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getCartCookie, clearCartCookie } from "@/lib/cart-session";
 import { orderNumber } from "@/lib/ref-number";
+import { notifyOrderRequest } from "@/lib/notifications";
 
 const schema = z.object({
   name: z.string().min(2).max(120),
@@ -105,7 +106,15 @@ export async function createOrderRequest(
     });
     await clearCartCookie();
 
-    // Email confirmation + admin notification are wired in Phase 17 (SMTP).
+    await notifyOrderRequest({
+      orderNumber: order.orderNumber,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      totalCents: subtotalCents,
+      locale: data.locale,
+    });
+
     revalidatePath("/cart");
     return { ok: true, orderNumber: order.orderNumber };
   } catch {

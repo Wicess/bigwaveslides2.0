@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { env } from "@/lib/env";
+import { sendAbandonedCartReminder } from "@/lib/notifications";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
         reminderSentAt: null,
         items: { some: {} },
       },
-      select: { id: true },
+      select: { id: true, customerId: true },
       take: 200,
     });
 
@@ -47,8 +48,21 @@ export async function POST(request: Request) {
       data: { status: "ABANDONED", reminderSentAt: new Date() },
     });
 
-    // TODO(Phase 17): enqueue reminder emails for these carts.
-    return NextResponse.json({ flagged: ids.length, reminded: 0 });
+    // Email reminders only to carts linked to a known customer (guests have none).
+    const customerIds = stale.map((c) => c.customerId).filter((v): v is string => !!v);
+    let reminded = 0;
+    if (customerIds.length > 0) {
+      const customers = await prisma.customer.findMany({
+        where: { id: { in: customerIds } },
+        select: { email: true },
+      });
+      for (const c of customers) {
+        await sendAbandonedCartReminder(c.email);
+        reminded += 1;
+      }
+    }
+
+    return NextResponse.json({ flagged: ids.length, reminded });
   } catch {
     return NextResponse.json({ error: "Sweep failed" }, { status: 500 });
   }

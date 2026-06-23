@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { notifyContact } from "@/lib/notifications";
 
 const schema = z.object({
   name: z.string().min(2).max(120),
@@ -40,7 +41,7 @@ export async function submitContact(
         sourcePage: "contact",
       },
     });
-    // Email notification + auto-reply are wired in Phase 17 (Hostinger SMTP).
+    await notifyContact({ name, email, subject: subject || undefined, message });
     return { ok: true };
   } catch {
     return { ok: false, error: "Something went wrong. Please try again." };

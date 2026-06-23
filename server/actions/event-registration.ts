@@ -3,6 +3,8 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { getLocalized } from "@/lib/localized";
+import { notifyEventRegistration } from "@/lib/notifications";
 
 const schema = z.object({
   eventId: z.string().min(1),
@@ -33,6 +35,7 @@ export async function registerForEvent(
       where: { id: eventId },
       select: {
         slug: true,
+        title: true,
         registrationEnabled: true,
         capacity: true,
         status: true,
@@ -53,7 +56,11 @@ export async function registerForEvent(
       data: { eventId, name, email, phone: phone || null, partySize, notes: notes || null },
     });
 
-    // Confirmation email is wired in Phase 17 (SMTP).
+    await notifyEventRegistration({
+      name,
+      email,
+      eventTitle: getLocalized(event.title, "en"),
+    });
     revalidatePath(`/events/${event.slug}`);
     return { ok: true };
   } catch {

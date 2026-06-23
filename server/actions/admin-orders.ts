@@ -4,6 +4,8 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requirePermission, logActivity } from "@/lib/admin-auth";
+import { notifyStatusUpdate } from "@/lib/notifications";
+import { statusLabel } from "@/lib/status-labels";
 
 const ORDER_STATUS = ["PENDING", "PROCESSING", "FULFILLED", "CANCELLED"] as const;
 const PAYMENT_STATUS = [
@@ -45,12 +47,28 @@ export async function updateOrder(input: UpdateOrderInput): Promise<AdminActionR
     } = { status, paymentStatus, invoiceNote: invoiceNote || null };
     if (paymentStatus === "PAID_IN_FULL") data.paidAt = new Date();
 
-    await prisma.order.update({ where: { id }, data });
+    const updated = await prisma.order.update({
+      where: { id },
+      data,
+      select: { orderNumber: true, guestName: true, guestEmail: true },
+    });
     await logActivity(session.id, "order.update", {
       entityType: "Order",
       entityId: id,
       summary: `Order set to ${status} / ${paymentStatus}`,
     });
+
+    if (updated.guestEmail) {
+      await notifyStatusUpdate({
+        email: updated.guestEmail,
+        name: updated.guestName ?? "there",
+        reference: updated.orderNumber,
+        kind: "order",
+        statusLabel: statusLabel(paymentStatus, "en"),
+        note: invoiceNote || undefined,
+      });
+    }
+
     revalidatePath(`/admin/orders/${id}`);
     revalidatePath("/admin/orders");
     return { ok: true };

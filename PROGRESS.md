@@ -20,7 +20,7 @@
 | 14 | Authentication & Customer Accounts | ✅ Complete |
 | 15 | Admin Dashboard Part 1 (commerce ops) | ✅ Complete |
 | 16 | Admin Dashboard Part 2 (CRM, content, governance) | ✅ Complete |
-| 17 | Integrations & Communications (email, WhatsApp, analytics) | ⬜ Not started |
+| 17 | Integrations & Communications (email, WhatsApp, analytics) | ✅ Complete |
 | 18 | SEO, Structured Data, Legal & 404 | ⬜ Not started |
 | 19 | Testing, Performance, Security & Accessibility | ⬜ Not started |
 | 20 | Deployment & Production Launch | ⬜ Not started |
@@ -323,3 +323,21 @@
 - Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** Role/permission **editing** is intentionally read-only in the UI (managed via seed/migrations) — assignment happens when creating admin users. Rich-text blog editing uses plain localized textareas (a WYSIWYG can be added later without schema change). Status-change/notification emails (orders, bookings, contacts, registrations) are wired in **Phase 17 (SMTP)**. The entire admin surface (Phases 15–16) is English-only and isolated under `/admin` with its own session.
+
+---
+
+## Phase 17 — Integrations & Communications (email, WhatsApp, analytics) ✅
+
+**Delivered:**
+- **Transactional email** (Hostinger SMTP via `nodemailer`) — `lib/email.ts` (lazy transport, branded email-safe HTML layout, best-effort `sendEmail` that skips cleanly when SMTP is unset and never throws into a request). `lib/notifications.ts` composes per-flow templates
+- **Wired every request flow** to email customer + admin: order requests, booking requests (with sign-contract CTA), quote requests, contact (auto-reply + admin copy), event registrations, password reset (the jose link is now actually sent), and admin-triggered **order/booking status updates** notify the customer
+- **Abandoned-cart recovery** — the cron now emails reminders to carts linked to a known customer
+- **WhatsApp Cloud API** — `lib/whatsapp.ts` (`sendWhatsApp` / `notifyAdminWhatsApp`, best-effort, credential-gated); admin gets a WhatsApp ping on new orders/bookings; `/api/whatsapp/webhook` (Meta verify handshake + receipt acknowledgement)
+- **Analytics** — `components/analytics.tsx` injects GA4 + Microsoft Clarity via `next/script` (`afterInteractive`), rendered only when their IDs are configured; added to the locale layout
+- `WHATSAPP_VERIFY_TOKEN` added to typed env; installed `nodemailer`
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · all sends are best-effort/credential-gated, so missing SMTP/WhatsApp/analytics config degrades to no-ops without breaking flows
+- Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** Emails are sent inline (awaited, try/caught) rather than via a queue — fine at this scale and avoids serverless fire-and-forget cutoffs. WhatsApp free-form text only delivers inside the 24-hour service window; approved message templates should be added before relying on proactive outbound. Set `SMTP_*`, `WHATSAPP_*`, `NEXT_PUBLIC_GA_ID`, and `NEXT_PUBLIC_CLARITY_ID` in production to activate each channel. Remaining: **Phase 18** SEO/structured-data/legal/404, **19** testing/perf/a11y, **20** deploy.

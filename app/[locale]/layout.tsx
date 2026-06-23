@@ -12,6 +12,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { BackToTop } from "@/components/layout/back-to-top";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
+import { Analytics } from "@/components/analytics";
 // Self-hosted variable fonts (offline, no layout shift). Family names:
 // "Inter Variable" (body) and "Sora Variable" (display) — wired in globals.css.
 import "@fontsource-variable/inter";
@@ -73,6 +74,7 @@ export default async function LocaleLayout({
           <BackToTop label={t("backToTop")} />
           <Toaster />
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );

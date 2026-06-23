@@ -7,6 +7,7 @@ import { rentalDays, computeQuote, parseISODate } from "@/lib/rental-pricing";
 import { checkRange } from "@/server/data/availability";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { bookingNumber, contractNumber } from "@/lib/ref-number";
+import { notifyBookingRequest } from "@/lib/notifications";
 
 const schema = z.object({
   productId: z.string().min(1),
@@ -127,7 +128,18 @@ export async function createBookingRequest(
       },
     });
 
-    // Email confirmation + admin notification are wired in Phase 17 (SMTP).
+    await notifyBookingRequest({
+      bookingNumber: created.bookingNumber,
+      contractNumber: created.contract?.contractNumber,
+      name: d.name,
+      email: d.email,
+      phone: d.phone,
+      startAt: start,
+      endAt: end,
+      totalCents: quote.totalCents,
+      locale: d.locale,
+    });
+
     return {
       ok: true,
       bookingNumber: created.bookingNumber,

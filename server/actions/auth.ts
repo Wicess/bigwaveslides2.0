@@ -7,6 +7,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
 import { signIn, signOut } from "@/lib/auth";
 import { getCartCookie } from "@/lib/cart-session";
+import { sendPasswordReset } from "@/lib/notifications";
 
 export type AuthResult = { ok: boolean; error?: string };
 
@@ -134,14 +135,13 @@ export async function requestPasswordReset(
       select: { id: true },
     });
     if (customer) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const _token = await new SignJWT({ purpose: "pwreset" })
+      const token = await new SignJWT({ purpose: "pwreset" })
         .setProtectedHeader({ alg: "HS256" })
         .setSubject(customer.id)
         .setIssuedAt()
         .setExpirationTime("1h")
         .sign(resetSecret());
-      // TODO(Phase 17): email `${SITE_URL}/reset-password?token=${_token}`.
+      await sendPasswordReset(email, token);
     }
   } catch {
     /* ignore — never leak */

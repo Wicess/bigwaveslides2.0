@@ -45,6 +45,7 @@ const EnvSchema = z.object({
   WHATSAPP_PHONE_NUMBER: z.string().optional(),
   WHATSAPP_TOKEN: z.string().optional(),
   WHATSAPP_PHONE_NUMBER_ID: z.string().optional(),
+  WHATSAPP_VERIFY_TOKEN: z.string().optional(),
 
   // Embeddings for AI search (Phase 9)
   EMBEDDINGS_API_KEY: z.string().optional(),

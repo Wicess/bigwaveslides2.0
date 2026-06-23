@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { quoteNumber } from "@/lib/ref-number";
+import { notifyQuoteRequest } from "@/lib/notifications";
 
 const CONTEXTS = ["SHOP", "RENTAL", "SERVICE", "GENERAL"] as const;
 
@@ -65,7 +66,11 @@ export async function createQuoteRequest(
       select: { quoteNumber: true },
     });
 
-    // Email confirmation + admin notification are wired in Phase 17 (SMTP).
+    await notifyQuoteRequest({
+      quoteNumber: quote.quoteNumber,
+      name: data.name,
+      email: data.email,
+    });
     return { ok: true, quoteNumber: quote.quoteNumber };
   } catch {
     return { ok: false, error: "Something went wrong. Please try again." };
