@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git commit -q -m ' *)"
+      "Bash(git commit -q -m ' *)",
+      "Bash(sed -n '/const PERMISSIONS/,/\\\\];/p' prisma/seed.ts)",
+      "Bash(sed -n '/^enum SubscriberStatus/,/^}/p;/^enum OrgType/,/^}/p;/^model NewsletterSubscriber/,/^}/p;/^model MediaAsset/,/^}/p' prisma/schema.prisma)"
     ]
   }
 }

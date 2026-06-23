@@ -19,7 +19,7 @@
 | 13 | Events, Blog & Testimonials | ✅ Complete |
 | 14 | Authentication & Customer Accounts | ✅ Complete |
 | 15 | Admin Dashboard Part 1 (commerce ops) | ✅ Complete |
-| 16 | Admin Dashboard Part 2 (CRM, content, governance) | ⬜ Not started |
+| 16 | Admin Dashboard Part 2 (CRM, content, governance) | ✅ Complete |
 | 17 | Integrations & Communications (email, WhatsApp, analytics) | ⬜ Not started |
 | 18 | SEO, Structured Data, Legal & 404 | ⬜ Not started |
 | 19 | Testing, Performance, Security & Accessibility | ⬜ Not started |
@@ -306,3 +306,20 @@
 - Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** Admin is **not localized** (English UI) per the sitemap — no i18n overhead. Admin auth is intentionally **separate** from customer auth (different cookie, same `NEXTAUTH_SECRET`) so customers can never reach `/admin`. Seeded super-admin: `admin@bigwaveslides.com` / `BigWave!2026` (change before launch). Product media management (gallery/variations upload) and category editing/delete are deferred to **Phase 16** (CRM/content/governance), along with customers, blog/events admin, testimonials/reviews moderation, media library, settings, users/roles, and activity log views. Email notifications on status changes land in Phase 17.
+
+---
+
+## Phase 16 — Admin Dashboard Part 2 (CRM, content, governance) ✅
+
+**Delivered (all permission-gated + audit-logged):**
+- **CRM** — Customers list + detail (profile, lifetime value, orders/bookings/quotes history, editable notes & tags); Contact inbox (status workflow NEW→IN_PROGRESS→RESOLVED); Newsletter subscribers
+- **Moderation** — Reviews (approve/reject/delete, recomputes product `ratingAvg`/`ratingCount`); Testimonials (approve/reject/feature)
+- **Content** — Blog posts CRUD (localized EN/FR title/excerpt/content, status, cover, author/category, **publish gated by `blog.publish`**) + taxonomy (categories/tags/authors); Events CRUD (datetime, capacity, registration toggle) + registrations list
+- **Governance** — Settings editor (contact, hours, fees, social → `SiteSetting` upserts, revalidates `settings`); Media library (upload via R2 dropzone + delete from R2; **upload route now requires `media.write`**); Admin users (create with bcrypt, activate/deactivate, can't self-deactivate); Roles overview; Activity log viewer
+- Grouped admin sidebar (Commerce / CRM & comms / Content / Governance); CMS data layer (`server/data/admin-cms.ts`); per-module action files
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · every mutating action calls `requirePermission(...)` and writes an `ActivityLog`; the public `/api/media/upload` is now admin-gated
+- Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** Role/permission **editing** is intentionally read-only in the UI (managed via seed/migrations) — assignment happens when creating admin users. Rich-text blog editing uses plain localized textareas (a WYSIWYG can be added later without schema change). Status-change/notification emails (orders, bookings, contacts, registrations) are wired in **Phase 17 (SMTP)**. The entire admin surface (Phases 15–16) is English-only and isolated under `/admin` with its own session.

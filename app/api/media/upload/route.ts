@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { r2PutObject, buildMediaKey } from "@/lib/r2";
 import { prisma } from "@/lib/prisma";
+import { getAdminSession, can } from "@/lib/admin-auth";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,12 @@ function mediaTypeFor(mime: string): "IMAGE" | "VIDEO" | "DOC" {
  * in Phase 14 (auth). This endpoint is used only by the admin UI.
  */
 export async function POST(req: NextRequest) {
+  // SECURITY: admin auth + media.write permission required.
+  const session = await getAdminSession();
+  if (!session || !can(session, "media.write")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   let form: FormData;
   try {
     form = await req.formData();

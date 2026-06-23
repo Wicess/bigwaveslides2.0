@@ -10,19 +10,62 @@ import {
   CalendarCheck,
   ShoppingCart,
   FileText,
+  Users,
+  Star,
+  MessageSquareQuote,
+  Inbox,
+  Mail,
+  Newspaper,
+  CalendarDays,
+  Image,
+  Settings,
+  Shield,
+  History,
   LogOut,
   Waves,
 } from "lucide-react";
 import { adminLogout } from "@/server/actions/admin-auth";
 import { cn } from "@/lib/utils";
 
-const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/products", label: "Products", icon: Package },
-  { href: "/admin/inventory", label: "Inventory", icon: Boxes },
-  { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
-  { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
-  { href: "/admin/quotes", label: "Quotes", icon: FileText },
+const GROUPS = [
+  {
+    label: "Commerce",
+    items: [
+      { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+      { href: "/admin/products", label: "Products", icon: Package },
+      { href: "/admin/inventory", label: "Inventory", icon: Boxes },
+      { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
+      { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+      { href: "/admin/quotes", label: "Quotes", icon: FileText },
+    ],
+  },
+  {
+    label: "CRM & comms",
+    items: [
+      { href: "/admin/customers", label: "Customers", icon: Users },
+      { href: "/admin/reviews", label: "Reviews", icon: Star },
+      { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
+      { href: "/admin/contacts", label: "Contacts", icon: Inbox },
+      { href: "/admin/newsletter", label: "Newsletter", icon: Mail },
+    ],
+  },
+  {
+    label: "Content",
+    items: [
+      { href: "/admin/blog", label: "Blog", icon: Newspaper },
+      { href: "/admin/events", label: "Events", icon: CalendarDays },
+      { href: "/admin/media", label: "Media", icon: Image },
+    ],
+  },
+  {
+    label: "Governance",
+    items: [
+      { href: "/admin/settings", label: "Settings", icon: Settings },
+      { href: "/admin/users", label: "Users", icon: Users },
+      { href: "/admin/roles", label: "Roles", icon: Shield },
+      { href: "/admin/activity", label: "Activity", icon: History },
+    ],
+  },
 ] as const;
 
 export function AdminSidebar({ name, role }: { name: string; role: string }) {
@@ -39,25 +82,34 @@ export function AdminSidebar({ name, role }: { name: string; role: string }) {
         <span className="font-bold">Big Wave</span>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-        {NAV.map((item) => {
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                active(item.href, "exact" in item ? item.exact : false)
-                  ? "bg-primary-50 text-primary"
-                  : "text-foreground hover:bg-muted",
-              )}
-            >
-              <Icon className="size-4.5" />
-              {item.label}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 space-y-4 overflow-y-auto p-3">
+        {GROUPS.map((group) => (
+          <div key={group.label}>
+            <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+              {group.label}
+            </p>
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                      active(item.href, "exact" in item ? item.exact : false)
+                        ? "bg-primary-50 text-primary"
+                        : "text-foreground hover:bg-muted",
+                    )}
+                  >
+                    <Icon className="size-4.5" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       <div className="border-t border-border p-3">
