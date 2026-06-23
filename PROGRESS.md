@@ -17,7 +17,7 @@
 | 11 | Rental System Part 1 (availability, pricing, instant quote) | ✅ Complete |
 | 12 | Rental System Part 2 (booking request, digital contracts) | ✅ Complete |
 | 13 | Events, Blog & Testimonials | ✅ Complete |
-| 14 | Authentication & Customer Accounts | ⬜ Not started |
+| 14 | Authentication & Customer Accounts | ✅ Complete |
 | 15 | Admin Dashboard Part 1 (commerce ops) | ⬜ Not started |
 | 16 | Admin Dashboard Part 2 (CRM, content, governance) | ⬜ Not started |
 | 17 | Integrations & Communications (email, WhatsApp, analytics) | ⬜ Not started |
@@ -268,3 +268,21 @@
 - Full `next build` not completed locally — cold three.js compile exceeds the runnable window (same condition since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** Registrations, reviews, and testimonials are all **request/moderation-based** (PENDING → approved/confirmed in admin, Phases 15–16) — no payment, consistent with the site model. Blog post bodies render the localized `content` string as paragraphs; the **rich-text editor + media embeds come with the admin in Phase 16**. Confirmation emails for registrations are wired in Phase 17 (SMTP).
+
+---
+
+## Phase 14 — Authentication & Customer Accounts ✅
+
+**Delivered:**
+- **Auth.js v5 (NextAuth beta) credentials auth** against the `Customer` model — `lib/auth.ts` (JWT sessions, bcrypt verify), `/api/auth/[...nextauth]`, session/JWT type augmentation (`types/next-auth.d.ts`)
+- **Auth pages** — `/sign-in`, `/sign-up`, `/forgot-password`, `/reset-password` with RHF + Zod forms; bcrypt(12) password hashing; password reset via short-lived **HS256 jose token** (email delivery in Phase 17); forgot-password never reveals whether an email exists
+- **Guarded `/account` area** — layout redirects guests to `/sign-in`; dashboard (summary tiles) + **orders, bookings, quotes, contracts, wishlist, profile** sub-pages; account nav with sign-out
+- **Guest → customer linking** — on sign-in/up the guest cart cookie is claimed (`cart.customerId`), and the localStorage wishlist is merged into DB `WishlistItem` (`WishlistSync` + `syncWishlist`); account history matches by `customerId` OR the email used as a guest
+- Actions: `registerCustomer`, `signInWithCredentials`, `signOutAction`, `requestPasswordReset`, `resetPassword`, `updateProfile`, `removeFromWishlist`, `syncWishlist`; data layer `server/data/account.ts`; status-label helper (`lib/status-labels.ts`)
+- EN/FR strings for `Auth` + `Account`
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · boundaries reviewed (auth/account forms client; pages + data server-only; bcrypt/prisma kept off the edge — auth is not used in middleware)
+- Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** Added `next-auth@5 beta` + `jose` (npm install succeeded; engine warns about node 22 but runs on 20 / Vercel). **JWT session strategy** (no Prisma adapter / Session table needed) since auth is credentials-only. **Set `NEXTAUTH_SECRET` in production** — the reset-token + session signing fall back to a dev secret otherwise. Customer auth only; **admin auth/RBAC is Phase 15**. Password-reset + registration/confirmation emails are wired in Phase 17 (SMTP) — the token flow is fully built and just needs the send step.
