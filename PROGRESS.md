@@ -15,7 +15,7 @@
 | 9 | Shop System Part 1 (discovery, AI search, reviews, wishlist) | ✅ Complete |
 | 10 | Shop System Part 2 (cart, request order, abandoned-request) | ✅ Complete |
 | 11 | Rental System Part 1 (availability, pricing, instant quote) | ✅ Complete |
-| 12 | Rental System Part 2 (booking request, digital contracts) | ⬜ Not started |
+| 12 | Rental System Part 2 (booking request, digital contracts) | ✅ Complete |
 | 13 | Events, Blog & Testimonials | ⬜ Not started |
 | 14 | Authentication & Customer Accounts | ⬜ Not started |
 | 15 | Admin Dashboard Part 1 (commerce ops) | ⬜ Not started |
@@ -234,3 +234,20 @@
 - Full `next build` not completed locally — cold three.js compile exceeds the runnable window in this env (same condition since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** The instant quote produces an estimate only — the actual **booking request, date holds, and digital contracts are Phase 12**. The "Request this booking" CTA routes to `/quote` (prefilling the event date) so it's never a dead end; Phase 12 replaces it with the dedicated `/rent/checkout` flow that writes a `Booking` + tentative hold. Delivery/pickup are shown as estimates and confirmed in the staff quote. Availability deliberately ignores tentative holds so a single request never blocks the calendar for everyone else.
+
+---
+
+## Phase 12 — Rental System Part 2 (booking request, digital contracts) ✅
+
+**Delivered:**
+- **Booking request flow** (`/rent/checkout`) — multi-section form (event details, delivery address, contact), live order summary; reached from the rental detail "Request this booking" CTA with dates carried via `?product=&start=&end=`
+- **Booking creation** (`server/actions/bookings.ts`) — re-checks availability server-side, computes totals (rental + delivery + pickup + deposit), writes a `Booking` (REQUESTED + **TENTATIVE** hold — never blocks the calendar) with a `BookingItem` and a **DRAFT `RentalContract`**, all in one nested create; returns booking + contract refs
+- **Digital contract** (`/contract/[number]`) — full rental agreement rendered from booking data (parties, equipment, dates, fee breakdown, refundable deposit, 6 standard terms), print/save-to-PDF, and a **legally-meaningful e-signature**: typed name + explicit consent → `signContract` records `signerName`, `signedAt`, **IP address**, and an immutable `auditTrail` entry; status → SIGNED with a confirmation panel
+- `lib/ref-number.ts` gained `bookingNumber()` + `contractNumber()` (the contract number doubles as the public signing-URL token); contract data layer (`server/data/contracts.ts`)
+- EN/FR strings for `Checkout` + `Contract` (terms, statuses, e-sign copy)
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · boundaries reviewed (forms + e-sign are client; checkout/contract pages are server; availability re-checked in the action, not trusted from the client)
+- Full `next build` not completed locally — cold three.js compile exceeds the runnable window (same condition since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** Contracts render as styled HTML (print-to-PDF ready); server-side PDF generation to R2 + emailing the signed copy are layered in **Phase 17**. The signing page is reachable by its unguessable contract number for guests now; it also surfaces in the customer account in **Phase 14**. Bookings stay TENTATIVE until an admin confirms them (Phase 15), which is the only thing that converts the hold to HARD and blocks the calendar — consistent with the request-based, no-online-payment model.

@@ -79,7 +79,10 @@ export function InstantQuote({
   }, [productId, range.start, range.end]);
 
   const available = check?.available ?? false;
-  const quoteHref = `/quote?product=${slug}${range.start ? `&date=${range.start}` : ""}`;
+  const bookingHref =
+    range.start && range.end
+      ? `/rent/checkout?product=${slug}&start=${range.start}&end=${range.end}`
+      : `/rent/checkout?product=${slug}`;
 
   return (
     <div className="space-y-4">
@@ -149,7 +152,7 @@ export function InstantQuote({
         )}
 
         <Button asChild size="lg" variant="gradient" className="mt-4 w-full">
-          <Link href={quoteHref}>
+          <Link href={bookingHref}>
             {t("requestBooking")}
             <ArrowRight className="size-4" />
           </Link>

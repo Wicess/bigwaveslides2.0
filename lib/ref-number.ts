@@ -27,3 +27,13 @@ export function orderNumber(): string {
 export function quoteNumber(): string {
   return `Q-${datePart()}-${randomSuffix()}`;
 }
+
+/** e.g. BK-260623-K7P2Q */
+export function bookingNumber(): string {
+  return `BK-${datePart()}-${randomSuffix()}`;
+}
+
+/** e.g. CT-260623-K7P2Q (also used as the public contract URL token). */
+export function contractNumber(): string {
+  return `CT-${datePart()}-${randomSuffix(7)}`;
+}
