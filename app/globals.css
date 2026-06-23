@@ -1,0 +1,126 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+  Big Wave Slides — design tokens (Tailwind v4, CSS-first).
+  Brand palette:
+    Primary  #0099FF   Secondary #00D4FF   Accent #003366
+    Background #FFFFFF  Text/Ink  #111111
+  The full design system (components, motion) is built in Phase 3.
+*/
+
+@theme {
+  /* Brand */
+  --color-primary: #0099ff;
+  --color-primary-50: #e6f5ff;
+  --color-primary-100: #cceaff;
+  --color-primary-200: #99d5ff;
+  --color-primary-300: #66c0ff;
+  --color-primary-400: #33abff;
+  --color-primary-500: #0099ff;
+  --color-primary-600: #007acc;
+  --color-primary-700: #005c99;
+  --color-primary-800: #003d66;
+  --color-primary-900: #001f33;
+
+  --color-secondary: #00d4ff;
+  --color-secondary-400: #33ddff;
+  --color-secondary-600: #00aacc;
+
+  --color-accent: #003366;
+  --color-accent-light: #0a4d8c;
+
+  --color-ink: #111111;
+
+  /* Semantic (light) */
+  --color-background: #ffffff;
+  --color-foreground: #111111;
+  --color-muted: #f4f7fa;
+  --color-muted-foreground: #5b6b7a;
+  --color-border: #e3e9f0;
+  --color-ring: #0099ff;
+
+  /* Typography (self-hosted via @fontsource-variable) */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Sora Variable", "Inter Variable", sans-serif;
+
+  /* Radii */
+  --radius: 0.875rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+
+  /* Elevation & brand glow */
+  --shadow-glow: 0 10px 40px -10px rgba(0, 153, 255, 0.45);
+  --shadow-soft: 0 8px 30px -12px rgba(17, 17, 17, 0.18);
+
+  /* Brand gradient */
+  --gradient-wave: linear-gradient(120deg, #0099ff 0%, #00d4ff 100%);
+  --gradient-deep: linear-gradient(160deg, #003366 0%, #0099ff 100%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--color-primary);
+    color: #fff;
+  }
+}
+
+/* Glassmorphism utilities (expanded in Phase 3) */
+@utility glass {
+  background: color-mix(in oklab, #ffffff 70%, transparent);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid color-mix(in oklab, #ffffff 60%, transparent);
+}
+
+@utility glass-dark {
+  background: color-mix(in oklab, #003366 35%, transparent);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid color-mix(in oklab, #00d4ff 25%, transparent);
+}
+
+@utility text-gradient {
+  background: var(--gradient-wave);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Respect reduced motion globally (motion engine refines this in Phase 3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

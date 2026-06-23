@@ -1,0 +1,33 @@
+{
+  "Common": {
+    "brand": "Big Wave Slides",
+    "skipToContent": "Skip to content"
+  },
+  "Nav": {
+    "shop": "Shop",
+    "rent": "Rent",
+    "services": "Services",
+    "events": "Events",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "quote": "Get a Quote"
+  },
+  "Home": {
+    "eyebrow": "Sell · Rent · Install",
+    "tagline": "Ride the Big Wave",
+    "subtitle": "Premium water slides to buy, rent, and install for unforgettable parties, events, and gatherings.",
+    "ctaShop": "Shop Slides",
+    "ctaRent": "Rent for Your Event"
+  },
+  "Setup": {
+    "badge": "Phase 2 · Foundation ready",
+    "note": "Project scaffolding, design tokens, and EN/FR routing are live. The full experience is built in the phases ahead.",
+    "switch": "Language"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The wave you were chasing rolled away.",
+    "back": "Back home"
+  }
+}

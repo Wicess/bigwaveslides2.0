@@ -1,0 +1,10 @@
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+
+export default createMiddleware(routing);
+
+export const config = {
+  // Run on all paths except API routes, Next internals, the admin area
+  // (not localized), and any file with an extension (static assets).
+  matcher: ["/((?!api|_next|_vercel|admin|.*\\..*).*)"],
+};

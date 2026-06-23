@@ -1,0 +1,33 @@
+{
+  "Common": {
+    "brand": "Big Wave Slides",
+    "skipToContent": "Aller au contenu"
+  },
+  "Nav": {
+    "shop": "Boutique",
+    "rent": "Location",
+    "services": "Services",
+    "events": "Événements",
+    "blog": "Blog",
+    "about": "À propos",
+    "contact": "Contact",
+    "quote": "Obtenir un devis"
+  },
+  "Home": {
+    "eyebrow": "Vente · Location · Installation",
+    "tagline": "Surfez la Grande Vague",
+    "subtitle": "Toboggans aquatiques premium à acheter, louer et installer pour des fêtes, événements et rassemblements inoubliables.",
+    "ctaShop": "Voir les toboggans",
+    "ctaRent": "Louer pour votre événement"
+  },
+  "Setup": {
+    "badge": "Phase 2 · Fondations prêtes",
+    "note": "L'ossature du projet, les jetons de design et le routage EN/FR sont en place. L'expérience complète arrive dans les prochaines phases.",
+    "switch": "Langue"
+  },
+  "NotFound": {
+    "title": "Page introuvable",
+    "description": "La vague que vous poursuiviez s'est éloignée.",
+    "back": "Retour à l'accueil"
+  }
+}
