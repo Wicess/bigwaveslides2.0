@@ -1,0 +1,114 @@
+"use server";
+
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
+import { prisma } from "@/lib/prisma";
+import { getCartCookie, clearCartCookie } from "@/lib/cart-session";
+import { orderNumber } from "@/lib/ref-number";
+
+const schema = z.object({
+  name: z.string().min(2).max(120),
+  email: z.string().email(),
+  phone: z.string().min(5).max(40),
+  address: z.string().max(300).optional().or(z.literal("")),
+  city: z.string().max(120).optional().or(z.literal("")),
+  eventDate: z.string().optional().or(z.literal("")),
+  notes: z.string().max(2000).optional().or(z.literal("")),
+  locale: z.string().default("en"),
+  website: z.string().optional(), // honeypot
+});
+
+export type OrderRequestResult =
+  | { ok: true; orderNumber: string }
+  | { ok: false; error: string };
+
+/**
+ * Convert the active cart into a request-based Order (no payment taken).
+ * Staff follow up with an invoice in the admin (Phase 15).
+ */
+export async function createOrderRequest(
+  input: z.input<typeof schema>,
+): Promise<OrderRequestResult> {
+  if (input.website) {
+    // Honeypot tripped — pretend success without writing anything.
+    return { ok: true, orderNumber: orderNumber() };
+  }
+
+  const parsed = schema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: "Please check your details and try again." };
+  }
+  const data = parsed.data;
+
+  try {
+    const cartId = await getCartCookie();
+    if (!cartId) return { ok: false, error: "Your cart is empty." };
+
+    const cart = await prisma.cart.findFirst({
+      where: { id: cartId, status: "ACTIVE" },
+      include: { items: { include: { product: true } } },
+    });
+    if (!cart || cart.items.length === 0) {
+      return { ok: false, error: "Your cart is empty." };
+    }
+
+    const items = cart.items.map((item) => {
+      const unit =
+        (item.product.type === "SALE"
+          ? item.product.salePriceCents
+          : item.product.dailyRateCents) ?? 0;
+      const name =
+        (item.product.name as { en?: string; fr?: string })[
+          data.locale as "en" | "fr"
+        ] ??
+        (item.product.name as { en?: string }).en ??
+        item.product.sku;
+      return {
+        productId: item.productId,
+        name,
+        unitPriceCents: unit,
+        quantity: item.quantity,
+        lineTotalCents: unit * item.quantity,
+      };
+    });
+
+    const subtotalCents = items.reduce((n, i) => n + i.lineTotalCents, 0);
+
+    const order = await prisma.order.create({
+      data: {
+        orderNumber: orderNumber(),
+        guestName: data.name,
+        guestEmail: data.email,
+        guestPhone: data.phone,
+        contactPhone: data.phone,
+        status: "PENDING",
+        paymentStatus: "PENDING",
+        subtotalCents,
+        totalCents: subtotalCents,
+        deliveryAddress:
+          data.address || data.city
+            ? { address: data.address || "", city: data.city || "" }
+            : undefined,
+        notes: [data.eventDate ? `Event date: ${data.eventDate}` : "", data.notes || ""]
+          .filter(Boolean)
+          .join("\n"),
+        locale: data.locale,
+        items: { create: items },
+      },
+      select: { orderNumber: true },
+    });
+
+    // Mark cart converted and drop the session cookie.
+    await prisma.cart.update({
+      where: { id: cartId },
+      data: { status: "CONVERTED" },
+    });
+    await clearCartCookie();
+
+    // Email confirmation + admin notification are wired in Phase 17 (SMTP).
+    revalidatePath("/cart");
+    return { ok: true, orderNumber: order.orderNumber };
+  } catch {
+    return { ok: false, error: "Something went wrong. Please try again." };
+  }
+}

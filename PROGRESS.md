@@ -13,7 +13,7 @@
 | 7 | Homepage | ✅ Complete |
 | 8 | About, Services & Contact | ✅ Complete |
 | 9 | Shop System Part 1 (discovery, AI search, reviews, wishlist) | ✅ Complete |
-| 10 | Shop System Part 2 (cart, request order, abandoned-request) | ⬜ Not started |
+| 10 | Shop System Part 2 (cart, request order, abandoned-request) | ✅ Complete |
 | 11 | Rental System Part 1 (availability, pricing, instant quote) | ⬜ Not started |
 | 12 | Rental System Part 2 (booking request, digital contracts) | ⬜ Not started |
 | 13 | Events, Blog & Testimonials | ⬜ Not started |
@@ -196,3 +196,22 @@
 - Build prerender not run to completion locally (cold three.js + Neon unreachable in this env; identical condition to Phases 7–8). `generateStaticParams` calls are `.catch`-guarded so they degrade gracefully.
 
 **Decisions / notes:** "AI search" is implemented as typo-tolerant lexical search (pg_trgm) which works fully offline; true semantic **pgvector** embeddings need an embedding provider and are slated to layer in during Phase 17 (integrations) — the extension and `searchText` column are already in place. Cart / request-order / abandoned-request flow is **Phase 10**, so the product CTA is "Request a Quote" (Add-to-Cart arrives next phase). Wishlist is client-side until auth (Phase 14).
+
+---
+
+## Phase 10 — Shop System Part 2 (cart, request order, abandoned-request) ✅
+
+**Delivered:**
+- **Server-side cart** keyed by an httpOnly session cookie (`lib/cart-session.ts`) — persists to `Cart`/`CartItem` so it survives reloads and powers abandoned-request recovery. Data layer `server/data/cart.ts` (`getCart`, `getCartCount`); actions `server/actions/cart.ts` (`addToCart`, `setQuantity`, `removeItem`, `clearCart`) with ownership checks, qty clamping, and `lastActivityAt` touch
+- **Add to Cart** on product detail — qty stepper + gradient CTA; dispatches a window event so the **header cart badge** (`CartBadge`, live count via `/api/cart`) updates instantly. Request-a-Quote demoted to secondary, wishlist alongside
+- **/cart** — optimistic qty/remove, order summary (subtotal, delivery "from"/"quoted by location", est. total with no-payment note), empty/success states; two-step → request form → confirmation with reference number
+- **Request order** (`server/actions/orders.ts`) — converts cart → `Order` (PENDING/PENDING, no payment), snapshots line items, stores delivery address + event date/notes, marks cart `CONVERTED`, clears cookie; honeypot-protected. Staff invoice in admin (Phase 15), email in Phase 17
+- **/quote** — general request-a-quote page; `?product=slug` prefills product context → `QuoteRequest` (+ `QuoteItem`) via `server/actions/quotes.ts`; honeypot-protected. Header "Get a Quote" + product page both route here
+- **Abandoned-request recovery** — `POST /api/cron/abandoned-carts` (Bearer `CRON_SECRET`) flags `ACTIVE` carts idle > 24h with items as `ABANDONED` + stamps `reminderSentAt` (idempotent); reminder emails wired in Phase 17. `ref-number.ts` for order/quote refs; `CRON_SECRET` added to env
+- EN/FR strings for `Cart`, `OrderRequest`, `Quote` (ICU plurals)
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · server/client boundaries reviewed (`import type` for server-only cart types into the client cart component; server actions imported into client forms)
+- Full `next build` not completed locally — cold three.js compile exceeds the runnable window in this env (same condition noted since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** Cart is guest/session-based now; it will associate with the signed-in customer in **Phase 14** (auth). No on-site payment anywhere — orders and quotes are request-based and followed up manually by staff. Delivery fee is shown as an estimate ("from $X" / "quoted by location") and confirmed in the staff quote, honoring the request-based model.

@@ -52,6 +52,9 @@ const EnvSchema = z.object({
   // Analytics (Phase 17)
   NEXT_PUBLIC_GA_ID: z.string().optional(),
   NEXT_PUBLIC_CLARITY_ID: z.string().optional(),
+
+  // Secures cron-triggered jobs (e.g. abandoned-cart sweep)
+  CRON_SECRET: z.string().optional(),
 });
 
 export const env = EnvSchema.parse(process.env);

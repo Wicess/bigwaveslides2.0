@@ -18,6 +18,7 @@ import { Link } from "@/i18n/navigation";
 import { getLocalized } from "@/lib/localized";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { CartBadge } from "@/components/cart/cart-badge";
 import { LocaleSwitcher } from "./locale-switcher";
 import type { NavData } from "@/server/data/navigation";
 
@@ -165,8 +166,9 @@ export function SiteHeader({ locale, data }: Props) {
           >
             <Heart className="size-5" />
           </IconLink>
-          <IconLink href="/cart" label={t("cart")}>
+          <IconLink href="/cart" label={t("cart")} className="relative">
             <ShoppingBag className="size-5" />
+            <CartBadge />
           </IconLink>
           <IconLink
             href="/account"
