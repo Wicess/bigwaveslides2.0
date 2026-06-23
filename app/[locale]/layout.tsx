@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { getNavData, type NavData } from "@/server/data/navigation";
 import { LenisProvider } from "@/components/motion/lenis-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { ScrollProgress } from "@/components/layout/scroll-progress";
+import { BackToTop } from "@/components/layout/back-to-top";
+import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 // Self-hosted variable fonts (offline, no layout shift). Family names:
 // "Inter Variable" (body) and "Sora Variable" (display) — wired in globals.css.
 import "@fontsource-variable/inter";
@@ -41,12 +47,30 @@ export default async function LocaleLayout({
   }
   setRequestLocale(locale);
   const messages = await getMessages();
+  const navData: NavData = await getNavData().catch(() => ({
+    categories: [],
+    rentals: [],
+    services: [],
+    settings: {},
+  }));
+  const t = await getTranslations("Layout");
+  const year = new Date().getFullYear();
 
   return (
     <html lang={locale}>
       <body className="min-h-dvh antialiased">
         <NextIntlClientProvider messages={messages}>
-          <LenisProvider>{children}</LenisProvider>
+          <ScrollProgress />
+          <LenisProvider>
+            <SiteHeader locale={locale} data={navData} />
+            {children}
+            <SiteFooter locale={locale} data={navData} year={year} />
+          </LenisProvider>
+          <WhatsAppFab
+            phone={navData.settings.contact?.whatsapp}
+            label={t("whatsapp")}
+          />
+          <BackToTop label={t("backToTop")} />
           <Toaster />
         </NextIntlClientProvider>
       </body>

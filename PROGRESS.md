@@ -9,7 +9,7 @@
 | 3 | Design System & Motion Engine | ✅ Complete |
 | 4 | Database & Prisma (Neon + pgvector) | ✅ Complete |
 | 5 | Media Pipeline (R2 + CDN + Image Optimization) | ✅ Complete |
-| 6 | Global Layout (mega-menu, footer, i18n, WhatsApp) | ⬜ Not started |
+| 6 | Global Layout (mega-menu, footer, i18n, WhatsApp) | ✅ Complete |
 | 7 | Homepage | ⬜ Not started |
 | 8 | About, Services & Contact | ⬜ Not started |
 | 9 | Shop System Part 1 (discovery, AI search, reviews, wishlist) | ⬜ Not started |
@@ -117,3 +117,21 @@
 - `typecheck` ✓ · `lint` ✓ · `build` ✓ (`/api/media/upload` dynamic route)
 
 **Decisions / notes:** upload goes **through the server** (no bucket CORS needed); presigned direct-upload helper is available for later if CORS is configured. next/image (Vercel optimizer) handles optimization of R2 originals; a Cloudflare Images custom-domain layer can be added later. Upload endpoint is gated by **admin auth in Phase 14**. Curated real water media is uploaded to R2 per-page as those pages are built (Phases 6+); seed still uses placeholders for now. Transient Neon cold-connection timeouts can occur on first query — global query-retry hardening is slated for Phase 17/19.
+
+---
+
+## Phase 6 — Global Layout ✅
+
+**Delivered:**
+- **Glass mega-menu header** (`site-header.tsx`) — scroll-aware, logo, Shop/Rent/Services dropdown panels (DB-driven categories, popular rentals, services), Events/Blog/About/Contact links, search/wishlist/cart/account icons, EN/FR switcher, "Get a Quote" CTA, full-screen animated mobile menu
+- **Rich footer** (`site-footer.tsx`) — working newsletter (Server Action → `NewsletterSubscriber`), explore + services links, contact (email/phone/address), social (inline brand SVGs), trust badges, legal links
+- **Floating WhatsApp** (click-to-chat from settings), **scroll-progress** bar, **back-to-top**
+- Cached nav data layer (`server/data/navigation.ts`) with **retry** (`lib/retry.ts`) for Neon resilience; revalidate-tag ready
+- Newsletter Server Action (`server/actions/newsletter.ts`); brand icons (`components/icons/brand.tsx`); +Layout i18n keys (EN/FR)
+- Wired into locale layout (header above page, footer below, outside page-transition transform)
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · `build` ✓ (8/8 static, ISR 1h)
+- Runtime: `/en` renders mega-menu categories (Inflatable Water Slides), popular rentals (Tropical Twist), footer services (Birthday Parties), WhatsApp number, contact email, trust badges; `/fr` renders localized nav (Boutique, Location, Obtenir un devis, Tous droits réservés)
+
+**Note:** lucide v1 dropped brand icons → inline SVG brand glyphs. Build-time Neon timeout initially baked empty nav; fixed with `withRetry`.
