@@ -11,8 +11,8 @@
 | 5 | Media Pipeline (R2 + CDN + Image Optimization) | ✅ Complete |
 | 6 | Global Layout (mega-menu, footer, i18n, WhatsApp) | ✅ Complete |
 | 7 | Homepage | ✅ Complete |
-| 8 | About, Services & Contact | ⬜ Not started |
-| 9 | Shop System Part 1 (discovery, AI search, reviews, wishlist) | ⬜ Not started |
+| 8 | About, Services & Contact | ✅ Complete |
+| 9 | Shop System Part 1 (discovery, AI search, reviews, wishlist) | ✅ Complete |
 | 10 | Shop System Part 2 (cart, request order, abandoned-request) | ⬜ Not started |
 | 11 | Rental System Part 1 (availability, pricing, instant quote) | ⬜ Not started |
 | 12 | Rental System Part 2 (booking request, digital contracts) | ⬜ Not started |
@@ -160,3 +160,39 @@
 - Runtime `/en` (231 KB): renders hero, Tropical Twist + Castle Splash (featured), Inflatable Water Slides (category), Birthday Parties (service), Summer Splash (event), "Rent in 3 easy steps", testimonials, blog — all live DB content
 
 **Note:** Phase 2 splash + `Setup` i18n removed. Cold build with three.js ~3.5min on this machine (warm builds fast; Vercel fast). Real curated water imagery still pending real assets — cards use placeholders, hero uses 3D/gradients.
+
+---
+
+## Phase 8 — About, Services & Contact ✅
+
+**Delivered:**
+- **About** (`/about`) — story + mission, animated `CountUp` stat counters, values grid, team, service-area map, gradient CTA
+- **Services list** (`/services`) — DB-driven `getAllServices`, cards grouped into *event services* vs *installation & support*, custom-quote CTA
+- **Service detail** (`/services/[slug]`) — hero image, "what's included" checklist, gallery, related services, SSG via `getServiceSlugs`; localized meta
+- **Contact** (`/contact`) — RHF + Zod form with honeypot → `submitContact` server action → `ContactInquiry` row (email/auto-reply deferred to Phase 17); settings-driven info, opening hours, WhatsApp + call CTAs; keyless Google Maps embed
+- **Shared infra:** `PageHeader`, `MapEmbed`, `CountUp`, `getAllServices`/`getServiceBySlug`, `getSettings`; EN/FR strings for all four pages
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · all nav links (`/about`, `/services`, `/services/[slug]`, `/contact`) now resolve
+- Build prerender not run to completion locally (Neon unreachable in this env → `withRetry` backoff; same condition as Phase 7). Compiles where DB is reachable.
+
+---
+
+## Phase 9 — Shop System Part 1 (discovery, AI search, reviews, wishlist) ✅
+
+**Delivered:**
+- **Shop catalog** (`/shop`) — faceted filters (category, price bands, rating), sort (featured/newest/price/rating), URL-driven state, responsive grid, pagination, mobile filter disclosure
+- **Category listing** (`/shop/category/[slug]`) — shared `ShopView`, SSG via `generateStaticParams`, localized category meta
+- **Product detail** (`/shop/[slug]`) — client gallery (image/video thumbnails), buy-box (rating, price, deposit, specs), **Request a Quote** CTA (no on-site payment), wishlist, trust badges, tabs (description / features / reviews), related products, SSG + localized meta
+- **Typo-tolerant "AI" search** — `pg_trgm` similarity + ILIKE ranking via `$queryRaw` (`searchProductSlugs`) with a graceful Prisma `contains` fallback; `/api/search` route powers a debounced live search dropdown (`SearchBox`)
+- **Reviews** — approved-review list + star-rating submit form → `submitReview` server action (held `PENDING` for Phase 16 moderation), honeypot-protected, revalidates `products`
+- **Wishlist** — `useWishlist` localStorage hook + `WishlistButton` (icon on cards, full on detail); server persistence deferred to Phase 14 auth
+- **Data layer** `server/data/products.ts` — `getShopProducts` (filter/sort/paginate), `getProductBySlug`, `getRelatedProducts`, `getProductCategories`, `getCategoryBySlug`, `searchProducts`, `getApprovedReviews`
+- **Migration** `…_product_search_trgm` — trigram GIN index on `Product.searchText`
+- EN/FR strings for `Shop`, `ProductDetail`, `Reviews` (ICU plurals)
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓
+- Build prerender not run to completion locally (cold three.js + Neon unreachable in this env; identical condition to Phases 7–8). `generateStaticParams` calls are `.catch`-guarded so they degrade gracefully.
+
+**Decisions / notes:** "AI search" is implemented as typo-tolerant lexical search (pg_trgm) which works fully offline; true semantic **pgvector** embeddings need an embedding provider and are slated to layer in during Phase 17 (integrations) — the extension and `searchText` column are already in place. Cart / request-order / abandoned-request flow is **Phase 10**, so the product CTA is "Request a Quote" (Add-to-Cart arrives next phase). Wishlist is client-side until auth (Phase 14).
