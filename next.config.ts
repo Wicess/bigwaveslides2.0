@@ -7,7 +7,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
-    // Cloudflare R2 + CDN domains are added in Phase 5 once the bucket exists.
+    // Serve images directly from Cloudflare R2's CDN instead of Vercel's image
+    // optimizer. This keeps us off Vercel's Hobby-plan Image Optimization limits
+    // (transformations + cache writes) and shifts image bandwidth onto R2.
+    // Upload web-sized assets to R2; re-enable optimization (remove this line or
+    // wire a Cloudflare Images loader) if you move to a paid plan.
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "**.r2.dev" },
       { protocol: "https", hostname: "images.unsplash.com" },
