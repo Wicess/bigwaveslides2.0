@@ -24,6 +24,7 @@ const EnvSchema = z.object({
 
   // Cloudflare R2 (Phase 5)
   R2_ACCOUNT_ID: z.string().optional(),
+  R2_ENDPOINT: z.string().url().optional(),
   R2_ACCESS_KEY_ID: z.string().optional(),
   R2_SECRET_ACCESS_KEY: z.string().optional(),
   R2_BUCKET_NAME: z.string().optional(),

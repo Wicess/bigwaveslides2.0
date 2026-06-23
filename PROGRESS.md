@@ -8,7 +8,7 @@
 | 2 | Project Setup & Configuration | ✅ Complete |
 | 3 | Design System & Motion Engine | ✅ Complete |
 | 4 | Database & Prisma (Neon + pgvector) | ✅ Complete |
-| 5 | Media Pipeline (R2 + CDN + Image Optimization) | ⬜ Not started |
+| 5 | Media Pipeline (R2 + CDN + Image Optimization) | ✅ Complete |
 | 6 | Global Layout (mega-menu, footer, i18n, WhatsApp) | ⬜ Not started |
 | 7 | Homepage | ⬜ Not started |
 | 8 | About, Services & Contact | ⬜ Not started |
@@ -100,3 +100,20 @@
 - `npm run typecheck` ✓ · `npm run lint` ✓ · `npm run build` ✓
 
 **Decisions:** Prisma 7 (current major) requires URLs in `prisma.config.ts` + a driver adapter — adopted `@prisma/adapter-pg`. Localized CMS text stored as `{en,fr}` Json. Seed images are placeholders (picsum) — replaced with curated water media on R2 in Phase 5. Admin login seeded: `admin@bigwaveslides.com` / `BigWave!2026` (change before launch).
+
+---
+
+## Phase 5 — Media Pipeline (Cloudflare R2 + CDN) ✅
+
+**Delivered:**
+- `lib/r2.ts` (server-only) — R2 S3 client + `r2PutObject`, `r2PresignUpload`, `r2DeleteObject`, `r2PublicUrl`, `buildMediaKey`
+- `app/api/media/upload/route.ts` — server upload → R2 → `MediaAsset` record; type/size validation (25 MB, images/MP4/PDF)
+- `components/ui/media-image.tsx` — optimized `<MediaImage>` (next/image, AVIF/WebP, fill-based, lazy)
+- `components/media/upload-dropzone.tsx` — drag & drop uploader with live XHR progress
+- R2 creds in `.env.local`; `R2_ENDPOINT` added to typed env
+
+**Verification (end-to-end, real upload):**
+- POST image → route → R2 object + `MediaAsset` row (`id` returned) → **public CDN GET 200, `image/jpeg`, byte-exact (56,525)**
+- `typecheck` ✓ · `lint` ✓ · `build` ✓ (`/api/media/upload` dynamic route)
+
+**Decisions / notes:** upload goes **through the server** (no bucket CORS needed); presigned direct-upload helper is available for later if CORS is configured. next/image (Vercel optimizer) handles optimization of R2 originals; a Cloudflare Images custom-domain layer can be added later. Upload endpoint is gated by **admin auth in Phase 14**. Curated real water media is uploaded to R2 per-page as those pages are built (Phases 6+); seed still uses placeholders for now. Transient Neon cold-connection timeouts can occur on first query — global query-retry hardening is slated for Phase 17/19.
