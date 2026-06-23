@@ -21,7 +21,7 @@
 | 15 | Admin Dashboard Part 1 (commerce ops) | ✅ Complete |
 | 16 | Admin Dashboard Part 2 (CRM, content, governance) | ✅ Complete |
 | 17 | Integrations & Communications (email, WhatsApp, analytics) | ✅ Complete |
-| 18 | SEO, Structured Data, Legal & 404 | ⬜ Not started |
+| 18 | SEO, Structured Data, Legal & 404 | ✅ Complete |
 | 19 | Testing, Performance, Security & Accessibility | ⬜ Not started |
 | 20 | Deployment & Production Launch | ⬜ Not started |
 
@@ -341,3 +341,20 @@
 - Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** Emails are sent inline (awaited, try/caught) rather than via a queue — fine at this scale and avoids serverless fire-and-forget cutoffs. WhatsApp free-form text only delivers inside the 24-hour service window; approved message templates should be added before relying on proactive outbound. Set `SMTP_*`, `WHATSAPP_*`, `NEXT_PUBLIC_GA_ID`, and `NEXT_PUBLIC_CLARITY_ID` in production to activate each channel. Remaining: **Phase 18** SEO/structured-data/legal/404, **19** testing/perf/a11y, **20** deploy.
+
+---
+
+## Phase 18 — SEO, Structured Data, Legal & 404 ✅
+
+**Delivered:**
+- **`app/sitemap.ts`** — every static + dynamic route (products, rentals, services, posts, events, product/blog categories, tags) emitted per locale with hreflang `alternates`; **`app/robots.ts`** disallows `/admin`, `/account`, `/api/`, `/cart`
+- **Structured data** (`lib/structured-data.ts` + `<JsonLd>`): Organization + WebSite (with SearchAction) in the layout; **Product** on shop & rental detail (offers + aggregateRating), **Article** on blog posts, **Event** on event detail, **BreadcrumbList** on shop detail, **FAQPage** on /faq
+- **Dynamic OG images** — `app/api/og` (`next/og` ImageResponse, branded gradient) wired as the default `openGraph`/`twitter` image in layout metadata
+- **Legal & FAQ** — `/privacy-policy`, `/terms-of-service`, and `/faq` (accessible `<details>` accordion + FAQ schema), all bilingual via `lib/legal-content.ts`; footer links now resolve
+- Localized 404 already in place from Phase 2
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · sitemap/robots data loaders are `.catch`-guarded so generation never fails on a cold DB
+- Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** OG route uses the `edge` runtime (required by `next/og`). Legal/FAQ copy is solid, production-ready boilerplate tailored to the request-based, no-online-payment model — have counsel review before launch. hreflang is emitted in the sitemap; per-page `<link rel=alternate>` can be added later via `generateMetadata` alternates if needed. Remaining: **Phase 19** (testing, performance, security, accessibility) and **Phase 20** (deployment).

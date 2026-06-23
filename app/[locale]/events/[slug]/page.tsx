@@ -16,6 +16,8 @@ import { MediaImage } from "@/components/ui/media-image";
 import { PageHeader } from "@/components/ui/page-header";
 import { RegistrationForm } from "@/components/events/registration-form";
 import { Reveal } from "@/components/motion/reveal";
+import { JsonLd } from "@/components/seo/json-ld";
+import { eventLd, absoluteUrl } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -59,6 +61,17 @@ export default async function EventDetailPage({ params }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={eventLd({
+          name: title,
+          description: excerpt,
+          image: event.coverImage,
+          url: absoluteUrl(locale, `/events/${event.slug}`),
+          startDate: event.startAt.toISOString(),
+          endDate: event.endAt?.toISOString(),
+          location: event.location,
+        })}
+      />
       <PageHeader eyebrow={t("eyebrow")} title={title} description={excerpt}>
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <span className="inline-flex items-center gap-2">

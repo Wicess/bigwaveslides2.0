@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { MediaImage } from "@/components/ui/media-image";
 import { PostCard } from "@/components/blog/post-card";
 import { Reveal } from "@/components/motion/reveal";
+import { JsonLd } from "@/components/seo/json-ld";
+import { articleLd, absoluteUrl } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -48,6 +50,16 @@ export default async function PostDetailPage({ params }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={articleLd({
+          title,
+          description: getLocalized(post.excerpt, locale),
+          image: post.coverImage,
+          url: absoluteUrl(locale, `/blog/${post.slug}`),
+          datePublished: post.publishedAt?.toISOString(),
+          author: post.author?.name,
+        })}
+      />
       <article>
         <Section className="pt-28 sm:pt-32" spacing="compact">
           <Container className="max-w-3xl">

@@ -22,6 +22,8 @@ import { ProductGallery, type GalleryItem } from "@/components/shop/product-gall
 import { WishlistButton } from "@/components/shop/wishlist-button";
 import { InstantQuote } from "@/components/rent/instant-quote";
 import { Reveal } from "@/components/motion/reveal";
+import { JsonLd } from "@/components/seo/json-ld";
+import { productLd, absoluteUrl } from "@/lib/structured-data";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Props = {
@@ -111,6 +113,18 @@ export default async function RentalDetailPage({ params, searchParams }: Props) 
 
   return (
     <main>
+      <JsonLd
+        data={productLd({
+          name,
+          description: shortDescription,
+          image: gallery[0]?.url,
+          url: absoluteUrl(locale, `/rent/${product.slug}`),
+          priceCents: product.dailyRateCents,
+          ratingAvg: product.ratingAvg,
+          ratingCount: product.ratingCount,
+          sku: product.sku,
+        })}
+      />
       <Section className="pt-28 sm:pt-32">
         <Container>
           <nav className="mb-6 text-sm text-muted-foreground">

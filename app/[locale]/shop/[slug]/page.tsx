@@ -33,6 +33,8 @@ import { AddToCart } from "@/components/shop/add-to-cart";
 import { WishlistButton } from "@/components/shop/wishlist-button";
 import { ReviewsSection } from "@/components/shop/reviews-section";
 import { Reveal } from "@/components/motion/reveal";
+import { JsonLd } from "@/components/seo/json-ld";
+import { productLd, breadcrumbLd, absoluteUrl } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -114,8 +116,28 @@ export default async function ProductDetailPage({ params }: Props) {
     { icon: Truck, label: t("trustDelivery") },
   ];
 
+  const canonical = absoluteUrl(locale, `/shop/${product.slug}`);
+
   return (
     <main>
+      <JsonLd
+        data={productLd({
+          name,
+          description: shortDescription,
+          image: gallery[0]?.url,
+          url: canonical,
+          priceCents,
+          ratingAvg: product.ratingAvg,
+          ratingCount: product.ratingCount,
+          sku: product.sku,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Shop", url: absoluteUrl(locale, "/shop") },
+          { name, url: canonical },
+        ])}
+      />
       <Section className="pt-28 sm:pt-32">
         <Container>
           {/* Breadcrumb */}

@@ -13,6 +13,8 @@ import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { BackToTop } from "@/components/layout/back-to-top";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 import { Analytics } from "@/components/analytics";
+import { JsonLd } from "@/components/seo/json-ld";
+import { organizationLd, websiteLd } from "@/lib/structured-data";
 // Self-hosted variable fonts (offline, no layout shift). Family names:
 // "Inter Variable" (body) and "Sora Variable" (display) — wired in globals.css.
 import "@fontsource-variable/inter";
@@ -29,6 +31,15 @@ export const metadata: Metadata = {
   },
   description:
     "Premium water slides to buy, rent, and install for unforgettable parties, events, and gatherings.",
+  openGraph: {
+    type: "website",
+    siteName: "Big Wave Slides",
+    images: [{ url: "/api/og", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/api/og"],
+  },
 };
 
 export function generateStaticParams() {
@@ -75,6 +86,8 @@ export default async function LocaleLayout({
           <Toaster />
         </NextIntlClientProvider>
         <Analytics />
+        <JsonLd data={organizationLd(navData.settings.contact)} />
+        <JsonLd data={websiteLd()} />
       </body>
     </html>
   );
