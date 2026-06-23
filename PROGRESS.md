@@ -14,7 +14,7 @@
 | 8 | About, Services & Contact | ✅ Complete |
 | 9 | Shop System Part 1 (discovery, AI search, reviews, wishlist) | ✅ Complete |
 | 10 | Shop System Part 2 (cart, request order, abandoned-request) | ✅ Complete |
-| 11 | Rental System Part 1 (availability, pricing, instant quote) | ⬜ Not started |
+| 11 | Rental System Part 1 (availability, pricing, instant quote) | ✅ Complete |
 | 12 | Rental System Part 2 (booking request, digital contracts) | ⬜ Not started |
 | 13 | Events, Blog & Testimonials | ⬜ Not started |
 | 14 | Authentication & Customer Accounts | ⬜ Not started |
@@ -215,3 +215,22 @@
 - Full `next build` not completed locally — cold three.js compile exceeds the runnable window in this env (same condition noted since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** Cart is guest/session-based now; it will associate with the signed-in customer in **Phase 14** (auth). No on-site payment anywhere — orders and quotes are request-based and followed up manually by staff. Delivery fee is shown as an estimate ("from $X" / "quoted by location") and confirmed in the staff quote, honoring the request-based model.
+
+---
+
+## Phase 11 — Rental System Part 1 (availability, pricing, instant quote) ✅
+
+**Delivered:**
+- **Rental catalog** (`/rent`) — `RENTAL`/`BOTH` products, category chips + sort + pagination, honors the homepage "check your date" widget (`?date=` flows through each card to the unit's calendar)
+- **Rental detail** (`/rent/[slug]`) — gallery, about/features, specs, sticky buy-box, trust badges, wishlist, related rentals; SSG via `getRentalSlugs`; localized meta
+- **Real-time availability calendar** — dependency-free month calendar with range selection, past/booked dates disabled, legend; loads blocked dates from `/api/availability`
+- **Instant quote** — live price breakdown (rate × days, delivery/setup, refundable deposit, estimated total) that re-checks availability for the chosen range and shows an Available/Unavailable badge
+- **Availability engine** (`server/data/availability.ts`) — hard-blocks dates ONLY for **CONFIRMED** bookings (tentative/REQUESTED holds never block, per the request-based model); `getAvailabilityWindow` (calendar) + `checkRange` (instant quote)
+- `/api/availability` route (range check + blocked-dates window); `lib/rental-pricing.ts` (pure date + pricing helpers); rentals data layer (`server/data/rentals.ts`)
+- `ProductCard` gained an optional `query` passthrough; EN/FR strings for `Rent`/`RentalDetail`/`Availability` (ICU plurals)
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · server/client boundaries reviewed (calendar/instant-quote are client; pages are server; pricing helpers are pure and shared)
+- Full `next build` not completed locally — cold three.js compile exceeds the runnable window in this env (same condition since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** The instant quote produces an estimate only — the actual **booking request, date holds, and digital contracts are Phase 12**. The "Request this booking" CTA routes to `/quote` (prefilling the event date) so it's never a dead end; Phase 12 replaces it with the dedicated `/rent/checkout` flow that writes a `Booking` + tentative hold. Delivery/pickup are shown as estimates and confirmed in the staff quote. Availability deliberately ignores tentative holds so a single request never blocks the calendar for everyone else.

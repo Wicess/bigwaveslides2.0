@@ -24,16 +24,20 @@ export async function ProductCard({
   locale,
   className,
   priority,
+  query,
 }: {
   product: CardProduct;
   locale: string;
   className?: string;
   priority?: boolean;
+  /** Optional query string (without `?`) appended to the card link. */
+  query?: string;
 }) {
   const t = await getTranslations("Product");
   const name = getLocalized(product.name, locale);
   const isRental = product.type === "RENTAL";
-  const href = isRental ? `/rent/${product.slug}` : `/shop/${product.slug}`;
+  const base = isRental ? `/rent/${product.slug}` : `/shop/${product.slug}`;
+  const href = query ? `${base}?${query}` : base;
   const image = product.media[0]?.url;
 
   const price =
