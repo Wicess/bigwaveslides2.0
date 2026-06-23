@@ -18,7 +18,7 @@
 | 12 | Rental System Part 2 (booking request, digital contracts) | ✅ Complete |
 | 13 | Events, Blog & Testimonials | ✅ Complete |
 | 14 | Authentication & Customer Accounts | ✅ Complete |
-| 15 | Admin Dashboard Part 1 (commerce ops) | ⬜ Not started |
+| 15 | Admin Dashboard Part 1 (commerce ops) | ✅ Complete |
 | 16 | Admin Dashboard Part 2 (CRM, content, governance) | ⬜ Not started |
 | 17 | Integrations & Communications (email, WhatsApp, analytics) | ⬜ Not started |
 | 18 | SEO, Structured Data, Legal & 404 | ⬜ Not started |
@@ -286,3 +286,23 @@
 - Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** Added `next-auth@5 beta` + `jose` (npm install succeeded; engine warns about node 22 but runs on 20 / Vercel). **JWT session strategy** (no Prisma adapter / Session table needed) since auth is credentials-only. **Set `NEXTAUTH_SECRET` in production** — the reset-token + session signing fall back to a dev secret otherwise. Customer auth only; **admin auth/RBAC is Phase 15**. Password-reset + registration/confirmation emails are wired in Phase 17 (SMTP) — the token flow is fully built and just needs the send step.
+
+---
+
+## Phase 15 — Admin Dashboard Part 1 (commerce ops) ✅
+
+**Delivered:**
+- **Admin auth + RBAC** — dedicated jose-signed httpOnly session (`lib/admin-auth.ts`, separate from customer NextAuth) verifying `AdminUser` via bcrypt; role permissions loaded into the session; `requireAdmin` / `requirePermission` / `can` guards; `ActivityLog` audit helper. `/admin/login` + `adminLogin`/`adminLogout`
+- **Admin shell** — non-localized admin area via Next **multiple root layouts** (`app/admin/layout.tsx` html/body + Toaster); guarded `(panel)` group with sidebar; login sits outside the guard
+- **Dashboard** — KPI tiles (pending orders, booking requests, new quotes, paid revenue), recent orders/bookings, recent activity feed
+- **Orders** — list + detail; update order status, payment status (PENDING→…→PAID_IN_FULL, stamps `paidAt`), invoice/internal note
+- **Bookings** — list + detail; confirm/decline; **confirming converts the TENTATIVE hold to HARD** (blocks the calendar) and advances the contract DRAFT→SENT; payment status; contract link
+- **Quotes** — list + detail; status, estimate ($), staff notes
+- **Products** — list, create, edit (localized EN/FR name/short/description, slug, SKU, type, status, prices, deposit, category, featured), delete; **Categories** add + list; **Inventory** — per-product rental units, add + toggle active
+- Admin data layer (`server/data/admin.ts`), permission-gated action files per module, reused `StatusBadge` (locale `en`)
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · every mutating action calls `requirePermission(...)` server-side and writes an `ActivityLog`
+- Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
+
+**Decisions / notes:** Admin is **not localized** (English UI) per the sitemap — no i18n overhead. Admin auth is intentionally **separate** from customer auth (different cookie, same `NEXTAUTH_SECRET`) so customers can never reach `/admin`. Seeded super-admin: `admin@bigwaveslides.com` / `BigWave!2026` (change before launch). Product media management (gallery/variations upload) and category editing/delete are deferred to **Phase 16** (CRM/content/governance), along with customers, blog/events admin, testimonials/reviews moderation, media library, settings, users/roles, and activity log views. Email notifications on status changes land in Phase 17.
