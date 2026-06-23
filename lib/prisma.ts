@@ -7,8 +7,14 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrismaClient() {
   // Prisma 7 driver adapter — runtime connects via the pooled Neon URL.
+  // Bounded timeouts so a flaky connection fails fast (and retries quickly)
+  // instead of hanging the request/build for minutes.
   const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL,
+    // Generous connect timeout for Neon cold-starts; bounded so a truly dead
+    // connection still fails (and retries) rather than hanging indefinitely.
+    connectionTimeoutMillis: 30000,
+    max: 10,
   });
   return new PrismaClient({
     adapter,

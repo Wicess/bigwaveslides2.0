@@ -1,72 +1,57 @@
 import { hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { LocaleSwitcher } from "@/components/layout/locale-switcher";
+import { getHomeData, type HomeData } from "@/server/data/home";
+import { Hero } from "@/components/sections/home/hero";
+import { TrustBand } from "@/components/sections/home/trust-band";
+import { FeaturedSlides } from "@/components/sections/home/featured-slides";
+import { RentalCategories } from "@/components/sections/home/rental-categories";
+import { ServicesOverview } from "@/components/sections/home/services-overview";
+import { HowItWorks } from "@/components/sections/home/how-it-works";
+import { WhyChooseUs } from "@/components/sections/home/why-choose-us";
+import { UpcomingEvents } from "@/components/sections/home/upcoming-events";
+import { TestimonialsCarousel } from "@/components/sections/home/testimonials-carousel";
+import { LatestBlog } from "@/components/sections/home/latest-blog";
+import { FinalCta } from "@/components/sections/home/final-cta";
 
-type Props = {
-  params: Promise<{ locale: string }>;
+type Props = { params: Promise<{ locale: string }> };
+
+const FALLBACK: HomeData = {
+  featured: [],
+  categories: [],
+  services: [],
+  events: [],
+  testimonials: [],
+  posts: [],
+  stats: { reviewCount: 1200, ratingAvg: 4.9 },
 };
 
-/**
- * Phase 2 scaffolding splash — proves design tokens, fonts, and EN/FR routing.
- * Replaced by the real cinematic homepage in Phase 7.
- */
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
   setRequestLocale(locale);
-  const t = await getTranslations("Home");
-  const tSetup = await getTranslations("Setup");
+
+  const data: HomeData = await getHomeData().catch(() => FALLBACK);
 
   return (
-    <main className="relative flex min-h-dvh items-center justify-center overflow-hidden px-6 py-20">
-      {/* Ambient brand wash */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(60% 50% at 50% 0%, rgba(0,212,255,0.18), transparent 70%), radial-gradient(50% 50% at 80% 90%, rgba(0,153,255,0.16), transparent 70%)",
-        }}
+    <main>
+      <Hero
+        rating={data.stats.ratingAvg}
+        reviewCount={data.stats.reviewCount}
       />
-
-      <div className="glass mx-auto w-full max-w-2xl rounded-[var(--radius-xl)] p-10 shadow-[var(--shadow-soft)] sm:p-14">
-        <div className="flex items-center justify-between gap-4">
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            {tSetup("badge")}
-          </span>
-          <LocaleSwitcher />
-        </div>
-
-        <p className="mt-8 text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-          {t("eyebrow")}
-        </p>
-
-        <h1 className="mt-3 text-5xl font-bold leading-[1.05] sm:text-6xl">
-          <span className="text-gradient">{t("tagline")}</span>
-        </h1>
-
-        <p className="mt-5 max-w-prose text-lg text-muted-foreground">
-          {t("subtitle")}
-        </p>
-
-        <div className="mt-8 flex flex-wrap gap-3">
-          <span className="inline-flex items-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-[var(--shadow-glow)]">
-            {t("ctaShop")}
-          </span>
-          <span className="inline-flex items-center rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground">
-            {t("ctaRent")}
-          </span>
-        </div>
-
-        <p className="mt-10 border-t border-border pt-6 text-sm text-muted-foreground">
-          {tSetup("note")}
-        </p>
-      </div>
+      <TrustBand />
+      <FeaturedSlides products={data.featured} locale={locale} />
+      <RentalCategories categories={data.categories} locale={locale} />
+      <ServicesOverview services={data.services} locale={locale} />
+      <HowItWorks />
+      <WhyChooseUs />
+      <UpcomingEvents events={data.events} locale={locale} />
+      <TestimonialsCarousel testimonials={data.testimonials} locale={locale} />
+      <LatestBlog posts={data.posts} locale={locale} />
+      <FinalCta />
     </main>
   );
 }

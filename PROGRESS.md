@@ -10,7 +10,7 @@
 | 4 | Database & Prisma (Neon + pgvector) | ✅ Complete |
 | 5 | Media Pipeline (R2 + CDN + Image Optimization) | ✅ Complete |
 | 6 | Global Layout (mega-menu, footer, i18n, WhatsApp) | ✅ Complete |
-| 7 | Homepage | ⬜ Not started |
+| 7 | Homepage | ✅ Complete |
 | 8 | About, Services & Contact | ⬜ Not started |
 | 9 | Shop System Part 1 (discovery, AI search, reviews, wishlist) | ⬜ Not started |
 | 10 | Shop System Part 2 (cart, request order, abandoned-request) | ⬜ Not started |
@@ -135,3 +135,28 @@
 - Runtime: `/en` renders mega-menu categories (Inflatable Water Slides), popular rentals (Tropical Twist), footer services (Birthday Parties), WhatsApp number, contact email, trust badges; `/fr` renders localized nav (Boutique, Location, Obtenir un devis, Tous droits réservés)
 
 **Note:** lucide v1 dropped brand icons → inline SVG brand glyphs. Build-time Neon timeout initially baked empty nav; fixed with `withRetry`.
+
+---
+
+## Phase 7 — Homepage ✅
+
+**Delivered (11 cinematic, data-driven sections):**
+1. **Hero** — R3F liquid-blob scene, kinetic headline, dual CTAs, star rating, "check your date" widget (→ /rent?date=)
+2. **Trust band** — insured/clean/on-time badges + audience marquee
+3. **Featured slides** — DB-driven `ProductCard` grid (reusable, with rating/price/badges)
+4. **Rental categories** — image cards with gradient overlay
+5. **Services overview** — icon cards by service category
+6. **How it works** — 3-step **GSAP ScrollTrigger** scrollytelling (scrub progress line), reduced-motion safe
+7. **Why choose us** — animated count-up stat counters (in-view)
+8. **Upcoming events** — DB event cards with date/location
+9. **Testimonials** — snap-scroll carousel with prev/next
+10. **Latest blog** — DB post cards (category, reading time, date)
+11. **Final CTA** — gradient band → quote/rent
+
+**Supporting:** `server/data/home.ts` (cached + retry + aggregate stats), `ProductCard`, `Stars`, `lib/format.ts` (price/date), expanded Home/Product i18n (EN/FR), Prisma adapter timeouts tuned for resilience.
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · `build` ✓ (8/8 static, ISR 10min)
+- Runtime `/en` (231 KB): renders hero, Tropical Twist + Castle Splash (featured), Inflatable Water Slides (category), Birthday Parties (service), Summer Splash (event), "Rent in 3 easy steps", testimonials, blog — all live DB content
+
+**Note:** Phase 2 splash + `Setup` i18n removed. Cold build with three.js ~3.5min on this machine (warm builds fast; Vercel fast). Real curated water imagery still pending real assets — cards use placeholders, hero uses 3D/gradients.
