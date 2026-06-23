@@ -11,11 +11,11 @@ const IDLE_HOURS = 24;
 
 /**
  * Abandoned-request recovery sweep. Flags stale ACTIVE carts (that still hold
- * items) as ABANDONED so a reminder can be sent. The actual reminder email is
- * wired in Phase 17 (SMTP); this endpoint marks `reminderSentAt` to make the
- * job idempotent. Trigger from Vercel Cron with `Authorization: Bearer <CRON_SECRET>`.
+ * items) as ABANDONED and emails a reminder to carts linked to a customer.
+ * Idempotent via `reminderSentAt`. Triggered by Vercel Cron (GET), which sends
+ * `Authorization: Bearer <CRON_SECRET>` automatically when CRON_SECRET is set.
  */
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   if (!env.CRON_SECRET) {
     return NextResponse.json({ error: "CRON_SECRET not configured" }, { status: 503 });
   }

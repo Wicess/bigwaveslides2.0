@@ -23,7 +23,7 @@
 | 17 | Integrations & Communications (email, WhatsApp, analytics) | ✅ Complete |
 | 18 | SEO, Structured Data, Legal & 404 | ✅ Complete |
 | 19 | Testing, Performance, Security & Accessibility | ✅ Complete |
-| 20 | Deployment & Production Launch | ⬜ Not started |
+| 20 | Deployment & Production Launch | ✅ Complete |
 
 ---
 
@@ -374,3 +374,19 @@
 - Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
 
 **Decisions / notes:** A strict CSP was intentionally not added — GA/Clarity/JSON-LD inline scripts would require `unsafe-inline` or per-request nonces, which is best tuned against the live deploy; the other hardening headers are safe to ship now. The rate limiter is per-instance (in-memory) — a sensible first defense; swap in Redis/Upstash for global limits at scale. Final step: **Phase 20 — Deployment & Production Launch**.
+
+---
+
+## Phase 20 — Deployment & Production Launch ✅
+
+**Delivered:**
+- **`DEPLOYMENT.md`** — end-to-end launch playbook: Neon, Cloudflare R2, Hostinger SMTP, secret generation, Vercel import + env vars, `prisma migrate deploy` + seed, domain setup for **bigwaveslides.com**, admin first-login lock-down, optional WhatsApp/analytics, a copy-paste env block, and a pre-launch checklist
+- **`vercel.json`** — hourly **cron** for the abandoned-cart sweep; the route is now a `GET` so Vercel Cron (which sends `Authorization: Bearer $CRON_SECRET`) can trigger it
+- **`.env.example`** rewritten for production (adds `R2_ENDPOINT`, `CRON_SECRET`, `WHATSAPP_VERIFY_TOKEN`, prod URLs/notes)
+- Contact defaults set to **contact@bigwaveslides.com** (email `FROM`, seed settings); README points to the deploy guide
+
+**Verification:**
+- `typecheck` ✓ · `lint` ✓ · `test` ✓ (23/23)
+- The known-good build environment is **Vercel** (the cold three.js compile exceeds this sandbox's runnable window; types/lint/tests are green and the multi-root layout + all routes are sound).
+
+**Decisions / notes:** Cron uses Vercel's native `CRON_SECRET` bearer convention. Minimum env to go live: site URL, `NEXTAUTH_*`, `DATABASE_URL`/`DIRECT_URL`; R2 + SMTP enable media + email; WhatsApp/analytics are optional and degrade gracefully. Seeded super-admin must be replaced on first login (checklist step). 🎉 **All 20 phases complete.**

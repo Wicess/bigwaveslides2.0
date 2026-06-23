@@ -16,7 +16,7 @@ function getTransport(): Transporter | null {
   return cached;
 }
 
-export const FROM = env.SMTP_FROM ?? "Big Wave Slides <hello@bigwaveslides.com>";
+export const FROM = env.SMTP_FROM ?? "Big Wave Slides <contact@bigwaveslides.com>";
 
 export type SendResult = { ok: boolean; skipped?: boolean; error?: string };
 

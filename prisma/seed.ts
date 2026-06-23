@@ -627,7 +627,7 @@ async function seedTestimonials() {
 // ───────────────────────── Site Settings ─────────────────────────
 async function seedSettings() {
   const SETTINGS = [
-    { key: "contact", group: "contact", value: { email: "hello@bigwaveslides.com", phone: "+1 (555) 123-9255", whatsapp: "15551239255", address: "123 Riverside Ave, Springfield, USA" } },
+    { key: "contact", group: "contact", value: { email: "contact@bigwaveslides.com", phone: "+1 (555) 123-9255", whatsapp: "15551239255", address: "123 Riverside Ave, Springfield, USA" } },
     { key: "fees", group: "fees", value: { deliveryBaseCents: 4900, pickupCents: 2900, freeRadiusMiles: 15, perMileCents: 250 } },
     { key: "social", group: "social", value: { instagram: "https://instagram.com/bigwaveslides", facebook: "https://facebook.com/bigwaveslides", tiktok: "https://tiktok.com/@bigwaveslides" } },
     { key: "hours", group: "general", value: { mon_fri: "8:00–18:00", sat: "8:00–20:00", sun: "10:00–16:00" } },

@@ -26,6 +26,12 @@ World-class platform for **Big Wave Slides** — a US company that **sells, rent
 
 This platform does **not** process payments online. All orders, bookings, and quotes are **request-based**: captured to the database and emailed to staff + customer. Staff send payment details manually and track status in the admin panel (`PENDING → INVOICE_SENT → DEPOSIT_PAID → PAID_IN_FULL → CANCELLED`).
 
+## 🚀 Deploying to production
+
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for the complete, copy‑paste launch guide — Neon, Cloudflare R2, Hostinger SMTP, Vercel env vars + cron, domain setup at `bigwaveslides.com`, migration/seed, and a pre‑launch checklist.
+
+Quality gates: `npm run typecheck && npm run lint && npm run test`.
+
 ## Build Plan
 
 Delivered in **20 phases**, one at a time. See [`PROGRESS.md`](./PROGRESS.md) for status and [`docs/`](./docs) for the full architecture, database design, sitemap, wireframes, and strategy.
