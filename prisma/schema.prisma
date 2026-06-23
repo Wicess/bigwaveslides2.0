@@ -1,0 +1,721 @@
+// Big Wave Slides — data model (Phase 4)
+// Money is stored as integer cents. Timestamps are UTC.
+// Localized text fields are `Json` holding { en: string, fr: string }.
+// pgvector embedding column + trigram indexes are added in Phase 9 (AI search).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Prisma 7: connection URLs live in prisma.config.ts (migrations) and the
+  // PrismaClient driver adapter (runtime). See lib/prisma.ts.
+}
+
+// ───────────────────────── Enums ─────────────────────────
+enum ProductType {
+  SALE
+  RENTAL
+  BOTH
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+  OUT_OF_STOCK
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  FULFILLED
+  CANCELLED
+}
+
+enum BookingStatus {
+  REQUESTED
+  CONFIRMED
+  COMPLETED
+  DECLINED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  INVOICE_SENT
+  DEPOSIT_PAID
+  PAID_IN_FULL
+  CANCELLED
+}
+
+enum QuoteStatus {
+  NEW
+  REVIEWED
+  QUOTED
+  WON
+  LOST
+}
+
+enum QuoteContext {
+  SHOP
+  RENTAL
+  SERVICE
+  GENERAL
+}
+
+enum ContractStatus {
+  DRAFT
+  SENT
+  SIGNED
+  VOID
+}
+
+enum EventStatus {
+  UPCOMING
+  ONGOING
+  PAST
+  CANCELLED
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TestimonialStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AdminRoleType {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  SALES
+  SUPPORT
+}
+
+enum HoldType {
+  TENTATIVE
+  HARD
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOC
+}
+
+enum InquiryStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum SubscriberStatus {
+  SUBSCRIBED
+  UNSUBSCRIBED
+}
+
+enum CartStatus {
+  ACTIVE
+  CONVERTED
+  ABANDONED
+}
+
+enum ServiceCategory {
+  EVENT
+  INSTALL
+  MAINTENANCE
+  SUPPORT
+}
+
+enum OrgType {
+  INDIVIDUAL
+  SCHOOL
+  CHURCH
+  HOTEL
+  MUNICIPALITY
+  CORPORATE
+}
+
+// ───────────────────────── Catalog ─────────────────────────
+model ProductCategory {
+  id              String            @id @default(cuid())
+  slug            String            @unique
+  name            Json
+  description     Json?
+  image           String?
+  order           Int               @default(0)
+  parentId        String?
+  parent          ProductCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children        ProductCategory[] @relation("CategoryTree")
+  products        Product[]
+  metaTitle       Json?
+  metaDescription Json?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model Product {
+  id               String             @id @default(cuid())
+  slug             String             @unique
+  sku              String             @unique
+  name             Json
+  shortDescription Json?
+  description      Json?
+  type             ProductType        @default(RENTAL)
+  status           ProductStatus      @default(ACTIVE)
+  salePriceCents   Int?
+  dailyRateCents   Int?
+  depositCents     Int?
+  dimensions       Json?
+  capacity         Int?
+  spaceRequired    Json?
+  powerRequired    String?
+  ageRange         String?
+  features         Json?
+  searchText       String?
+  ratingAvg        Float              @default(0)
+  ratingCount      Int                @default(0)
+  featured         Boolean            @default(false)
+  categoryId       String?
+  category         ProductCategory?   @relation(fields: [categoryId], references: [id])
+  media            ProductMedia[]
+  variations       ProductVariation[]
+  reviews          Review[]
+  wishlistItems    WishlistItem[]
+  rentalUnits      RentalUnit[]
+  orderItems       OrderItem[]
+  bookingItems     BookingItem[]
+  cartItems        CartItem[]
+  metaTitle        Json?
+  metaDescription  Json?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@index([type, status])
+  @@index([categoryId])
+  @@index([featured])
+}
+
+model ProductMedia {
+  id        String    @id @default(cuid())
+  productId String
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type      MediaType @default(IMAGE)
+  r2Key     String?
+  url       String
+  alt       Json?
+  width     Int?
+  height    Int?
+  order     Int       @default(0)
+  isPrimary Boolean   @default(false)
+  createdAt DateTime  @default(now())
+
+  @@index([productId])
+}
+
+model ProductVariation {
+  id              String   @id @default(cuid())
+  productId       String
+  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name            Json
+  sku             String?
+  priceDeltaCents Int      @default(0)
+  stock           Int?
+  image           String?
+  order           Int      @default(0)
+
+  @@index([productId])
+}
+
+model RentalUnit {
+  id             String        @id @default(cuid())
+  productId      String
+  product        Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  unitLabel      String
+  conditionNotes String?
+  isActive       Boolean       @default(true)
+  bookingItems   BookingItem[]
+  createdAt      DateTime      @default(now())
+
+  @@index([productId])
+}
+
+// ───────────────────────── Customer & CRM ─────────────────────────
+model Customer {
+  id                 String              @id @default(cuid())
+  name               String
+  email              String              @unique
+  phone              String?
+  passwordHash       String?
+  locale             String              @default("en")
+  marketingOptIn     Boolean             @default(false)
+  organizationName   String?
+  organizationType   OrgType?
+  crmTags            String[]
+  crmNotes           String?
+  lifetimeValueCents Int                 @default(0)
+  orders             Order[]
+  bookings           Booking[]
+  quotes             QuoteRequest[]
+  reviews            Review[]
+  wishlist           WishlistItem[]
+  registrations      EventRegistration[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model Review {
+  id         String       @id @default(cuid())
+  productId  String
+  product    Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customerId String?
+  customer   Customer?    @relation(fields: [customerId], references: [id])
+  authorName String
+  rating     Int
+  title      String?
+  body       String
+  status     ReviewStatus @default(PENDING)
+  createdAt  DateTime     @default(now())
+
+  @@index([productId, status])
+}
+
+model WishlistItem {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([customerId, productId])
+}
+
+// ───────────────────────── Sales (request-based) ─────────────────────────
+model Order {
+  id               String        @id @default(cuid())
+  orderNumber      String        @unique
+  customerId       String?
+  customer         Customer?     @relation(fields: [customerId], references: [id])
+  guestName        String?
+  guestEmail       String?
+  guestPhone       String?
+  status           OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(PENDING)
+  subtotalCents    Int           @default(0)
+  deliveryFeeCents Int           @default(0)
+  totalCents       Int           @default(0)
+  amountPaidCents  Int           @default(0)
+  invoiceNote      String?
+  paidAt           DateTime?
+  deliveryAddress  Json?
+  contactPhone     String?
+  locale           String        @default("en")
+  notes            String?
+  items            OrderItem[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([customerId, createdAt])
+  @@index([status])
+  @@index([paymentStatus])
+}
+
+model OrderItem {
+  id             String   @id @default(cuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId      String?
+  product        Product? @relation(fields: [productId], references: [id])
+  variationId    String?
+  name           String
+  unitPriceCents Int
+  quantity       Int      @default(1)
+  lineTotalCents Int
+
+  @@index([orderId])
+}
+
+model Cart {
+  id             String     @id @default(cuid())
+  customerId     String?
+  sessionId      String?
+  status         CartStatus @default(ACTIVE)
+  lastActivityAt DateTime   @default(now())
+  reminderSentAt DateTime?
+  items          CartItem[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([status, lastActivityAt])
+}
+
+model CartItem {
+  id          String  @id @default(cuid())
+  cartId      String
+  cart        Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+  variationId String?
+  quantity    Int     @default(1)
+
+  @@index([cartId])
+}
+
+// ───────────────────────── Rentals (request-based) ─────────────────────────
+model Booking {
+  id               String          @id @default(cuid())
+  bookingNumber    String          @unique
+  customerId       String?
+  customer         Customer?       @relation(fields: [customerId], references: [id])
+  guestName        String?
+  guestEmail       String?
+  guestPhone       String?
+  status           BookingStatus   @default(REQUESTED)
+  paymentStatus    PaymentStatus   @default(PENDING)
+  holdType         HoldType        @default(TENTATIVE)
+  eventStartDate   DateTime
+  eventEndDate     DateTime
+  eventType        String?
+  headcount        Int?
+  surfaceType      String?
+  eventAddress     Json?
+  subtotalCents    Int             @default(0)
+  deliveryFeeCents Int             @default(0)
+  pickupFeeCents   Int             @default(0)
+  depositCents     Int             @default(0)
+  totalCents       Int             @default(0)
+  amountPaidCents  Int             @default(0)
+  balanceDueCents  Int             @default(0)
+  invoiceNote      String?
+  locale           String          @default("en")
+  notes            String?
+  items            BookingItem[]
+  contract         RentalContract?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([eventStartDate, eventEndDate])
+}
+
+model BookingItem {
+  id             String      @id @default(cuid())
+  bookingId      String
+  booking        Booking     @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  productId      String?
+  product        Product?    @relation(fields: [productId], references: [id])
+  rentalUnitId   String?
+  rentalUnit     RentalUnit? @relation(fields: [rentalUnitId], references: [id])
+  name           String
+  dailyRateCents Int
+  days           Int         @default(1)
+  lineTotalCents Int
+
+  @@index([bookingId])
+  @@index([rentalUnitId])
+}
+
+model RentalContract {
+  id             String         @id @default(cuid())
+  bookingId      String         @unique
+  booking        Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  contractNumber String         @unique
+  status         ContractStatus @default(DRAFT)
+  pdfR2Key       String?
+  pdfUrl         String?
+  signatureR2Key String?
+  signerName     String?
+  signedAt       DateTime?
+  ipAddress      String?
+  auditTrail     Json?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+// ───────────────────────── Quotes ─────────────────────────
+model QuoteRequest {
+  id            String       @id @default(cuid())
+  quoteNumber   String       @unique
+  customerId    String?
+  customer      Customer?    @relation(fields: [customerId], references: [id])
+  guestName     String?
+  guestEmail    String?
+  guestPhone    String?
+  status        QuoteStatus  @default(NEW)
+  context       QuoteContext @default(GENERAL)
+  eventDate     DateTime?
+  message       String?
+  estimateCents Int?
+  staffNotes    String?
+  locale        String       @default("en")
+  items         QuoteItem[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([status])
+  @@index([context])
+}
+
+model QuoteItem {
+  id        String       @id @default(cuid())
+  quoteId   String
+  quote     QuoteRequest @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  productId String?
+  serviceId String?
+  label     String
+  quantity  Int          @default(1)
+  notes     String?
+
+  @@index([quoteId])
+}
+
+// ───────────────────────── Events ─────────────────────────
+model Event {
+  id                  String              @id @default(cuid())
+  slug                String              @unique
+  title               Json
+  excerpt             Json?
+  description         Json?
+  status              EventStatus         @default(UPCOMING)
+  startAt             DateTime
+  endAt               DateTime?
+  location            String?
+  coverImage          String?
+  galleryMedia        Json?
+  capacity            Int?
+  registrationEnabled Boolean             @default(false)
+  featured            Boolean             @default(false)
+  metaTitle           Json?
+  metaDescription     Json?
+  registrations       EventRegistration[]
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  @@index([status, startAt])
+}
+
+model EventRegistration {
+  id        String             @id @default(cuid())
+  eventId   String
+  event     Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  customerId String?
+  customer  Customer?          @relation(fields: [customerId], references: [id])
+  name      String
+  email     String
+  phone     String?
+  partySize Int                @default(1)
+  status    RegistrationStatus @default(PENDING)
+  notes     String?
+  createdAt DateTime           @default(now())
+
+  @@index([eventId])
+}
+
+// ───────────────────────── Blog ─────────────────────────
+model Author {
+  id        String     @id @default(cuid())
+  name      String
+  bio       Json?
+  avatar    String?
+  socials   Json?
+  posts     BlogPost[]
+  createdAt DateTime   @default(now())
+}
+
+model BlogCategory {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  name        Json
+  description Json?
+  posts       BlogPost[]
+}
+
+model Tag {
+  id    String     @id @default(cuid())
+  slug  String     @unique
+  name  Json
+  posts BlogPost[] @relation("PostTags")
+}
+
+model BlogPost {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  title           Json
+  excerpt         Json?
+  content         Json?
+  coverImage      String?
+  status          PostStatus    @default(DRAFT)
+  publishedAt     DateTime?
+  readingMinutes  Int           @default(3)
+  viewCount       Int           @default(0)
+  featured        Boolean       @default(false)
+  authorId        String?
+  author          Author?       @relation(fields: [authorId], references: [id])
+  categoryId      String?
+  category        BlogCategory? @relation(fields: [categoryId], references: [id])
+  tags            Tag[]         @relation("PostTags")
+  metaTitle       Json?
+  metaDescription Json?
+  ogImage         String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+// ───────────────────────── Content / Marketing ─────────────────────────
+model Testimonial {
+  id           String            @id @default(cuid())
+  authorName   String
+  authorRole   String?
+  organization String?
+  rating       Int               @default(5)
+  quote        Json
+  avatar       String?
+  videoUrl     String?
+  status       TestimonialStatus @default(PENDING)
+  featured     Boolean           @default(false)
+  order        Int               @default(0)
+  createdAt    DateTime          @default(now())
+
+  @@index([status, featured])
+}
+
+model Service {
+  id              String          @id @default(cuid())
+  slug            String          @unique
+  title           Json
+  summary         Json?
+  description     Json?
+  icon            String?
+  heroImage       String?
+  gallery         Json?
+  included        Json?
+  category        ServiceCategory @default(EVENT)
+  order           Int             @default(0)
+  featured        Boolean         @default(false)
+  metaTitle       Json?
+  metaDescription Json?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model ContactInquiry {
+  id           String        @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  subject      String?
+  message      String
+  sourcePage   String?
+  status       InquiryStatus @default(NEW)
+  assignedToId String?
+  locale       String        @default("en")
+  createdAt    DateTime      @default(now())
+
+  @@index([status])
+}
+
+model NewsletterSubscriber {
+  id        String           @id @default(cuid())
+  email     String           @unique
+  locale    String           @default("en")
+  status    SubscriberStatus @default(SUBSCRIBED)
+  source    String?
+  createdAt DateTime         @default(now())
+}
+
+// ───────────────────────── Admin / Governance ─────────────────────────
+model AdminUser {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  roleId       String?
+  role         Role?         @relation(fields: [roleId], references: [id])
+  isActive     Boolean       @default(true)
+  lastLoginAt  DateTime?
+  activityLogs ActivityLog[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Role {
+  id          String        @id @default(cuid())
+  name        String        @unique
+  type        AdminRoleType @default(ADMIN)
+  description String?
+  permissions Permission[]  @relation("RolePermissions")
+  users       AdminUser[]
+  createdAt   DateTime      @default(now())
+}
+
+model Permission {
+  id    String @id @default(cuid())
+  key   String @unique
+  label String
+  group String?
+  roles Role[] @relation("RolePermissions")
+}
+
+model ActivityLog {
+  id         String     @id @default(cuid())
+  actorId    String?
+  actor      AdminUser? @relation(fields: [actorId], references: [id])
+  action     String
+  entityType String?
+  entityId   String?
+  summary    String?
+  diff       Json?
+  ip         String?
+  createdAt  DateTime   @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+model MediaAsset {
+  id           String    @id @default(cuid())
+  r2Key        String    @unique
+  url          String
+  type         MediaType @default(IMAGE)
+  mimeType     String?
+  sizeBytes    Int?
+  width        Int?
+  height       Int?
+  alt          Json?
+  folder       String?
+  uploadedById String?
+  createdAt    DateTime  @default(now())
+
+  @@index([folder])
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  group     String?
+  updatedAt DateTime @updatedAt
+}

@@ -7,7 +7,7 @@
 | 1 | Discovery, Architecture & Data Design | ✅ Complete |
 | 2 | Project Setup & Configuration | ✅ Complete |
 | 3 | Design System & Motion Engine | ✅ Complete |
-| 4 | Database & Prisma (Neon + pgvector) | ⬜ Not started |
+| 4 | Database & Prisma (Neon + pgvector) | ✅ Complete |
 | 5 | Media Pipeline (R2 + CDN + Image Optimization) | ⬜ Not started |
 | 6 | Global Layout (mega-menu, footer, i18n, WhatsApp) | ⬜ Not started |
 | 7 | Homepage | ⬜ Not started |
@@ -80,3 +80,23 @@
 - `npm run typecheck` → ✓ clean
 - `npm run lint` → ✓ clean
 - Runtime: `/en/styleguide` → 200, all sections render (Buttons, Typography, Accordion, Marquee, …)
+
+---
+
+## Phase 4 — Database & Prisma (Neon) ✅
+
+**Delivered:**
+- Full Prisma schema (`prisma/schema.prisma`) — 33 models, 22 enums, relations & indexes covering catalog, CRM, request-based orders/bookings, quotes, contracts, events, blog, testimonials, services, media, RBAC, activity logs, settings
+- **Prisma 7 + pg driver adapter** wired (`lib/prisma.ts` singleton; `prisma.config.ts` for migrations) — pooled URL at runtime, direct URL for migrations
+- Initial migration applied to **Neon** (`prisma/migrations/…_init`)
+- Search extensions enabled: **pg_trgm + pgvector** (`prisma/extensions.sql`) — ready for Phase 9
+- Localized-content helper (`lib/localized.ts`, `{en,fr}` Json convention)
+- Rich idempotent seed (`prisma/seed.ts`): 5 categories · 7 products · 10 rental units · 11 services · 3 blog posts · 3 events · 5 testimonials · 28 permissions · 3 roles · 1 admin user · 4 settings
+- Scripts: `db:migrate`, `db:seed`, `db:studio`, `db:generate`, `db:check`; `postinstall` runs `prisma generate` (Vercel-ready)
+
+**Verification:**
+- `prisma migrate dev` → ✓ applied to Neon
+- `db:seed` → ✓ complete; `db:check` count table confirms all rows
+- `npm run typecheck` ✓ · `npm run lint` ✓ · `npm run build` ✓
+
+**Decisions:** Prisma 7 (current major) requires URLs in `prisma.config.ts` + a driver adapter — adopted `@prisma/adapter-pg`. Localized CMS text stored as `{en,fr}` Json. Seed images are placeholders (picsum) — replaced with curated water media on R2 in Phase 5. Admin login seeded: `admin@bigwaveslides.com` / `BigWave!2026` (change before launch).
