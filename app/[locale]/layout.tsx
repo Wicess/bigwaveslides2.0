@@ -4,6 +4,8 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { LenisProvider } from "@/components/motion/lenis-provider";
+import { Toaster } from "@/components/ui/toaster";
 // Self-hosted variable fonts (offline, no layout shift). Family names:
 // "Inter Variable" (body) and "Sora Variable" (display) — wired in globals.css.
 import "@fontsource-variable/inter";
@@ -44,7 +46,8 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body className="min-h-dvh antialiased">
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <LenisProvider>{children}</LenisProvider>
+          <Toaster />
         </NextIntlClientProvider>
       </body>
     </html>

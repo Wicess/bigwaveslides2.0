@@ -113,6 +113,78 @@
   color: transparent;
 }
 
+/* Marquee (logo strips / kinetic bands) — duplicate children to loop seamlessly */
+@utility animate-marquee {
+  animation: bws-marquee var(--marquee-duration, 32s) linear infinite;
+}
+
+@keyframes bws-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Accordion (Radix height-based reveal) */
+@utility animate-accordion-down {
+  animation: bws-accordion-down 0.3s ease-out;
+}
+@utility animate-accordion-up {
+  animation: bws-accordion-up 0.3s ease-out;
+}
+@keyframes bws-accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+@keyframes bws-accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* Lenis smooth-scroll (required base styles) */
+@layer base {
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* Focus-visible ring + tasteful scrollbar */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--color-primary) 35%, transparent);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--color-primary) 55%, transparent);
+  }
+}
+
 /* Respect reduced motion globally (motion engine refines this in Phase 3) */
 @media (prefers-reduced-motion: reduce) {
   *,

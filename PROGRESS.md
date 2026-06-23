@@ -6,7 +6,7 @@
 |---|---|---|
 | 1 | Discovery, Architecture & Data Design | ✅ Complete |
 | 2 | Project Setup & Configuration | ✅ Complete |
-| 3 | Design System & Motion Engine | ⬜ Not started |
+| 3 | Design System & Motion Engine | ✅ Complete |
 | 4 | Database & Prisma (Neon + pgvector) | ⬜ Not started |
 | 5 | Media Pipeline (R2 + CDN + Image Optimization) | ⬜ Not started |
 | 6 | Global Layout (mega-menu, footer, i18n, WhatsApp) | ⬜ Not started |
@@ -62,3 +62,21 @@
 - Runtime: `/` → 307 → `/en`; `/en` renders English, `/fr` renders French
 
 **Decisions:** honored Next 15 pin (not 16); Tailwind v4 CSS-first config; self-hosted fonts (sandbox can't fetch Google Fonts reliably; also better for production determinism); lint kept out of `next build` (`eslint.ignoreDuringBuilds`) and run as its own gate.
+
+---
+
+## Phase 3 — Design System & Motion Engine ✅
+
+**Delivered:**
+- **UI primitives** (`components/ui/`): Button (6 variants, sizes, loading, asChild), Container, Section + Eyebrow + SectionHeader (tight rhythm), Card (solid/glass + parts), Badge, Input, Textarea, Label, Select, Dialog, Tabs, Accordion, Marquee, Toaster (sonner)
+- **Design tokens** expanded in `app/globals.css`: brand palette + tint scale, glass/text-gradient utilities, marquee + accordion keyframes, Lenis base styles, focus ring + scrollbar
+- **Motion engine** (`components/motion/`): Lenis smooth-scroll provider synced to GSAP ScrollTrigger, shared Framer Motion variants, `<Reveal>` scroll-reveal, `<KineticText>` word-stagger, page-transition `template.tsx` — all `prefers-reduced-motion` safe
+- **3D** (`components/three/`): lazy-loaded R3F liquid blob (`WaveScene`) with static-gradient reduced-motion fallback, no external asset fetches
+- Providers wired into locale layout (Lenis + Toaster)
+- **`/styleguide`** route showcasing every token, component, and motion sample
+
+**Verification:**
+- `npm run build` → ✓ 7/7 static pages (`/en` `/fr` + styleguide ×2); 3D in async chunk
+- `npm run typecheck` → ✓ clean
+- `npm run lint` → ✓ clean
+- Runtime: `/en/styleguide` → 200, all sections render (Buttons, Typography, Accordion, Marquee, …)
