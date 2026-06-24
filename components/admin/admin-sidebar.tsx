@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  BarChart3,
   Package,
   Boxes,
   CalendarCheck,
@@ -53,6 +54,13 @@ const GROUPS = [
     items: [
       { href: "/admin/blog", label: "Blog", icon: Newspaper },
       { href: "/admin/media", label: "Media", icon: Image },
+    ],
+  },
+  {
+    label: "Insights",
+    items: [
+      { href: "/admin/analytics", label: "Analytics", icon: BarChart3, exact: true },
+      { href: "/admin/analytics/visitors", label: "Visitors", icon: Users },
     ],
   },
   {

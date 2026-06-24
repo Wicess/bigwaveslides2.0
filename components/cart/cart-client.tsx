@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import {
   Minus,
   Plus,
@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatPrice } from "@/lib/format";
 import { CART_CHANGED_EVENT } from "@/lib/cart-event";
+import { trackEvent } from "@/lib/analytics/client";
 import type { CartLine, CartSummary } from "@/server/data/cart";
 import { OrderRequestForm } from "@/components/cart/order-request-form";
 
@@ -43,6 +44,19 @@ export function CartClient({
 
   const subtotalCents = lines.reduce((n, l) => n + l.lineTotalCents, 0);
   const count = lines.reduce((n, l) => n + l.quantity, 0);
+
+  // Record that the visitor viewed their cart (once, on mount with items).
+  useEffect(() => {
+    if (cart.lines.length > 0) {
+      trackEvent({
+        type: "CART_VIEW",
+        meta: {
+          itemCount: cart.lines.reduce((n, l) => n + l.quantity, 0),
+          subtotalCents: cart.lines.reduce((n, l) => n + l.lineTotalCents, 0),
+        },
+      });
+    }
+  }, []);
 
   const changeQty = (line: CartLine, next: number) => {
     if (next < 1) return remove(line);
@@ -75,6 +89,10 @@ export function CartClient({
         toast.error(res.error ?? t("updateError"));
       } else {
         toast.success(t("removed"));
+        trackEvent({
+          type: "REMOVE_FROM_CART",
+          meta: { productId: line.productId, productName: line.name },
+        });
         notifyChange();
       }
     });
@@ -150,7 +168,13 @@ export function CartClient({
           variant="gradient"
           size="lg"
           className="mt-5 w-full"
-          onClick={() => setStep("checkout")}
+          onClick={() => {
+            trackEvent({
+              type: "CHECKOUT_START",
+              meta: { itemCount: count, subtotalCents },
+            });
+            setStep("checkout");
+          }}
         >
           {t("requestOrder")}
         </Button>
@@ -246,6 +270,10 @@ export function CartClient({
             <div className="mt-5">
               <OrderRequestForm
                 onSuccess={(num) => {
+                  trackEvent({
+                    type: "ORDER_REQUEST",
+                    meta: { orderNumber: num, itemCount: count, subtotalCents },
+                  });
                   setOrderNumber(num);
                   setLines([]);
                   notifyChange();

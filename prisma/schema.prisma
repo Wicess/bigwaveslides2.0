@@ -233,15 +233,15 @@ model ProductMedia {
 }
 
 model ProductVariation {
-  id              String   @id @default(cuid())
+  id              String  @id @default(cuid())
   productId       String
-  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product         Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   name            Json
   sku             String?
-  priceDeltaCents Int      @default(0)
+  priceDeltaCents Int     @default(0)
   stock           Int?
   image           String?
-  order           Int      @default(0)
+  order           Int     @default(0)
 
   @@index([productId])
 }
@@ -516,18 +516,18 @@ model Event {
 }
 
 model EventRegistration {
-  id        String             @id @default(cuid())
-  eventId   String
-  event     Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  id         String             @id @default(cuid())
+  eventId    String
+  event      Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
   customerId String?
-  customer  Customer?          @relation(fields: [customerId], references: [id])
-  name      String
-  email     String
-  phone     String?
-  partySize Int                @default(1)
-  status    RegistrationStatus @default(PENDING)
-  notes     String?
-  createdAt DateTime           @default(now())
+  customer   Customer?          @relation(fields: [customerId], references: [id])
+  name       String
+  email      String
+  phone      String?
+  partySize  Int                @default(1)
+  status     RegistrationStatus @default(PENDING)
+  notes      String?
+  createdAt  DateTime           @default(now())
 
   @@index([eventId])
 }
@@ -672,11 +672,11 @@ model Role {
 }
 
 model Permission {
-  id    String @id @default(cuid())
-  key   String @unique
+  id    String  @id @default(cuid())
+  key   String  @unique
   label String
   group String?
-  roles Role[] @relation("RolePermissions")
+  roles Role[]  @relation("RolePermissions")
 }
 
 model ActivityLog {
@@ -718,4 +718,105 @@ model SiteSetting {
   value     Json
   group     String?
   updatedAt DateTime @updatedAt
+}
+
+// ───────────────────────── Analytics & visitor tracking ─────────────────────
+// A Visitor is one anonymous person (identified by a long-lived cookie id).
+// Each Visit is a session (arrival → leave). Every movement/cart action is an
+// AnalyticsEvent linked to both, so the admin can replay a visitor's journey.
+
+enum AnalyticsEventType {
+  PAGE_VIEW
+  PAGE_LEAVE
+  SESSION_START
+  ADD_TO_CART
+  REMOVE_FROM_CART
+  CART_VIEW
+  CHECKOUT_START
+  ORDER_REQUEST
+  BOOKING_REQUEST
+  QUOTE_REQUEST
+  CONTACT
+}
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  BOT
+  UNKNOWN
+}
+
+model Visitor {
+  id            String     @id @default(cuid())
+  // Anonymous id stored in the visitor's cookie (stable across sessions).
+  visitorKey    String     @unique
+  firstSeenAt   DateTime   @default(now())
+  lastSeenAt    DateTime   @default(now())
+  // Geo (resolved from edge headers); names are stored fully expanded.
+  country       String?
+  countryCode   String?
+  region        String? // full state/region name, e.g. "Ohio"
+  regionCode    String?
+  city          String?
+  // Device / source
+  device        DeviceType @default(UNKNOWN)
+  browser       String?
+  os            String?
+  userAgent     String?
+  firstReferrer String?
+  landingPath   String?
+  // Rollups for fast listing
+  visitCount    Int        @default(0)
+  pageViewCount Int        @default(0)
+  eventCount    Int        @default(0)
+
+  visits Visit[]
+  events AnalyticsEvent[]
+
+  @@index([lastSeenAt])
+  @@index([country])
+}
+
+model Visit {
+  id          String    @id @default(cuid())
+  visitorId   String
+  visitor     Visitor   @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  // Session id stored in a short-lived cookie.
+  sessionKey  String    @unique
+  startedAt   DateTime  @default(now())
+  // Updated on every event; when it stops changing the session has "left".
+  lastSeenAt  DateTime  @default(now())
+  endedAt     DateTime?
+  durationMs  Int       @default(0)
+  pageViews   Int       @default(0)
+  landingPath String?
+  exitPath    String?
+  referrer    String?
+
+  events AnalyticsEvent[]
+
+  @@index([visitorId, startedAt])
+  @@index([startedAt])
+}
+
+model AnalyticsEvent {
+  id         String             @id @default(cuid())
+  type       AnalyticsEventType
+  visitorId  String
+  visitor    Visitor            @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  visitId    String?
+  visit      Visit?             @relation(fields: [visitId], references: [id], onDelete: SetNull)
+  path       String?
+  title      String?
+  referrer   String?
+  // For PAGE_LEAVE: how long the visitor spent on `path`.
+  durationMs Int?
+  // Free-form context (product id/name, cart count, order number, etc.).
+  meta       Json?
+  createdAt  DateTime           @default(now())
+
+  @@index([visitorId, createdAt])
+  @@index([type, createdAt])
+  @@index([createdAt])
 }

@@ -7,12 +7,15 @@ import { addToCart } from "@/server/actions/cart";
 import { toast } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { CART_CHANGED_EVENT } from "@/lib/cart-event";
+import { trackEvent } from "@/lib/analytics/client";
 
 export function AddToCart({
   productId,
+  productName,
   className,
 }: {
   productId: string;
+  productName?: string;
   className?: string;
 }) {
   const t = useTranslations("Cart");
@@ -24,6 +27,10 @@ export function AddToCart({
       const res = await addToCart(productId, qty);
       if (res.ok) {
         toast.success(t("added"));
+        trackEvent({
+          type: "ADD_TO_CART",
+          meta: { productId, productName, quantity: qty, cartCount: res.count },
+        });
         window.dispatchEvent(
           new CustomEvent(CART_CHANGED_EVENT, { detail: { count: res.count } }),
         );

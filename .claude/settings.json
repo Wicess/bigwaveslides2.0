@@ -4,7 +4,15 @@
       "Bash(git commit -q -m ' *)",
       "Bash(sed -n '/const PERMISSIONS/,/\\\\];/p' prisma/seed.ts)",
       "Bash(sed -n '/^enum SubscriberStatus/,/^}/p;/^enum OrgType/,/^}/p;/^model NewsletterSubscriber/,/^}/p;/^model MediaAsset/,/^}/p' prisma/schema.prisma)",
-      "Bash(git commit -q -m 'feat: admin product image upload to R2 + PDF product image + condensed 2-page terms *)"
+      "Bash(git commit -q -m 'feat: admin product image upload to R2 + PDF product image + condensed 2-page terms *)",
+      "Bash(pdftoppm -png -r 90 order_booking.pdf bk_page)",
+      "Bash(pdftoppm -png -r 90 order_order.pdf or_page)",
+      "Read(//home/wice2/Desktop/projects/Big\\\\ Wave\\\\ Slides/app/[locale]/contact/**)",
+      "Read(//home/wice2/Desktop/projects/Big\\\\ Wave\\\\ Slides/app/[locale]/quote/**)",
+      "Read(//home/wice2/Desktop/projects/Big\\\\ Wave\\\\ Slides/app/[locale]/testimonials/**)",
+      "Bash(echo \"PUSH=$?\")",
+      "Bash(echo \"GEN=$?\")",
+      "Bash(git commit -q -m 'feat: visitor analytics + tracking \\(unique IDs, geo, movement timeline, cart funnel\\) *)"
     ]
   }
 }

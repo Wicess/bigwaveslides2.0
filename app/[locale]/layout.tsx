@@ -13,6 +13,7 @@ import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { BackToTop } from "@/components/layout/back-to-top";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 import { Analytics } from "@/components/analytics";
+import { AnalyticsTracker } from "@/components/analytics/analytics-tracker";
 import { JsonLd } from "@/components/seo/json-ld";
 import { organizationLd, websiteLd } from "@/lib/structured-data";
 // Self-hosted variable fonts (offline, no layout shift). Family names:
@@ -91,6 +92,7 @@ export default async function LocaleLayout({
           />
           <BackToTop label={t("backToTop")} />
           <Toaster />
+          <AnalyticsTracker />
         </NextIntlClientProvider>
         <Analytics />
         <JsonLd data={organizationLd(navData.settings.contact)} />
