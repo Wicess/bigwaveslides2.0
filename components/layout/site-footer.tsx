@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { Waves, Mail, Phone, MapPin, ShieldCheck, Sparkles, Clock } from "lucide-react";
+import Image from "next/image";
+import { Mail, Phone, MapPin, ShieldCheck, Sparkles, Clock } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import {
   InstagramIcon,
@@ -59,11 +60,16 @@ export async function SiteFooter({
       {/* Main */}
       <Container className="grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <Link href="/" className="flex items-center gap-2 font-display text-lg font-bold">
-            <span className="grid size-9 place-items-center rounded-xl text-white shadow-[var(--shadow-glow)] [background:var(--gradient-wave)]">
-              <Waves className="size-5" />
+          <Link href="/" aria-label="Big Wave Slides — home" className="inline-flex">
+            <span className="rounded-2xl bg-white/95 px-3 py-2 shadow-[var(--shadow-soft)]">
+              <Image
+                src="/logo.png"
+                alt="Big Wave Slides"
+                width={170}
+                height={144}
+                className="h-14 w-auto"
+              />
             </span>
-            Big Wave Slides
           </Link>
           <p className="mt-4 max-w-xs text-sm text-white/70">
             {t("footerTagline")}

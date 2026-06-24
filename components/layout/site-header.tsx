@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Waves,
   Search,
   Heart,
   ShoppingBag,
@@ -64,16 +64,15 @@ export function SiteHeader({ locale, data }: Props) {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-5 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-display text-lg font-bold"
-        >
-          <span className="grid size-9 place-items-center rounded-xl text-white shadow-[var(--shadow-glow)] [background:var(--gradient-wave)]">
-            <Waves className="size-5" />
-          </span>
-          <span>
-            Big Wave <span className="text-primary">Slides</span>
-          </span>
+        <Link href="/" aria-label="Big Wave Slides — home" className="flex items-center">
+          <Image
+            src="/logo.png"
+            alt="Big Wave Slides"
+            width={180}
+            height={153}
+            priority
+            className="h-12 w-auto sm:h-14"
+          />
         </Link>
 
         {/* Desktop nav */}
@@ -364,9 +363,13 @@ function MobileMenu({
             className="absolute right-0 top-0 flex h-full w-[88%] max-w-sm flex-col overflow-y-auto bg-background p-6 shadow-2xl"
           >
             <div className="flex items-center justify-between">
-              <span className="font-display text-lg font-bold">
-                Big Wave <span className="text-primary">Slides</span>
-              </span>
+              <Image
+                src="/logo.png"
+                alt="Big Wave Slides"
+                width={150}
+                height={127}
+                className="h-11 w-auto"
+              />
               <button
                 type="button"
                 onClick={onClose}

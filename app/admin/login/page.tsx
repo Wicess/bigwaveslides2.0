@@ -1,5 +1,5 @@
+import Image from "next/image";
 import { redirect } from "next/navigation";
-import { Waves } from "lucide-react";
 import { getAdminSession } from "@/lib/admin-auth";
 import { Card } from "@/components/ui/card";
 import { AdminLoginForm } from "@/components/admin/admin-login-form";
@@ -11,9 +11,8 @@ export default async function AdminLoginPage() {
   return (
     <main className="grid min-h-dvh place-items-center p-6">
       <div className="w-full max-w-sm">
-        <div className="mb-6 flex items-center justify-center gap-2 text-primary">
-          <Waves className="size-7" />
-          <span className="text-lg font-bold">Big Wave Slides</span>
+        <div className="mb-6 flex justify-center">
+          <Image src="/logo.png" alt="Big Wave Slides" width={200} height={170} priority className="h-20 w-auto" />
         </div>
         <Card className="p-8">
           <h1 className="text-xl font-bold">Admin sign in</h1>
