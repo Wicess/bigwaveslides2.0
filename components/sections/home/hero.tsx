@@ -30,19 +30,22 @@ export async function Hero({
       <HeroCarousel slides={SLIDES} />
 
       <Container className="relative z-10 flex flex-col items-center pt-[6.75rem] text-center sm:pt-[7.25rem]">
-        <Reveal y={16}>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-secondary sm:text-sm">
-            {t("eyebrow")}
-          </p>
-        </Reveal>
-
-        {/* Colorful brand wordmark */}
-        <h1 className="mt-5 font-display text-6xl font-extrabold leading-[0.95] tracking-[-0.03em] drop-shadow-[0_4px_30px_rgba(0,0,0,0.45)] sm:text-7xl lg:text-[7.5rem]">
-          <KineticText text="Big Wave Slides" as="span" className="block text-gradient" />
+        {/* Designed, colorful brand wordmark */}
+        <h1 className="font-display text-6xl font-extrabold leading-[0.92] tracking-[-0.035em] sm:text-7xl lg:text-[8rem]">
+          <KineticText
+            text="Big Wave"
+            as="span"
+            className="block bg-[linear-gradient(110deg,#7fe9ff_0%,#00d4ff_35%,#0099ff_70%,#0066ff_100%)] bg-clip-text text-transparent drop-shadow-[0_6px_40px_rgba(0,153,255,0.45)]"
+          />
+          <KineticText
+            text="Slides"
+            as="span"
+            className="mt-1 block text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.5)]"
+          />
         </h1>
 
         <Reveal y={16} delay={0.15}>
-          <p className="mx-auto mt-6 max-w-xl text-lg text-white/85 sm:text-xl">
+          <p className="mx-auto mt-7 max-w-xl text-lg text-white/85 sm:text-xl">
             {t("subtitle")}
           </p>
         </Reveal>
