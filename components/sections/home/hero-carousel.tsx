@@ -101,9 +101,9 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         );
       })}
 
-      {/* Legibility scrims */}
-      <div className="absolute inset-0 z-[5] bg-gradient-to-r from-black/80 via-black/50 to-black/20" />
-      <div className="absolute inset-0 z-[5] bg-gradient-to-t from-black/60 via-transparent to-black/25" />
+      {/* Light scrim — keeps the HD imagery bright while giving the see-through
+          navbar (top) and the hero copy (bottom) just enough contrast. */}
+      <div className="absolute inset-0 z-[5] bg-gradient-to-b from-black/35 via-black/5 to-black/50" />
 
       {/* Slide indicators */}
       <div className="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2.5">

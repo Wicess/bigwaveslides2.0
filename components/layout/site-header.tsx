@@ -44,7 +44,7 @@ export function SiteHeader({ locale, data }: Props) {
   return (
     <header className="sticky top-0 z-50 px-3 pt-5 sm:px-5 sm:pt-7">
       <div className="mx-auto max-w-[84rem]">
-        <div className="flex h-[5.5rem] items-center justify-between gap-3 rounded-[8px] border border-white/10 bg-[rgba(16,17,23,0.96)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:px-6">
+        <div className="flex h-[5.5rem] items-center justify-between gap-3 rounded-[8px] border border-white/10 bg-[rgba(18,19,26,0.45)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:px-6">
           {/* Left: logo + desktop nav */}
           <div className="flex items-center gap-5">
             <Link
@@ -52,16 +52,14 @@ export function SiteHeader({ locale, data }: Props) {
               aria-label="Big Wave Slides — home"
               className="flex items-center gap-2.5"
             >
-              <span className="grid size-14 place-items-center overflow-hidden rounded-[10px] bg-white shadow-[0_4px_14px_-6px_rgba(0,0,0,0.5)]">
-                <Image
-                  src="/logo.png"
-                  alt="Big Wave Slides"
-                  width={48}
-                  height={48}
-                  priority
-                  className="size-11 object-contain"
-                />
-              </span>
+              <Image
+                src="/logo.png"
+                alt="Big Wave Slides"
+                width={56}
+                height={56}
+                priority
+                className="h-12 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+              />
               <span className="font-brand text-[1.65rem] font-bold tracking-[-0.01em] text-white">
                 BWS
               </span>
