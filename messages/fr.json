@@ -179,7 +179,22 @@
     "sat": "Samedi",
     "sun": "Dimanche",
     "whatsappCta": "Discuter sur WhatsApp",
-    "callCta": "Appelez-nous"
+    "callCta": "Appelez-nous",
+    "crumbHome": "Accueil",
+    "crumb": "Contactez-nous",
+    "infoEyebrow": "Besoin de plus d'informations ?",
+    "infoHeading": "Entrons en contact",
+    "infoLead": "Toboggans aquatiques premium à acheter, louer et installer — parlez-nous de votre événement et nous nous occupons du reste.",
+    "phoneLabel": "Téléphone",
+    "emailLabel": "Email",
+    "addressLabel": "Adresse",
+    "sendTitle": "Envoyer un message",
+    "sendIntro": "Remplissez le formulaire ci-dessous avec vos coordonnées et votre message, nous vous répondrons rapidement.",
+    "phName": "Nom complet",
+    "phEmail": "Adresse email",
+    "phPhone": "Numéro de téléphone (facultatif)",
+    "phSubject": "Sujet (facultatif)",
+    "phMessage": "Écrivez votre message ici…"
   },
   "Shop": {
     "eyebrow": "Boutique",

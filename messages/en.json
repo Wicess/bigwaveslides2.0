@@ -179,7 +179,22 @@
     "sat": "Saturday",
     "sun": "Sunday",
     "whatsappCta": "Chat on WhatsApp",
-    "callCta": "Call us"
+    "callCta": "Call us",
+    "crumbHome": "Home",
+    "crumb": "Contact Us",
+    "infoEyebrow": "Need more information?",
+    "infoHeading": "Get in touch with us",
+    "infoLead": "Premium water slides to buy, rent, and install — tell us about your event and we'll take care of the rest.",
+    "phoneLabel": "Phone Number",
+    "emailLabel": "Email",
+    "addressLabel": "Address",
+    "sendTitle": "Send Message",
+    "sendIntro": "Fill out the form below with your details and message, and we'll get right back to you.",
+    "phName": "Full name",
+    "phEmail": "Email address",
+    "phPhone": "Phone number (optional)",
+    "phSubject": "Subject (optional)",
+    "phMessage": "Write your message here…"
   },
   "Shop": {
     "eyebrow": "Shop",

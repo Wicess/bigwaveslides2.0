@@ -4,7 +4,8 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CheckCircle2 } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { CheckCircle2, Send } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { submitContact } from "@/server/actions/contact";
 import { trackEvent } from "@/lib/analytics/client";
@@ -12,7 +13,7 @@ import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { EASE_OUT } from "@/components/motion/variants";
 
 const formSchema = z.object({
   name: z.string().min(2, "Please enter your name"),
@@ -24,27 +25,18 @@ const formSchema = z.object({
 });
 type FormValues = z.infer<typeof formSchema>;
 
-function Field({
-  label,
-  error,
-  children,
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block space-y-1.5">
-      <span className="text-sm font-medium">{label}</span>
-      {children}
-      {error ? <span className="text-xs text-red-600">{error}</span> : null}
-    </label>
-  );
+const fieldClass =
+  "h-12 rounded-xl border-border/70 bg-muted/40 px-4 focus-visible:bg-background";
+
+function FieldError({ msg }: { msg?: string }) {
+  if (!msg) return null;
+  return <span className="mt-1 block text-xs font-medium text-red-600">{msg}</span>;
 }
 
 export function ContactForm() {
   const t = useTranslations("Contact");
   const locale = useLocale();
+  const reduce = useReducedMotion();
   const [pending, startTransition] = useTransition();
   const [done, setDone] = useState(false);
   const {
@@ -68,48 +60,115 @@ export function ContactForm() {
     });
   };
 
-  if (done) {
-    return (
-      <Card className="p-8 text-center">
-        <CheckCircle2 className="mx-auto size-12 text-primary" />
-        <h3 className="mt-4 text-xl font-bold">{t("successTitle")}</h3>
-        <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{t("successNext")}</p>
-        <Button type="button" variant="outline" className="mt-6" onClick={() => setDone(false)}>
-          {t("sendAnother")}
-        </Button>
-      </Card>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <input
-        {...register("website")}
-        tabIndex={-1}
-        autoComplete="off"
-        aria-hidden
-        className="hidden"
-      />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label={t("formName")} error={errors.name?.message}>
-          <Input {...register("name")} autoComplete="name" />
-        </Field>
-        <Field label={t("formEmail")} error={errors.email?.message}>
-          <Input type="email" {...register("email")} autoComplete="email" />
-        </Field>
-        <Field label={t("formPhone")}>
-          <Input type="tel" {...register("phone")} autoComplete="tel" />
-        </Field>
-        <Field label={t("formSubject")}>
-          <Input {...register("subject")} />
-        </Field>
-      </div>
-      <Field label={t("formMessage")} error={errors.message?.message}>
-        <Textarea rows={5} {...register("message")} />
-      </Field>
-      <Button type="submit" size="lg" loading={pending}>
-        {pending ? t("sending") : t("send")}
-      </Button>
-    </form>
+    <AnimatePresence mode="wait">
+      {done ? (
+        <motion.div
+          key="done"
+          initial={reduce ? false : { opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: EASE_OUT }}
+          className="flex flex-col items-center justify-center py-8 text-center"
+        >
+          <span className="grid size-14 place-items-center rounded-full bg-primary-50 text-primary">
+            <CheckCircle2 className="size-8" />
+          </span>
+          <h3 className="mt-4 text-xl font-bold">{t("successTitle")}</h3>
+          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+            {t("successNext")}
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-6"
+            onClick={() => setDone(false)}
+          >
+            {t("sendAnother")}
+          </Button>
+        </motion.div>
+      ) : (
+        <motion.form
+          key="form"
+          initial={reduce ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-3.5"
+          noValidate
+        >
+          <input
+            {...register("website")}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden
+            className="hidden"
+          />
+
+          <div className="grid gap-3.5 sm:grid-cols-2">
+            <div>
+              <Input
+                {...register("name")}
+                placeholder={t("phName")}
+                aria-label={t("formName")}
+                autoComplete="name"
+                className={fieldClass}
+              />
+              <FieldError msg={errors.name?.message} />
+            </div>
+            <div>
+              <Input
+                type="email"
+                {...register("email")}
+                placeholder={t("phEmail")}
+                aria-label={t("formEmail")}
+                autoComplete="email"
+                className={fieldClass}
+              />
+              <FieldError msg={errors.email?.message} />
+            </div>
+          </div>
+
+          <div className="grid gap-3.5 sm:grid-cols-2">
+            <Input
+              type="tel"
+              {...register("phone")}
+              placeholder={t("phPhone")}
+              aria-label={t("formPhone")}
+              autoComplete="tel"
+              className={fieldClass}
+            />
+            <Input
+              {...register("subject")}
+              placeholder={t("phSubject")}
+              aria-label={t("formSubject")}
+              className={fieldClass}
+            />
+          </div>
+
+          <div>
+            <Textarea
+              rows={4}
+              {...register("message")}
+              placeholder={t("phMessage")}
+              aria-label={t("formMessage")}
+              className="rounded-xl border-border/70 bg-muted/40 px-4 focus-visible:bg-background"
+            />
+            <FieldError msg={errors.message?.message} />
+          </div>
+
+          <Button
+            type="submit"
+            size="lg"
+            variant="gradient"
+            className="w-full"
+            loading={pending}
+          >
+            {!pending ? <Send className="size-4" /> : null}
+            {pending ? t("sending") : t("send")}
+          </Button>
+        </motion.form>
+      )}
+    </AnimatePresence>
   );
 }
