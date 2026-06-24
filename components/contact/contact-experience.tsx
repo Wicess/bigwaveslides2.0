@@ -75,7 +75,7 @@ export function ContactExperience({ info }: { info: ContactInfo }) {
   }[];
 
   return (
-    <section className="relative flex min-h-dvh items-center overflow-hidden bg-background pb-12 pt-28 sm:pt-32">
+    <section className="relative flex min-h-[calc(100dvh-6rem)] items-center overflow-hidden bg-background py-10 sm:py-12">
       {/* Ambient background motif */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_15%_10%,var(--color-primary-50),transparent_60%)]" />

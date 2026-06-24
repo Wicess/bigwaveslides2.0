@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Waves,
   Phone,
   ShoppingBag,
   Menu,
@@ -29,15 +28,7 @@ const FALLBACK_PHONE = "+16143025899";
 export function SiteHeader({ locale, data }: Props) {
   const t = useTranslations("Layout");
   const tn = useTranslations("Nav");
-  const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   React.useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -51,16 +42,9 @@ export function SiteHeader({ locale, data }: Props) {
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 sm:px-5">
-      <div className="mx-auto mt-3 max-w-6xl sm:mt-4">
-        <div
-          className={cn(
-            "flex h-16 items-center justify-between gap-3 rounded-2xl border px-3 backdrop-blur-xl transition-all duration-300 sm:px-4",
-            scrolled
-              ? "border-white/10 bg-[rgba(18,19,26,0.82)] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.55)]"
-              : "border-white/10 bg-[rgba(26,28,36,0.55)] shadow-[0_8px_30px_-16px_rgba(0,0,0,0.5)]",
-          )}
-        >
+    <header className="relative z-50 px-3 sm:px-5">
+      <div className="mx-auto mt-3 max-w-[92rem] sm:mt-4">
+        <div className="flex h-20 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[rgba(18,19,26,0.82)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:px-6">
           {/* Left: logo + desktop nav */}
           <div className="flex items-center gap-5">
             <Link
@@ -68,11 +52,18 @@ export function SiteHeader({ locale, data }: Props) {
               aria-label="Big Wave Slides — home"
               className="flex items-center gap-2.5"
             >
-              <span className="grid size-9 place-items-center rounded-xl bg-[#003366] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
-                <Waves className="size-5 text-white" />
+              <span className="grid size-14 place-items-center overflow-hidden rounded-md bg-white shadow-[0_4px_14px_-6px_rgba(0,0,0,0.5)]">
+                <Image
+                  src="/logo.png"
+                  alt="Big Wave Slides"
+                  width={48}
+                  height={48}
+                  priority
+                  className="size-11 object-contain"
+                />
               </span>
-              <span className="font-display text-lg font-bold tracking-tight text-white">
-                Big Wave Slides
+              <span className="font-display text-2xl font-bold tracking-tight text-white">
+                BWS
               </span>
             </Link>
 
@@ -166,14 +157,14 @@ export function SiteHeader({ locale, data }: Props) {
 
             <Link
               href="/quote"
-              className="hidden h-10 items-center rounded-xl bg-white px-5 text-xs font-bold uppercase tracking-wider text-neutral-900 transition-transform hover:-translate-y-0.5 hover:bg-white/90 md:inline-flex"
+              className="hidden h-11 items-center rounded-md bg-white px-5 text-xs font-bold uppercase tracking-wider text-neutral-900 transition-transform hover:-translate-y-0.5 hover:bg-white/90 md:inline-flex"
             >
               {t("getQuote")}
             </Link>
 
             <Link
               href="/contact"
-              className="hidden h-10 items-center rounded-xl bg-[#a3e635] px-5 text-xs font-bold uppercase tracking-wider text-neutral-900 shadow-[0_6px_20px_-8px_rgba(163,230,53,0.85)] transition-transform hover:-translate-y-0.5 hover:bg-[#8fd11f] sm:inline-flex"
+              className="hidden h-11 items-center rounded-md bg-[#a3e635] px-5 text-xs font-bold uppercase tracking-wider text-neutral-900 shadow-[0_6px_20px_-8px_rgba(163,230,53,0.85)] transition-transform hover:-translate-y-0.5 hover:bg-[#8fd11f] sm:inline-flex"
             >
               {tn("contact")}
             </Link>
@@ -182,7 +173,7 @@ export function SiteHeader({ locale, data }: Props) {
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label={t("openMenu")}
-              className="grid size-10 place-items-center rounded-xl border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 lg:hidden"
+              className="grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 lg:hidden"
             >
               <Menu className="size-5" />
             </button>
@@ -303,7 +294,7 @@ function IconChip({
   external?: boolean;
 }) {
   const cls = cn(
-    "grid size-10 place-items-center rounded-xl border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10",
+    "grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10",
     className,
   );
   if (external) {
@@ -329,7 +320,7 @@ function HeaderLocale() {
 
   return (
     <div
-      className="hidden items-center rounded-xl border border-white/15 bg-white/5 p-0.5 md:inline-flex"
+      className="hidden items-center rounded-md border border-white/15 bg-white/5 p-0.5 md:inline-flex"
       role="group"
       aria-label="Language"
     >
@@ -345,7 +336,7 @@ function HeaderLocale() {
               startTransition(() => router.replace(pathname, { locale: l }))
             }
             className={cn(
-              "rounded-lg px-2.5 py-1 text-xs font-bold uppercase transition-colors",
+              "rounded-sm px-2.5 py-1.5 text-xs font-bold uppercase transition-colors",
               isActive ? "bg-white text-neutral-900" : "text-white/70 hover:text-white",
             )}
           >
