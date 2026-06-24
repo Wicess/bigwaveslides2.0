@@ -17,7 +17,10 @@
       "Bash(git commit -q -m 'feat\\(admin\\): complete CRUD across taxonomy, categories, testimonials, newsletter, contacts, users *)",
       "Bash(node -e \"const m=require\\('./messages/en.json'\\); console.log\\(JSON.stringify\\(m.Cart,null,1\\)\\)\")",
       "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('messages/en.json','utf8'\\)\\);JSON.parse\\(require\\('fs'\\).readFileSync\\('messages/fr.json','utf8'\\)\\);console.log\\('JSON OK'\\)\")",
-      "Bash(git commit -q -m 'feat: dashboard traffic widget, cart next-steps, form success states + funnel events *)"
+      "Bash(git commit -q -m 'feat: dashboard traffic widget, cart next-steps, form success states + funnel events *)",
+      "Bash(node -e \"const m=require\\('./messages/en.json'\\); console.log\\('Layout keys:', Object.keys\\(m.Layout\\).join\\(', '\\)\\); console.log\\('--- has callCta:', 'callCta' in m.Layout\\); console.log\\('Nav keys:', Object.keys\\(m.Nav\\).join\\(', '\\)\\)\")",
+      "Bash(node -e \"try{require\\('playwright'\\);console.log\\('playwright-ok'\\)}catch{console.log\\('no-playwright'\\)}\")",
+      "Bash(node -e \"try{require\\('puppeteer'\\);console.log\\('puppeteer-ok'\\)}catch{console.log\\('no-puppeteer'\\)}\")"
     ]
   }
 }

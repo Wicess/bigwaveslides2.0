@@ -2,17 +2,19 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Search,
+  Waves,
+  Phone,
   ShoppingBag,
   Menu,
   X,
   ChevronDown,
   ArrowRight,
 } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { getLocalized } from "@/lib/localized";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,6 +23,8 @@ import { LocaleSwitcher } from "./locale-switcher";
 import type { NavData } from "@/server/data/navigation";
 
 type Props = { locale: string; data: NavData };
+
+const FALLBACK_PHONE = "+16143025899";
 
 export function SiteHeader({ locale, data }: Props) {
   const t = useTranslations("Layout");
@@ -43,136 +47,146 @@ export function SiteHeader({ locale, data }: Props) {
   }, [mobileOpen]);
 
   const loc = (v: unknown) => getLocalized(v, locale);
-
-  const simpleLinks = [
-    { href: "/blog", label: tn("blog") },
-    { href: "/about", label: tn("about") },
-    { href: "/contact", label: tn("contact") },
-  ];
+  const phone = data.settings.contact?.phone ?? FALLBACK_PHONE;
+  const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled
-          ? "glass shadow-[var(--shadow-soft)]"
-          : "bg-transparent",
-      )}
-    >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-5 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <Link href="/" aria-label="Big Wave Slides — home" className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="Big Wave Slides"
-            width={180}
-            height={153}
-            priority
-            className="h-12 w-auto sm:h-14"
-          />
-        </Link>
+    <header className="fixed inset-x-0 top-0 z-50 px-3 sm:px-5">
+      <div className="mx-auto mt-3 max-w-6xl sm:mt-4">
+        <div
+          className={cn(
+            "flex h-16 items-center justify-between gap-3 rounded-2xl border px-3 backdrop-blur-xl transition-all duration-300 sm:px-4",
+            scrolled
+              ? "border-white/10 bg-[rgba(18,19,26,0.82)] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.55)]"
+              : "border-white/10 bg-[rgba(26,28,36,0.55)] shadow-[0_8px_30px_-16px_rgba(0,0,0,0.5)]",
+          )}
+        >
+          {/* Left: logo + desktop nav */}
+          <div className="flex items-center gap-5">
+            <Link
+              href="/"
+              aria-label="Big Wave Slides — home"
+              className="flex items-center gap-2.5"
+            >
+              <span className="grid size-9 place-items-center rounded-xl bg-[#003366] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
+                <Waves className="size-5 text-white" />
+              </span>
+              <span className="font-display text-lg font-bold tracking-tight text-white">
+                Big Wave Slides
+              </span>
+            </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-0.5 lg:flex">
-          <MegaItem label={tn("shop")} href="/shop">
-            <div className="grid grid-cols-[1.4fr_1fr] gap-5">
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {t("megaShopTitle")}
-                </p>
-                <div className="grid grid-cols-2 gap-1">
-                  {data.categories.map((c) => (
-                    <PanelLink key={c.slug} href={`/shop/category/${c.slug}`}>
-                      {loc(c.name)}
-                    </PanelLink>
-                  ))}
+            <nav className="hidden items-center gap-0.5 lg:flex">
+              <MegaItem label={tn("shop")} href="/shop">
+                <div className="grid grid-cols-[1.4fr_1fr] gap-5">
+                  <div>
+                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t("megaShopTitle")}
+                    </p>
+                    <div className="grid grid-cols-2 gap-1">
+                      {data.categories.map((c) => (
+                        <PanelLink key={c.slug} href={`/shop/category/${c.slug}`}>
+                          {loc(c.name)}
+                        </PanelLink>
+                      ))}
+                    </div>
+                  </div>
+                  <PanelCta
+                    href="/shop"
+                    title={t("megaShopTitle")}
+                    desc={t("megaShopDesc")}
+                    cta={t("viewAll")}
+                  />
                 </div>
-              </div>
-              <PanelCta
-                href="/shop"
-                title={t("megaShopTitle")}
-                desc={t("megaShopDesc")}
-                cta={t("viewAll")}
-              />
-            </div>
-          </MegaItem>
+              </MegaItem>
 
-          <MegaItem label={tn("rent")} href="/rent">
-            <div className="grid grid-cols-[1.4fr_1fr] gap-5">
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {t("popularRentals")}
-                </p>
-                <div className="grid gap-1">
-                  {data.rentals.map((r) => (
-                    <PanelLink key={r.slug} href={`/rent/${r.slug}`}>
-                      {loc(r.name)}
-                    </PanelLink>
-                  ))}
+              <MegaItem label={tn("rent")} href="/rent">
+                <div className="grid grid-cols-[1.4fr_1fr] gap-5">
+                  <div>
+                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t("popularRentals")}
+                    </p>
+                    <div className="grid gap-1">
+                      {data.rentals.map((r) => (
+                        <PanelLink key={r.slug} href={`/rent/${r.slug}`}>
+                          {loc(r.name)}
+                        </PanelLink>
+                      ))}
+                    </div>
+                  </div>
+                  <PanelCta
+                    href="/rent"
+                    title={t("megaRentTitle")}
+                    desc={t("megaRentDesc")}
+                    cta={t("checkAvailability")}
+                  />
                 </div>
-              </div>
-              <PanelCta
-                href="/rent"
-                title={t("megaRentTitle")}
-                desc={t("megaRentDesc")}
-                cta={t("checkAvailability")}
-              />
-            </div>
-          </MegaItem>
+              </MegaItem>
 
-          <MegaItem label={tn("services")} href="/services">
-            <div className="grid grid-cols-[1.4fr_1fr] gap-5">
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {t("megaServicesTitle")}
-                </p>
-                <div className="grid grid-cols-2 gap-1">
-                  {data.services.slice(0, 8).map((s) => (
-                    <PanelLink key={s.slug} href={`/services/${s.slug}`}>
-                      {loc(s.title)}
-                    </PanelLink>
-                  ))}
+              <MegaItem label={tn("services")} href="/services">
+                <div className="grid grid-cols-[1.4fr_1fr] gap-5">
+                  <div>
+                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t("megaServicesTitle")}
+                    </p>
+                    <div className="grid grid-cols-2 gap-1">
+                      {data.services.slice(0, 8).map((s) => (
+                        <PanelLink key={s.slug} href={`/services/${s.slug}`}>
+                          {loc(s.title)}
+                        </PanelLink>
+                      ))}
+                    </div>
+                  </div>
+                  <PanelCta
+                    href="/services"
+                    title={t("megaServicesTitle")}
+                    desc={t("megaServicesDesc")}
+                    cta={t("allServices")}
+                  />
                 </div>
-              </div>
-              <PanelCta
-                href="/services"
-                title={t("megaServicesTitle")}
-                desc={t("megaServicesDesc")}
-                cta={t("allServices")}
-              />
-            </div>
-          </MegaItem>
+              </MegaItem>
 
-          {simpleLinks.map((l) => (
-            <NavLink key={l.href} href={l.href}>
-              {l.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* Right side */}
-        <div className="flex items-center gap-0.5">
-          <IconLink href="/shop" label={t("search")}>
-            <Search className="size-5" />
-          </IconLink>
-          <IconLink href="/cart" label={t("cart")} className="relative">
-            <ShoppingBag className="size-5" />
-            <CartBadge />
-          </IconLink>
-          <div className="ml-1 hidden lg:block">
-            <LocaleSwitcher />
+              <NavLink href="/blog">{tn("blog")}</NavLink>
+              <NavLink href="/about">{tn("about")}</NavLink>
+            </nav>
           </div>
-          <Button asChild size="sm" className="ml-1 hidden md:inline-flex">
-            <Link href="/quote">{t("getQuote")}</Link>
-          </Button>
-          <button
-            type="button"
-            onClick={() => setMobileOpen(true)}
-            aria-label={t("openMenu")}
-            className="grid size-10 place-items-center rounded-full text-foreground hover:bg-muted lg:hidden"
-          >
-            <Menu className="size-6" />
-          </button>
+
+          {/* Right: actions */}
+          <div className="flex items-center gap-2">
+            <HeaderLocale />
+
+            <IconChip href={telHref} label={t("call")} external>
+              <Phone className="size-[18px]" />
+            </IconChip>
+
+            <IconChip href="/cart" label={t("cart")} className="relative">
+              <ShoppingBag className="size-[18px]" />
+              <CartBadge />
+            </IconChip>
+
+            <Link
+              href="/quote"
+              className="hidden h-10 items-center rounded-xl bg-white px-5 text-xs font-bold uppercase tracking-wider text-neutral-900 transition-transform hover:-translate-y-0.5 hover:bg-white/90 md:inline-flex"
+            >
+              {t("getQuote")}
+            </Link>
+
+            <Link
+              href="/contact"
+              className="hidden h-10 items-center rounded-xl bg-[#a3e635] px-5 text-xs font-bold uppercase tracking-wider text-neutral-900 shadow-[0_6px_20px_-8px_rgba(163,230,53,0.85)] transition-transform hover:-translate-y-0.5 hover:bg-[#8fd11f] sm:inline-flex"
+            >
+              {tn("contact")}
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setMobileOpen(true)}
+              aria-label={t("openMenu")}
+              className="grid size-10 place-items-center rounded-xl border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 lg:hidden"
+            >
+              <Menu className="size-5" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -200,7 +214,7 @@ function MegaItem({
     <div className="group relative">
       <Link
         href={href}
-        className="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+        className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:text-white"
       >
         {label}
         <ChevronDown className="size-3.5 transition-transform duration-300 group-hover:rotate-180" />
@@ -268,35 +282,78 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="rounded-full px-3.5 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+      className="rounded-full px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:text-white"
     >
       {children}
     </Link>
   );
 }
 
-function IconLink({
+function IconChip({
   href,
   label,
   children,
   className,
+  external,
 }: {
   href: string;
   label: string;
   children: React.ReactNode;
   className?: string;
+  external?: boolean;
 }) {
+  const cls = cn(
+    "grid size-10 place-items-center rounded-xl border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10",
+    className,
+  );
+  if (external) {
+    return (
+      <a href={href} aria-label={label} className={cls}>
+        {children}
+      </a>
+    );
+  }
   return (
-    <Link
-      href={href}
-      aria-label={label}
-      className={cn(
-        "grid size-10 place-items-center rounded-full text-foreground/80 transition-colors hover:bg-muted hover:text-primary",
-        className,
-      )}
-    >
+    <Link href={href} aria-label={label} className={cls}>
       {children}
     </Link>
+  );
+}
+
+/** Compact EN/FR toggle styled for the dark frosted bar (desktop only). */
+function HeaderLocale() {
+  const activeLocale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isPending, startTransition] = React.useTransition();
+
+  return (
+    <div
+      className="hidden items-center rounded-xl border border-white/15 bg-white/5 p-0.5 md:inline-flex"
+      role="group"
+      aria-label="Language"
+    >
+      {routing.locales.map((l) => {
+        const isActive = l === activeLocale;
+        return (
+          <button
+            key={l}
+            type="button"
+            disabled={isPending}
+            aria-current={isActive ? "true" : undefined}
+            onClick={() =>
+              startTransition(() => router.replace(pathname, { locale: l }))
+            }
+            className={cn(
+              "rounded-lg px-2.5 py-1 text-xs font-bold uppercase transition-colors",
+              isActive ? "bg-white text-neutral-900" : "text-white/70 hover:text-white",
+            )}
+          >
+            {l}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -382,26 +439,37 @@ function MobileMenu({
               ))}
             </nav>
 
-            <div className="mt-8 flex flex-col gap-4">
-              <Button asChild size="lg">
+            <div className="mt-8 flex flex-col gap-3">
+              <Button asChild size="lg" className="bg-[#a3e635] text-neutral-900 hover:bg-[#8fd11f]">
+                <Link href="/contact" onClick={onClose}>
+                  {tn("contact")}
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
                 <Link href="/quote" onClick={onClose}>
                   {t("getQuote")}
                 </Link>
               </Button>
               <div className="flex items-center justify-between">
                 <LocaleSwitcher />
-                <div className="flex gap-1">
-                  <IconLink href="/cart" label={t("cart")}>
-                    <ShoppingBag className="size-5" />
-                  </IconLink>
-                </div>
+                <Link
+                  href="/cart"
+                  aria-label={t("cart")}
+                  onClick={onClose}
+                  className="grid size-10 place-items-center rounded-xl border border-border text-foreground transition-colors hover:bg-muted hover:text-primary"
+                >
+                  <ShoppingBag className="size-5" />
+                </Link>
               </div>
             </div>
 
             {data.settings.contact?.phone ? (
-              <p className="mt-auto pt-6 text-sm text-muted-foreground">
-                {data.settings.contact.phone}
-              </p>
+              <a
+                href={`tel:${data.settings.contact.phone.replace(/[^+\d]/g, "")}`}
+                className="mt-auto flex items-center gap-2 pt-6 text-sm font-medium text-muted-foreground hover:text-primary"
+              >
+                <Phone className="size-4" /> {data.settings.contact.phone}
+              </a>
             ) : null}
           </motion.div>
         </motion.div>
