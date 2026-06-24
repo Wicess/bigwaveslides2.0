@@ -40,6 +40,8 @@ const EnvSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
   SMTP_FROM: z.string().optional(),
+  // Brevo transactional API key (xkeysib-...) — preferred over SMTP when set.
+  BREVO_API_KEY: z.string().optional(),
 
   // WhatsApp Cloud API (Phase 17)
   WHATSAPP_PHONE_NUMBER: z.string().optional(),

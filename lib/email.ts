@@ -20,10 +20,57 @@ export const FROM = env.SMTP_FROM ?? "Big Wave Slides <contact@bigwaveslides.com
 
 export type SendResult = { ok: boolean; skipped?: boolean; error?: string };
 
+/** Split "Name <email>" into parts for the Brevo API payload. */
+function parseFrom(value: string): { name: string; email: string } {
+  const match = value.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
+  if (match && match[2]) {
+    return { name: match[1] || "Big Wave Slides", email: match[2] };
+  }
+  return { name: "Big Wave Slides", email: value.trim() };
+}
+
+/** Send via Brevo's transactional API (uses the xkeysib- API key). */
+async function sendViaBrevo(opts: {
+  to: string;
+  subject: string;
+  html: string;
+  text?: string;
+  replyTo?: string;
+}): Promise<SendResult> {
+  const sender = parseFrom(FROM);
+  try {
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": env.BREVO_API_KEY as string,
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({
+        sender,
+        to: [{ email: opts.to }],
+        subject: opts.subject,
+        htmlContent: opts.html,
+        textContent: opts.text ?? stripHtml(opts.html),
+        ...(opts.replyTo ? { replyTo: { email: opts.replyTo } } : {}),
+      }),
+    });
+    if (!res.ok) {
+      console.error("[email error] brevo", res.status, await res.text().catch(() => ""));
+      return { ok: false, error: `brevo ${res.status}` };
+    }
+    return { ok: true };
+  } catch (error) {
+    console.error("[email error] brevo", error);
+    return { ok: false, error: "send failed" };
+  }
+}
+
 /**
- * Send a transactional email. Best-effort: if SMTP isn't configured the call is
- * skipped (not an error), and failures never throw into the caller so a missed
- * email can't break a request/booking submission.
+ * Send a transactional email. Prefers the Brevo API (if BREVO_API_KEY is set),
+ * otherwise falls back to SMTP. Best-effort: if no provider is configured the
+ * call is skipped (not an error), and failures never throw into the caller so a
+ * missed email can't break a request/booking submission.
  */
 export async function sendEmail(opts: {
   to: string;
@@ -32,6 +79,10 @@ export async function sendEmail(opts: {
   text?: string;
   replyTo?: string;
 }): Promise<SendResult> {
+  if (env.BREVO_API_KEY) {
+    return sendViaBrevo(opts);
+  }
+
   const transport = getTransport();
   if (!transport) {
     if (process.env.NODE_ENV !== "production") {
