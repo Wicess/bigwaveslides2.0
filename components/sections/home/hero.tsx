@@ -4,11 +4,11 @@ import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Stars } from "@/components/ui/stars";
-import { KineticText } from "@/components/motion/kinetic-text";
 import { Reveal } from "@/components/motion/reveal";
 import { HeroCarousel, type HeroSlide } from "@/components/sections/home/hero-carousel";
 
 const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/hero";
+const WORDMARK = `${R2}/wordmark.png`;
 
 const SLIDES: HeroSlide[] = [
   { type: "video", src: `${R2}/hero.mp4`, poster: `${R2}/slide-1.jpg` },
@@ -30,19 +30,22 @@ export async function Hero({
       <HeroCarousel slides={SLIDES} />
 
       <Container className="relative z-10 flex flex-col items-center pt-[6.75rem] text-center sm:pt-[7.25rem]">
-        {/* Designed, colorful brand wordmark */}
-        <h1 className="font-display text-6xl font-extrabold leading-[0.92] tracking-[-0.035em] sm:text-7xl lg:text-[8rem]">
-          <KineticText
-            text="Big Wave"
-            as="span"
-            className="block bg-[linear-gradient(110deg,#7fe9ff_0%,#00d4ff_35%,#0099ff_70%,#0066ff_100%)] bg-clip-text text-transparent drop-shadow-[0_6px_40px_rgba(0,153,255,0.45)]"
+        {/* Designed brand wordmark (transparent PNG) */}
+        <Reveal y={18}>
+          <h1 className="sr-only">Big Wave Slides</h1>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={WORDMARK}
+            alt="Big Wave Slides"
+            width={1949}
+            height={741}
+            className="h-auto w-[min(86vw,720px)]"
+            style={{
+              filter:
+                "drop-shadow(0 8px 28px rgba(0,0,0,0.55)) drop-shadow(0 0 48px rgba(127,233,255,0.35))",
+            }}
           />
-          <KineticText
-            text="Slides"
-            as="span"
-            className="mt-1 block text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.5)]"
-          />
-        </h1>
+        </Reveal>
 
         <Reveal y={16} delay={0.15}>
           <p className="mx-auto mt-7 max-w-xl text-lg text-white/85 sm:text-xl">
