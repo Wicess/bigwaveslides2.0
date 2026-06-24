@@ -32,6 +32,8 @@ const productSchema = z.object({
   shortFr: z.string().max(400).optional().or(z.literal("")),
   descEn: z.string().max(5000).optional().or(z.literal("")),
   descFr: z.string().max(5000).optional().or(z.literal("")),
+  // Ordered image URLs (uploaded to R2). First is the primary image.
+  images: z.array(z.string().url()).max(12).optional(),
 });
 
 export async function saveProduct(
@@ -68,6 +70,23 @@ export async function saveProduct(
       const created = await prisma.product.create({ data, select: { id: true } });
       id = created.id;
     }
+
+    // Sync product images (uploaded to R2 by the form) → ProductMedia.
+    // First image becomes the primary; ordering is preserved.
+    if (d.images) {
+      await prisma.productMedia.deleteMany({ where: { productId: id } });
+      if (d.images.length) {
+        await prisma.productMedia.createMany({
+          data: d.images.map((url, i) => ({
+            productId: id as string,
+            url,
+            isPrimary: i === 0,
+            order: i,
+          })),
+        });
+      }
+    }
+
     await logActivity(session.id, d.id ? "product.update" : "product.create", {
       entityType: "Product",
       entityId: id,

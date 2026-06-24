@@ -30,6 +30,7 @@ const s = StyleSheet.create({
   page: { paddingTop: 38, paddingBottom: 70, paddingHorizontal: 44, fontSize: 9.5, color: C.body, fontFamily: "Helvetica", lineHeight: 1.5 },
   headerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 },
   logo: { height: 52, objectFit: "contain" },
+  hero: { width: "100%", height: 150, objectFit: "cover", borderRadius: 8, marginBottom: 14 },
   brandRight: { textAlign: "right", fontSize: 8.5, color: C.muted },
   brandName: { fontSize: 11, fontFamily: "Helvetica-Bold", color: C.accent, marginBottom: 2 },
   titleBar: { backgroundColor: C.accent, borderRadius: 8, paddingVertical: 12, paddingHorizontal: 16, marginBottom: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
@@ -80,6 +81,7 @@ export type QuotePdfInput = {
   kind: "order" | "booking";
   number: string;
   dateLabel: string;
+  heroImageUrl?: string;
   customer: { name: string; email: string; phone?: string; address?: string };
   rental?: {
     arrival?: string;
@@ -104,28 +106,20 @@ export type QuotePdfInput = {
 type Clause = { t: string; b: string };
 
 const RENTAL_TERMS: Clause[] = [
-  { t: "Agreement & parties.", b: `This Rental Quote & Agreement (the "Agreement") is made between Big Wave Slides (the "Company", "we", "us") and the renter named above (the "Renter", "you"). It becomes a binding contract once signed by the Renter and accepted by the Company.` },
-  { t: "Equipment & rental period.", b: "The Company will supply the equipment itemized above for the rental period stated (from the delivery/arrival date through the scheduled pickup/return). The rental period may not be extended without the Company's prior written approval, which may incur additional charges." },
-  { t: "Quote validity & confirmation.", b: "This quote is valid for 14 days from the date shown. The booking is confirmed only once the Company accepts it and any required deposit is arranged; an invoice with payment instructions will be issued upon acceptance." },
-  { t: "Fees & refundable deposit.", b: "Charges include the rental, delivery/transport, and pickup fees as itemized. Any refundable security deposit shown is held against damage, excessive cleaning, loss, theft, or late return and is returned after a post-event inspection, less any applicable deductions." },
-  { t: "Delivery, setup & site requirements.", b: "The Renter must provide a safe, level, and clear setup area, a grounded power outlet within 50 ft (or an adequate generator), sufficient overhead and side clearance, and a clear access path for delivery. The Renter must disclose underground utilities, sprinklers, and cables. Setup on unsuitable, sloped, or hazardous surfaces may be refused without refund." },
-  { t: "Supervision & safe operation.", b: "Competent adult supervision is required at all times during use. The Renter must enforce all posted capacity, height, and age limits; prohibit flips, rough play, climbing on walls/nets, food, drink, shoes, sharp objects, and use by anyone under the influence; and immediately stop use in unsafe conditions." },
-  { t: "Weather.", b: "For safety, inflatable equipment must not be used in sustained winds above 20 mph, rain storms, or lightning, and must be evacuated and unplugged in such conditions. The Company may reschedule or cancel for severe weather at its sole discretion." },
-  { t: "Renter responsibilities, damage & spillage.", b: "The Renter is responsible for the equipment from delivery until pickup and is liable for any damage beyond normal wear, loss, or theft while in their care. Additional cleaning fees apply for excessive soiling or spillage, including food, drinks, gum, paint, silly string, mud, sand, or bodily fluids. Equipment must not be moved, cut, written on, or have anything attached once set up." },
-  { t: "Assumption of risk & indemnification.", b: `The Renter acknowledges that the use of water slides and inflatable equipment involves inherent risks, including the risk of personal injury. To the fullest extent permitted by law, the Renter voluntarily assumes all such risks and agrees to indemnify, defend, and hold harmless the Company, its owners, employees, and agents from and against any and all claims, demands, injuries, damages, losses, or expenses arising out of or related to the use of the equipment during the rental period, except to the extent caused by the Company's gross negligence or willful misconduct.` },
-  { t: "Insurance & compliance.", b: "The Company maintains liability insurance covering its equipment. The Renter is responsible for compliance with all venue, park, HOA, or municipal rules and for obtaining any permits required for the event location." },
-  { t: "Cancellation & rescheduling.", b: "Cancellation and rescheduling terms are confirmed on your invoice. Deposits may be non-refundable within a stated window prior to the event. Weather-related rescheduling is handled per clause 7." },
-  { t: "Limitation of liability.", b: "To the maximum extent permitted by law, the Company's total liability under this Agreement shall not exceed the total amount paid by the Renter for the rental, and the Company shall not be liable for any indirect, incidental, or consequential damages." },
-  { t: "Entire agreement & governing law.", b: `This Agreement, together with the issued invoice, constitutes the entire agreement between the parties and supersedes any prior understandings. It is governed by the laws of the State of ${GOVERNING_STATE}.` },
+  { t: "Agreement & validity.", b: "This Rental Quote & Agreement becomes binding once signed by the Renter and accepted by Big Wave Slides (the \"Company\"). This quote is valid for 14 days; an invoice with payment instructions follows acceptance. Equipment is supplied for the stated rental period only and may not be extended without written approval." },
+  { t: "Fees & refundable deposit.", b: "Charges are as itemized (rental, delivery/transport, pickup). Any refundable deposit shown covers damage, excessive cleaning, loss, theft, or late return, and is refunded after inspection less any deductions." },
+  { t: "Site, setup & supervision.", b: "The Renter must provide a safe, level, clear area with a grounded power outlet within 50 ft and clear access; unsuitable or hazardous sites may be refused without refund. Competent adult supervision is required at all times, enforcing all capacity, height, age, and safety rules; no flips, rough play, food, drink, shoes, or use under the influence." },
+  { t: "Weather.", b: "For safety, inflatables must not be used in sustained winds above 20 mph, storms, or lightning, and must be evacuated and unplugged. The Company may reschedule or cancel for severe weather at its discretion." },
+  { t: "Renter responsibility, damage & spillage.", b: "The Renter is responsible for the equipment from delivery to pickup and is liable for damage beyond normal wear, loss, or theft. Cleaning fees apply for excessive soiling or spillage (food, drink, paint, silly string, mud, or bodily fluids). Equipment must not be moved after setup." },
+  { t: "Assumption of risk & indemnification.", b: "Use of water slides and inflatables involves inherent risks of injury. To the fullest extent permitted by law, the Renter assumes these risks and agrees to indemnify and hold harmless the Company, its owners, and staff from any claims, injuries, damages, or losses arising from use during the rental period, except those caused by the Company's gross negligence. The Company carries liability insurance for its equipment." },
+  { t: "Cancellation, liability & governing law.", b: `Cancellation and rescheduling terms are confirmed on the invoice. To the maximum extent permitted by law, the Company's total liability shall not exceed the amount paid, and it is not liable for indirect or consequential damages. This Agreement is governed by the laws of the State of ${GOVERNING_STATE}.` },
 ];
 
 const ORDER_TERMS: Clause[] = [
-  { t: "Agreement & parties.", b: `This Order Quote (the "Quote") is made between Big Wave Slides (the "Company") and the purchaser named above (the "Buyer"). It becomes a binding order once accepted by the Company and an invoice is issued.` },
-  { t: "Quote validity & pricing.", b: "This quote is valid for 14 days from the date shown. Prices are subject to availability at the time of confirmation. Applicable taxes and any delivery charges are confirmed on the invoice." },
-  { t: "Payment.", b: "No charge is processed from this quote. Upon acceptance, the Company issues an invoice with payment instructions; the order is confirmed once payment arrangements are in place." },
-  { t: "Delivery & risk of loss.", b: "Title and risk of loss pass to the Buyer upon delivery or collection. Quoted delivery timelines are estimates and are confirmed on the invoice." },
-  { t: "Inspection, returns & warranty.", b: "The Buyer must inspect goods upon receipt and report any defects or shortages within the stated window. Where applicable, the manufacturer's warranty accompanies the product. Returns and exchanges are handled in accordance with the Company's standard policy." },
-  { t: "Safe use & liability.", b: `Commercial-grade equipment must be installed, anchored, operated, and maintained in accordance with the provided guidelines and applicable safety standards. To the maximum extent permitted by law, the Company's liability is limited to the purchase price, and the Buyer assumes responsibility for safe installation, supervision, and use after delivery. This agreement is governed by the laws of the State of ${GOVERNING_STATE}.` },
+  { t: "Agreement & validity.", b: "This Order Quote becomes a binding order once accepted by Big Wave Slides and an invoice is issued. It is valid for 14 days; prices are subject to availability at confirmation, and applicable taxes/delivery are confirmed on the invoice." },
+  { t: "Payment.", b: "No charge is processed from this quote. Upon acceptance, the Company issues an invoice with payment instructions; the order is confirmed once payment is arranged." },
+  { t: "Delivery, inspection & warranty.", b: "Title and risk of loss pass to the Buyer on delivery or collection; timelines are estimates. The Buyer must inspect goods on receipt and report defects within the stated window. Any manufacturer's warranty accompanies the product; returns follow the Company's standard policy." },
+  { t: "Safe use, liability & governing law.", b: `Commercial-grade equipment must be installed and operated per the provided guidelines and applicable safety standards. To the maximum extent permitted by law, the Company's liability is limited to the purchase price, and the Buyer assumes responsibility for safe installation, supervision, and use after delivery. Governed by the laws of the State of ${GOVERNING_STATE}.` },
 ];
 
 function KV({ k, v }: { k: string; v?: string }) {
@@ -174,6 +168,8 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
             <Text style={s.titleMeta}>Valid for 14 days</Text>
           </View>
         </View>
+
+        {input.heroImageUrl ? <Image src={input.heroImageUrl} style={s.hero} /> : null}
 
         {/* Parties / logistics */}
         <View style={s.cols}>

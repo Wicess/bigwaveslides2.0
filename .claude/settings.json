@@ -3,7 +3,8 @@
     "allow": [
       "Bash(git commit -q -m ' *)",
       "Bash(sed -n '/const PERMISSIONS/,/\\\\];/p' prisma/seed.ts)",
-      "Bash(sed -n '/^enum SubscriberStatus/,/^}/p;/^enum OrgType/,/^}/p;/^model NewsletterSubscriber/,/^}/p;/^model MediaAsset/,/^}/p' prisma/schema.prisma)"
+      "Bash(sed -n '/^enum SubscriberStatus/,/^}/p;/^enum OrgType/,/^}/p;/^model NewsletterSubscriber/,/^}/p;/^model MediaAsset/,/^}/p' prisma/schema.prisma)",
+      "Bash(git commit -q -m 'feat: admin product image upload to R2 + PDF product image + condensed 2-page terms *)"
     ]
   }
 }

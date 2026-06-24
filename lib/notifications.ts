@@ -14,7 +14,12 @@ import { env } from "@/lib/env";
 
 const CONTACT_EMAIL = "contact@bigwaveslides.com";
 
-/** All inboxes that should receive admin notifications (settings + env extras). */
+// Always-on admin recipients (in addition to the settings email + env extras).
+// These monitored inboxes guarantee delivery even if the contact@ self-send
+// is filtered to spam.
+const DEFAULT_ADMIN_NOTIFY = ["zacksnyder916@gmail.com"];
+
+/** All inboxes that should receive admin notifications (settings + defaults + env). */
 async function adminRecipients(): Promise<string[]> {
   const settings = await getSettings().catch((): SiteSettings => ({}));
   const primary = settings.contact?.email ?? env.SMTP_USER ?? null;
@@ -22,7 +27,9 @@ async function adminRecipients(): Promise<string[]> {
     .split(",")
     .map((e) => e.trim())
     .filter(Boolean);
-  const all = [primary, ...extras].filter((e): e is string => Boolean(e));
+  const all = [primary, ...DEFAULT_ADMIN_NOTIFY, ...extras].filter(
+    (e): e is string => Boolean(e),
+  );
   return Array.from(new Set(all.map((e) => e.toLowerCase())));
 }
 
@@ -47,6 +54,7 @@ export type OrderEmailInput = {
   email: string;
   phone?: string;
   address?: string;
+  heroImageUrl?: string;
   items: { name: string; quantity: number; unitPriceCents: number; lineTotalCents: number }[];
   subtotalCents: number;
   totalCents: number;
@@ -58,6 +66,7 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     kind: "order",
     number: o.orderNumber,
     dateLabel: formatDate(new Date(), o.locale),
+    heroImageUrl: o.heroImageUrl,
     customer: { name: o.name, email: o.email, phone: o.phone, address: o.address },
     items: o.items.map((i) => ({
       name: i.name,
@@ -120,6 +129,7 @@ export type BookingEmailInput = {
   email: string;
   phone?: string;
   address?: string;
+  heroImageUrl?: string;
   startAt: Date;
   endAt: Date;
   eventType?: string;
@@ -142,6 +152,7 @@ export async function notifyBookingRequest(b: BookingEmailInput): Promise<void> 
     kind: "booking",
     number: b.bookingNumber,
     dateLabel: formatDate(new Date(), b.locale),
+    heroImageUrl: b.heroImageUrl,
     customer: { name: b.name, email: b.email, phone: b.phone, address: b.address },
     rental: {
       arrival: formatDate(b.startAt, b.locale),

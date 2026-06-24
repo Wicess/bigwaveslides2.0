@@ -57,7 +57,13 @@ export async function createBookingRequest(
   try {
     const product = await prisma.product.findFirst({
       where: { id: d.productId, status: "ACTIVE", type: { in: ["RENTAL", "BOTH"] } },
-      select: { id: true, name: true, dailyRateCents: true, depositCents: true },
+      select: {
+        id: true,
+        name: true,
+        dailyRateCents: true,
+        depositCents: true,
+        media: { where: { isPrimary: true }, take: 1, select: { url: true } },
+      },
     });
     if (!product) return { ok: false, error: "This rental is unavailable." };
 
@@ -135,6 +141,7 @@ export async function createBookingRequest(
       email: d.email,
       phone: d.phone,
       address: [d.address, d.city].filter(Boolean).join(", ") || undefined,
+      heroImageUrl: product.media[0]?.url,
       startAt: start,
       endAt: end,
       eventType: d.eventType || undefined,

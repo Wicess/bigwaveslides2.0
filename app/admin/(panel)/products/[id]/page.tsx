@@ -43,6 +43,7 @@ export default async function AdminEditProduct({ params }: Props) {
     shortFr: short.fr ?? "",
     descEn: desc.en ?? "",
     descFr: desc.fr ?? "",
+    images: product.media.map((m) => m.url),
   };
 
   return (

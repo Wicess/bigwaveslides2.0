@@ -1,14 +1,16 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { Star, X } from "lucide-react";
 import { saveProduct } from "@/server/actions/admin-products";
 import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { UploadDropzone } from "@/components/media/upload-dropzone";
 
 export type ProductFormValues = {
   id?: string;
@@ -27,6 +29,7 @@ export type ProductFormValues = {
   shortFr: string;
   descEn: string;
   descFr: string;
+  images: string[];
 };
 
 function Field({
@@ -56,15 +59,21 @@ export function ProductForm({
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [images, setImages] = useState<string[]>(defaults.images ?? []);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ProductFormValues>({ defaultValues: defaults });
 
+  const addImage = (url: string) => setImages((prev) => [...prev, url]);
+  const removeImage = (url: string) => setImages((prev) => prev.filter((u) => u !== url));
+  const makePrimary = (url: string) =>
+    setImages((prev) => [url, ...prev.filter((u) => u !== url)]);
+
   const onSubmit = (values: ProductFormValues) =>
     startTransition(async () => {
-      const res = await saveProduct({ ...values, id: defaults.id });
+      const res = await saveProduct({ ...values, id: defaults.id, images });
       if (res.ok) {
         toast.success("Product saved");
         router.push("/admin/products");
@@ -129,6 +138,41 @@ export function ProductForm({
         <Field label="Short description (FR)"><Textarea rows={2} {...register("shortFr")} /></Field>
         <Field label="Description (EN)"><Textarea rows={5} {...register("descEn")} /></Field>
         <Field label="Description (FR)"><Textarea rows={5} {...register("descFr")} /></Field>
+      </section>
+
+      {/* Images — uploaded straight to Cloudflare R2 */}
+      <section className="space-y-3">
+        <span className="text-sm font-medium">Product images</span>
+        {images.length > 0 ? (
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+            {images.map((url, i) => (
+              <div key={url} className="group relative overflow-hidden rounded-[var(--radius-lg)] border border-border">
+                <div className="aspect-square bg-muted">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={url} alt="" className="size-full object-cover" />
+                </div>
+                {i === 0 ? (
+                  <span className="absolute left-1.5 top-1.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-white">
+                    Primary
+                  </span>
+                ) : null}
+                <div className="absolute inset-x-0 bottom-0 flex justify-end gap-1 bg-gradient-to-t from-black/60 to-transparent p-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+                  {i !== 0 ? (
+                    <button type="button" onClick={() => makePrimary(url)} title="Make primary" className="grid size-7 place-items-center rounded-full bg-background/90 text-foreground hover:text-primary">
+                      <Star className="size-3.5" />
+                    </button>
+                  ) : null}
+                  <button type="button" onClick={() => removeImage(url)} title="Remove" className="grid size-7 place-items-center rounded-full bg-background/90 text-foreground hover:text-red-600">
+                    <X className="size-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">No images yet. Upload below — the first image is the primary one shown on cards.</p>
+        )}
+        <UploadDropzone folder="products" accept="image/*" onUploaded={(m) => addImage(m.url)} />
       </section>
 
       <div className="flex gap-3">

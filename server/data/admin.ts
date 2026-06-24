@@ -188,7 +188,13 @@ export async function getAdminProduct(id: string) {
   return withRetry(() =>
     prisma.product.findUnique({
       where: { id },
-      include: { category: { select: { id: true, name: true } } },
+      include: {
+        category: { select: { id: true, name: true } },
+        media: {
+          orderBy: [{ isPrimary: "desc" }, { order: "asc" }],
+          select: { url: true },
+        },
+      },
     }),
   ).catch(() => null);
 }

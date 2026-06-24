@@ -47,7 +47,15 @@ export async function createOrderRequest(
 
     const cart = await prisma.cart.findFirst({
       where: { id: cartId, status: "ACTIVE" },
-      include: { items: { include: { product: true } } },
+      include: {
+        items: {
+          include: {
+            product: {
+              include: { media: { where: { isPrimary: true }, take: 1, select: { url: true } } },
+            },
+          },
+        },
+      },
     });
     if (!cart || cart.items.length === 0) {
       return { ok: false, error: "Your cart is empty." };
@@ -112,6 +120,7 @@ export async function createOrderRequest(
       email: data.email,
       phone: data.phone,
       address: [data.address, data.city].filter(Boolean).join(", ") || undefined,
+      heroImageUrl: cart.items[0]?.product.media[0]?.url,
       items: items.map((i) => ({
         name: i.name,
         quantity: i.quantity,
