@@ -20,6 +20,8 @@ export const FROM = env.SMTP_FROM ?? "Big Wave Slides <contact@bigwaveslides.com
 
 export type SendResult = { ok: boolean; skipped?: boolean; error?: string };
 
+export type EmailAttachment = { filename: string; content: Buffer };
+
 /** Split "Name <email>" into parts for the Brevo API payload. */
 function parseFrom(value: string): { name: string; email: string } {
   const match = value.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
@@ -36,6 +38,7 @@ async function sendViaBrevo(opts: {
   html: string;
   text?: string;
   replyTo?: string;
+  attachments?: EmailAttachment[];
 }): Promise<SendResult> {
   const sender = parseFrom(FROM);
   try {
@@ -53,6 +56,14 @@ async function sendViaBrevo(opts: {
         htmlContent: opts.html,
         textContent: opts.text ?? stripHtml(opts.html),
         ...(opts.replyTo ? { replyTo: { email: opts.replyTo } } : {}),
+        ...(opts.attachments?.length
+          ? {
+              attachment: opts.attachments.map((a) => ({
+                name: a.filename,
+                content: a.content.toString("base64"),
+              })),
+            }
+          : {}),
       }),
     });
     if (!res.ok) {
@@ -78,6 +89,7 @@ export async function sendEmail(opts: {
   html: string;
   text?: string;
   replyTo?: string;
+  attachments?: EmailAttachment[];
 }): Promise<SendResult> {
   if (env.BREVO_API_KEY) {
     return sendViaBrevo(opts);
@@ -98,6 +110,7 @@ export async function sendEmail(opts: {
       html: opts.html,
       text: opts.text ?? stripHtml(opts.html),
       replyTo: opts.replyTo,
+      attachments: opts.attachments,
     });
     return { ok: true };
   } catch (error) {

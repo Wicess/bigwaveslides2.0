@@ -111,6 +111,14 @@ export async function createOrderRequest(
       name: data.name,
       email: data.email,
       phone: data.phone,
+      address: [data.address, data.city].filter(Boolean).join(", ") || undefined,
+      items: items.map((i) => ({
+        name: i.name,
+        quantity: i.quantity,
+        unitPriceCents: i.unitPriceCents,
+        lineTotalCents: i.lineTotalCents,
+      })),
+      subtotalCents,
       totalCents: subtotalCents,
       locale: data.locale,
     });

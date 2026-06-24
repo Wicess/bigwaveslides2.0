@@ -1,39 +1,86 @@
 import "server-only";
-import { sendEmail, renderEmail, siteUrl, type EmailRow } from "@/lib/email";
+import {
+  sendEmail,
+  renderEmail,
+  siteUrl,
+  type EmailRow,
+  type EmailAttachment,
+} from "@/lib/email";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { formatPrice, formatDate } from "@/lib/format";
 import { notifyAdminWhatsApp } from "@/lib/whatsapp";
+import { generateQuotePdf, type QuotePdfInput } from "@/lib/pdf/quote-pdf";
 import { env } from "@/lib/env";
+
+const CONTACT_EMAIL = "contact@bigwaveslides.com";
 
 async function adminRecipient(): Promise<string | null> {
   const settings = await getSettings().catch((): SiteSettings => ({}));
   return settings.contact?.email ?? env.SMTP_USER ?? null;
 }
 
+/** Best-effort PDF quote generation — never blocks the email if it fails. */
+async function buildQuoteAttachment(
+  input: QuotePdfInput,
+): Promise<EmailAttachment[]> {
+  try {
+    const content = await generateQuotePdf(input);
+    return [{ filename: `Big-Wave-Slides-Quote-${input.number}.pdf`, content }];
+  } catch (error) {
+    console.error("[pdf error]", error);
+    return [];
+  }
+}
+
 /* ───────────────── Orders ───────────────── */
 
-export async function notifyOrderRequest(o: {
+export type OrderEmailInput = {
   orderNumber: string;
   name: string;
   email: string;
   phone?: string;
+  address?: string;
+  items: { name: string; quantity: number; unitPriceCents: number; lineTotalCents: number }[];
+  subtotalCents: number;
   totalCents: number;
   locale: string;
-}): Promise<void> {
+};
+
+export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
+  const attachments = await buildQuoteAttachment({
+    kind: "order",
+    number: o.orderNumber,
+    dateLabel: formatDate(new Date(), o.locale),
+    customer: { name: o.name, email: o.email, phone: o.phone, address: o.address },
+    items: o.items.map((i) => ({
+      name: i.name,
+      qtyLabel: String(i.quantity),
+      rateLabel: formatPrice(i.unitPriceCents, o.locale),
+      amountCents: i.lineTotalCents,
+    })),
+    totals: { subtotalCents: o.subtotalCents, totalCents: o.totalCents },
+    locale: o.locale,
+  });
+
   const rows: EmailRow[] = [
     { label: "Reference", value: o.orderNumber },
+    { label: "Items", value: String(o.items.reduce((n, i) => n + i.quantity, 0)) },
     { label: "Estimated total", value: formatPrice(o.totalCents, o.locale) },
   ];
 
   await sendEmail({
     to: o.email,
-    subject: `We received your order request (${o.orderNumber})`,
+    replyTo: CONTACT_EMAIL,
+    subject: `Your Big Wave Slides quote — ${o.orderNumber}`,
+    attachments,
     html: renderEmail({
-      heading: "Thanks for your request! 🌊",
-      intro: `Hi ${o.name}, we've received your order request and our team will email you a quote and payment details shortly. No payment is needed yet.`,
+      heading: `Thanks, ${o.name.split(" ")[0] || o.name}! Your quote is attached`,
+      preheader: "Your personalized quote is attached as a PDF — review, sign, and reply to confirm.",
+      intro:
+        "Thanks for your order request with Big Wave Slides. Your personalized quote is attached as a PDF. There's nothing to pay online — review it, sign the last page, and reply to this email to confirm. We'll then send payment details.",
       rows,
-      cta: { label: "Visit your account", url: siteUrl("/account/orders") },
-      outro: "Questions? Just reply to this email.",
+      cta: { label: "Reply to confirm", url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${o.orderNumber}` },
+      outro: "Prefer to chat? Just reply to this email and a real person will help.",
     }),
   });
 
@@ -43,46 +90,95 @@ export async function notifyOrderRequest(o: {
       to: admin,
       replyTo: o.email,
       subject: `New order request — ${o.orderNumber}`,
+      attachments,
       html: renderEmail({
         heading: "New order request",
-        intro: `${o.name} (${o.email}${o.phone ? `, ${o.phone}` : ""}) submitted an order request.`,
+        intro: `${o.name} (${o.email}${o.phone ? `, ${o.phone}` : ""}) submitted an order request. The generated quote PDF is attached.`,
         rows,
         cta: { label: "Open in admin", url: siteUrl("/admin/orders") },
       }),
     });
   }
-  await notifyAdminWhatsApp(`🛒 New order request ${o.orderNumber} from ${o.name} — ${formatPrice(o.totalCents, o.locale)}`);
+  await notifyAdminWhatsApp(
+    `🛒 New order ${o.orderNumber} from ${o.name} — ${formatPrice(o.totalCents, o.locale)}`,
+  );
 }
 
 /* ───────────────── Bookings ───────────────── */
 
-export async function notifyBookingRequest(b: {
+export type BookingEmailInput = {
   bookingNumber: string;
   contractNumber?: string;
   name: string;
   email: string;
   phone?: string;
+  address?: string;
   startAt: Date;
   endAt: Date;
+  eventType?: string;
+  headcount?: string;
+  surfaceType?: string;
+  items: { name: string; days: number; dailyRateCents: number; lineTotalCents: number }[];
+  subtotalCents: number;
+  deliveryFeeCents: number;
+  pickupFeeCents: number;
+  depositCents: number;
   totalCents: number;
   locale: string;
-}): Promise<void> {
+};
+
+export async function notifyBookingRequest(b: BookingEmailInput): Promise<void> {
+  const datesLabel = `${formatDate(b.startAt, b.locale)} – ${formatDate(b.endAt, b.locale)}`;
+
+  const attachments = await buildQuoteAttachment({
+    kind: "booking",
+    number: b.bookingNumber,
+    dateLabel: formatDate(new Date(), b.locale),
+    customer: { name: b.name, email: b.email, phone: b.phone, address: b.address },
+    event: {
+      dates: datesLabel,
+      type: b.eventType,
+      headcount: b.headcount,
+      surface: b.surfaceType,
+      location: b.address,
+    },
+    items: b.items.map((i) => ({
+      name: i.name,
+      qtyLabel: String(i.days),
+      rateLabel: `${formatPrice(i.dailyRateCents, b.locale)}/day`,
+      amountCents: i.lineTotalCents,
+    })),
+    totals: {
+      subtotalCents: b.subtotalCents,
+      deliveryCents: b.deliveryFeeCents,
+      pickupCents: b.pickupFeeCents,
+      depositCents: b.depositCents,
+      totalCents: b.totalCents,
+    },
+    locale: b.locale,
+  });
+
   const rows: EmailRow[] = [
     { label: "Reference", value: b.bookingNumber },
-    { label: "Dates", value: `${formatDate(b.startAt, b.locale)} – ${formatDate(b.endAt, b.locale)}` },
+    { label: "Event dates", value: datesLabel },
     { label: "Estimated total", value: formatPrice(b.totalCents, b.locale) },
   ];
 
   await sendEmail({
     to: b.email,
-    subject: `Your booking request is in (${b.bookingNumber})`,
+    replyTo: CONTACT_EMAIL,
+    subject: `Your Big Wave Slides rental quote — ${b.bookingNumber}`,
+    attachments,
     html: renderEmail({
-      heading: "Booking requested! 🌊",
-      intro: `Hi ${b.name}, we've tentatively held your dates. Review and sign your rental agreement to speed things up — we'll confirm availability and email payment details.`,
+      heading: `Thanks, ${b.name.split(" ")[0] || b.name}! Your rental quote is attached`,
+      preheader: "Your rental quote & agreement is attached — sign and return to confirm your dates.",
+      intro:
+        "Thanks for your booking request. We've tentatively held your dates and attached your rental quote & agreement as a PDF. There's nothing to pay online — review it, sign, and return it to confirm. We'll then send payment details and lock in your dates.",
       rows,
       cta: b.contractNumber
-        ? { label: "Review & sign agreement", url: siteUrl(`/contract/${b.contractNumber}`) }
-        : { label: "Visit your account", url: siteUrl("/account/bookings") },
+        ? { label: "Review & sign online", url: siteUrl(`/contract/${b.contractNumber}`) }
+        : { label: "Reply to confirm", url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${b.bookingNumber}` },
+      outro: `You can sign the attached PDF and reply to this email, or sign online. Questions? Email us at ${CONTACT_EMAIL}.`,
     }),
   });
 
@@ -92,16 +188,17 @@ export async function notifyBookingRequest(b: {
       to: admin,
       replyTo: b.email,
       subject: `New booking request — ${b.bookingNumber}`,
+      attachments,
       html: renderEmail({
         heading: "New booking request",
-        intro: `${b.name} (${b.email}${b.phone ? `, ${b.phone}` : ""}) requested a booking. Confirm it in admin to lock the dates.`,
+        intro: `${b.name} (${b.email}${b.phone ? `, ${b.phone}` : ""}) requested a booking for ${datesLabel}. Confirm it in admin to lock the dates. The quote PDF is attached.`,
         rows,
         cta: { label: "Open in admin", url: siteUrl("/admin/bookings") },
       }),
     });
   }
   await notifyAdminWhatsApp(
-    `📅 New booking ${b.bookingNumber} from ${b.name} — ${formatDate(b.startAt, b.locale)} to ${formatDate(b.endAt, b.locale)}`,
+    `📅 New booking ${b.bookingNumber} from ${b.name} — ${datesLabel}`,
   );
 }
 
