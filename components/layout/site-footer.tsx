@@ -30,7 +30,6 @@ export async function SiteFooter({
   const exploreLinks = [
     { href: "/shop", label: tn("shop") },
     { href: "/rent", label: tn("rent") },
-    { href: "/events", label: tn("events") },
     { href: "/blog", label: tn("blog") },
     { href: "/about", label: tn("about") },
     { href: "/contact", label: tn("contact") },

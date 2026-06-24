@@ -187,36 +187,6 @@ export async function notifyContact(c: {
   }
 }
 
-/* ───────────────── Event registration ───────────────── */
-
-export async function notifyEventRegistration(e: {
-  name: string;
-  email: string;
-  eventTitle: string;
-}): Promise<void> {
-  await sendEmail({
-    to: e.email,
-    subject: `You're registered: ${e.eventTitle}`,
-    html: renderEmail({
-      heading: "You're on the list! 🎉",
-      intro: `Hi ${e.name}, your spot for "${e.eventTitle}" is reserved. We can't wait to see you there!`,
-    }),
-  });
-}
-
-/* ───────────────── Auth ───────────────── */
-
-export async function sendPasswordReset(email: string, token: string): Promise<void> {
-  await sendEmail({
-    to: email,
-    subject: "Reset your password",
-    html: renderEmail({
-      heading: "Reset your password",
-      intro: "We received a request to reset your password. This link expires in 1 hour. If you didn't request it, you can safely ignore this email.",
-      cta: { label: "Choose a new password", url: siteUrl(`/reset-password?token=${token}`) },
-    }),
-  });
-}
 
 /* ───────────────── Status updates (admin-triggered) ───────────────── */
 

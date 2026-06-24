@@ -7,7 +7,6 @@ import { Stars } from "@/components/ui/stars";
 import { KineticText } from "@/components/motion/kinetic-text";
 import { Reveal } from "@/components/motion/reveal";
 import { WaveScene } from "@/components/three/wave-scene";
-import { DateWidget } from "./date-widget";
 
 export async function Hero({
   rating,
@@ -64,14 +63,6 @@ export async function Hero({
                 </span>{" "}
                 · {t("trustReviews", { count: reviewCount })}
               </span>
-            </div>
-          </Reveal>
-          <Reveal y={16} delay={0.45}>
-            <div className="mt-8">
-              <p className="mb-2 text-sm font-medium text-muted-foreground">
-                {t("heroDateLabel")}
-              </p>
-              <DateWidget label={t("heroDateLabel")} cta={t("heroDateCta")} />
             </div>
           </Reveal>
         </div>

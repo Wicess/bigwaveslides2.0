@@ -5,7 +5,7 @@ import { requirePermission } from "@/lib/admin-auth";
 import { getAdminOrder } from "@/server/data/admin";
 import { formatPrice, formatDate } from "@/lib/format";
 import { Card } from "@/components/ui/card";
-import { StatusBadge } from "@/components/account/status-badge";
+import { StatusBadge } from "@/components/admin/status-badge";
 import { OrderControls } from "@/components/admin/order-controls";
 
 type Props = { params: Promise<{ id: string }> };

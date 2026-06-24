@@ -6,7 +6,7 @@ import { getAdminCustomer } from "@/server/data/admin-cms";
 import { formatPrice, formatDate } from "@/lib/format";
 import { Card } from "@/components/ui/card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { StatusBadge } from "@/components/account/status-badge";
+import { StatusBadge } from "@/components/admin/status-badge";
 import { CrmForm } from "@/components/admin/crm-form";
 
 type Props = { params: Promise<{ id: string }> };

@@ -17,7 +17,6 @@ import {
   Inbox,
   Mail,
   Newspaper,
-  CalendarDays,
   Image,
   Settings,
   Shield,
@@ -53,7 +52,6 @@ const GROUPS = [
     label: "Content",
     items: [
       { href: "/admin/blog", label: "Blog", icon: Newspaper },
-      { href: "/admin/events", label: "Events", icon: CalendarDays },
       { href: "/admin/media", label: "Media", icon: Image },
     ],
   },

@@ -10,7 +10,6 @@ import { RentalCategories } from "@/components/sections/home/rental-categories";
 import { ServicesOverview } from "@/components/sections/home/services-overview";
 import { HowItWorks } from "@/components/sections/home/how-it-works";
 import { WhyChooseUs } from "@/components/sections/home/why-choose-us";
-import { UpcomingEvents } from "@/components/sections/home/upcoming-events";
 import { TestimonialsCarousel } from "@/components/sections/home/testimonials-carousel";
 import { LatestBlog } from "@/components/sections/home/latest-blog";
 import { FinalCta } from "@/components/sections/home/final-cta";
@@ -21,7 +20,6 @@ const FALLBACK: HomeData = {
   featured: [],
   categories: [],
   services: [],
-  events: [],
   testimonials: [],
   posts: [],
   stats: { reviewCount: 1200, ratingAvg: 4.9 },
@@ -48,7 +46,6 @@ export default async function HomePage({ params }: Props) {
       <ServicesOverview services={data.services} locale={locale} />
       <HowItWorks />
       <WhyChooseUs />
-      <UpcomingEvents events={data.events} locale={locale} />
       <TestimonialsCarousel testimonials={data.testimonials} locale={locale} />
       <LatestBlog posts={data.posts} locale={locale} />
       <FinalCta />

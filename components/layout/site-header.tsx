@@ -6,9 +6,7 @@ import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Search,
-  Heart,
   ShoppingBag,
-  User,
   Menu,
   X,
   ChevronDown,
@@ -47,7 +45,6 @@ export function SiteHeader({ locale, data }: Props) {
   const loc = (v: unknown) => getLocalized(v, locale);
 
   const simpleLinks = [
-    { href: "/events", label: tn("events") },
     { href: "/blog", label: tn("blog") },
     { href: "/about", label: tn("about") },
     { href: "/contact", label: tn("contact") },
@@ -158,23 +155,9 @@ export function SiteHeader({ locale, data }: Props) {
           <IconLink href="/shop" label={t("search")}>
             <Search className="size-5" />
           </IconLink>
-          <IconLink
-            href="/account/wishlist"
-            label={t("wishlist")}
-            className="hidden sm:grid"
-          >
-            <Heart className="size-5" />
-          </IconLink>
           <IconLink href="/cart" label={t("cart")} className="relative">
             <ShoppingBag className="size-5" />
             <CartBadge />
-          </IconLink>
-          <IconLink
-            href="/account"
-            label={t("account")}
-            className="hidden sm:grid"
-          >
-            <User className="size-5" />
           </IconLink>
           <div className="ml-1 hidden lg:block">
             <LocaleSwitcher />
@@ -335,7 +318,6 @@ function MobileMenu({
     { label: tn("shop"), href: "/shop" },
     { label: tn("rent"), href: "/rent" },
     { label: tn("services"), href: "/services" },
-    { label: tn("events"), href: "/events" },
     { label: tn("blog"), href: "/blog" },
     { label: tn("about"), href: "/about" },
     { label: tn("contact"), href: "/contact" },
@@ -409,12 +391,6 @@ function MobileMenu({
               <div className="flex items-center justify-between">
                 <LocaleSwitcher />
                 <div className="flex gap-1">
-                  <IconLink href="/account" label={t("account")}>
-                    <User className="size-5" />
-                  </IconLink>
-                  <IconLink href="/account/wishlist" label={t("wishlist")}>
-                    <Heart className="size-5" />
-                  </IconLink>
                   <IconLink href="/cart" label={t("cart")}>
                     <ShoppingBag className="size-5" />
                   </IconLink>

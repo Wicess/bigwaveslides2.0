@@ -4,7 +4,7 @@ import { getAdminQuotes } from "@/server/data/admin";
 import { formatDate } from "@/lib/format";
 import { Card } from "@/components/ui/card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { StatusBadge } from "@/components/account/status-badge";
+import { StatusBadge } from "@/components/admin/status-badge";
 
 export default async function AdminQuotesPage() {
   await requirePermission("quote.read");

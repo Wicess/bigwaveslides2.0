@@ -10,14 +10,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { routing, type AppLocale } from "@/i18n/routing";
-import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
-import { MapEmbed } from "@/components/ui/map-embed";
 import { CountUp } from "@/components/ui/count-up";
 import { Reveal } from "@/components/motion/reveal";
 
@@ -56,8 +54,6 @@ export default async function AboutPage({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations("About");
-  const settings = await getSettings().catch((): SiteSettings => ({}));
-  const address = settings.contact?.address;
 
   return (
     <main>
@@ -160,22 +156,6 @@ export default async function AboutPage({ params }: Props) {
           </div>
         </Container>
       </Section>
-
-      {/* Service area */}
-      {address ? (
-        <Section>
-          <Container>
-            <SectionHeader title={t("areaTitle")} description={t("areaDesc")} />
-            <Reveal className="mt-6">
-              <MapEmbed
-                query={address}
-                title={t("areaTitle")}
-                className="h-[360px] rounded-[var(--radius-lg)] sm:h-[420px]"
-              />
-            </Reveal>
-          </Container>
-        </Section>
-      ) : null}
 
       {/* CTA */}
       <Section spacing="compact" className="pb-16">

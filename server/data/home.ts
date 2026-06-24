@@ -6,7 +6,7 @@ import { withRetry } from "@/lib/retry";
 /** All content for the homepage, fetched in parallel and cached. */
 export const getHomeData = unstable_cache(
   async () => {
-    const [featured, categories, services, events, testimonials, posts, stats] =
+    const [featured, categories, services, testimonials, posts, stats] =
       await withRetry(() =>
         Promise.all([
           prisma.product.findMany({
@@ -25,11 +25,6 @@ export const getHomeData = unstable_cache(
             where: { featured: true },
             orderBy: { order: "asc" },
             take: 6,
-          }),
-          prisma.event.findMany({
-            where: { status: "UPCOMING" },
-            orderBy: { startAt: "asc" },
-            take: 3,
           }),
           prisma.testimonial.findMany({
             where: { status: "APPROVED" },
@@ -57,7 +52,6 @@ export const getHomeData = unstable_cache(
       featured,
       categories,
       services,
-      events,
       testimonials,
       posts,
       stats: {
@@ -68,7 +62,7 @@ export const getHomeData = unstable_cache(
   },
   ["home-data"],
   {
-    tags: ["products", "categories", "services", "events", "testimonials", "blog"],
+    tags: ["products", "categories", "services", "testimonials", "blog"],
     revalidate: 600,
   },
 );

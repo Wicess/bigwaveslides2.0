@@ -19,7 +19,6 @@ import { Stars } from "@/components/ui/stars";
 import { Link } from "@/i18n/navigation";
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductGallery, type GalleryItem } from "@/components/shop/product-gallery";
-import { WishlistButton } from "@/components/shop/wishlist-button";
 import { InstantQuote } from "@/components/rent/instant-quote";
 import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -241,7 +240,6 @@ export default async function RentalDetailPage({ params, searchParams }: Props) 
                       );
                     })}
                   </ul>
-                  <WishlistButton slug={product.slug} name={name} />
                 </div>
               </div>
             </Reveal>

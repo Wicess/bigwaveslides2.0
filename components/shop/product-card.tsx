@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { MediaImage } from "@/components/ui/media-image";
 import { Stars } from "@/components/ui/stars";
 import { Badge } from "@/components/ui/badge";
-import { WishlistButton } from "@/components/shop/wishlist-button";
 
 export type CardProduct = {
   slug: string;
@@ -70,11 +69,6 @@ export async function ProductCard({
         >
           {isRental ? t("rentBadge") : t("saleBadge")}
         </Badge>
-        <WishlistButton
-          slug={product.slug}
-          name={name}
-          className="absolute right-3 top-3"
-        />
       </div>
 
       <div className="mt-3 px-0.5">

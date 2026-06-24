@@ -5,7 +5,6 @@ import { getProductSlugs } from "@/server/data/products";
 import { getRentalSlugs } from "@/server/data/rentals";
 import { getServiceSlugs } from "@/server/data/services";
 import { getPostSlugs, getBlogCategories, getPopularTags } from "@/server/data/blog";
-import { getEventSlugs } from "@/server/data/events";
 import { getProductCategories } from "@/server/data/products";
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -16,7 +15,6 @@ const STATIC_PATHS = [
   "/services",
   "/shop",
   "/rent",
-  "/events",
   "/blog",
   "/testimonials",
   "/contact",
@@ -27,13 +25,12 @@ const STATIC_PATHS = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, rentals, services, posts, events, productCats, blogCats, tags] =
+  const [products, rentals, services, posts, productCats, blogCats, tags] =
     await Promise.all([
       getProductSlugs().catch(() => []),
       getRentalSlugs().catch(() => []),
       getServiceSlugs().catch(() => []),
       getPostSlugs().catch(() => []),
-      getEventSlugs().catch(() => []),
       getProductCategories().catch(() => []),
       getBlogCategories().catch(() => []),
       getPopularTags().catch(() => []),
@@ -44,7 +41,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...rentals.map((p) => `/rent/${p.slug}`),
     ...services.map((s) => `/services/${s.slug}`),
     ...posts.map((p) => `/blog/${p.slug}`),
-    ...events.map((e) => `/events/${e.slug}`),
     ...productCats.map((c) => `/shop/category/${c.slug}`),
     ...blogCats.map((c) => `/blog/category/${c.slug}`),
     ...tags.map((t) => `/blog/tag/${t.slug}`),

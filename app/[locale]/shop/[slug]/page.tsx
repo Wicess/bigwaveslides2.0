@@ -30,7 +30,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductGallery, type GalleryItem } from "@/components/shop/product-gallery";
 import { AddToCart } from "@/components/shop/add-to-cart";
-import { WishlistButton } from "@/components/shop/wishlist-button";
 import { ReviewsSection } from "@/components/shop/reviews-section";
 import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -238,14 +237,11 @@ export default async function ProductDetailPage({ params }: Props) {
               {/* CTAs */}
               <div className="mt-7 space-y-3">
                 <AddToCart productId={product.id} />
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <Button asChild size="lg" variant="outline" className="flex-1">
-                    <Link href={`/quote?product=${product.slug}`}>
-                      {t("requestQuote")}
-                    </Link>
-                  </Button>
-                  <WishlistButton slug={product.slug} name={name} variant="full" />
-                </div>
+                <Button asChild size="lg" variant="outline" className="w-full">
+                  <Link href={`/quote?product=${product.slug}`}>
+                    {t("requestQuote")}
+                  </Link>
+                </Button>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">{t("noPaymentNote")}</p>
 

@@ -5,7 +5,7 @@ import { requirePermission } from "@/lib/admin-auth";
 import { getAdminQuote } from "@/server/data/admin";
 import { formatDate } from "@/lib/format";
 import { Card } from "@/components/ui/card";
-import { StatusBadge } from "@/components/account/status-badge";
+import { StatusBadge } from "@/components/admin/status-badge";
 import { QuoteControls } from "@/components/admin/quote-controls";
 
 type Props = { params: Promise<{ id: string }> };

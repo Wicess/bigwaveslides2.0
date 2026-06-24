@@ -9,7 +9,6 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
-import { MapEmbed } from "@/components/ui/map-embed";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactForm } from "@/components/forms/contact-form";
 
@@ -139,21 +138,6 @@ export default async function ContactPage({ params }: Props) {
           </div>
         </Container>
       </Section>
-
-      {/* Map */}
-      {contact.address ? (
-        <Section spacing="compact" className="pt-0">
-          <Container>
-            <Reveal>
-              <MapEmbed
-                query={contact.address}
-                title={t("infoTitle")}
-                className="h-[360px] rounded-[var(--radius-lg)] sm:h-[420px]"
-              />
-            </Reveal>
-          </Container>
-        </Section>
-      ) : null}
     </main>
   );
 }

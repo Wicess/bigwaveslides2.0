@@ -113,38 +113,6 @@ export async function getBlogTaxonomy() {
   }).catch(() => ({ categories: [], tags: [], authors: [] }));
 }
 
-/* ───────────────── Events ───────────────── */
-
-export async function getAdminEvents() {
-  return withRetry(() =>
-    prisma.event.findMany({
-      orderBy: { startAt: "desc" },
-      take: 200,
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        status: true,
-        startAt: true,
-        location: true,
-        registrationEnabled: true,
-        _count: { select: { registrations: true } },
-      },
-    }),
-  ).catch(() => []);
-}
-
-export async function getAdminEvent(id: string) {
-  return withRetry(() =>
-    prisma.event.findUnique({
-      where: { id },
-      include: {
-        registrations: { orderBy: { createdAt: "desc" } },
-      },
-    }),
-  ).catch(() => null);
-}
-
 /* ───────────────── Media ───────────────── */
 
 export async function getAdminMedia() {

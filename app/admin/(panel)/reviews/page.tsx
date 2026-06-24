@@ -5,7 +5,7 @@ import { formatDate } from "@/lib/format";
 import { Card } from "@/components/ui/card";
 import { Stars } from "@/components/ui/stars";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { StatusBadge } from "@/components/account/status-badge";
+import { StatusBadge } from "@/components/admin/status-badge";
 import { ReviewButtons } from "@/components/admin/moderation-buttons";
 
 export default async function AdminReviewsPage() {
