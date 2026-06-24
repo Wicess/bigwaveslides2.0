@@ -6,7 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Stars } from "@/components/ui/stars";
 import { KineticText } from "@/components/motion/kinetic-text";
 import { Reveal } from "@/components/motion/reveal";
-import { WaveScene } from "@/components/three/wave-scene";
+import { HeroCarousel, type HeroSlide } from "@/components/sections/home/hero-carousel";
+
+const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/hero";
+
+const SLIDES: HeroSlide[] = [
+  { type: "video", src: `${R2}/hero.mp4`, poster: `${R2}/slide-1.jpg` },
+  { type: "image", src: `${R2}/slide-1.jpg`, alt: "Aerial view of a vibrant water park" },
+  { type: "image", src: `${R2}/slide-2.jpg`, alt: "Family water-play structure with slides" },
+];
 
 export async function Hero({
   rating,
@@ -18,57 +26,49 @@ export async function Hero({
   const t = await getTranslations("Home");
 
   return (
-    <section className="relative overflow-hidden pb-12 pt-28 sm:pt-32 lg:pb-16 lg:pt-36">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(55% 45% at 75% 15%, rgba(0,212,255,0.20), transparent 70%), radial-gradient(50% 50% at 10% 80%, rgba(0,153,255,0.16), transparent 70%)",
-        }}
-      />
-      <Container className="grid items-center gap-10 lg:grid-cols-2">
-        <div>
+    <section className="relative flex min-h-[calc(100svh-7rem)] w-full items-center overflow-hidden bg-ink">
+      <HeroCarousel slides={SLIDES} />
+
+      <Container className="relative z-10 py-20">
+        <div className="max-w-2xl">
           <Reveal y={16}>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
               {t("eyebrow")}
             </p>
           </Reveal>
-          <h1 className="mt-4 text-5xl font-bold leading-[1.02] sm:text-6xl lg:text-7xl">
-            <KineticText text={t("tagline")} as="span" className="block text-gradient" />
+          <h1 className="mt-4 text-5xl font-bold leading-[1.02] text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-6xl lg:text-7xl">
+            <KineticText text={t("tagline")} as="span" className="block" />
           </h1>
           <Reveal y={16} delay={0.15}>
-            <p className="mt-5 max-w-lg text-lg text-muted-foreground">
+            <p className="mt-5 max-w-lg text-lg text-white/85">
               {t("subtitle")}
             </p>
           </Reveal>
           <Reveal y={16} delay={0.25}>
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild variant="gradient" size="lg">
                 <Link href="/rent">
                   {t("ctaRent")} <ArrowRight className="size-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              <Button
+                asChild
+                size="lg"
+                className="border border-white/40 bg-white/10 text-white backdrop-blur-sm hover:border-white/70 hover:bg-white/20"
+              >
                 <Link href="/shop">{t("ctaShop")}</Link>
               </Button>
             </div>
           </Reveal>
           <Reveal y={16} delay={0.35}>
-            <div className="mt-6 flex items-center gap-3">
+            <div className="mt-7 flex items-center gap-3">
               <Stars rating={rating} />
-              <span className="text-sm text-muted-foreground">
-                <span className="font-semibold text-foreground">
-                  {rating.toFixed(1)}
-                </span>{" "}
-                · {t("trustReviews", { count: reviewCount })}
+              <span className="text-sm text-white/80">
+                <span className="font-semibold text-white">{rating.toFixed(1)}</span> ·{" "}
+                {t("trustReviews", { count: reviewCount })}
               </span>
             </div>
           </Reveal>
-        </div>
-
-        <div className="relative">
-          <WaveScene className="mx-auto aspect-square w-full max-w-lg rounded-[var(--radius-xl)]" />
         </div>
       </Container>
     </section>
