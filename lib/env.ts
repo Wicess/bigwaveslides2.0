@@ -42,6 +42,9 @@ const EnvSchema = z.object({
   SMTP_FROM: z.string().optional(),
   // Brevo transactional API key (xkeysib-...) — preferred over SMTP when set.
   BREVO_API_KEY: z.string().optional(),
+  // Extra inbox(es) for admin notifications (comma-separated). Use a monitored
+  // Gmail to guarantee delivery (the contact@ self-send can land in spam).
+  ADMIN_NOTIFY_EMAILS: z.string().optional(),
 
   // WhatsApp Cloud API (Phase 17)
   WHATSAPP_PHONE_NUMBER: z.string().optional(),

@@ -14,9 +14,16 @@ import { env } from "@/lib/env";
 
 const CONTACT_EMAIL = "contact@bigwaveslides.com";
 
-async function adminRecipient(): Promise<string | null> {
+/** All inboxes that should receive admin notifications (settings + env extras). */
+async function adminRecipients(): Promise<string[]> {
   const settings = await getSettings().catch((): SiteSettings => ({}));
-  return settings.contact?.email ?? env.SMTP_USER ?? null;
+  const primary = settings.contact?.email ?? env.SMTP_USER ?? null;
+  const extras = (env.ADMIN_NOTIFY_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim())
+    .filter(Boolean);
+  const all = [primary, ...extras].filter((e): e is string => Boolean(e));
+  return Array.from(new Set(all.map((e) => e.toLowerCase())));
 }
 
 /** Best-effort PDF quote generation — never blocks the email if it fails. */
@@ -75,19 +82,19 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     attachments,
     html: renderEmail({
       heading: `Thanks, ${o.name.split(" ")[0] || o.name}! Your quote is attached`,
-      preheader: "Your personalized quote is attached as a PDF — review, sign, and reply to confirm.",
+      preheader: "Your personalized quote is attached as a PDF. Sign it and reply to confirm your order.",
       intro:
-        "Thanks for your order request with Big Wave Slides. Your personalized quote is attached as a PDF. There's nothing to pay online — review it, sign the last page, and reply to this email to confirm. We'll then send payment details.",
+        "Thanks for your order request with Big Wave Slides. Your personalized quote is attached as a PDF. To confirm your order, please review and sign the attached quote, then return it by replying to this email. We'll follow up with an invoice and next steps.",
       rows,
       cta: { label: "Reply to confirm", url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${o.orderNumber}` },
-      outro: "Prefer to chat? Just reply to this email and a real person will help.",
+      outro: "Have a question first? Just reply to this email and a real person will help.",
     }),
   });
 
-  const admin = await adminRecipient();
-  if (admin) {
+  const admins = await adminRecipients();
+  if (admins.length) {
     await sendEmail({
-      to: admin,
+      to: admins,
       replyTo: o.email,
       subject: `New order request — ${o.orderNumber}`,
       attachments,
@@ -130,13 +137,16 @@ export type BookingEmailInput = {
 export async function notifyBookingRequest(b: BookingEmailInput): Promise<void> {
   const datesLabel = `${formatDate(b.startAt, b.locale)} – ${formatDate(b.endAt, b.locale)}`;
 
+  const durationDays = b.items[0]?.days ?? 0;
   const attachments = await buildQuoteAttachment({
     kind: "booking",
     number: b.bookingNumber,
     dateLabel: formatDate(new Date(), b.locale),
     customer: { name: b.name, email: b.email, phone: b.phone, address: b.address },
-    event: {
-      dates: datesLabel,
+    rental: {
+      arrival: formatDate(b.startAt, b.locale),
+      ret: formatDate(b.endAt, b.locale),
+      duration: durationDays ? `${durationDays} day${durationDays === 1 ? "" : "s"}` : undefined,
       type: b.eventType,
       headcount: b.headcount,
       surface: b.surfaceType,
@@ -171,21 +181,21 @@ export async function notifyBookingRequest(b: BookingEmailInput): Promise<void> 
     attachments,
     html: renderEmail({
       heading: `Thanks, ${b.name.split(" ")[0] || b.name}! Your rental quote is attached`,
-      preheader: "Your rental quote & agreement is attached — sign and return to confirm your dates.",
+      preheader: "Your rental agreement is attached. Sign and return it to confirm your dates.",
       intro:
-        "Thanks for your booking request. We've tentatively held your dates and attached your rental quote & agreement as a PDF. There's nothing to pay online — review it, sign, and return it to confirm. We'll then send payment details and lock in your dates.",
+        "Thanks for your booking request — we've tentatively held your dates. Your rental quote & agreement is attached as a PDF. To confirm your booking, you'll need to sign the attached agreement and return it to us (reply to this email, or sign online). Once received, we'll send your invoice and lock in your dates.",
       rows,
       cta: b.contractNumber
         ? { label: "Review & sign online", url: siteUrl(`/contract/${b.contractNumber}`) }
         : { label: "Reply to confirm", url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${b.bookingNumber}` },
-      outro: `You can sign the attached PDF and reply to this email, or sign online. Questions? Email us at ${CONTACT_EMAIL}.`,
+      outro: `Please sign the attached agreement and return it to ${CONTACT_EMAIL}. Questions? Just reply and we'll help.`,
     }),
   });
 
-  const admin = await adminRecipient();
-  if (admin) {
+  const admins = await adminRecipients();
+  if (admins.length) {
     await sendEmail({
-      to: admin,
+      to: admins,
       replyTo: b.email,
       subject: `New booking request — ${b.bookingNumber}`,
       attachments,
@@ -219,10 +229,10 @@ export async function notifyQuoteRequest(q: {
     }),
   });
 
-  const admin = await adminRecipient();
-  if (admin) {
+  const admins = await adminRecipients();
+  if (admins.length) {
     await sendEmail({
-      to: admin,
+      to: admins,
       replyTo: q.email,
       subject: `New quote request — ${q.quoteNumber}`,
       html: renderEmail({
@@ -259,13 +269,13 @@ export async function notifyContact(c: {
     }),
   });
 
-  const admin = await adminRecipient();
-  if (admin) {
+  const admins = await adminRecipients();
+  if (admins.length) {
     const replySubject = encodeURIComponent(
       `Re: your Big Wave Slides enquiry${c.subject ? ` (${c.subject})` : ""}`,
     );
     await sendEmail({
-      to: admin,
+      to: admins,
       replyTo: c.email,
       subject: `New inquiry${c.subject ? `: ${c.subject}` : ""} — ${c.name}`,
       html: renderEmail({

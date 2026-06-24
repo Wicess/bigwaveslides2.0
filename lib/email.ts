@@ -33,7 +33,7 @@ function parseFrom(value: string): { name: string; email: string } {
 
 /** Send via Brevo's transactional API (uses the xkeysib- API key). */
 async function sendViaBrevo(opts: {
-  to: string;
+  to: string | string[];
   subject: string;
   html: string;
   text?: string;
@@ -41,6 +41,7 @@ async function sendViaBrevo(opts: {
   attachments?: EmailAttachment[];
 }): Promise<SendResult> {
   const sender = parseFrom(FROM);
+  const recipients = (Array.isArray(opts.to) ? opts.to : [opts.to]).map((email) => ({ email }));
   try {
     const res = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
@@ -51,7 +52,7 @@ async function sendViaBrevo(opts: {
       },
       body: JSON.stringify({
         sender,
-        to: [{ email: opts.to }],
+        to: recipients,
         subject: opts.subject,
         htmlContent: opts.html,
         textContent: opts.text ?? stripHtml(opts.html),
@@ -84,7 +85,7 @@ async function sendViaBrevo(opts: {
  * missed email can't break a request/booking submission.
  */
 export async function sendEmail(opts: {
-  to: string;
+  to: string | string[];
   subject: string;
   html: string;
   text?: string;
@@ -105,7 +106,7 @@ export async function sendEmail(opts: {
   try {
     await transport.sendMail({
       from: FROM,
-      to: opts.to,
+      to: Array.isArray(opts.to) ? opts.to.join(", ") : opts.to,
       subject: opts.subject,
       html: opts.html,
       text: opts.text ?? stripHtml(opts.html),
