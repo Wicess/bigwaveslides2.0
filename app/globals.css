@@ -43,6 +43,7 @@
   /* Typography (self-hosted via @fontsource-variable) */
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Sora Variable", "Inter Variable", sans-serif;
+  --font-brand: "Space Grotesk Variable", "Sora Variable", sans-serif;
 
   /* Radii */
   --radius: 0.875rem;

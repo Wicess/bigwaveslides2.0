@@ -42,9 +42,9 @@ export function SiteHeader({ locale, data }: Props) {
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
 
   return (
-    <header className="relative z-50 px-3 sm:px-5">
-      <div className="mx-auto mt-3 max-w-[92rem] sm:mt-4">
-        <div className="flex h-20 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[rgba(18,19,26,0.82)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:px-6">
+    <header className="sticky top-0 z-50 px-3 pt-5 sm:px-5 sm:pt-7">
+      <div className="mx-auto max-w-[84rem]">
+        <div className="flex h-[5.5rem] items-center justify-between gap-3 rounded-xl border border-white/10 bg-[rgba(18,19,26,0.85)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:px-6">
           {/* Left: logo + desktop nav */}
           <div className="flex items-center gap-5">
             <Link
@@ -52,17 +52,15 @@ export function SiteHeader({ locale, data }: Props) {
               aria-label="Big Wave Slides — home"
               className="flex items-center gap-2.5"
             >
-              <span className="grid size-14 place-items-center overflow-hidden rounded-md bg-white shadow-[0_4px_14px_-6px_rgba(0,0,0,0.5)]">
-                <Image
-                  src="/logo.png"
-                  alt="Big Wave Slides"
-                  width={48}
-                  height={48}
-                  priority
-                  className="size-11 object-contain"
-                />
-              </span>
-              <span className="font-display text-2xl font-bold tracking-tight text-white">
+              <Image
+                src="/logo.png"
+                alt="Big Wave Slides"
+                width={56}
+                height={56}
+                priority
+                className="h-12 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+              />
+              <span className="font-brand text-[1.65rem] font-bold tracking-[-0.01em] text-white">
                 BWS
               </span>
             </Link>
@@ -157,14 +155,14 @@ export function SiteHeader({ locale, data }: Props) {
 
             <Link
               href="/quote"
-              className="hidden h-11 items-center rounded-md bg-white px-5 text-xs font-bold uppercase tracking-wider text-neutral-900 transition-transform hover:-translate-y-0.5 hover:bg-white/90 md:inline-flex"
+              className="hidden h-11 items-center rounded-md bg-white px-5 font-brand text-xs font-bold uppercase tracking-wider text-neutral-900 transition-transform hover:-translate-y-0.5 hover:bg-white/90 md:inline-flex"
             >
               {t("getQuote")}
             </Link>
 
             <Link
               href="/contact"
-              className="hidden h-11 items-center rounded-md bg-[#a3e635] px-5 text-xs font-bold uppercase tracking-wider text-neutral-900 shadow-[0_6px_20px_-8px_rgba(163,230,53,0.85)] transition-transform hover:-translate-y-0.5 hover:bg-[#8fd11f] sm:inline-flex"
+              className="hidden h-11 items-center rounded-md bg-[#a3e635] px-5 font-brand text-xs font-bold uppercase tracking-wider text-neutral-900 shadow-[0_6px_20px_-8px_rgba(163,230,53,0.85)] transition-transform hover:-translate-y-0.5 hover:bg-[#8fd11f] sm:inline-flex"
             >
               {tn("contact")}
             </Link>
@@ -205,13 +203,13 @@ function MegaItem({
     <div className="group relative">
       <Link
         href={href}
-        className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:text-white"
+        className="inline-flex items-center gap-1 rounded-lg px-3.5 py-2 font-brand text-[15px] font-medium text-white/85 transition-colors hover:text-white"
       >
         {label}
         <ChevronDown className="size-3.5 transition-transform duration-300 group-hover:rotate-180" />
       </Link>
-      <div className="invisible absolute left-1/2 top-full z-50 w-[min(42rem,90vw)] -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-        <div className="glass rounded-[var(--radius-lg)] p-5 shadow-[var(--shadow-soft)]">
+      <div className="invisible absolute left-0 top-full z-[60] w-[min(42rem,90vw)] translate-y-1 pt-[2.4rem] opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+        <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white/80 p-5 shadow-[0_24px_60px_-20px_rgba(0,51,102,0.3)] backdrop-blur-2xl backdrop-saturate-150">
           {children}
         </div>
       </div>
@@ -273,7 +271,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="rounded-full px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:text-white"
+      className="rounded-lg px-3.5 py-2 font-brand text-[15px] font-medium text-white/85 transition-colors hover:text-white"
     >
       {children}
     </Link>
@@ -336,7 +334,7 @@ function HeaderLocale() {
               startTransition(() => router.replace(pathname, { locale: l }))
             }
             className={cn(
-              "rounded-sm px-2.5 py-1.5 text-xs font-bold uppercase transition-colors",
+              "rounded-sm px-2.5 py-1.5 font-brand text-xs font-bold uppercase transition-colors",
               isActive ? "bg-white text-neutral-900" : "text-white/70 hover:text-white",
             )}
           >

@@ -25,8 +25,7 @@ const formSchema = z.object({
 });
 type FormValues = z.infer<typeof formSchema>;
 
-const fieldClass =
-  "h-12 rounded-xl border-border/70 bg-muted/40 px-4 focus-visible:bg-background";
+const fieldClass = "h-12 rounded-lg border-border bg-white px-4";
 
 function FieldError({ msg }: { msg?: string }) {
   if (!msg) return null;
@@ -152,7 +151,7 @@ export function ContactForm() {
               {...register("message")}
               placeholder={t("phMessage")}
               aria-label={t("formMessage")}
-              className="rounded-xl border-border/70 bg-muted/40 px-4 focus-visible:bg-background"
+              className="rounded-lg border-border bg-white px-4"
             />
             <FieldError msg={errors.message?.message} />
           </div>
@@ -160,7 +159,6 @@ export function ContactForm() {
           <Button
             type="submit"
             size="lg"
-            variant="gradient"
             className="w-full"
             loading={pending}
           >

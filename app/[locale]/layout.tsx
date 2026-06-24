@@ -20,6 +20,7 @@ import { organizationLd, websiteLd } from "@/lib/structured-data";
 // "Inter Variable" (body) and "Sora Variable" (display) — wired in globals.css.
 import "@fontsource-variable/inter";
 import "@fontsource-variable/sora";
+import "@fontsource-variable/space-grotesk";
 import "../globals.css";
 
 export const metadata: Metadata = {
