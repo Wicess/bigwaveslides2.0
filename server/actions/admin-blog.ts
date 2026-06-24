@@ -87,6 +87,7 @@ export async function deletePost(id: string): Promise<AdminActionResult> {
 /* ───────────────── Taxonomy ───────────────── */
 
 const taxonomySchema = z.object({
+  id: z.string().optional(),
   kind: z.enum(["category", "tag", "author"]),
   nameEn: z.string().min(1).max(120),
   nameFr: z.string().max(120).optional(),
@@ -99,25 +100,45 @@ export async function saveTaxonomy(
   const session = await requirePermission("blog.write");
   const parsed = taxonomySchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Invalid data." };
-  const { kind, nameEn, nameFr, slug } = parsed.data;
+  const { id, kind, nameEn, nameFr, slug } = parsed.data;
   const safeSlug = (slug || nameEn).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const name = { en: nameEn, fr: nameFr || nameEn };
+  const editing = Boolean(id);
 
   try {
     if (kind === "author") {
-      await prisma.author.create({ data: { name: nameEn } });
+      if (id) await prisma.author.update({ where: { id }, data: { name: nameEn } });
+      else await prisma.author.create({ data: { name: nameEn } });
     } else if (kind === "category") {
-      await prisma.blogCategory.create({
-        data: { slug: safeSlug, name: { en: nameEn, fr: nameFr || nameEn } },
-      });
+      if (id) await prisma.blogCategory.update({ where: { id }, data: { slug: safeSlug, name } });
+      else await prisma.blogCategory.create({ data: { slug: safeSlug, name } });
     } else {
-      await prisma.tag.create({
-        data: { slug: safeSlug, name: { en: nameEn, fr: nameFr || nameEn } },
-      });
+      if (id) await prisma.tag.update({ where: { id }, data: { slug: safeSlug, name } });
+      else await prisma.tag.create({ data: { slug: safeSlug, name } });
     }
-    await logActivity(session.id, "blog.taxonomy", { summary: `Added ${kind} ${nameEn}` });
+    await logActivity(session.id, "blog.taxonomy", {
+      summary: `${editing ? "Updated" : "Added"} ${kind} ${nameEn}`,
+    });
     revalidatePath("/admin/blog/taxonomy");
     return { ok: true };
   } catch {
     return { ok: false, error: "Couldn't save (slug may be in use)." };
+  }
+}
+
+export async function deleteTaxonomy(
+  kind: "category" | "tag" | "author",
+  id: string,
+): Promise<AdminActionResult> {
+  const session = await requirePermission("blog.write");
+  try {
+    if (kind === "author") await prisma.author.delete({ where: { id } });
+    else if (kind === "category") await prisma.blogCategory.delete({ where: { id } });
+    else await prisma.tag.delete({ where: { id } });
+    await logActivity(session.id, "blog.taxonomy", { summary: `Deleted ${kind}` });
+    revalidatePath("/admin/blog/taxonomy");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't delete (it may still be in use by posts)." };
   }
 }

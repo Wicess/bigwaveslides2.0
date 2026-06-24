@@ -93,6 +93,22 @@ export async function setTestimonialStatus(id: string, status: string): Promise<
   }
 }
 
+export async function deleteTestimonial(id: string): Promise<ModResult> {
+  const session = await requirePermission("testimonial.moderate");
+  try {
+    await prisma.testimonial.delete({ where: { id } });
+    await logActivity(session.id, "testimonial.delete", {
+      entityType: "Testimonial",
+      entityId: id,
+    });
+    revalidateTag("testimonials");
+    revalidatePath("/admin/testimonials");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't delete the testimonial." };
+  }
+}
+
 export async function toggleTestimonialFeatured(id: string): Promise<ModResult> {
   await requirePermission("testimonial.moderate");
   try {

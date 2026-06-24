@@ -147,6 +147,51 @@ export async function createAdminUser(
   }
 }
 
+const userUpdateSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(2).max(120),
+  email: z.string().email(),
+  password: z.string().min(8, "Use at least 8 characters").optional().or(z.literal("")),
+  roleId: z.string().optional(),
+});
+
+export async function updateAdminUser(
+  input: z.input<typeof userUpdateSchema>,
+): Promise<AdminActionResult> {
+  const session = await requirePermission("users.manage");
+  const parsed = userUpdateSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid data." };
+  }
+  const { id, name, email, password, roleId } = parsed.data;
+  try {
+    const clash = await prisma.adminUser.findFirst({
+      where: { email: email.toLowerCase(), NOT: { id } },
+      select: { id: true },
+    });
+    if (clash) return { ok: false, error: "That email is already in use." };
+
+    const data: {
+      name: string;
+      email: string;
+      roleId: string | null;
+      passwordHash?: string;
+    } = { name, email: email.toLowerCase(), roleId: roleId || null };
+    if (password) data.passwordHash = await bcrypt.hash(password, 12);
+
+    await prisma.adminUser.update({ where: { id }, data });
+    await logActivity(session.id, "users.update", {
+      entityType: "AdminUser",
+      entityId: id,
+      summary: `Updated admin ${email}`,
+    });
+    revalidatePath("/admin/users");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't update the user." };
+  }
+}
+
 export async function toggleAdminUser(id: string): Promise<AdminActionResult> {
   const session = await requirePermission("users.manage");
   if (id === session.id) return { ok: false, error: "You can't deactivate yourself." };

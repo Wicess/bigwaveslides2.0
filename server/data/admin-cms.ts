@@ -142,6 +142,7 @@ export async function getAdminUsers() {
         email: true,
         isActive: true,
         lastLoginAt: true,
+        roleId: true,
         role: { select: { name: true, type: true } },
       },
     }),

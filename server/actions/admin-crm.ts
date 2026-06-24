@@ -64,3 +64,57 @@ export async function setContactStatus(id: string, status: string): Promise<CrmR
     return { ok: false, error: "Couldn't update the inquiry." };
   }
 }
+
+export async function deleteContact(id: string): Promise<CrmResult> {
+  const session = await requirePermission("contact.manage");
+  try {
+    await prisma.contactInquiry.delete({ where: { id } });
+    await logActivity(session.id, "contact.delete", {
+      entityType: "ContactInquiry",
+      entityId: id,
+    });
+    revalidatePath("/admin/contacts");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't delete the inquiry." };
+  }
+}
+
+/* ───────────────── Newsletter ───────────────── */
+
+const SUBSCRIBER_STATUS = ["SUBSCRIBED", "UNSUBSCRIBED"];
+
+export async function setSubscriberStatus(id: string, status: string): Promise<CrmResult> {
+  const session = await requirePermission("newsletter.manage");
+  if (!SUBSCRIBER_STATUS.includes(status)) return { ok: false, error: "Invalid status." };
+  try {
+    await prisma.newsletterSubscriber.update({
+      where: { id },
+      data: { status: status as "SUBSCRIBED" | "UNSUBSCRIBED" },
+    });
+    await logActivity(session.id, "newsletter.manage", {
+      entityType: "NewsletterSubscriber",
+      entityId: id,
+      summary: `Subscriber ${status}`,
+    });
+    revalidatePath("/admin/newsletter");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't update the subscriber." };
+  }
+}
+
+export async function deleteSubscriber(id: string): Promise<CrmResult> {
+  const session = await requirePermission("newsletter.manage");
+  try {
+    await prisma.newsletterSubscriber.delete({ where: { id } });
+    await logActivity(session.id, "newsletter.delete", {
+      entityType: "NewsletterSubscriber",
+      entityId: id,
+    });
+    revalidatePath("/admin/newsletter");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't delete the subscriber." };
+  }
+}

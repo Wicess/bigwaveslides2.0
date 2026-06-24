@@ -4,7 +4,7 @@ import { formatDate } from "@/lib/format";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { NewUserForm, ToggleUserButton } from "@/components/admin/user-admin";
+import { NewUserForm, ToggleUserButton, EditUserButton } from "@/components/admin/user-admin";
 
 export default async function AdminUsersPage() {
   await requirePermission("users.manage");
@@ -37,8 +37,14 @@ export default async function AdminUsersPage() {
                     <td className="px-4 py-3 text-muted-foreground">
                       {u.lastLoginAt ? formatDate(u.lastLoginAt, "en") : "Never"}
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <ToggleUserButton id={u.id} isActive={u.isActive} />
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end gap-1">
+                        <EditUserButton
+                          user={{ id: u.id, name: u.name, email: u.email, roleId: u.roleId }}
+                          roles={roles}
+                        />
+                        <ToggleUserButton id={u.id} isActive={u.isActive} />
+                      </div>
                     </td>
                   </tr>
                 ))}

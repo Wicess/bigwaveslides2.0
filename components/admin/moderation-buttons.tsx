@@ -7,6 +7,7 @@ import {
   setReviewStatus,
   deleteReview,
   setTestimonialStatus,
+  deleteTestimonial,
   toggleTestimonialFeatured,
 } from "@/server/actions/admin-moderation";
 import { toast } from "@/components/ui/toaster";
@@ -103,6 +104,9 @@ export function TestimonialButtons({
       ) : null}
       <IconBtn title="Toggle featured" disabled={pending} className={featured ? "border-primary text-primary" : ""} onClick={() => run(() => toggleTestimonialFeatured(id))}>
         <Star className={cn("size-4", featured && "fill-current")} />
+      </IconBtn>
+      <IconBtn title="Delete" disabled={pending} className="text-red-600 hover:border-red-300" onClick={() => { if (confirm("Delete this testimonial?")) run(() => deleteTestimonial(id)); }}>
+        <Trash2 className="size-4" />
       </IconBtn>
     </div>
   );

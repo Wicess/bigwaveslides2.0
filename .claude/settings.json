@@ -12,7 +12,9 @@
       "Read(//home/wice2/Desktop/projects/Big\\\\ Wave\\\\ Slides/app/[locale]/testimonials/**)",
       "Bash(echo \"PUSH=$?\")",
       "Bash(echo \"GEN=$?\")",
-      "Bash(git commit -q -m 'feat: visitor analytics + tracking \\(unique IDs, geo, movement timeline, cart funnel\\) *)"
+      "Bash(git commit -q -m 'feat: visitor analytics + tracking \\(unique IDs, geo, movement timeline, cart funnel\\) *)",
+      "Bash(git rm *)",
+      "Bash(git commit -q -m 'feat\\(admin\\): complete CRUD across taxonomy, categories, testimonials, newsletter, contacts, users *)"
     ]
   }
 }

@@ -156,6 +156,29 @@ export async function saveCategory(
   }
 }
 
+export async function deleteCategory(id: string): Promise<AdminActionResult> {
+  const session = await requirePermission("category.write");
+  try {
+    const inUse = await prisma.product.count({ where: { categoryId: id } });
+    if (inUse > 0) {
+      return {
+        ok: false,
+        error: `${inUse} product(s) still use this category. Reassign them first.`,
+      };
+    }
+    await prisma.productCategory.delete({ where: { id } });
+    await logActivity(session.id, "category.delete", {
+      entityType: "ProductCategory",
+      entityId: id,
+    });
+    revalidateTag("categories");
+    revalidatePath("/admin/products/categories");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't delete the category." };
+  }
+}
+
 /* ───────────────── Inventory (rental units) ───────────────── */
 
 export async function addRentalUnit(
