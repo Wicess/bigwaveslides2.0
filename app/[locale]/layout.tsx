@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { getNavData, type NavData } from "@/server/data/navigation";
 import { LenisProvider } from "@/components/motion/lenis-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
@@ -42,6 +43,15 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: ["/api/og"],
   },
+};
+
+export const viewport: Viewport = {
+  // Edge-to-edge: let the app paint under the status bar / notch on mobile so
+  // it feels like a native app. Safe-area insets keep content clear of it.
+  viewportFit: "cover",
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export function generateStaticParams() {
@@ -83,6 +93,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <ScrollProgress />
           <LenisProvider>
+            <AnnouncementBar />
             <SiteHeader locale={locale} data={navData} />
             <div id="main-content">{children}</div>
             <SiteFooter locale={locale} data={navData} year={year} />
