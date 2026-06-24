@@ -145,21 +145,28 @@ export async function notifyContact(c: {
   subject?: string;
   message: string;
 }): Promise<void> {
+  const supportEmail = "contact@bigwaveslides.com";
+
   await sendEmail({
     to: c.email,
-    subject: "Thanks for contacting Big Wave Slides 🌊",
+    replyTo: supportEmail,
+    subject: "We received your message — Big Wave Slides",
     html: renderEmail({
-      heading: `Thanks, ${c.name.split(" ")[0] || c.name}! 🌊`,
-      preheader: "We've received your message and will reply within a few hours.",
-      intro: "Thanks for reaching out to Big Wave Slides — we usually reply within a few hours during business hours. Here's a copy of what you sent us:",
+      heading: `Thanks, ${c.name.split(" ")[0] || c.name}!`,
+      preheader: "We've received your message and a team member will reach out shortly.",
+      intro:
+        "Thanks for reaching out to Big Wave Slides. A member of our team will get back to you very shortly. Here's a copy of what you sent us:",
       quote: c.message,
-      cta: { label: "Browse our slides", url: siteUrl("/en/rent") },
-      outro: "Need a faster answer? Just reply to this email and a real person will get back to you.",
+      cta: { label: "Email us directly", url: `mailto:${supportEmail}` },
+      outro: `If you haven't heard from us within a few minutes, please email us directly at ${supportEmail} and we'll respond right away.`,
     }),
   });
 
   const admin = await adminRecipient();
   if (admin) {
+    const replySubject = encodeURIComponent(
+      `Re: your Big Wave Slides enquiry${c.subject ? ` (${c.subject})` : ""}`,
+    );
     await sendEmail({
       to: admin,
       replyTo: c.email,
@@ -174,7 +181,7 @@ export async function notifyContact(c: {
           { label: "Email", value: c.email },
           ...(c.subject ? [{ label: "Subject", value: c.subject }] : []),
         ],
-        cta: { label: "Open inbox", url: siteUrl("/admin/contacts") },
+        cta: { label: `Reply to ${c.name.split(" ")[0] || c.name}`, url: `mailto:${c.email}?subject=${replySubject}` },
       }),
     });
   }

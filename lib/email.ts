@@ -119,6 +119,8 @@ function stripHtml(html: string): string {
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 const CONTACT_EMAIL = "contact@bigwaveslides.com";
+// Hosted on R2 CDN so it renders in email clients independently of site deploys.
+const EMAIL_LOGO = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/brand/logo-email.png";
 
 export type EmailRow = { label: string; value: string };
 
@@ -161,8 +163,8 @@ export function renderEmail(opts: {
     <tr><td align="center">
       <table role="presentation" width="580" cellpadding="0" cellspacing="0" style="max-width:580px;width:100%;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(2,32,71,0.08)">
         <tr><td style="background:linear-gradient(135deg,#0099FF,#00D4FF);padding:22px 32px" align="left">
-          <img src="${SITE}/logo-email.png" alt="Big Wave Slides" height="56" style="display:block;height:56px;width:auto;border:0;outline:none" />
-          <div style="color:rgba(255,255,255,0.95);font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;margin-top:8px">Sell · Rent · Install</div>
+          <img src="${EMAIL_LOGO}" alt="Big Wave Slides" height="56" style="display:block;height:56px;width:auto;border:0;outline:none" />
+          <div style="color:rgba(255,255,255,0.95);font-size:13px;font-weight:600;margin-top:8px">Big waves, bigger smiles.</div>
         </td></tr>
         <tr><td style="padding:30px 32px">
           <h1 style="margin:0 0 10px;color:#0f172a;font-size:23px;line-height:1.25">${escape(opts.heading)}</h1>
@@ -182,7 +184,6 @@ export function renderEmail(opts: {
           </p>
         </td></tr>
       </table>
-      <p style="margin:14px 0 0;color:#aab4c5;font-size:11px">No payment is taken online — we reply with a personalized quote.</p>
     </td></tr>
   </table>
   </body></html>`;
