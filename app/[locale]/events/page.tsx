@@ -13,6 +13,9 @@ import { Reveal } from "@/components/motion/reveal";
 
 type Props = { params: Promise<{ locale: string }> };
 
+// ISR: surface admin content edits on the live site within this window.
+export const revalidate = 600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as AppLocale, namespace: "Events" });

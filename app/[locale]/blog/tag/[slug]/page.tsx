@@ -24,6 +24,9 @@ export async function generateStaticParams() {
   return tags.map((tag) => ({ slug: tag.slug }));
 }
 
+// ISR: surface admin content edits on the live site within this window.
+export const revalidate = 600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const tag = await getTagBySlug(slug);

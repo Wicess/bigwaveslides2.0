@@ -64,7 +64,7 @@ export async function updateOrder(input: UpdateOrderInput): Promise<AdminActionR
         name: updated.guestName ?? "there",
         reference: updated.orderNumber,
         kind: "order",
-        statusLabel: statusLabel(paymentStatus, "en"),
+        statusLabel: `${statusLabel(status, "en")} · ${statusLabel(paymentStatus, "en")}`,
         note: invoiceNote || undefined,
       });
     }

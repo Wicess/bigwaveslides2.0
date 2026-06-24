@@ -71,12 +71,16 @@ export async function registerCustomer(
     });
 
     await claimGuestCart(customer.id);
-    await signIn("credentials", { email: normalizedEmail, password, redirect: false });
-    return { ok: true };
-  } catch (error) {
-    if (error instanceof AuthError) {
-      return { ok: false, error: "Account created — please sign in." };
+    try {
+      await signIn("credentials", { email: normalizedEmail, password, redirect: false });
+    } catch (signInError) {
+      // Account was created successfully; only the auto-login failed. Treat as
+      // success — the /account guard will send them to sign-in if no session.
+      if (signInError instanceof AuthError) return { ok: true };
+      throw signInError;
     }
+    return { ok: true };
+  } catch {
     return { ok: false, error: "Something went wrong. Please try again." };
   }
 }

@@ -10,6 +10,9 @@ import { BlogView } from "@/components/blog/blog-view";
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams };
 
+// ISR: surface admin content edits on the live site within this window.
+export const revalidate = 600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as AppLocale, namespace: "Blog" });
