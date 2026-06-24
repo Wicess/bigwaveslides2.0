@@ -12,6 +12,7 @@ import { formatPrice } from "@/lib/format";
 
 const LOGO = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/brand/logo-email.png";
 const CONTACT_EMAIL = "contact@bigwaveslides.com";
+const CONTACT_PHONE = "+1 (614) 302-5899";
 const SITE = "bigwaveslides.com";
 
 const C = {
@@ -125,6 +126,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
             <Text style={s.brandName}>Big Wave Slides</Text>
             <Text>Big waves, bigger smiles.</Text>
             <Text>{CONTACT_EMAIL}</Text>
+            <Text>{CONTACT_PHONE}</Text>
             <Text>{SITE}</Text>
           </View>
         </View>
@@ -249,7 +251,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         </Text>
 
         <View style={s.footer} fixed>
-          <Text>Big Wave Slides · {CONTACT_EMAIL}</Text>
+          <Text>Big Wave Slides · {CONTACT_EMAIL} · {CONTACT_PHONE}</Text>
           <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`} />
         </View>
       </Page>

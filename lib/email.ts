@@ -132,6 +132,7 @@ function stripHtml(html: string): string {
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 const CONTACT_EMAIL = "contact@bigwaveslides.com";
+const CONTACT_PHONE = "+1 (614) 302-5899";
 // Hosted on R2 CDN so it renders in email clients independently of site deploys.
 const EMAIL_LOGO = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/brand/logo-email.png";
 
@@ -193,6 +194,8 @@ export function renderEmail(opts: {
           <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6">
             Premium water slides to buy, rent &amp; install.<br>
             <a href="mailto:${CONTACT_EMAIL}" style="color:#0099FF;text-decoration:none">${CONTACT_EMAIL}</a>
+            &nbsp;·&nbsp;
+            <a href="tel:+16143025899" style="color:#0099FF;text-decoration:none">${CONTACT_PHONE}</a>
             &nbsp;·&nbsp;
             <a href="${SITE}" style="color:#0099FF;text-decoration:none">${SITE.replace(/^https?:\/\//, "")}</a>
           </p>
