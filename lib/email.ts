@@ -162,9 +162,10 @@ export function renderEmail(opts: {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef2f8;padding:32px 12px">
     <tr><td align="center">
       <table role="presentation" width="580" cellpadding="0" cellspacing="0" style="max-width:580px;width:100%;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(2,32,71,0.08)">
-        <tr><td style="background:linear-gradient(135deg,#0099FF,#00D4FF);padding:22px 32px" align="left">
-          <img src="${EMAIL_LOGO}" alt="Big Wave Slides" height="56" style="display:block;height:56px;width:auto;border:0;outline:none" />
-          <div style="color:rgba(255,255,255,0.95);font-size:13px;font-weight:600;margin-top:8px">Big waves, bigger smiles.</div>
+        <tr><td style="height:5px;line-height:5px;font-size:0;background:linear-gradient(135deg,#0099FF,#00D4FF)">&nbsp;</td></tr>
+        <tr><td style="background:#ffffff;padding:26px 32px 18px;border-bottom:1px solid #eef2f7" align="left">
+          <img src="${EMAIL_LOGO}" alt="Big Wave Slides" height="60" style="display:block;height:60px;width:auto;border:0;outline:none" />
+          <div style="color:#0099FF;font-size:13px;font-weight:700;margin-top:10px">Big waves, bigger smiles.</div>
         </td></tr>
         <tr><td style="padding:30px 32px">
           <h1 style="margin:0 0 10px;color:#0f172a;font-size:23px;line-height:1.25">${escape(opts.heading)}</h1>
