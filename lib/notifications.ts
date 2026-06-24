@@ -149,9 +149,12 @@ export async function notifyContact(c: {
     to: c.email,
     subject: "Thanks for contacting Big Wave Slides 🌊",
     html: renderEmail({
-      heading: "We got your message",
-      intro: `Hi ${c.name}, thanks for reaching out — we usually reply within a few hours. Here's a copy of your message:`,
-      outro: c.message,
+      heading: `Thanks, ${c.name.split(" ")[0] || c.name}! 🌊`,
+      preheader: "We've received your message and will reply within a few hours.",
+      intro: "Thanks for reaching out to Big Wave Slides — we usually reply within a few hours during business hours. Here's a copy of what you sent us:",
+      quote: c.message,
+      cta: { label: "Browse our slides", url: siteUrl("/en/rent") },
+      outro: "Need a faster answer? Just reply to this email and a real person will get back to you.",
     }),
   });
 
@@ -163,8 +166,14 @@ export async function notifyContact(c: {
       subject: `New inquiry${c.subject ? `: ${c.subject}` : ""} — ${c.name}`,
       html: renderEmail({
         heading: "New contact inquiry",
-        intro: `${c.name} (${c.email}) sent a message:`,
-        outro: c.message,
+        preheader: `${c.name} sent a message via the contact form.`,
+        intro: `${c.name} (${c.email}) sent a message via the website contact form:`,
+        quote: c.message,
+        rows: [
+          { label: "Name", value: c.name },
+          { label: "Email", value: c.email },
+          ...(c.subject ? [{ label: "Subject", value: c.subject }] : []),
+        ],
         cta: { label: "Open inbox", url: siteUrl("/admin/contacts") },
       }),
     });

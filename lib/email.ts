@@ -118,48 +118,71 @@ function stripHtml(html: string): string {
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
+const CONTACT_EMAIL = "contact@bigwaveslides.com";
+
 export type EmailRow = { label: string; value: string };
 
-/** Branded HTML wrapper for all transactional emails (table-based, email-safe). */
+/** Branded, email-client-safe HTML wrapper for all transactional emails. */
 export function renderEmail(opts: {
   heading: string;
   intro: string;
+  /** Hidden inbox preview text. */
+  preheader?: string;
   rows?: EmailRow[];
+  /** Highlighted block (e.g. the visitor's message). */
+  quote?: string;
   cta?: { label: string; url: string };
   outro?: string;
 }): string {
+  const preheader = opts.preheader ?? opts.intro;
+
   const rows = (opts.rows ?? [])
     .map(
       (r) => `
       <tr>
-        <td style="padding:6px 0;color:#6b7280;font-size:14px">${escape(r.label)}</td>
-        <td style="padding:6px 0;color:#111111;font-size:14px;font-weight:600;text-align:right">${escape(r.value)}</td>
+        <td style="padding:8px 0;color:#6b7280;font-size:14px">${escape(r.label)}</td>
+        <td style="padding:8px 0;color:#0f172a;font-size:14px;font-weight:600;text-align:right">${escape(r.value)}</td>
       </tr>`,
     )
     .join("");
 
-  const cta = opts.cta
-    ? `<tr><td style="padding:24px 0 8px"><a href="${escape(opts.cta.url)}" style="display:inline-block;background:#0099FF;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 28px;border-radius:999px;font-size:15px">${escape(opts.cta.label)}</a></td></tr>`
+  const quoteBlock = opts.quote
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0"><tr><td style="background:#f1f8ff;border-left:4px solid #0099FF;border-radius:10px;padding:16px 18px;color:#334155;font-size:15px;line-height:1.6;white-space:pre-line">${escape(opts.quote)}</td></tr></table>`
     : "";
 
-  return `<!doctype html><html><body style="margin:0;background:#f3f6fb;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f6fb;padding:32px 0">
+  const cta = opts.cta
+    ? `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 4px"><tr><td style="border-radius:999px;background:linear-gradient(135deg,#0099FF,#00D4FF)"><a href="${escape(opts.cta.url)}" style="display:inline-block;color:#ffffff;text-decoration:none;font-weight:700;padding:13px 30px;border-radius:999px;font-size:15px">${escape(opts.cta.label)} &rarr;</a></td></tr></table>`
+    : "";
+
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"></head>
+  <body style="margin:0;background:#eef2f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0">${escape(preheader)}</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef2f8;padding:32px 12px">
     <tr><td align="center">
-      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e5e9f0">
-        <tr><td style="background:linear-gradient(135deg,#0099FF,#00D4FF);padding:20px 28px">
-          <span style="color:#ffffff;font-size:18px;font-weight:800;letter-spacing:-0.02em">🌊 Big Wave Slides</span>
+      <table role="presentation" width="580" cellpadding="0" cellspacing="0" style="max-width:580px;width:100%;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(2,32,71,0.08)">
+        <tr><td style="background:linear-gradient(135deg,#0099FF,#00D4FF);padding:24px 32px">
+          <div style="color:#ffffff;font-size:20px;font-weight:800;letter-spacing:-0.02em">🌊 Big Wave Slides</div>
+          <div style="color:rgba(255,255,255,0.9);font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;margin-top:2px">Sell · Rent · Install</div>
         </td></tr>
-        <tr><td style="padding:28px">
-          <h1 style="margin:0 0 8px;color:#111111;font-size:22px">${escape(opts.heading)}</h1>
-          <p style="margin:0 0 16px;color:#374151;font-size:15px;line-height:1.6">${escape(opts.intro)}</p>
-          ${rows ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #eef2f7;border-bottom:1px solid #eef2f7;margin:8px 0">${rows}</table>` : ""}
-          <table role="presentation" cellpadding="0" cellspacing="0">${cta}</table>
-          ${opts.outro ? `<p style="margin:16px 0 0;color:#6b7280;font-size:13px;line-height:1.6">${escape(opts.outro)}</p>` : ""}
+        <tr><td style="padding:30px 32px">
+          <h1 style="margin:0 0 10px;color:#0f172a;font-size:23px;line-height:1.25">${escape(opts.heading)}</h1>
+          <p style="margin:0 0 8px;color:#374151;font-size:15px;line-height:1.65">${escape(opts.intro)}</p>
+          ${quoteBlock}
+          ${rows ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #eef2f7;border-bottom:1px solid #eef2f7;margin:14px 0">${rows}</table>` : ""}
+          ${cta}
+          ${opts.outro ? `<p style="margin:18px 0 0;color:#6b7280;font-size:13px;line-height:1.6">${escape(opts.outro)}</p>` : ""}
         </td></tr>
-        <tr><td style="padding:18px 28px;background:#fafbfc;border-top:1px solid #eef2f7">
-          <p style="margin:0;color:#9ca3af;font-size:12px">Big Wave Slides · <a href="${SITE}" style="color:#0099FF;text-decoration:none">${SITE.replace(/^https?:\/\//, "")}</a></p>
+        <tr><td style="padding:22px 32px;background:#f8fafc;border-top:1px solid #eef2f7">
+          <p style="margin:0 0 4px;color:#475569;font-size:13px;font-weight:600">Big Wave Slides</p>
+          <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6">
+            Premium water slides to buy, rent &amp; install.<br>
+            <a href="mailto:${CONTACT_EMAIL}" style="color:#0099FF;text-decoration:none">${CONTACT_EMAIL}</a>
+            &nbsp;·&nbsp;
+            <a href="${SITE}" style="color:#0099FF;text-decoration:none">${SITE.replace(/^https?:\/\//, "")}</a>
+          </p>
         </td></tr>
       </table>
+      <p style="margin:14px 0 0;color:#aab4c5;font-size:11px">No payment is taken online — we reply with a personalized quote.</p>
     </td></tr>
   </table>
   </body></html>`;
