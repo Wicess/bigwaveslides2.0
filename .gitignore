@@ -51,3 +51,9 @@ Thumbs.db
 
 # Local media scratch (downloaded before upload to R2)
 /media-scratch
+
+# Local video/media (upload to Cloudflare R2, never commit)
+/images/Videos/
+*.mkv
+*.mp4
+*.mov
