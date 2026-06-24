@@ -14,7 +14,10 @@
       "Bash(echo \"GEN=$?\")",
       "Bash(git commit -q -m 'feat: visitor analytics + tracking \\(unique IDs, geo, movement timeline, cart funnel\\) *)",
       "Bash(git rm *)",
-      "Bash(git commit -q -m 'feat\\(admin\\): complete CRUD across taxonomy, categories, testimonials, newsletter, contacts, users *)"
+      "Bash(git commit -q -m 'feat\\(admin\\): complete CRUD across taxonomy, categories, testimonials, newsletter, contacts, users *)",
+      "Bash(node -e \"const m=require\\('./messages/en.json'\\); console.log\\(JSON.stringify\\(m.Cart,null,1\\)\\)\")",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('messages/en.json','utf8'\\)\\);JSON.parse\\(require\\('fs'\\).readFileSync\\('messages/fr.json','utf8'\\)\\);console.log\\('JSON OK'\\)\")",
+      "Bash(git commit -q -m 'feat: dashboard traffic widget, cart next-steps, form success states + funnel events *)"
     ]
   }
 }

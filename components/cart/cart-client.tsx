@@ -267,6 +267,23 @@ export function CartClient({
           <Card className="p-6">
             <h2 className="text-lg font-semibold">{t("yourDetails")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{t("detailsIntro")}</p>
+
+            <div className="mt-4 rounded-[var(--radius-lg)] bg-muted/50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t("nextStepsTitle")}
+              </p>
+              <ol className="mt-2 space-y-1.5 text-sm">
+                {[t("step1"), t("step2"), t("step3")].map((step, i) => (
+                  <li key={i} className="flex gap-2.5">
+                    <span className="grid size-5 shrink-0 place-items-center rounded-full bg-primary text-[11px] font-bold text-white">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
             <div className="mt-5">
               <OrderRequestForm
                 onSuccess={(num) => {

@@ -8,6 +8,7 @@ import { CheckCircle2, FileSignature } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { createBookingRequest } from "@/server/actions/bookings";
+import { trackEvent } from "@/lib/analytics/client";
 import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -80,8 +81,13 @@ export function BookingForm({
         headcount: values.headcount ? Number(values.headcount) : undefined,
         locale,
       });
-      if (res.ok) setDone({ booking: res.bookingNumber, contract: res.contractNumber });
-      else toast.error(res.error);
+      if (res.ok) {
+        trackEvent({
+          type: "BOOKING_REQUEST",
+          meta: { bookingNumber: res.bookingNumber, productId },
+        });
+        setDone({ booking: res.bookingNumber, contract: res.contractNumber });
+      } else toast.error(res.error);
     });
   };
 

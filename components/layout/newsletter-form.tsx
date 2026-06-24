@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { subscribeNewsletter } from "@/server/actions/newsletter";
 import { toast } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,7 @@ export function NewsletterForm({ className }: { className?: string }) {
   const locale = useLocale();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,9 +23,23 @@ export function NewsletterForm({ className }: { className?: string }) {
     if (res.ok) {
       toast.success(t("subscribeSuccess"));
       setEmail("");
+      setDone(true);
     } else {
       toast.error(res.error ?? t("subscribeError"));
     }
+  }
+
+  if (done) {
+    return (
+      <p
+        className={cn(
+          "flex w-full max-w-md items-center gap-2 text-sm font-medium text-white",
+          className,
+        )}
+      >
+        <CheckCircle2 className="size-5 shrink-0" /> {t("subscribeSuccess")}
+      </p>
+    );
   }
 
   return (

@@ -1,15 +1,18 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { CheckCircle2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { submitContact } from "@/server/actions/contact";
+import { trackEvent } from "@/lib/analytics/client";
 import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 const formSchema = z.object({
   name: z.string().min(2, "Please enter your name"),
@@ -43,6 +46,7 @@ export function ContactForm() {
   const t = useTranslations("Contact");
   const locale = useLocale();
   const [pending, startTransition] = useTransition();
+  const [done, setDone] = useState(false);
   const {
     register,
     handleSubmit,
@@ -55,12 +59,27 @@ export function ContactForm() {
       const res = await submitContact({ ...values, locale });
       if (res.ok) {
         toast.success(t("success"));
+        trackEvent({ type: "CONTACT" });
         reset();
+        setDone(true);
       } else {
         toast.error(res.error ?? t("error"));
       }
     });
   };
+
+  if (done) {
+    return (
+      <Card className="p-8 text-center">
+        <CheckCircle2 className="mx-auto size-12 text-primary" />
+        <h3 className="mt-4 text-xl font-bold">{t("successTitle")}</h3>
+        <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{t("successNext")}</p>
+        <Button type="button" variant="outline" className="mt-6" onClick={() => setDone(false)}>
+          {t("sendAnother")}
+        </Button>
+      </Card>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

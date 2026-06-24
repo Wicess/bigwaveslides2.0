@@ -2,11 +2,13 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { CheckCircle2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { signContract } from "@/server/actions/contracts";
 import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 export function SignContract({
   contractNumber,
@@ -21,6 +23,7 @@ export function SignContract({
   const [name, setName] = useState(expectedName ?? "");
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [signed, setSigned] = useState(false);
 
   const submit = () => {
     setError(null);
@@ -36,12 +39,23 @@ export function SignContract({
       const res = await signContract({ contractNumber, signerName: name.trim(), agree: true });
       if (res.ok) {
         toast.success(t("signedToast"));
+        setSigned(true);
         router.refresh();
       } else {
         setError(res.error ?? t("signError"));
       }
     });
   };
+
+  if (signed) {
+    return (
+      <Card className="p-8 text-center">
+        <CheckCircle2 className="mx-auto size-14 text-primary" />
+        <h3 className="mt-4 text-xl font-bold">{t("signedToast")}</h3>
+        <p className="mt-2 font-mono text-sm text-muted-foreground">{contractNumber}</p>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-4">

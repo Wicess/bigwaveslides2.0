@@ -7,6 +7,7 @@ import { z } from "zod";
 import { CheckCircle2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { createQuoteRequest } from "@/server/actions/quotes";
+import { trackEvent } from "@/lib/analytics/client";
 import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -74,8 +75,10 @@ export function QuoteForm({
         productId,
         productLabel,
       });
-      if (res.ok) setQuoteRef(res.quoteNumber);
-      else toast.error(res.error);
+      if (res.ok) {
+        trackEvent({ type: "QUOTE_REQUEST", meta: { quoteNumber: res.quoteNumber } });
+        setQuoteRef(res.quoteNumber);
+      } else toast.error(res.error);
     });
   };
 

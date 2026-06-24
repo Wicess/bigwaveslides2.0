@@ -4,13 +4,14 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Star } from "lucide-react";
+import { Star, CheckCircle2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { submitReview } from "@/server/actions/reviews";
 import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 const schema = z.object({
@@ -26,6 +27,7 @@ export function ReviewForm({ productId }: { productId: string }) {
   const [pending, startTransition] = useTransition();
   const [rating, setRating] = useState(5);
   const [hover, setHover] = useState(0);
+  const [done, setDone] = useState(false);
   const {
     register,
     handleSubmit,
@@ -40,11 +42,22 @@ export function ReviewForm({ productId }: { productId: string }) {
         toast.success(t("submitted"));
         reset();
         setRating(5);
+        setDone(true);
       } else {
         toast.error(res.error ?? t("error"));
       }
     });
   };
+
+  if (done) {
+    return (
+      <Card className="p-8 text-center">
+        <CheckCircle2 className="mx-auto size-12 text-primary" />
+        <h3 className="mt-4 text-lg font-bold">{t("submitted")}</h3>
+        <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">{t("moderationNote")}</p>
+      </Card>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

@@ -5,28 +5,44 @@ import {
   FileText,
   DollarSign,
   ArrowRight,
+  Package,
+  CalendarClock,
+  Users,
+  Eye,
+  MousePointerClick,
 } from "lucide-react";
 import { getAdminDashboard } from "@/server/data/admin";
+import { getAnalyticsOverview } from "@/server/data/analytics";
 import { formatPrice, formatDate } from "@/lib/format";
 import { Card } from "@/components/ui/card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { StatusBadge } from "@/components/admin/status-badge";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboard() {
-  const d = await getAdminDashboard();
+  const [d, a] = await Promise.all([getAdminDashboard(), getAnalyticsOverview(30)]);
 
   const kpis = [
     { label: "Pending orders", value: d.ordersPending, icon: ShoppingCart, href: "/admin/orders" },
     { label: "Booking requests", value: d.bookingsRequested, icon: CalendarCheck, href: "/admin/bookings" },
     { label: "New quotes", value: d.quotesNew, icon: FileText, href: "/admin/quotes" },
     { label: "Revenue (paid)", value: formatPrice(d.revenueCents, "en"), icon: DollarSign },
+    { label: "Active products", value: d.productsActive, icon: Package, href: "/admin/products" },
+    { label: "Upcoming events", value: d.upcoming, icon: CalendarClock, href: "/admin/bookings" },
+  ];
+
+  const traffic = [
+    { label: "Visitors", value: a.visitors, today: a.visitorsToday, icon: Users },
+    { label: "Sessions", value: a.visits, today: a.visitsToday, icon: MousePointerClick },
+    { label: "Page views", value: a.pageViews, today: a.pageViewsToday, icon: Eye },
   ];
 
   return (
     <div>
       <AdminPageHeader title="Dashboard" description="Commerce operations at a glance." />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {kpis.map((k) => {
           const Icon = k.icon;
           const body = (
@@ -47,6 +63,37 @@ export default async function AdminDashboard() {
           );
         })}
       </div>
+
+      {/* Traffic at a glance (last 30 days) */}
+      <Card className="mt-6 p-5">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="font-semibold">Traffic — last 30 days</h2>
+          <Link href="/admin/analytics" className="inline-flex items-center gap-1 text-sm text-primary">
+            Full analytics <ArrowRight className="size-4" />
+          </Link>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {traffic.map((t) => {
+            const Icon = t.icon;
+            return (
+              <div key={t.label} className="flex items-center gap-3 rounded-xl border border-border p-4">
+                <span className="grid size-10 place-items-center rounded-xl bg-primary-50 text-primary">
+                  <Icon className="size-5" />
+                </span>
+                <span>
+                  <span className="block text-2xl font-bold">{t.value.toLocaleString("en-US")}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {t.label}
+                    <span className="ml-1.5 text-xs font-medium text-primary">
+                      +{t.today.toLocaleString("en-US")} today
+                    </span>
+                  </span>
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         {/* Recent orders */}
