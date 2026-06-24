@@ -44,7 +44,7 @@ export function SiteHeader({ locale, data }: Props) {
   return (
     <header className="sticky top-0 z-50 px-3 pt-5 sm:px-5 sm:pt-7">
       <div className="mx-auto max-w-[84rem]">
-        <div className="flex h-[5.5rem] items-center justify-between gap-3 rounded-xl border border-white/10 bg-[rgba(18,19,26,0.85)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:px-6">
+        <div className="flex h-[5.5rem] items-center justify-between gap-3 rounded-[8px] border border-white/10 bg-[rgba(18,19,26,0.85)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:px-6">
           {/* Left: logo + desktop nav */}
           <div className="flex items-center gap-5">
             <Link
