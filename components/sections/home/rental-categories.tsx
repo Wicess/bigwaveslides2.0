@@ -78,7 +78,7 @@ export async function RentalCategories({
   return (
     <Section
       spacing="compact"
-      className="overflow-hidden [background:var(--gradient-deep)]"
+      className="overflow-hidden [background:linear-gradient(180deg,#0a1a2f_0%,#0e2742_100%)]"
     >
       <Container>
         <h2 className="text-balance text-center text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-5xl">
@@ -93,7 +93,7 @@ export async function RentalCategories({
             <Link
               key={card.key}
               href={card.href}
-              className="group relative flex aspect-[3/4] w-60 shrink-0 flex-col justify-between overflow-hidden rounded-[1.5rem] p-5 text-white shadow-[0_14px_36px_-16px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:-translate-y-1"
+              className="group/card relative my-4 flex aspect-[3/4] w-60 shrink-0 flex-col justify-between overflow-hidden rounded-[1.5rem] p-5 text-white shadow-[0_14px_36px_-16px_rgba(0,0,0,0.6)] ring-1 ring-white/10 transition-all duration-500 ease-out will-change-transform hover:!opacity-100 hover:scale-[1.04] hover:shadow-[0_28px_55px_-18px_rgba(0,0,0,0.8)] hover:ring-white/50 group-hover:opacity-40"
             >
               {card.image ? (
                 <MediaImage
@@ -101,15 +101,15 @@ export async function RentalCategories({
                   alt={card.title}
                   rounded={false}
                   className="absolute inset-0 size-full"
-                  imgClassName="transition-transform duration-700 group-hover:scale-110"
+                  imgClassName="transition-transform duration-700 ease-out group-hover/card:scale-110"
                   sizes="240px"
                 />
               ) : (
                 <div className="absolute inset-0 bg-accent" />
               )}
 
-              {/* Scrims for legible copy */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/10 to-black/75" />
+              {/* Scrims for legible copy — lift a touch on hover so the photo pops */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/10 to-black/75 transition-opacity duration-500 group-hover/card:opacity-75" />
 
               <h3 className="relative font-display text-lg font-bold leading-snug tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
                 {card.title}
@@ -121,7 +121,7 @@ export async function RentalCategories({
                     {card.desc}
                   </p>
                 ) : null}
-                <span className="mt-3 inline-flex size-9 items-center justify-center rounded-full bg-white/15 backdrop-blur transition-colors group-hover:bg-white group-hover:text-accent">
+                <span className="mt-3 inline-flex size-9 items-center justify-center rounded-full bg-white/15 backdrop-blur transition-colors duration-300 group-hover/card:bg-white group-hover/card:text-accent">
                   <ArrowUpRight className="size-4" />
                 </span>
               </div>
