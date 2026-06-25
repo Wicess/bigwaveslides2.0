@@ -42,7 +42,7 @@ export async function SiteFooter({
   ];
 
   return (
-    <footer className="bg-accent text-white">
+    <footer className="bg-[#0a1a2f] text-white">
       {/* Newsletter band */}
       <div className="border-b border-white/10">
         <Container className="flex flex-col items-start justify-between gap-6 py-10 md:flex-row md:items-center">
@@ -57,7 +57,7 @@ export async function SiteFooter({
       </div>
 
       {/* Main */}
-      <Container className="grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-4">
+      <Container className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr] lg:gap-12">
         <div>
           <Link href="/" aria-label="Big Wave Slides — home" className="inline-flex">
             <span className="rounded-2xl bg-white/95 px-3 py-2 shadow-[var(--shadow-soft)]">
@@ -70,12 +70,12 @@ export async function SiteFooter({
               />
             </span>
           </Link>
-          <p className="mt-4 max-w-xs text-sm text-white/70">
+          <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/70">
             {t("footerTagline")}
           </p>
-          <ul className="mt-5 space-y-2">
+          <ul className="mt-6 space-y-2.5">
             {trust.map((item) => (
-              <li key={item.label} className="flex items-center gap-2 text-sm text-white/80">
+              <li key={item.label} className="flex items-center gap-2.5 text-sm text-white/80">
                 <item.icon className="size-4 text-secondary" />
                 {item.label}
               </li>
@@ -84,15 +84,15 @@ export async function SiteFooter({
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-white/60">
+          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
             {t("footerExplore")}
           </h3>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-5 space-y-3">
             {exploreLinks.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="text-sm text-white/80 transition-colors hover:text-white"
+                  className="text-sm text-white/75 transition-colors hover:text-white"
                 >
                   {l.label}
                 </Link>
@@ -102,15 +102,15 @@ export async function SiteFooter({
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-white/60">
+          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
             {t("footerServices")}
           </h3>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-5 space-y-3">
             {data.services.slice(0, 6).map((s) => (
               <li key={s.slug}>
                 <Link
                   href={`/services/${s.slug}`}
-                  className="text-sm text-white/80 transition-colors hover:text-white"
+                  className="text-sm text-white/75 transition-colors hover:text-white"
                 >
                   {loc(s.title)}
                 </Link>
@@ -120,21 +120,21 @@ export async function SiteFooter({
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-white/60">
+          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
             {t("footerContact")}
           </h3>
-          <ul className="mt-4 space-y-3 text-sm text-white/80">
+          <ul className="mt-5 space-y-3.5 text-sm text-white/80">
             {contact.email ? (
-              <li className="flex items-center gap-2">
-                <Mail className="size-4 text-secondary" />
+              <li className="flex items-center gap-2.5">
+                <Mail className="size-4 shrink-0 text-secondary" />
                 <a href={`mailto:${contact.email}`} className="hover:text-white">
                   {contact.email}
                 </a>
               </li>
             ) : null}
             {contact.phone ? (
-              <li className="flex items-center gap-2">
-                <Phone className="size-4 text-secondary" />
+              <li className="flex items-center gap-2.5">
+                <Phone className="size-4 shrink-0 text-secondary" />
                 <a
                   href={`tel:${contact.phone.replace(/[^0-9+]/g, "")}`}
                   className="hover:text-white"
@@ -144,35 +144,43 @@ export async function SiteFooter({
               </li>
             ) : null}
             {contact.address ? (
-              <li className="flex items-start gap-2">
+              <li className="flex items-start gap-2.5">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-secondary" />
                 {contact.address}
               </li>
             ) : null}
           </ul>
-          <div className="mt-5 flex gap-2">
-            {social.instagram ? (
-              <SocialLink href={social.instagram} label="Instagram">
-                <InstagramIcon className="size-4" />
-              </SocialLink>
-            ) : null}
-            {social.facebook ? (
-              <SocialLink href={social.facebook} label="Facebook">
-                <FacebookIcon className="size-4" />
-              </SocialLink>
-            ) : null}
-            {social.tiktok ? (
-              <SocialLink href={social.tiktok} label="TikTok">
-                <TiktokIcon className="size-4" />
-              </SocialLink>
-            ) : null}
-          </div>
+
+          {social.instagram || social.facebook || social.tiktok ? (
+            <div className="mt-7">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
+                {t("followUs")}
+              </p>
+              <div className="mt-3 flex gap-2.5">
+                {social.instagram ? (
+                  <SocialLink href={social.instagram} label="Instagram">
+                    <InstagramIcon className="size-[18px]" />
+                  </SocialLink>
+                ) : null}
+                {social.facebook ? (
+                  <SocialLink href={social.facebook} label="Facebook">
+                    <FacebookIcon className="size-[18px]" />
+                  </SocialLink>
+                ) : null}
+                {social.tiktok ? (
+                  <SocialLink href={social.tiktok} label="TikTok">
+                    <TiktokIcon className="size-[18px]" />
+                  </SocialLink>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
         </div>
       </Container>
 
       {/* Bottom bar */}
       <div className="border-t border-white/10">
-        <Container className="flex flex-col items-center justify-between gap-3 py-5 text-sm text-white/60 sm:flex-row">
+        <Container className="flex flex-col items-center justify-between gap-3 py-5 text-sm text-white/55 sm:flex-row">
           <p>
             © {year} Big Wave Slides. {t("footerRights")}
           </p>
@@ -208,7 +216,7 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="grid size-9 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+      className="grid size-11 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/10 transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary hover:ring-primary"
     >
       {children}
     </a>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { BadgeCheck } from "lucide-react";
@@ -13,7 +13,7 @@ const BG =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/categories/pool.jpg";
 const DESKTOP_COUNT = 4;
 const SWAP_MS = 3200;
-const MOBILE_MS = 4200;
+const MOBILE_MS = 4500;
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 type Testimonial = {
@@ -77,7 +77,12 @@ export function TestimonialsCarousel({
   const [slots, setSlots] = useState<number[]>(() =>
     Array.from({ length: Math.min(DESKTOP_COUNT, n) }, (_, i) => i),
   );
-  const [mobileStep, setMobileStep] = useState(0);
+
+  // Mobile swipe carousel state
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+  const resumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
     const arr = Array.from({ length: n }, (_, i) => i);
@@ -107,17 +112,63 @@ export function TestimonialsCarousel({
     return () => clearInterval(id);
   }, [order, n, reduce]);
 
-  // Mobile: auto-advancing carousel that fades between single reviews.
+  // Mobile: gently auto-advance the swipeable carousel (pauses while swiping).
   useEffect(() => {
     if (reduce || n <= 1) return;
-    const id = setInterval(() => setMobileStep((s) => s + 1), MOBILE_MS);
+    const id = setInterval(() => {
+      const el = scrollerRef.current;
+      if (!el || pausedRef.current) return;
+      const center = el.scrollLeft + el.clientWidth / 2;
+      let cur = 0;
+      let best = Infinity;
+      Array.from(el.children).forEach((c, i) => {
+        const node = c as HTMLElement;
+        const cc = node.offsetLeft + node.clientWidth / 2;
+        const d = Math.abs(cc - center);
+        if (d < best) {
+          best = d;
+          cur = i;
+        }
+      });
+      const next = el.children[(cur + 1) % n] as HTMLElement | undefined;
+      if (next) {
+        el.scrollTo({
+          left: next.offsetLeft - (el.clientWidth - next.clientWidth) / 2,
+          behavior: "smooth",
+        });
+      }
+    }, MOBILE_MS);
     return () => clearInterval(id);
   }, [reduce, n]);
 
   if (n === 0) return null;
 
-  const mobileIndex = order.length ? order[mobileStep % n]! : 0;
-  const mobileItem = testimonials[mobileIndex]!;
+  const syncActive = () => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const center = el.scrollLeft + el.clientWidth / 2;
+    let best = 0;
+    let bestDist = Infinity;
+    Array.from(el.children).forEach((c, i) => {
+      const node = c as HTMLElement;
+      const cc = node.offsetLeft + node.clientWidth / 2;
+      const d = Math.abs(cc - center);
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    });
+    setActive(best);
+  };
+
+  // Pause auto-advance briefly when the user takes over.
+  const pause = () => {
+    pausedRef.current = true;
+    if (resumeRef.current) clearTimeout(resumeRef.current);
+    resumeRef.current = setTimeout(() => {
+      pausedRef.current = false;
+    }, 7000);
+  };
 
   return (
     <section className="relative isolate overflow-hidden py-14 sm:py-20">
@@ -162,33 +213,35 @@ export function TestimonialsCarousel({
           })}
         </div>
 
-        {/* Mobile: single auto-advancing card */}
+        {/* Mobile: swipeable carousel (auto-advances, pauses on swipe) */}
         <div className="mt-10 sm:hidden">
-          <div className="relative min-h-[14rem]">
-            <AnimatePresence initial={false} mode="wait">
-              <motion.div
-                key={mobileItem.id}
-                initial={reduce ? false : { opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={reduce ? undefined : { opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.5, ease: EASE }}
-              >
-                <ReviewCard
-                  item={mobileItem}
-                  locale={locale}
-                  verifiedLabel={verified}
-                />
-              </motion.div>
-            </AnimatePresence>
+          <div
+            ref={scrollerRef}
+            onScroll={syncActive}
+            onPointerDown={pause}
+            className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {order.map((idx) => {
+              const item = testimonials[idx]!;
+              return (
+                <div key={item.id} className="w-[86%] shrink-0 snap-center">
+                  <ReviewCard
+                    item={item}
+                    locale={locale}
+                    verifiedLabel={verified}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-5 flex justify-center gap-2">
-            {testimonials.map((tt, i) => (
+            {order.map((idx, i) => (
               <span
-                key={tt.id}
+                key={idx}
                 className={cn(
                   "h-1.5 rounded-full transition-all duration-300",
-                  i === mobileIndex ? "w-6 bg-white" : "w-1.5 bg-white/40",
+                  i === active ? "w-6 bg-white" : "w-1.5 bg-white/40",
                 )}
               />
             ))}

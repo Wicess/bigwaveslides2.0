@@ -33,6 +33,46 @@ type Card = {
   desc: string;
 };
 
+function CategoryCard({ card }: { card: Card }) {
+  return (
+    <Link
+      href={card.href}
+      className="group/card relative my-4 flex aspect-[3/4] w-60 shrink-0 snap-start flex-col justify-between overflow-hidden rounded-[1.5rem] p-5 text-white shadow-[0_14px_36px_-16px_rgba(0,0,0,0.6)] ring-1 ring-white/10 transition-all duration-500 ease-out will-change-transform hover:!opacity-100 hover:scale-[1.04] hover:shadow-[0_28px_55px_-18px_rgba(0,0,0,0.8)] hover:ring-white/50 group-hover:opacity-40"
+    >
+      {card.image ? (
+        <MediaImage
+          src={card.image}
+          alt={card.title}
+          rounded={false}
+          className="absolute inset-0 size-full"
+          imgClassName="transition-transform duration-700 ease-out group-hover/card:scale-110"
+          sizes="240px"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-accent" />
+      )}
+
+      {/* Scrims for legible copy — lift a touch on hover so the photo pops */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/10 to-black/75 transition-opacity duration-500 group-hover/card:opacity-75" />
+
+      <h3 className="relative font-display text-lg font-bold leading-snug tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+        {card.title}
+      </h3>
+
+      <div className="relative">
+        {card.desc ? (
+          <p className="font-mono text-[11px] leading-relaxed text-white/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
+            {card.desc}
+          </p>
+        ) : null}
+        <span className="mt-3 inline-flex size-9 items-center justify-center rounded-full bg-white/15 backdrop-blur transition-colors duration-300 group-hover/card:bg-white group-hover/card:text-accent">
+          <ArrowUpRight className="size-4" />
+        </span>
+      </div>
+    </Link>
+  );
+}
+
 export async function RentalCategories({
   categories,
   locale,
@@ -86,46 +126,18 @@ export async function RentalCategories({
         </h2>
       </Container>
 
-      {/* Infinite, auto-scrolling carousel (pauses on hover) */}
-      <div className="mt-10">
+      {/* Mobile: swipe left/right (native scroll-snap) */}
+      <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {cards.map((card) => (
+          <CategoryCard key={card.key} card={card} />
+        ))}
+      </div>
+
+      {/* Desktop: infinite, auto-scrolling carousel (pauses on hover) */}
+      <div className="mt-8 hidden sm:block">
         <Marquee durationSeconds={55}>
           {cards.map((card) => (
-            <Link
-              key={card.key}
-              href={card.href}
-              className="group/card relative my-4 flex aspect-[3/4] w-60 shrink-0 flex-col justify-between overflow-hidden rounded-[1.5rem] p-5 text-white shadow-[0_14px_36px_-16px_rgba(0,0,0,0.6)] ring-1 ring-white/10 transition-all duration-500 ease-out will-change-transform hover:!opacity-100 hover:scale-[1.04] hover:shadow-[0_28px_55px_-18px_rgba(0,0,0,0.8)] hover:ring-white/50 group-hover:opacity-40"
-            >
-              {card.image ? (
-                <MediaImage
-                  src={card.image}
-                  alt={card.title}
-                  rounded={false}
-                  className="absolute inset-0 size-full"
-                  imgClassName="transition-transform duration-700 ease-out group-hover/card:scale-110"
-                  sizes="240px"
-                />
-              ) : (
-                <div className="absolute inset-0 bg-accent" />
-              )}
-
-              {/* Scrims for legible copy — lift a touch on hover so the photo pops */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/10 to-black/75 transition-opacity duration-500 group-hover/card:opacity-75" />
-
-              <h3 className="relative font-display text-lg font-bold leading-snug tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
-                {card.title}
-              </h3>
-
-              <div className="relative">
-                {card.desc ? (
-                  <p className="font-mono text-[11px] leading-relaxed text-white/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
-                    {card.desc}
-                  </p>
-                ) : null}
-                <span className="mt-3 inline-flex size-9 items-center justify-center rounded-full bg-white/15 backdrop-blur transition-colors duration-300 group-hover/card:bg-white group-hover/card:text-accent">
-                  <ArrowUpRight className="size-4" />
-                </span>
-              </div>
-            </Link>
+            <CategoryCard key={card.key} card={card} />
           ))}
         </Marquee>
       </div>
