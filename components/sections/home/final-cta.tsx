@@ -5,6 +5,9 @@ import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
 
+const CTA_BG =
+  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/featured/serengeti.jpg";
+
 export async function FinalCta() {
   const t = await getTranslations("Home");
 
@@ -12,27 +15,38 @@ export async function FinalCta() {
     <section className="py-10 sm:py-14 lg:py-16">
       <Container>
         <Reveal>
-          <div className="relative overflow-hidden rounded-[var(--radius-xl)] px-6 py-14 text-center text-white [background:var(--gradient-wave)] sm:px-12 sm:py-20">
+          <div className="relative isolate overflow-hidden rounded-[2rem] px-6 py-16 text-center text-white sm:px-12 sm:py-24">
+            {/* HD photo + brand gradient wash */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={CTA_BG}
+              alt=""
+              className="absolute inset-0 -z-10 size-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 -z-10 [background:linear-gradient(135deg,rgba(0,153,255,0.92)_0%,rgba(0,102,204,0.88)_45%,rgba(0,51,102,0.92)_100%)]" />
+            {/* soft light blooms */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-30"
+              className="pointer-events-none absolute inset-0 -z-10 opacity-60"
               style={{
                 background:
-                  "radial-gradient(40% 60% at 20% 20%, rgba(255,255,255,0.5), transparent 60%), radial-gradient(40% 60% at 85% 80%, rgba(0,51,102,0.5), transparent 60%)",
+                  "radial-gradient(45% 60% at 18% 12%, rgba(255,255,255,0.45), transparent 60%), radial-gradient(50% 70% at 88% 90%, rgba(0,212,255,0.5), transparent 60%)",
               }}
             />
-            <div className="relative">
-              <h2 className="mx-auto max-w-2xl font-display text-3xl font-bold sm:text-5xl">
+
+            <div className="relative mx-auto max-w-2xl">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight drop-shadow-[0_3px_16px_rgba(0,0,0,0.35)] sm:text-5xl">
                 {t("ctaTitle")}
               </h2>
-              <p className="mx-auto mt-4 max-w-xl text-white/85">
+              <p className="mx-auto mt-4 max-w-xl text-pretty text-white/90 sm:text-lg">
                 {t("ctaDesc")}
               </p>
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <div className="mt-9 flex flex-wrap justify-center gap-3">
                 <Button
                   asChild
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="bg-white text-primary shadow-xl transition-transform duration-200 hover:-translate-y-0.5 hover:bg-white/90"
                 >
                   <Link href="/quote">
                     {t("ctaButton")} <ArrowRight className="size-4" />
@@ -42,7 +56,7 @@ export async function FinalCta() {
                   asChild
                   size="lg"
                   variant="glass"
-                  className="text-white"
+                  className="text-white transition-transform duration-200 hover:-translate-y-0.5"
                 >
                   <Link href="/rent">{t("ctaSecondary")}</Link>
                 </Button>
