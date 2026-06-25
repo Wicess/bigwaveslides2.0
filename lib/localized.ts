@@ -1,9 +1,25 @@
+// lib/localized.ts
+// -----------------------------------------------------------------------------
+// This site is bilingual (English + French). Translatable text is stored in the
+// database as a small JSON object like { "en": "Slide", "fr": "Toboggan" }.
+// These helpers turn that JSON into a single string for the user's current
+// language, and let us build such objects in code. Used anywhere we display
+// content that has both an English and a French version.
+// -----------------------------------------------------------------------------
+
 /** Localized text stored in Json columns as { en, fr }. */
 export type LocalizedText = { en: string; fr: string };
 
 /**
  * Resolve a localized Json value for the active locale, with graceful
  * fallbacks (requested locale → English → first available → fallback string).
+ *
+ * `value` is typed as `unknown` because it comes from a JSON database column
+ * and could be anything. We defensively handle each shape so the UI never
+ * crashes and always shows *something* readable:
+ *   - null/undefined  -> use the provided fallback string
+ *   - a plain string  -> already a single language, return as-is
+ *   - not an object   -> unexpected type, use the fallback
  */
 export function getLocalized(
   value: unknown,
@@ -14,8 +30,14 @@ export function getLocalized(
   if (typeof value === "string") return value;
   if (typeof value !== "object") return fallback;
 
+  // At this point `value` is an object like { en: "...", fr: "..." }.
+  // The ?? chain picks the best available text in order of preference:
+  //   1. the requested language (map[locale], e.g. "fr")
+  //   2. English (map.en) as a sensible default
+  //   3. whatever value exists first, if neither key is present
   const map = value as Record<string, unknown>;
   const candidate = map[locale] ?? map.en ?? Object.values(map)[0];
+  // Only return it if it's actually a string; otherwise fall back.
   return typeof candidate === "string" ? candidate : fallback;
 }
 

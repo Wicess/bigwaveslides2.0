@@ -1,7 +1,16 @@
+/**
+ * 404 "Not Found" page.
+ *
+ * A special App Router file: Next.js renders this whenever a route is missing
+ * or when code calls `notFound()` (as page.tsx/layout.tsx do for unsupported
+ * locales). It is a Server Component, so it can await translations directly.
+ */
 import { getTranslations } from "next-intl/server";
+// Locale-aware Link from next-intl: keeps the user's current language in the URL.
 import { Link } from "@/i18n/navigation";
 
 export default async function NotFound() {
+  // Translated text for this page ("title", "description", "back" labels).
   const t = await getTranslations("NotFound");
 
   return (
