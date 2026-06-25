@@ -1,3 +1,19 @@
+/*
+ * WhyChooseUs
+ * -----------
+ * A homepage section that builds trust. It's a single card split into two
+ * halves:
+ *   - Left: a large HD photo with a headline and a "Rent now" button.
+ *   - Right: a panel of headline stats (events served, slides, years, rating).
+ *
+ * Nice touches for the user:
+ *   - The stat numbers animate by counting up from 0 when scrolled into view.
+ *   - Both halves slide in from the sides as you scroll down to them.
+ *
+ * This is a Client Component ("use client") because it uses animation and
+ * scroll-detection hooks that only run in the browser. Appears on the
+ * homepage / landing page.
+ */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -13,10 +29,19 @@ import { EASE_OUT } from "@/components/motion/variants";
 const WHY_IMAGE =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/why/trusted.jpg";
 
+// Easing curve for the count-up animation. Given progress "x" from 0 to 1, it
+// returns an eased 0..1 value that starts fast and slows down near the end,
+// so the numbers feel snappy then settle gently instead of moving at a robotic
+// constant speed.
 function easeOutCubic(x: number) {
   return 1 - Math.pow(1 - x, 3);
 }
 
+/**
+ * Counter — shows a number that animates up from 0 to `to` once it scrolls
+ * into view. `decimals` controls how many decimal places to show (e.g. 1 for
+ * the 4.9 rating) and `suffix` appends a symbol like "+" or "★".
+ */
 function Counter({
   to,
   decimals = 0,
@@ -26,21 +51,31 @@ function Counter({
   decimals?: number;
   suffix?: string;
 }) {
+  // ref attaches to the <span> below so we can watch when it enters the screen.
   const ref = useRef<HTMLSpanElement>(null);
+  // useInView becomes true once this element scrolls into view. "once: true"
+  // means it only fires the first time; the "-80px" margin triggers it slightly
+  // before the element is fully visible.
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  // The number currently shown on screen; starts at 0 and animates toward `to`.
   const [value, setValue] = useState(0);
 
   useEffect(() => {
+    // Wait until the element is on screen before starting the animation.
     if (!inView) return;
     let raf = 0;
     const start = performance.now();
-    const duration = 1600;
+    const duration = 1600; // total animation length in milliseconds.
+    // tick runs once per frame. We figure out how far through the animation we
+    // are (p, from 0 to 1), apply easing, and set the displayed value.
     const tick = (now: number) => {
       const p = Math.min(1, (now - start) / duration);
       setValue(to * easeOutCubic(p));
+      // Keep requesting frames until we reach the end (p === 1).
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
+    // Cleanup: if the component unmounts mid-animation, stop the pending frame.
     return () => cancelAnimationFrame(raf);
   }, [inView, to]);
 
@@ -53,9 +88,13 @@ function Counter({
 }
 
 export function WhyChooseUs() {
+  // "t" looks up translated text for the current language.
   const t = useTranslations("Home");
+  // True if the user has asked their OS to minimize animations. We respect that
+  // by skipping the slide-in motion below.
   const reduce = useReducedMotion();
 
+  // The four headline stats. `to` is the target number the Counter animates to.
   const stats = [
     { to: 5000, suffix: "+", decimals: 0, label: t("statEvents") },
     { to: 40, suffix: "+", decimals: 0, label: t("statSlides") },
@@ -63,6 +102,11 @@ export function WhyChooseUs() {
     { to: 4.9, suffix: "★", decimals: 1, label: t("statRating") },
   ];
 
+  // Helper that returns framer-motion props for a "slide in on scroll" effect.
+  // `from` is the horizontal start offset (negative = slides in from the left,
+  // positive = from the right). The element starts invisible and shifted, then
+  // animates to its natural spot once scrolled into view. If reduced motion is
+  // requested, we return {} so no animation is applied.
   const slide = (from: number) =>
     reduce
       ? {}
@@ -76,8 +120,11 @@ export function WhyChooseUs() {
   return (
     <section className="bg-gradient-to-b from-white via-primary-50/50 to-white py-10 sm:py-14 lg:py-16">
       <Container className="max-w-[96rem]">
+        {/* The split card. On large screens it's a 2-column grid where the
+            image column is wider (1.55fr) than the stats column (1fr). */}
         <div className="group grid overflow-hidden rounded-[var(--radius-xl)] shadow-[0_24px_70px_-30px_rgba(0,51,102,0.45)] transition-shadow duration-500 hover:shadow-[0_30px_80px_-28px_rgba(0,51,102,0.55)] lg:grid-cols-[1.55fr_1fr]">
-          {/* Left — wider HD image with heading + CTA */}
+          {/* Left — wider HD image with heading + CTA. slide(-48) makes it
+              slide in from the left. */}
           <motion.div
             {...slide(-48)}
             className="relative flex min-h-[18rem] flex-col justify-end overflow-hidden p-7 text-white sm:min-h-[20rem] sm:p-9 lg:min-h-[22rem]"
@@ -108,7 +155,8 @@ export function WhyChooseUs() {
             </div>
           </motion.div>
 
-          {/* Right — dark stats panel */}
+          {/* Right — stats panel. slide(48) makes it slide in from the right,
+              so the two halves meet in the middle. */}
           <motion.div
             {...slide(48)}
             className="flex flex-col justify-center gap-7 bg-gradient-to-br from-primary-50 to-white p-7 sm:p-9 lg:p-10"

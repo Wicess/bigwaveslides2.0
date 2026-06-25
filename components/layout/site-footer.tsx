@@ -1,3 +1,17 @@
+/*
+ * SiteFooter — the footer shown at the bottom of every page.
+ *
+ * What it renders, top to bottom:
+ *  1. A newsletter "band" with a heading and the email sign-up form.
+ *  2. A four-column block: brand/logo + trust badges, an "Explore" link list,
+ *     a "Services" link list, and a contact column with social buttons.
+ *  3. A bottom bar with the copyright line and legal links.
+ *
+ * This is an async Server Component (note `async` and the `await` calls): it
+ * runs on the server, so it fetches translations server-side and ships no
+ * client JavaScript of its own. The newsletter form is the only interactive
+ * (client) piece and lives in its own file.
+ */
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { Mail, Phone, MapPin, ShieldCheck, Sparkles, Clock } from "lucide-react";
@@ -23,10 +37,14 @@ export async function SiteFooter({
 }) {
   const t = await getTranslations("Layout");
   const tn = await getTranslations("Nav");
+  // Helper to pick the correct-language text from a localized value.
   const loc = (v: unknown) => getLocalized(v, locale);
+  // Contact and social settings come from the CMS; default to {} so reading a
+  // missing field (e.g. contact.email) is safely `undefined` instead of crashing.
   const contact = data.settings.contact ?? {};
   const social = data.settings.social ?? {};
 
+  // Static link lists, defined once here and mapped into the columns below.
   const exploreLinks = [
     { href: "/shop", label: tn("shop") },
     { href: "/rent", label: tn("rent") },
@@ -35,6 +53,8 @@ export async function SiteFooter({
     { href: "/contact", label: tn("contact") },
   ];
 
+  // Trust badges (icon + label). The icon is stored as a component reference
+  // and rendered later as <item.icon /> inside the map.
   const trust = [
     { icon: ShieldCheck, label: t("insured") },
     { icon: Sparkles, label: t("clean") },
@@ -43,7 +63,8 @@ export async function SiteFooter({
 
   return (
     <footer className="bg-[#0a1a2f] text-white">
-      {/* Newsletter band */}
+      {/* Newsletter band — a heading/description on the left and the sign-up
+          form on the right. Stacks vertically on mobile, side-by-side on md+. */}
       <div className="border-b border-white/10">
         <Container className="flex flex-col items-start justify-between gap-6 py-10 md:flex-row md:items-center">
           <div>
@@ -56,8 +77,10 @@ export async function SiteFooter({
         </Container>
       </div>
 
-      {/* Main */}
+      {/* Main columns. The grid is responsive: a single column on mobile, two
+          columns on md, and four uneven columns (brand wider, etc.) on lg+. */}
       <Container className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr] lg:gap-12">
+        {/* Column 1: logo, tagline, and the trust badge list. */}
         <div>
           <Link href="/" aria-label="Big Wave Slides — home" className="inline-flex">
             <span className="rounded-2xl bg-white/95 px-3 py-2 shadow-[var(--shadow-soft)]">
@@ -83,6 +106,7 @@ export async function SiteFooter({
           </ul>
         </div>
 
+        {/* Column 2: the "Explore" link list (built from exploreLinks above). */}
         <div>
           <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
             {t("footerExplore")}
@@ -101,6 +125,7 @@ export async function SiteFooter({
           </ul>
         </div>
 
+        {/* Column 3: the "Services" list, showing the first 6 services. */}
         <div>
           <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
             {t("footerServices")}
@@ -119,6 +144,8 @@ export async function SiteFooter({
           </ul>
         </div>
 
+        {/* Column 4: contact details and social buttons. Each contact row is
+            only rendered if that piece of info exists (the `? ... : null` guards). */}
         <div>
           <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
             {t("footerContact")}
@@ -136,6 +163,7 @@ export async function SiteFooter({
               <li className="flex items-center gap-2.5">
                 <Phone className="size-4 shrink-0 text-secondary" />
                 <a
+                  /* Strip everything but digits and "+" to form a valid tel: link. */
                   href={`tel:${contact.phone.replace(/[^0-9+]/g, "")}`}
                   className="hover:text-white"
                 >
@@ -151,6 +179,8 @@ export async function SiteFooter({
             ) : null}
           </ul>
 
+          {/* Social section — only shown if at least one social URL is set.
+              Each individual button is likewise guarded by its own check. */}
           {social.instagram || social.facebook || social.tiktok ? (
             <div className="mt-7">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
@@ -178,7 +208,7 @@ export async function SiteFooter({
         </div>
       </Container>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — copyright on one side, legal links on the other. */}
       <div className="border-t border-white/10">
         <Container className="flex flex-col items-center justify-between gap-3 py-5 text-sm text-white/55 sm:flex-row">
           <p>
@@ -201,6 +231,11 @@ export async function SiteFooter({
   );
 }
 
+/**
+ * SocialLink — a circular icon button linking to a social profile. It opens in
+ * a new tab (`target="_blank"`) and uses `rel="noopener noreferrer"`, a security
+ * best practice that prevents the new page from accessing this window.
+ */
 function SocialLink({
   href,
   label,

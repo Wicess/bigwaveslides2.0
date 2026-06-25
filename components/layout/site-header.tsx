@@ -1,3 +1,18 @@
+/*
+ * SiteHeader — the sticky navigation bar shown at the top of every page.
+ *
+ * What it renders:
+ *  - A frosted-glass bar that stays pinned to the top as you scroll (see the
+ *    `sticky` class below) containing the logo, the main navigation, and the
+ *    action buttons (call, cart, Get Quote, Contact).
+ *  - On large screens: hover-to-open "mega menu" dropdowns (Shop / Rent /
+ *    Services) plus a small EN/FR language toggle.
+ *  - On small screens: a hamburger button that slides in a full mobile menu.
+ *
+ * "use client" tells Next.js this is a Client Component — it needs to run in
+ * the browser because it uses React state (the mobile menu open/close), effects,
+ * and animations, none of which work in a server-only component.
+ */
 "use client";
 
 import * as React from "react";
@@ -28,8 +43,12 @@ const FALLBACK_PHONE = "+16143025899";
 export function SiteHeader({ locale, data }: Props) {
   const t = useTranslations("Layout");
   const tn = useTranslations("Nav");
+  // Tracks whether the slide-in mobile menu is open. Starts closed (false).
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  // Body-scroll lock: while the mobile menu is open we set the page's overflow
+  // to "hidden" so the page behind the menu can't scroll. The cleanup function
+  // restores normal scrolling when the menu closes or the component unmounts.
   React.useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
@@ -37,11 +56,16 @@ export function SiteHeader({ locale, data }: Props) {
     };
   }, [mobileOpen]);
 
+  // Small helper: picks the right-language string from a localized value.
   const loc = (v: unknown) => getLocalized(v, locale);
+  // Use the configured contact phone if present, otherwise fall back to a default.
   const phone = data.settings.contact?.phone ?? FALLBACK_PHONE;
+  // Build a "tel:" link, stripping everything except digits and a leading "+".
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
 
   return (
+    // `sticky top-0` keeps this header pinned to the top of the viewport as the
+    // user scrolls; `z-50` stacks it above normal page content.
     <header className="sticky top-0 z-50 px-3 pt-5 sm:px-5 sm:pt-7">
       <div className="mx-auto max-w-[84rem]">
         <div className="flex h-[5.5rem] items-center justify-between gap-3 rounded-[8px] border border-white/10 bg-[rgba(18,19,26,0.45)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:px-6">
@@ -65,6 +89,9 @@ export function SiteHeader({ locale, data }: Props) {
               </span>
             </Link>
 
+            {/* Desktop navigation — hidden on small screens (`hidden ... lg:flex`).
+                Each MegaItem is a top-level link that reveals a dropdown panel
+                on hover. The panel content is passed in as children below. */}
             <nav className="hidden items-center gap-0.5 lg:flex">
               <MegaItem label={tn("shop")} href="/shop">
                 <div className="grid grid-cols-[1.4fr_1fr] gap-5">
@@ -140,10 +167,13 @@ export function SiteHeader({ locale, data }: Props) {
             </nav>
           </div>
 
-          {/* Right: actions */}
+          {/* Right: action buttons (language toggle, call, cart, quote, contact,
+              and the hamburger that opens the mobile menu). */}
           <div className="flex items-center gap-2">
             <HeaderLocale />
 
+            {/* Phone link uses `external` so IconChip renders a plain <a> for the
+                tel: URL instead of the locale-aware <Link>. */}
             <IconChip href={telHref} label={t("call")} external>
               <Phone className="size-[18px]" />
             </IconChip>
@@ -167,6 +197,8 @@ export function SiteHeader({ locale, data }: Props) {
               {tn("contact")}
             </Link>
 
+            {/* Hamburger button — only visible below the `lg` breakpoint.
+                Clicking it flips `mobileOpen` to true, which opens the drawer. */}
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -179,6 +211,8 @@ export function SiteHeader({ locale, data }: Props) {
         </div>
       </div>
 
+      {/* The slide-in drawer for mobile. It controls its own animation but the
+          open/close state lives here in the parent. */}
       <MobileMenu
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
@@ -190,6 +224,15 @@ export function SiteHeader({ locale, data }: Props) {
 
 /* ─────────── Desktop helpers ─────────── */
 
+/**
+ * MegaItem — one top-level nav entry (e.g. "Shop") with a dropdown "mega menu".
+ *
+ * How the dropdown works without any JavaScript state: the outer div is marked
+ * `group`, and the panel is hidden by default (`invisible opacity-0`). When the
+ * user hovers the group (`group-hover:*`) or moves keyboard focus inside it
+ * (`group-focus-within:*`), the panel becomes visible and slides up into place.
+ * The chevron also rotates 180° on hover as a visual cue.
+ */
 function MegaItem({
   label,
   href,
@@ -208,6 +251,8 @@ function MegaItem({
         {label}
         <ChevronDown className="size-3.5 transition-transform duration-300 group-hover:rotate-180" />
       </Link>
+      {/* The dropdown panel. `pt-[2.4rem]` adds an invisible gap above the card
+          so the mouse can travel from the link into the panel without it closing. */}
       <div className="invisible absolute left-0 top-full z-[60] w-[min(42rem,90vw)] translate-y-1 pt-[2.4rem] opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
         <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white/80 p-5 shadow-[0_24px_60px_-20px_rgba(0,51,102,0.3)] backdrop-blur-2xl backdrop-saturate-150">
           {children}
@@ -217,6 +262,7 @@ function MegaItem({
   );
 }
 
+/** PanelLink — a single text link inside a mega-menu panel (e.g. a category). */
 function PanelLink({
   href,
   children,
@@ -234,6 +280,10 @@ function PanelLink({
   );
 }
 
+/**
+ * PanelCta — the highlighted "call to action" card on the right side of a mega
+ * menu (gradient background, title, description, and an arrow link).
+ */
 function PanelCta({
   href,
   title,
@@ -261,6 +311,7 @@ function PanelCta({
   );
 }
 
+/** NavLink — a plain top-level nav link with no dropdown (e.g. Blog, About). */
 function NavLink({
   href,
   children,
@@ -278,6 +329,11 @@ function NavLink({
   );
 }
 
+/**
+ * IconChip — a small square button that holds a single icon (phone, cart).
+ * When `external` is true it renders a regular <a> (for links that leave the
+ * app, like a tel: link); otherwise it uses the locale-aware <Link>.
+ */
 function IconChip({
   href,
   label,
@@ -291,6 +347,8 @@ function IconChip({
   className?: string;
   external?: boolean;
 }) {
+  // Shared styling for the chip; `className` lets the caller add extras
+  // (e.g. `relative` so the cart badge can position over it).
   const cls = cn(
     "grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10",
     className,
@@ -311,9 +369,12 @@ function IconChip({
 
 /** Compact EN/FR toggle styled for the dark frosted bar (desktop only). */
 function HeaderLocale() {
-  const activeLocale = useLocale();
-  const pathname = usePathname();
+  const activeLocale = useLocale(); // the language currently in use (e.g. "en")
+  const pathname = usePathname(); // current path, so we can re-load it in the new language
   const router = useRouter();
+  // useTransition lets the language switch happen without blocking the UI;
+  // `isPending` is true while the new-language page is loading, so we can
+  // disable the buttons to prevent double-clicks.
   const [isPending, startTransition] = React.useTransition();
 
   return (
@@ -322,6 +383,8 @@ function HeaderLocale() {
       role="group"
       aria-label="Language"
     >
+      {/* One button per supported language. Clicking a button reloads the same
+          path in that language; `aria-current` marks the active one for a11y. */}
       {routing.locales.map((l) => {
         const isActive = l === activeLocale;
         return (
@@ -348,6 +411,14 @@ function HeaderLocale() {
 
 /* ─────────── Mobile menu ─────────── */
 
+/**
+ * MobileMenu — the full-screen drawer that slides in from the right on phones.
+ *
+ * Props:
+ *  - `open`    : whether the drawer should be shown (controlled by the header).
+ *  - `onClose` : called to close the drawer (tapping the backdrop, the X, or a link).
+ *  - `data`    : nav data (phone number, etc.) for the footer area.
+ */
 function MobileMenu({
   open,
   onClose,
@@ -372,8 +443,12 @@ function MobileMenu({
   const phone = data.settings.contact?.phone;
 
   return (
+    // AnimatePresence keeps the element mounted long enough to play its exit
+    // animation when `open` flips back to false (otherwise it would vanish instantly).
     <AnimatePresence>
       {open ? (
+        // Full-screen overlay that fades in/out. `fixed inset-0` covers the
+        // whole viewport; `z-[100]` sits above everything, including the header.
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -381,11 +456,14 @@ function MobileMenu({
           transition={{ duration: 0.25 }}
           className="fixed inset-0 z-[100] lg:hidden"
         >
+          {/* Dimmed backdrop behind the panel — tapping it closes the menu. */}
           <button
             aria-label={t("closeMenu")}
             onClick={onClose}
             className="absolute inset-0 bg-ink/50 backdrop-blur-md"
           />
+          {/* The drawer panel. It slides in from the right (x: 100% → 0) using a
+              spring animation for a natural feel, and slides back out on exit. */}
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -425,7 +503,8 @@ function MobileMenu({
               </button>
             </div>
 
-            {/* Nav — clean text links */}
+            {/* Nav — clean text links. Each row animates in one after another:
+                the `delay` grows with the index `i`, creating a staggered effect. */}
             <nav className="flex-1 overflow-y-auto px-6">
               {sections.map((s, i) => (
                 <motion.div
@@ -450,7 +529,9 @@ function MobileMenu({
               ))}
             </nav>
 
-            {/* Footer actions */}
+            {/* Footer actions — primary buttons, phone, language, and cart.
+                The inline `paddingBottom` respects the phone's bottom safe area
+                (e.g. the iPhone home-bar) so controls aren't hidden behind it. */}
             <div
               className="border-t border-border px-6 pt-4"
               style={{ paddingBottom: "max(env(safe-area-inset-bottom), 1.25rem)" }}

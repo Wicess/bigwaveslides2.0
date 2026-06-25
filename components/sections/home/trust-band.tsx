@@ -1,8 +1,21 @@
+/**
+ * TrustBand
+ * ---------
+ * A "trusted by / our partners" strip that appears on the homepage. It shows a
+ * row of partner company logos that scroll sideways forever (a "marquee").
+ *
+ * The logos are stored in Cloudflare R2 (our media/file storage) rather than in
+ * the project folder, so we just point at their public URLs.
+ */
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/container";
 import { Marquee } from "@/components/ui/marquee";
 
+// Base URL of the R2 bucket folder that holds the partner logo images.
 const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/partners";
+// List of logo file names. The .map() below turns each one into a full URL
+// (e.g. "https://.../partners/33679843.jpg") so we can drop them straight
+// into <img src=...>.
 const PARTNERS = [
   "33679843.jpg",
   "40036748.jpg",
@@ -25,15 +38,33 @@ export async function TrustBand() {
         </p>
       </Container>
 
-      {/* Logo wall — unified grayscale, scrolls left → right, colorizes on hover */}
+      {/*
+        Logo wall — the <Marquee> component endlessly scrolls its children
+        sideways. `durationSeconds={44}` sets how long one full loop takes
+        (bigger = slower), and `reverse` flips the scroll direction.
+      */}
       <div className="mt-8">
         <Marquee durationSeconds={44} reverse>
           {PARTNERS.map((src, i) => (
+            // Each logo sits in a fixed-size box. The "group/logo" name lets the
+            // <img> react to THIS box being hovered (see group-hover/logo below).
             <span
               key={src}
               className="group/logo grid h-16 w-32 shrink-0 place-items-center sm:h-20 sm:w-40"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
+              {/*
+                Logos come from many brands with different colors/backgrounds.
+                To make them look like one consistent set we:
+                  - grayscale + opacity-60: dim them to a uniform muted gray.
+                  - [mix-blend-mode:multiply]: blends the image with the white
+                    section behind it, so any white box around a logo
+                    disappears and the logo looks transparent.
+                On hover the trick is reversed: group-hover/logo:grayscale-0
+                brings back the real color, opacity-100 makes it solid, and
+                scale-105 gently zooms it. `transition-all duration-300`
+                animates that change smoothly over 0.3s.
+              */}
               <img
                 src={src}
                 alt={`Partner ${i + 1}`}

@@ -1,3 +1,17 @@
+/*
+ * RentalCategories
+ * ----------------
+ * A homepage section that shows a row of "category" cards (e.g. Inflatable
+ * Water Slides, Slip-n-Slides, Combo Units). Each card is a photo with a title
+ * and a short blurb, and clicking it links to that category's shop page.
+ *
+ * It renders two layouts depending on screen size:
+ *   - On phones: a horizontal row you can swipe through (native scroll-snap).
+ *   - On larger screens: an auto-scrolling marquee that loops forever.
+ *
+ * This is a Server Component (no "use client"), so the card markup is built on
+ * the server. Appears on the homepage / landing page.
+ */
 import { getTranslations } from "next-intl/server";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
@@ -14,9 +28,16 @@ type Category = {
   image?: string | null;
 };
 
+// Base URL of our Cloudflare R2 bucket where all images are hosted.
+// We serve images from R2 (the cloud) instead of the local /public folder.
 const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev";
 
-/** Curated water-slide imagery per category (served from R2). */
+/**
+ * Curated water-slide imagery per category (served from R2).
+ * This maps a category's "slug" (its URL-friendly id) to a hand-picked photo,
+ * so each category always shows a nice, on-brand image instead of whatever the
+ * database happens to have.
+ */
 const CATEGORY_IMAGES: Record<string, string> = {
   "inflatable-water-slides": `${R2}/categories/inflatable.jpg`,
   "slip-n-slides": `${R2}/categories/slip.jpg`,
@@ -33,12 +54,20 @@ type Card = {
   desc: string;
 };
 
+// A single clickable category card (photo + title + blurb + arrow button).
 function CategoryCard({ card }: { card: Card }) {
   return (
+    // Hover-focus effect: the row is a "group", and each card is its own
+    // "group/card". When you hover ONE card, that card stays fully visible and
+    // scales up (hover:!opacity-100 / hover:scale), while the others dim down
+    // via group-hover:opacity-40. The result is the hovered card "pops" and the
+    // rest fade back, drawing the eye to it.
     <Link
       href={card.href}
       className="group/card relative my-4 flex aspect-[3/4] w-60 shrink-0 snap-start flex-col justify-between overflow-hidden rounded-[1.5rem] p-5 text-white shadow-[0_14px_36px_-16px_rgba(0,0,0,0.6)] ring-1 ring-white/10 transition-all duration-500 ease-out will-change-transform hover:!opacity-100 hover:scale-[1.04] hover:shadow-[0_28px_55px_-18px_rgba(0,0,0,0.8)] hover:ring-white/50 group-hover:opacity-40"
     >
+      {/* Background photo (slowly zooms in on hover). Falls back to a solid
+          accent-colored panel if the card has no image. */}
       {card.image ? (
         <MediaImage
           src={card.image}
@@ -80,10 +109,16 @@ export async function RentalCategories({
   categories: Category[];
   locale: string;
 }) {
+  // "t" looks up translated text for the current language under the "Home" key.
   const t = await getTranslations("Home");
+  // Nothing to show if there are no categories — render nothing.
   if (categories.length === 0) return null;
 
+  // Build the list of cards we'll display.
   const cards: Card[] = [
+    // First, one card per real category from the database. For the image we
+    // prefer our curated R2 photo; if there isn't one, fall back to the
+    // category's own image, and if that's missing too, leave it undefined.
     ...categories.map((c) => ({
       key: c.slug,
       href: `/shop/category/${c.slug}`,
@@ -126,14 +161,18 @@ export async function RentalCategories({
         </h2>
       </Container>
 
-      {/* Mobile: swipe left/right (native scroll-snap) */}
+      {/* Mobile (hidden on sm+ screens): a horizontal strip you swipe through.
+          "snap-x snap-mandatory" makes each card snap neatly into place as you
+          scroll. The scrollbar is hidden for a cleaner look. */}
       <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {cards.map((card) => (
           <CategoryCard key={card.key} card={card} />
         ))}
       </div>
 
-      {/* Desktop: infinite, auto-scrolling carousel (pauses on hover) */}
+      {/* Desktop (sm+ only): the same cards in a Marquee that auto-scrolls
+          forever. durationSeconds controls how long one full loop takes; the
+          Marquee component pauses the animation on hover. */}
       <div className="mt-8 hidden sm:block">
         <Marquee durationSeconds={55}>
           {cards.map((card) => (
