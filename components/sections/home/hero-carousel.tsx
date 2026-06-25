@@ -80,7 +80,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                 className="size-full object-cover"
                 muted
                 playsInline
-                preload="auto"
+                preload="metadata"
                 poster={slide.poster}
                 onEnded={() => active && go(index + 1)}
               >

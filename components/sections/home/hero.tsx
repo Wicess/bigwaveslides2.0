@@ -47,6 +47,8 @@ export async function Hero({
             alt="Big Wave Slides"
             width={1949}
             height={741}
+            fetchPriority="high"
+            decoding="async"
             className="h-auto w-[min(86vw,720px)]"
             style={{
               filter:

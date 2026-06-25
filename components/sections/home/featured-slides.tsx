@@ -50,7 +50,7 @@ export async function FeaturedSlides({
                 product={product}
                 locale={locale}
                 image={FEATURED_IMAGES[i]}
-                priority={i < 4}
+                priority={false}
               />
             </Reveal>
           ))}
