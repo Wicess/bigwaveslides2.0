@@ -111,18 +111,18 @@ export function WhyChooseUs() {
           {/* Right — dark stats panel */}
           <motion.div
             {...slide(48)}
-            className="flex flex-col justify-center gap-7 bg-[#0a1a2f] p-7 sm:p-9 lg:p-10"
+            className="flex flex-col justify-center gap-7 bg-gradient-to-br from-primary-50 to-white p-7 sm:p-9 lg:p-10"
           >
-            <p className="max-w-sm text-pretty text-base leading-relaxed text-white/70">
+            <p className="max-w-sm text-pretty text-base leading-relaxed text-muted-foreground">
               {t("trustServing")}
             </p>
             <div className="grid grid-cols-2 gap-x-6 gap-y-7">
               {stats.map((s) => (
                 <div key={s.label} className="group/stat">
-                  <p className="font-display text-4xl font-bold text-white transition-transform duration-300 group-hover/stat:scale-105 sm:text-5xl">
+                  <p className="font-display text-4xl font-bold text-accent transition-transform duration-300 group-hover/stat:scale-105 sm:text-5xl">
                     <Counter to={s.to} suffix={s.suffix} decimals={s.decimals} />
                   </p>
-                  <p className="mt-1.5 text-sm text-white/55">{s.label}</p>
+                  <p className="mt-1.5 text-sm text-muted-foreground">{s.label}</p>
                 </div>
               ))}
             </div>
