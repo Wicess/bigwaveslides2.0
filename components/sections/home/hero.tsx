@@ -11,15 +11,15 @@ const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/hero";
 const WORDMARK = `${R2}/wordmark.png`;
 
 const SLIDES: HeroSlide[] = [
-  { type: "video", src: `${R2}/hero.mp4`, poster: "/hero/aquatube.jpg" },
+  { type: "video", src: `${R2}/hero.mp4`, poster: `${R2}/aquatube.jpg` },
   {
     type: "image",
-    src: "/hero/aquatube.jpg",
+    src: `${R2}/aquatube.jpg`,
     alt: "AquaTube pool slider and AquaPlay tower water-play structure",
   },
   {
     type: "image",
-    src: "/hero/aquaforms.jpg",
+    src: `${R2}/aquaforms.jpg`,
     alt: "AquaForms island waterpark splash play structure",
   },
 ];
