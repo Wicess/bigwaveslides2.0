@@ -128,6 +128,21 @@
   }
 }
 
+/* Flowing wave divider — a band twice as wide as its frame slides left by
+   one tile width for a seamless, continuous ripple. */
+@utility animate-wave {
+  animation: bws-wave var(--wave-duration, 14s) linear infinite;
+}
+
+@keyframes bws-wave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* Accordion (Radix height-based reveal) */
 @utility animate-accordion-down {
   animation: bws-accordion-down 0.3s ease-out;
