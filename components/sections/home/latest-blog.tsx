@@ -92,19 +92,9 @@ export async function LatestBlog({
         {/* Centered header */}
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
-              {t("blogEyebrow")}
-            </p>
-            <h2 className="mt-3 text-balance text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">
+            <h2 className="text-balance text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">
               {t("blogTitle")}
             </h2>
-            <Link
-              href="/blog"
-              className="group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-            >
-              {t("blogCta")}
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
           </div>
         </Reveal>
 
