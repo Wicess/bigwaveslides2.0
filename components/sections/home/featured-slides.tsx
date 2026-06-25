@@ -15,6 +15,7 @@ const FEATURED_IMAGES = [
   `${R2}/serengeti.jpg`,
   `${R2}/blaster.jpg`,
   `${R2}/rapids.jpg`,
+  `${R2}/aquasplash.jpg`,
 ];
 
 export async function FeaturedSlides({
@@ -28,8 +29,8 @@ export async function FeaturedSlides({
   if (products.length === 0) return null;
 
   return (
-    <Section>
-      <Container>
+    <Section className="bg-muted">
+      <Container className="max-w-[100rem]">
         {/* Centered header */}
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
@@ -42,14 +43,14 @@ export async function FeaturedSlides({
           </div>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-          {products.slice(0, 3).map((product, i) => (
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+          {products.slice(0, 4).map((product, i) => (
             <Reveal key={product.slug} delay={i * 0.1}>
               <FeaturedCard
                 product={product}
                 locale={locale}
                 image={FEATURED_IMAGES[i]}
-                priority={i < 3}
+                priority={i < 4}
               />
             </Reveal>
           ))}
@@ -88,7 +89,7 @@ async function FeaturedCard({
   return (
     <Link
       href={href}
-      className="group block rounded-[1.75rem] bg-muted p-3 transition-all duration-300 hover:-translate-y-1 hover:bg-muted/70 hover:shadow-[var(--shadow-soft)] sm:p-4"
+      className="group block rounded-[1.75rem] border border-border/70 bg-white p-3 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-soft)] sm:p-4"
     >
       <div className="overflow-hidden rounded-[1.25rem]">
         {src ? (

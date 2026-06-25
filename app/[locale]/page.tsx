@@ -7,8 +7,6 @@ import { Hero } from "@/components/sections/home/hero";
 import { TrustBand } from "@/components/sections/home/trust-band";
 import { FeaturedSlides } from "@/components/sections/home/featured-slides";
 import { RentalCategories } from "@/components/sections/home/rental-categories";
-import { ServicesOverview } from "@/components/sections/home/services-overview";
-import { HowItWorks } from "@/components/sections/home/how-it-works";
 import { WhyChooseUs } from "@/components/sections/home/why-choose-us";
 import { TestimonialsCarousel } from "@/components/sections/home/testimonials-carousel";
 import { LatestBlog } from "@/components/sections/home/latest-blog";
@@ -43,8 +41,6 @@ export default async function HomePage({ params }: Props) {
       <TrustBand />
       <FeaturedSlides products={data.featured} locale={locale} />
       <RentalCategories categories={data.categories} locale={locale} />
-      <ServicesOverview services={data.services} locale={locale} />
-      <HowItWorks />
       <WhyChooseUs />
       <TestimonialsCarousel testimonials={data.testimonials} locale={locale} />
       <LatestBlog posts={data.posts} locale={locale} />
