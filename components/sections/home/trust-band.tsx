@@ -18,7 +18,7 @@ export async function TrustBand() {
   const t = await getTranslations("Home");
 
   return (
-    <section className="relative overflow-hidden border-b border-border bg-white py-12 sm:py-14">
+    <section className="relative overflow-hidden border-b border-border bg-white py-10 sm:py-12">
       <Container>
         <p className="text-center text-sm font-bold uppercase tracking-[0.22em] text-primary">
           {t("ourPartners")}

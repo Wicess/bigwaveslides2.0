@@ -9,7 +9,7 @@ export async function FinalCta() {
   const t = await getTranslations("Home");
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20">
+    <section className="py-10 sm:py-14 lg:py-16">
       <Container>
         <Reveal>
           <div className="relative overflow-hidden rounded-[var(--radius-xl)] px-6 py-14 text-center text-white [background:var(--gradient-wave)] sm:px-12 sm:py-20">

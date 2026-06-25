@@ -29,7 +29,7 @@ export async function FeaturedSlides({
   if (products.length === 0) return null;
 
   return (
-    <Section className="bg-muted">
+    <Section className="bg-muted py-10 sm:py-14 lg:py-16">
       <Container className="max-w-[100rem]">
         {/* Centered header */}
         <Reveal>

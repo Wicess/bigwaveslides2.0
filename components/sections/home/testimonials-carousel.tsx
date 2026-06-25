@@ -37,7 +37,7 @@ export function TestimonialsCarousel({
   if (testimonials.length === 0) return null;
 
   return (
-    <section className="bg-muted/40 py-12 sm:py-16 lg:py-20">
+    <section className="bg-muted/40 py-10 sm:py-14 lg:py-16">
       <Container>
         <div className="flex items-end justify-between gap-4">
           <SectionHeader

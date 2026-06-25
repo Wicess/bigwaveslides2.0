@@ -62,7 +62,7 @@ export function WhyChooseUs() {
   ];
 
   return (
-    <section className="bg-gradient-to-b from-white via-primary-50/50 to-white py-12 sm:py-16 lg:py-20">
+    <section className="bg-gradient-to-b from-white via-primary-50/50 to-white py-10 sm:py-14 lg:py-16">
       <Container>
         <div className="grid overflow-hidden rounded-[var(--radius-xl)] shadow-[0_24px_70px_-30px_rgba(0,51,102,0.45)] lg:grid-cols-2">
           {/* Left — HD image with heading + CTA */}

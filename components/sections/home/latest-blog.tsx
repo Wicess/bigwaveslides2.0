@@ -30,7 +30,7 @@ export async function LatestBlog({
   if (posts.length === 0) return null;
 
   return (
-    <Section>
+    <Section className="py-10 sm:py-14 lg:py-16">
       <Container>
         <div className="flex items-end justify-between gap-4">
           <SectionHeader eyebrow={t("blogEyebrow")} title={t("blogTitle")} />
