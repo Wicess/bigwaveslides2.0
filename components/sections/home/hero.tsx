@@ -60,7 +60,11 @@ export async function Hero({
             className="mx-auto mt-7 max-w-xl text-lg font-medium leading-relaxed text-white sm:text-xl"
             style={{ textShadow: "0 2px 14px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.6)" }}
           >
-            {t("subtitle")}
+            {t("subtitle")}{" "}
+            <span className="font-semibold text-white">
+              {t("rentNowAt")}{" "}
+              <span className="font-extrabold text-secondary-400">$199</span>.
+            </span>
           </p>
         </Reveal>
 
