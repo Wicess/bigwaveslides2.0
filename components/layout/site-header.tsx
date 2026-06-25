@@ -11,6 +11,14 @@ import {
   X,
   ChevronDown,
   ArrowRight,
+  Waves,
+  Wrench,
+  Newspaper,
+  Info,
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+  Clock,
 } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -361,13 +369,21 @@ function MobileMenu({
   const tn = useTranslations("Nav");
 
   const sections = [
-    { label: tn("shop"), href: "/shop" },
-    { label: tn("rent"), href: "/rent" },
-    { label: tn("services"), href: "/services" },
-    { label: tn("blog"), href: "/blog" },
-    { label: tn("about"), href: "/about" },
-    { label: tn("contact"), href: "/contact" },
+    { label: tn("shop"), href: "/shop", icon: ShoppingBag, desc: t("megaShopTitle") },
+    { label: tn("rent"), href: "/rent", icon: Waves, desc: t("megaRentTitle") },
+    { label: tn("services"), href: "/services", icon: Wrench, desc: t("megaServicesTitle") },
+    { label: tn("blog"), href: "/blog", icon: Newspaper },
+    { label: tn("about"), href: "/about", icon: Info },
+    { label: tn("contact"), href: "/contact", icon: MessageCircle },
   ];
+
+  const trust = [
+    { icon: ShieldCheck, label: t("insured") },
+    { icon: Sparkles, label: t("clean") },
+    { icon: Clock, label: t("onTime") },
+  ];
+
+  const phone = data.settings.contact?.phone;
 
   return (
     <AnimatePresence>
@@ -376,90 +392,149 @@ function MobileMenu({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[70] lg:hidden"
+          transition={{ duration: 0.25 }}
+          className="fixed inset-0 z-[100] lg:hidden"
         >
           <button
             aria-label={t("closeMenu")}
             onClick={onClose}
-            className="absolute inset-0 bg-accent/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-ink/50 backdrop-blur-md"
           />
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "tween", ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
-            className="absolute right-0 top-0 flex h-full w-[88%] max-w-sm flex-col overflow-y-auto bg-background p-6 shadow-2xl"
+            transition={{ type: "spring", stiffness: 360, damping: 38, mass: 0.9 }}
+            className="absolute right-0 top-0 flex h-dvh w-[88%] max-w-sm flex-col overflow-hidden bg-background shadow-2xl"
           >
-            <div className="flex items-center justify-between">
-              <Image
-                src="/logo.png"
-                alt="Big Wave Slides"
-                width={150}
-                height={127}
-                className="h-11 w-auto"
-              />
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label={t("closeMenu")}
-                className="grid size-10 place-items-center rounded-full hover:bg-muted"
-              >
-                <X className="size-6" />
-              </button>
+            {/* Branded header */}
+            <div
+              className="relative overflow-hidden px-6 pb-6 text-white [background:var(--gradient-deep)]"
+              style={{ paddingTop: "max(env(safe-area-inset-top), 1.25rem)" }}
+            >
+              {/* soft wave glow */}
+              <div className="pointer-events-none absolute -right-10 -top-10 size-40 rounded-full bg-white/10 blur-2xl" />
+              <div className="relative flex items-start justify-between">
+                <Link
+                  href="/"
+                  onClick={onClose}
+                  aria-label="Big Wave Slides — home"
+                  className="flex items-center gap-3"
+                >
+                  <Image
+                    src="/logo.png"
+                    alt="Big Wave Slides"
+                    width={150}
+                    height={127}
+                    className="h-12 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+                  />
+                  <span className="font-brand text-2xl font-bold tracking-[-0.01em]">
+                    Big Wave Slides
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label={t("closeMenu")}
+                  className="-mr-1 grid size-10 shrink-0 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 active:scale-95"
+                >
+                  <X className="size-5" />
+                </button>
+              </div>
+              <p className="relative mt-4 max-w-[18rem] text-sm leading-relaxed text-white/80">
+                {t("footerTagline")}
+              </p>
             </div>
 
-            <nav className="mt-8 flex flex-col">
+            {/* Nav */}
+            <nav className="flex-1 overflow-y-auto px-4 py-3">
               {sections.map((s, i) => (
                 <motion.div
                   key={s.href}
-                  initial={{ opacity: 0, x: 24 }}
+                  initial={{ opacity: 0, x: 28 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ delay: 0.08 + i * 0.05, ease: [0.22, 1, 0.36, 1], duration: 0.45 }}
                 >
                   <Link
                     href={s.href}
                     onClick={onClose}
-                    className="flex items-center justify-between border-b border-border py-4 text-lg font-semibold transition-colors hover:text-primary"
+                    className="group flex items-center gap-4 rounded-xl px-3 py-3.5 transition-colors hover:bg-primary-50 active:bg-primary-50"
                   >
-                    {s.label}
-                    <ArrowRight className="size-4 text-muted-foreground" />
+                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-muted text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                      <s.icon className="size-5" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-base font-semibold text-foreground group-hover:text-primary">
+                        {s.label}
+                      </span>
+                      {s.desc ? (
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {s.desc}
+                        </span>
+                      ) : null}
+                    </span>
+                    <ArrowRight className="size-4 shrink-0 text-muted-foreground/60 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary" />
                   </Link>
                 </motion.div>
               ))}
+
+              {/* Trust chips */}
+              <div className="mt-4 flex flex-wrap gap-2 px-1">
+                {trust.map((b) => (
+                  <span
+                    key={b.label}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 text-[11px] font-medium text-muted-foreground"
+                  >
+                    <b.icon className="size-3.5 text-primary" />
+                    {b.label}
+                  </span>
+                ))}
+              </div>
             </nav>
 
-            <div className="mt-8 flex flex-col gap-3">
-              <Button asChild size="lg" className="bg-[#a3e635] text-neutral-900 hover:bg-[#8fd11f]">
-                <Link href="/contact" onClick={onClose}>
-                  {tn("contact")}
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link href="/quote" onClick={onClose}>
-                  {t("getQuote")}
-                </Link>
-              </Button>
-              <div className="flex items-center justify-between">
+            {/* Footer actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.32, ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
+              className="border-t border-border px-5 pt-4"
+              style={{ paddingBottom: "max(env(safe-area-inset-bottom), 1.25rem)" }}
+            >
+              <div className="flex flex-col gap-2.5">
+                <Button asChild size="lg" className="bg-[#a3e635] text-neutral-900 hover:bg-[#8fd11f]">
+                  <Link href="/contact" onClick={onClose}>
+                    {tn("contact")}
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline">
+                  <Link href="/quote" onClick={onClose}>
+                    {t("getQuote")}
+                  </Link>
+                </Button>
+              </div>
+
+              {phone ? (
+                <a
+                  href={`tel:${phone.replace(/[^+\d]/g, "")}`}
+                  className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary"
+                >
+                  <Phone className="size-4" /> {phone}
+                </a>
+              ) : null}
+
+              <div className="mt-4 flex items-center justify-between">
                 <LocaleSwitcher />
                 <Link
                   href="/cart"
                   aria-label={t("cart")}
                   onClick={onClose}
-                  className="grid size-10 place-items-center rounded-xl border border-border text-foreground transition-colors hover:bg-muted hover:text-primary"
+                  className="relative grid size-10 place-items-center rounded-xl border border-border text-foreground transition-colors hover:bg-muted hover:text-primary"
                 >
                   <ShoppingBag className="size-5" />
+                  <CartBadge />
                 </Link>
               </div>
-            </div>
-
-            {data.settings.contact?.phone ? (
-              <a
-                href={`tel:${data.settings.contact.phone.replace(/[^+\d]/g, "")}`}
-                className="mt-auto flex items-center gap-2 pt-6 text-sm font-medium text-muted-foreground hover:text-primary"
-              >
-                <Phone className="size-4" /> {data.settings.contact.phone}
-              </a>
-            ) : null}
+            </motion.div>
           </motion.div>
         </motion.div>
       ) : null}

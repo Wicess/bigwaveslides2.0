@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Minus,
   Plus,
@@ -195,8 +196,17 @@ export function CartClient({
       <div>
         {step === "cart" ? (
           <ul className="divide-y divide-border">
+            <AnimatePresence initial={false}>
             {lines.map((line) => (
-              <li key={line.itemId} className="flex gap-4 py-5">
+              <motion.li
+                key={line.itemId}
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, x: -24, transition: { duration: 0.2 } }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="flex gap-4 py-5"
+              >
                 <Link
                   href={`/shop/${line.slug}`}
                   className="size-24 shrink-0 overflow-hidden rounded-[var(--radius-lg)] bg-muted"
@@ -260,8 +270,9 @@ export function CartClient({
                     </span>
                   </div>
                 </div>
-              </li>
+              </motion.li>
             ))}
+            </AnimatePresence>
           </ul>
         ) : (
           <Card className="p-6">

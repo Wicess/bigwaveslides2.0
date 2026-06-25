@@ -11,9 +11,17 @@ const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/hero";
 const WORDMARK = `${R2}/wordmark.png`;
 
 const SLIDES: HeroSlide[] = [
-  { type: "video", src: `${R2}/hero.mp4`, poster: `${R2}/slide-1.jpg` },
-  { type: "image", src: `${R2}/slide-1.jpg`, alt: "Aerial view of a vibrant water park" },
-  { type: "image", src: `${R2}/slide-2.jpg`, alt: "Family water-play structure with slides" },
+  { type: "video", src: `${R2}/hero.mp4`, poster: "/hero/aquatube.jpg" },
+  {
+    type: "image",
+    src: "/hero/aquatube.jpg",
+    alt: "AquaTube pool slider and AquaPlay tower water-play structure",
+  },
+  {
+    type: "image",
+    src: "/hero/aquaforms.jpg",
+    alt: "AquaForms island waterpark splash play structure",
+  },
 ];
 
 export async function Hero({
@@ -48,7 +56,10 @@ export async function Hero({
         </Reveal>
 
         <Reveal y={16} delay={0.15}>
-          <p className="mx-auto mt-7 max-w-xl text-lg text-white/85 sm:text-xl">
+          <p
+            className="mx-auto mt-7 max-w-xl text-lg font-medium leading-relaxed text-white sm:text-xl"
+            style={{ textShadow: "0 2px 14px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.6)" }}
+          >
             {t("subtitle")}
           </p>
         </Reveal>
@@ -73,9 +84,12 @@ export async function Hero({
         </Reveal>
 
         <Reveal y={16} delay={0.35}>
-          <div className="mt-8 flex items-center justify-center gap-3">
+          <div
+            className="mt-8 flex items-center justify-center gap-3"
+            style={{ filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.55))" }}
+          >
             <Stars rating={rating} />
-            <span className="text-sm text-white/80">
+            <span className="text-sm text-white/90">
               <span className="font-semibold text-white">{rating.toFixed(1)}</span> ·{" "}
               {t("trustReviews", { count: reviewCount })}
             </span>

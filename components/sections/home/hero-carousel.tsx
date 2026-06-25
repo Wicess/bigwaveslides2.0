@@ -101,9 +101,12 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         );
       })}
 
-      {/* Light scrim — keeps the HD imagery bright while giving the see-through
-          navbar (top) and the hero copy (bottom) just enough contrast. */}
-      <div className="absolute inset-0 z-[5] bg-gradient-to-b from-black/35 via-black/5 to-black/50" />
+      {/* Scrim — keeps the HD imagery bright while giving the see-through
+          navbar (top) and the hero copy enough contrast. A vertical gradient
+          handles the navbar + bottom, and a centered radial pool anchors the
+          headline/subtitle so the copy stays legible over busy imagery. */}
+      <div className="absolute inset-0 z-[5] bg-gradient-to-b from-black/45 via-black/20 to-black/55" />
+      <div className="absolute inset-0 z-[5] [background:radial-gradient(120%_80%_at_50%_48%,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.28)_38%,transparent_72%)]" />
 
       {/* Slide indicators */}
       <div className="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2.5">
