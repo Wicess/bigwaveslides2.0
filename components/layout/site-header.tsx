@@ -45,6 +45,10 @@ export function SiteHeader({ locale, data }: Props) {
   const tn = useTranslations("Nav");
   // Tracks whether the slide-in mobile menu is open. Starts closed (false).
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  // Which desktop mega-menu dropdown is open (by id), or null if none. Keeping a
+  // single value guarantees only ONE panel can be open at a time — hovering a
+  // new trigger immediately replaces the previous one (no overlapping panels).
+  const [openMenu, setOpenMenu] = React.useState<string | null>(null);
 
   // Body-scroll lock: while the mobile menu is open we set the page's overflow
   // to "hidden" so the page behind the menu can't scroll. The cleanup function
@@ -92,8 +96,17 @@ export function SiteHeader({ locale, data }: Props) {
             {/* Desktop navigation — hidden on small screens (`hidden ... lg:flex`).
                 Each MegaItem is a top-level link that reveals a dropdown panel
                 on hover. The panel content is passed in as children below. */}
-            <nav className="hidden items-center gap-0.5 lg:flex">
-              <MegaItem label={tn("shop")} href="/shop">
+            <nav
+              className="hidden items-center gap-0.5 lg:flex"
+              onMouseLeave={() => setOpenMenu(null)}
+            >
+              <MegaItem
+                id="shop"
+                label={tn("shop")}
+                href="/shop"
+                open={openMenu === "shop"}
+                onOpen={setOpenMenu}
+              >
                 <div className="grid grid-cols-[1.4fr_1fr] gap-5">
                   <div>
                     <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -116,7 +129,13 @@ export function SiteHeader({ locale, data }: Props) {
                 </div>
               </MegaItem>
 
-              <MegaItem label={tn("rent")} href="/rent">
+              <MegaItem
+                id="rent"
+                label={tn("rent")}
+                href="/rent"
+                open={openMenu === "rent"}
+                onOpen={setOpenMenu}
+              >
                 <div className="grid grid-cols-[1.4fr_1fr] gap-5">
                   <div>
                     <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -139,7 +158,13 @@ export function SiteHeader({ locale, data }: Props) {
                 </div>
               </MegaItem>
 
-              <MegaItem label={tn("services")} href="/services">
+              <MegaItem
+                id="services"
+                label={tn("services")}
+                href="/services"
+                open={openMenu === "services"}
+                onOpen={setOpenMenu}
+              >
                 <div className="grid grid-cols-[1.4fr_1fr] gap-5">
                   <div>
                     <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -227,34 +252,59 @@ export function SiteHeader({ locale, data }: Props) {
 /**
  * MegaItem — one top-level nav entry (e.g. "Shop") with a dropdown "mega menu".
  *
- * How the dropdown works without any JavaScript state: the outer div is marked
- * `group`, and the panel is hidden by default (`invisible opacity-0`). When the
- * user hovers the group (`group-hover:*`) or moves keyboard focus inside it
- * (`group-focus-within:*`), the panel becomes visible and slides up into place.
- * The chevron also rotates 180° on hover as a visual cue.
+ * The open/closed state is controlled by the parent via `open` + `onOpen`, and
+ * the parent only ever keeps ONE menu open. We open this menu on mouse-enter
+ * (and on keyboard focus, for accessibility); the parent closes it when the
+ * pointer leaves the whole nav. Because only one panel is ever open, dropdowns
+ * can never overlap each other — moving from Shop to Rent instantly swaps them.
+ *
+ * `z-[70]` while open lifts the active panel above any panel that is still
+ * fading out, and the panel background is solid white so nothing bleeds through.
  */
 function MegaItem({
+  id,
   label,
   href,
+  open,
+  onOpen,
   children,
 }: {
+  id: string;
   label: string;
   href: string;
+  open: boolean;
+  onOpen: (id: string) => void;
   children: React.ReactNode;
 }) {
   return (
-    <div className="group relative">
+    <div
+      className="relative"
+      onMouseEnter={() => onOpen(id)}
+      onFocus={() => onOpen(id)}
+    >
       <Link
         href={href}
         className="inline-flex items-center gap-1 rounded-lg px-3.5 py-2 font-brand text-[15px] font-medium text-white/85 transition-colors hover:text-white"
       >
         {label}
-        <ChevronDown className="size-3.5 transition-transform duration-300 group-hover:rotate-180" />
+        <ChevronDown
+          className={cn(
+            "size-3.5 transition-transform duration-300",
+            open && "rotate-180",
+          )}
+        />
       </Link>
       {/* The dropdown panel. `pt-[2.4rem]` adds an invisible gap above the card
           so the mouse can travel from the link into the panel without it closing. */}
-      <div className="invisible absolute left-0 top-full z-[60] w-[min(42rem,90vw)] translate-y-1 pt-[2.4rem] opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-        <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white/80 p-5 shadow-[0_24px_60px_-20px_rgba(0,51,102,0.3)] backdrop-blur-2xl backdrop-saturate-150">
+      <div
+        className={cn(
+          "absolute left-0 top-full w-[min(42rem,90vw)] pt-[2.4rem] transition-all duration-200",
+          open
+            ? "visible z-[70] translate-y-0 opacity-100"
+            : "invisible z-[60] translate-y-1 opacity-0",
+        )}
+      >
+        <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-5 shadow-[0_24px_60px_-20px_rgba(0,51,102,0.3)]">
           {children}
         </div>
       </div>
