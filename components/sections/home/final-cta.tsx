@@ -70,7 +70,7 @@ export async function FinalCta() {
                   size="lg"
                   className="bg-white text-primary shadow-xl transition-transform duration-200 hover:-translate-y-0.5 hover:bg-white/90"
                 >
-                  <Link href="/quote">
+                  <Link href="/contact">
                     {t("ctaButton")} <ArrowRight className="size-4" />
                   </Link>
                 </Button>

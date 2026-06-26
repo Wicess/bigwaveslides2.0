@@ -209,7 +209,7 @@ export function SiteHeader({ locale, data }: Props) {
             </IconChip>
 
             <Link
-              href="/quote"
+              href="/contact"
               className="hidden h-11 items-center rounded-md bg-white px-5 font-brand text-xs font-bold uppercase tracking-wider text-neutral-900 transition-transform hover:-translate-y-0.5 hover:bg-white/90 md:inline-flex"
             >
               {t("getQuote")}
@@ -601,7 +601,7 @@ function MobileMenu({
             >
               <div className="flex flex-col gap-2.5">
                 <Button asChild variant="gradient" size="lg">
-                  <Link href="/quote" onClick={onClose}>
+                  <Link href="/contact" onClick={onClose}>
                     {t("getQuote")}
                   </Link>
                 </Button>

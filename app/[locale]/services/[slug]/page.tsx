@@ -68,7 +68,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       <PageHeader eyebrow={summary || undefined} title={title} description={description}>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button asChild size="lg" variant="gradient">
-            <Link href="/quote">{t("getQuote")}</Link>
+            <Link href="/contact">{t("getQuote")}</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
             <Link href="/rent">{t("rentRelated")}</Link>

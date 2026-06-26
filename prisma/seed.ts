@@ -499,6 +499,9 @@ async function seedBlog() {
     create: { slug: "safety", name: L("Safety", "Sécurité") },
   });
 
+  // Blog cover images live on R2 (uploaded from images/Playground). Kept here
+  // so re-seeding restores the same images instead of placeholder photos.
+  const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog";
   const POSTS = [
     {
       slug: "perfect-backyard-water-slide-party",
@@ -506,6 +509,7 @@ async function seedBlog() {
       excerpt: L("Plan a splash hit with these simple tips.", "Réussissez votre fête avec ces conseils simples."),
       categoryId: guides.id,
       tags: ["parties", "tips"],
+      coverImage: `${R2}/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg`,
     },
     {
       slug: "choose-the-right-water-slide",
@@ -513,6 +517,7 @@ async function seedBlog() {
       excerpt: L("Match the slide to your space, ages, and crowd.", "Adaptez le toboggan à votre espace, âges et public."),
       categoryId: guides.id,
       tags: ["rentals", "tips"],
+      coverImage: `${R2}/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg`,
     },
     {
       slug: "safety-setup-inspection-process",
@@ -520,6 +525,7 @@ async function seedBlog() {
       excerpt: L("How we keep every slide spotless and safe.", "Comment nous gardons chaque toboggan impeccable et sûr."),
       categoryId: safety.id,
       tags: ["safety"],
+      coverImage: `${R2}/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg`,
     },
   ];
 
@@ -527,7 +533,7 @@ async function seedBlog() {
     const post = POSTS[i]!;
     await prisma.blogPost.upsert({
       where: { slug: post.slug },
-      update: { title: post.title, excerpt: post.excerpt },
+      update: { title: post.title, excerpt: post.excerpt, coverImage: post.coverImage },
       create: {
         slug: post.slug,
         title: post.title,
@@ -536,7 +542,7 @@ async function seedBlog() {
           "Full article content goes here. Edit this from the admin dashboard with the rich text editor.",
           "Le contenu complet de l'article ici. Modifiable depuis le tableau de bord admin.",
         ),
-        coverImage: img(`post-${post.slug}`),
+        coverImage: post.coverImage,
         status: "PUBLISHED",
         publishedAt: daysFromNow(-7 * (i + 1)),
         readingMinutes: 4 + i,

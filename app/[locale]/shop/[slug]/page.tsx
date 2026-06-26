@@ -238,7 +238,7 @@ export default async function ProductDetailPage({ params }: Props) {
               <div className="mt-7 space-y-3">
                 <AddToCart productId={product.id} productName={name} />
                 <Button asChild size="lg" variant="outline" className="w-full">
-                  <Link href={`/quote?product=${product.slug}`}>
+                  <Link href="/contact">
                     {t("requestQuote")}
                   </Link>
                 </Button>

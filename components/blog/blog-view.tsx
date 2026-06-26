@@ -34,7 +34,7 @@ export async function BlogView({
   const t = await getTranslations("Blog");
 
   return (
-    <Section spacing="compact" className="pt-8 pb-16">
+    <Section spacing="compact" className="bg-muted/40 pt-8 pb-16">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[1fr_280px]">
           {/* Main */}

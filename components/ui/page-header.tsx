@@ -28,12 +28,19 @@ export function PageHeader({
   description,
   children,
   tone = "light",
+  backgroundImage,
 }: {
   eyebrow?: ReactNode;
   title: ReactNode;
   description?: ReactNode;
   children?: ReactNode;
   tone?: "light" | "brand";
+  /**
+   * Optional photo rendered behind the header (and the fixed nav bar above it).
+   * A light scrim is layered on top so the dark eyebrow/title text stays
+   * legible. Used by the blog page.
+   */
+  backgroundImage?: string;
 }) {
   const brand = tone === "brand";
 
@@ -46,17 +53,33 @@ export function PageHeader({
           : "border-b border-border",
       )}
     >
+      {/* Optional photo background. `-z-20` keeps it behind both the scrim
+          (below) and the text. `object-cover` fills the banner without
+          distortion. */}
+      {backgroundImage ? (
+        <img
+          src={backgroundImage}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-20 size-full object-cover"
+        />
+      ) : null}
+
       {/* Decorative background glow. `aria-hidden` hides it from screen
           readers; `pointer-events-none` keeps it from blocking clicks; and
           `-z-10` places it behind the text (but above the section bg). The
-          brand variant uses a stronger blue glow to pop on the navy. */}
+          brand variant uses a stronger blue glow to pop on the navy. When a
+          photo background is set we instead lay down a white scrim — stronger
+          on the left where the text sits — so the dark text stays readable. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
-          background: brand
-            ? "radial-gradient(55% 70% at 82% 0%, rgba(0,153,255,0.38), transparent 70%)"
-            : "radial-gradient(50% 60% at 80% 0%, rgba(0,212,255,0.14), transparent 70%)",
+          background: backgroundImage
+            ? "linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.85) 45%, rgba(255,255,255,0.55) 100%)"
+            : brand
+              ? "radial-gradient(55% 70% at 82% 0%, rgba(0,153,255,0.38), transparent 70%)"
+              : "radial-gradient(50% 60% at 80% 0%, rgba(0,212,255,0.14), transparent 70%)",
         }}
       />
       <Container>

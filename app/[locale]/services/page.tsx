@@ -122,7 +122,7 @@ export default async function ServicesPage({ params }: Props) {
             >
               <h2 className="text-2xl font-bold sm:text-3xl">{t("ctaTitle")}</h2>
               <Button asChild size="lg" variant="gradient">
-                <Link href="/quote">{t("ctaButton")}</Link>
+                <Link href="/contact">{t("ctaButton")}</Link>
               </Button>
             </Card>
           </Reveal>

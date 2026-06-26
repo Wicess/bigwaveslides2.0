@@ -18,7 +18,6 @@ const STATIC_PATHS = [
   "/blog",
   "/testimonials",
   "/contact",
-  "/quote",
   "/faq",
   "/privacy-policy",
   "/terms-of-service",
