@@ -29,6 +29,8 @@ export function PageHeader({
   children,
   tone = "light",
   backgroundImage,
+  align = "left",
+  overlapHeader = false,
 }: {
   eyebrow?: ReactNode;
   title: ReactNode;
@@ -36,24 +38,38 @@ export function PageHeader({
   children?: ReactNode;
   tone?: "light" | "brand";
   /**
-   * Optional photo rendered behind the header (and the fixed nav bar above it).
-   * A light scrim is layered on top so the dark eyebrow/title text stays
-   * legible. Used by the blog page.
+   * Optional photo rendered behind the header. A soft overlay is layered on
+   * top so the title stays legible without washing the photo out. Used by the
+   * blog page.
    */
   backgroundImage?: string;
+  /** Text alignment for the eyebrow/title/description block. */
+  align?: "left" | "center";
+  /**
+   * Pull the banner up so it sits *behind* the translucent sticky nav bar
+   * (the photo then runs edge-to-edge up to the announcement line, with the
+   * frosted nav floating on top). Adds extra top padding to clear the nav.
+   */
+  overlapHeader?: boolean;
 }) {
   const brand = tone === "brand";
+  const centered = align === "center";
+  // When the photo title sits on a photo it needs a shadow to stay readable.
+  const onPhoto = Boolean(backgroundImage);
 
   return (
     <section
       className={cn(
         "relative overflow-hidden pb-10 pt-28 sm:pt-32 lg:pb-14",
+        // Slide the banner up under the sticky header so the photo reaches the
+        // top of the page; bump the top padding back so text clears the nav.
+        overlapHeader && "-mt-[108px] pt-[150px] pb-16 sm:-mt-[116px] sm:pt-[184px] lg:pb-20",
         brand
           ? "border-b border-white/10 text-white [background:linear-gradient(180deg,#0a1a2f_0%,#0e2742_100%)]"
           : "border-b border-border",
       )}
     >
-      {/* Optional photo background. `-z-20` keeps it behind both the scrim
+      {/* Optional photo background. `-z-20` keeps it behind both the overlay
           (below) and the text. `object-cover` fills the banner without
           distortion. */}
       {backgroundImage ? (
@@ -69,20 +85,20 @@ export function PageHeader({
           readers; `pointer-events-none` keeps it from blocking clicks; and
           `-z-10` places it behind the text (but above the section bg). The
           brand variant uses a stronger blue glow to pop on the navy. When a
-          photo background is set we instead lay down a white scrim — stronger
-          on the left where the text sits — so the dark text stays readable. */}
+          photo background is set we instead lay down a *soft* overlay — just
+          enough to seat the title without blurring/washing out the photo. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
-          background: backgroundImage
-            ? "linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.85) 45%, rgba(255,255,255,0.55) 100%)"
+          background: onPhoto
+            ? "linear-gradient(180deg, rgba(0,30,60,0.28) 0%, rgba(0,30,60,0.12) 40%, rgba(0,30,60,0.42) 100%)"
             : brand
               ? "radial-gradient(55% 70% at 82% 0%, rgba(0,153,255,0.38), transparent 70%)"
               : "radial-gradient(50% 60% at 80% 0%, rgba(0,212,255,0.14), transparent 70%)",
         }}
       />
-      <Container>
+      <Container className={cn(centered && "flex flex-col items-center text-center")}>
         {/* Each piece below renders only if its prop was provided. */}
         {eyebrow ? (
           <Eyebrow className={brand ? "text-secondary-400" : undefined}>
@@ -91,9 +107,17 @@ export function PageHeader({
         ) : null}
         <h1
           className={cn(
-            "mt-3 max-w-3xl text-balance text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl",
-            brand && "text-white",
+            "mt-3 max-w-3xl text-balance font-display font-bold leading-[1.03] tracking-tight",
+            centered
+              ? "text-5xl sm:text-6xl lg:text-7xl"
+              : "text-4xl sm:text-5xl lg:text-6xl",
+            onPhoto ? "text-primary" : brand && "text-white",
           )}
+          style={
+            onPhoto
+              ? { textShadow: "0 2px 18px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.5)" }
+              : undefined
+          }
         >
           {title}
         </h1>
@@ -101,7 +125,12 @@ export function PageHeader({
           <p
             className={cn(
               "mt-4 max-w-2xl text-lg",
-              brand ? "text-white/75" : "text-muted-foreground",
+              centered && "mx-auto",
+              onPhoto
+                ? "font-medium text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]"
+                : brand
+                  ? "text-white/75"
+                  : "text-muted-foreground",
             )}
           >
             {description}

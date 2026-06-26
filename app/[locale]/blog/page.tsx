@@ -42,9 +42,10 @@ export default async function BlogPage({ params, searchParams }: Props) {
   return (
     <main>
       <PageHeader
-        eyebrow={t("eyebrow")}
         title={t("title")}
         description={t("desc")}
+        align="center"
+        overlapHeader
         backgroundImage="https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479234273-ipwk85-overview-dream-space-water-park-chongqing-china-photo01-2048x1277.jpg"
       />
       <BlogView

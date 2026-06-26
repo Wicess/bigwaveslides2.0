@@ -21,7 +21,8 @@
       "Bash(node -e \"const m=require\\('./messages/en.json'\\); console.log\\('Layout keys:', Object.keys\\(m.Layout\\).join\\(', '\\)\\); console.log\\('--- has callCta:', 'callCta' in m.Layout\\); console.log\\('Nav keys:', Object.keys\\(m.Nav\\).join\\(', '\\)\\)\")",
       "Bash(node -e \"try{require\\('playwright'\\);console.log\\('playwright-ok'\\)}catch{console.log\\('no-playwright'\\)}\")",
       "Bash(node -e \"try{require\\('puppeteer'\\);console.log\\('puppeteer-ok'\\)}catch{console.log\\('no-puppeteer'\\)}\")",
-      "Bash(npx dotenv *)"
+      "Bash(npx dotenv *)",
+      "Bash(echo \"exit: $?\")"
     ]
   }
 }
