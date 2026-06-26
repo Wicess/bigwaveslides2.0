@@ -15,7 +15,6 @@ import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/ui/page-header";
 import { CountUp } from "@/components/ui/count-up";
 import { Reveal } from "@/components/motion/reveal";
 
@@ -57,7 +56,29 @@ export default async function AboutPage({ params }: Props) {
 
   return (
     <main>
-      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("intro")} />
+      {/* Hero — same treatment as the blog article page: a cover photo running
+          up behind the nav with a dark scrim so the white heading stays legible. */}
+      <header className="relative -mt-[108px] overflow-hidden border-b border-border bg-neutral-900 sm:-mt-[116px]">
+        <img
+          src="https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/about/1782501611506-twt9il-aquaforms-1800-island-waterpark-at-showboat-atlantic-city-usa-photo14-1536x1006.jpg"
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 size-full object-cover"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/55 to-neutral-950/45"
+        />
+        <Container className="relative z-10 max-w-[84rem] pb-12 pt-[122px] sm:pb-14 sm:pt-[146px]">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-secondary-400">
+            {t("eyebrow")}
+          </p>
+          <h1 className="mt-4 max-w-4xl text-balance font-display text-[2rem] font-bold leading-[1.07] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:text-4xl lg:text-5xl">
+            {t("title")}
+          </h1>
+          <p className="mt-4 max-w-2xl text-base text-white/80 sm:text-lg">{t("intro")}</p>
+        </Container>
+      </header>
 
       {/* Story + mission */}
       <Section>
