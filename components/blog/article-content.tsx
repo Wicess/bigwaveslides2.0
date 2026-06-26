@@ -1,6 +1,18 @@
+import * as React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Link } from "@/i18n/navigation";
+import { slugify } from "@/lib/toc";
+
+/** Flatten a heading's React children down to its plain-text string. */
+function toText(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(toText).join("");
+  if (React.isValidElement(node)) {
+    return toText((node.props as { children?: React.ReactNode }).children);
+  }
+  return "";
+}
 
 /**
  * ArticleContent — renders a blog post's Markdown body as a polished,
@@ -18,12 +30,18 @@ export function ArticleContent({ content }: { content: string }) {
         remarkPlugins={[remarkGfm]}
         components={{
           h2: ({ children }) => (
-            <h2 className="mt-12 mb-4 scroll-mt-28 font-display text-2xl font-bold tracking-tight text-foreground first:mt-0 sm:text-[1.7rem]">
+            <h2
+              id={slugify(toText(children))}
+              className="mt-12 mb-4 scroll-mt-28 font-display text-2xl font-bold tracking-tight text-foreground first:mt-0 sm:text-[1.7rem]"
+            >
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="mt-8 mb-3 scroll-mt-28 font-display text-xl font-semibold text-foreground">
+            <h3
+              id={slugify(toText(children))}
+              className="mt-8 mb-3 scroll-mt-28 font-display text-xl font-semibold text-foreground"
+            >
               {children}
             </h3>
           ),
