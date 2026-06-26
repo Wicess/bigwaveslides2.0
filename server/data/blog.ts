@@ -91,18 +91,29 @@ export async function getRelatedPosts(
   categoryId: string | null,
   limit = 3,
 ) {
-  return withRetry(() =>
-    prisma.blogPost.findMany({
-      where: {
-        status: "PUBLISHED",
-        id: { not: postId },
-        ...(categoryId ? { categoryId } : {}),
-      },
+  return withRetry(async () => {
+    // Prefer posts from the same category…
+    const sameCategory = categoryId
+      ? await prisma.blogPost.findMany({
+          where: { status: "PUBLISHED", id: { not: postId }, categoryId },
+          select: cardSelect,
+          orderBy: { publishedAt: "desc" },
+          take: limit,
+        })
+      : [];
+    if (sameCategory.length >= limit) return sameCategory;
+
+    // …then top up with the latest posts from anywhere so every article shows
+    // a full "keep reading" row (e.g. categories with only one post).
+    const exclude = [postId, ...sameCategory.map((p) => p.id)];
+    const fillers = await prisma.blogPost.findMany({
+      where: { status: "PUBLISHED", id: { notIn: exclude } },
       select: cardSelect,
       orderBy: { publishedAt: "desc" },
-      take: limit,
-    }),
-  ).catch(() => []);
+      take: limit - sameCategory.length,
+    });
+    return [...sameCategory, ...fillers];
+  }).catch(() => []);
 }
 
 export async function getPostSlugs() {

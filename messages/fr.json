@@ -554,7 +554,11 @@
     "ctaText": "Parlez-nous de votre événement et nous vous enverrons un devis gratuit et sans engagement — livraison, installation professionnelle et assurance complète incluses.",
     "ctaQuote": "Demander un devis gratuit",
     "ctaBrowse": "Voir nos locations",
-    "writtenBy": "Rédigé par"
+    "writtenBy": "Rédigé par",
+    "featured": "À la une",
+    "latestArticles": "Derniers articles",
+    "furtherReading": "Pour aller plus loin",
+    "furtherReadingDesc": "Des ressources fiables et indépendantes sur les jeux d'eau et la sécurité des événements."
   },
   "Testimonials": {
     "eyebrow": "Témoignages",

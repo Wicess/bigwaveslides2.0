@@ -554,7 +554,11 @@
     "ctaText": "Tell us about your event and we'll send a free, no-obligation quote — delivery, professional setup, and full insurance included.",
     "ctaQuote": "Request a free quote",
     "ctaBrowse": "Browse our rentals",
-    "writtenBy": "Written by"
+    "writtenBy": "Written by",
+    "featured": "Featured",
+    "latestArticles": "Latest articles",
+    "furtherReading": "Further reading",
+    "furtherReadingDesc": "Trusted, independent resources on water play and event safety."
   },
   "Testimonials": {
     "eyebrow": "Testimonials",
