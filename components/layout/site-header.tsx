@@ -172,7 +172,7 @@ export function SiteHeader({ locale, data }: Props) {
                     </p>
                     <div className="grid grid-cols-2 gap-1">
                       {data.services.slice(0, 8).map((s) => (
-                        <PanelLink key={s.slug} href={`/services/${s.slug}`}>
+                        <PanelLink key={s.slug} href={`/services#${s.slug}`}>
                           {loc(s.title)}
                         </PanelLink>
                       ))}

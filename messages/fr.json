@@ -160,11 +160,12 @@
   },
   "ServicesPage": {
     "eyebrow": "Services",
-    "title": "Des services pour chaque fête",
-    "desc": "Des anniversaires aux installations permanentes, votre plaisir aquatique est entre de bonnes mains.",
+    "title": "Tout ce que nous faisons, de la fête au parc aquatique",
+    "desc": "Location, vente, construction sur mesure, installation et entretien — une équipe experte pour chaque projet de toboggan.",
     "eventsGroup": "Services événementiels",
     "supportGroup": "Installation et support",
-    "ctaTitle": "Vous ne trouvez pas exactement ce qu'il vous faut ?",
+    "highlights": "Ce qui est inclus",
+    "ctaTitle": "Un projet en tête ?",
     "ctaButton": "Demander un devis personnalisé"
   },
   "ServiceDetail": {

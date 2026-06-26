@@ -160,11 +160,12 @@
   },
   "ServicesPage": {
     "eyebrow": "Services",
-    "title": "Services for every celebration",
-    "desc": "From birthday parties to permanent installations, we've got your water fun covered.",
+    "title": "Everything we do, from party day to waterpark",
+    "desc": "Rentals, sales, custom builds, installation, and care — one expert team for every kind of water-slide project.",
     "eventsGroup": "Event services",
     "supportGroup": "Installation & support",
-    "ctaTitle": "Don't see exactly what you need?",
+    "highlights": "What's included",
+    "ctaTitle": "Have a project in mind?",
     "ctaButton": "Request a custom quote"
   },
   "ServiceDetail": {

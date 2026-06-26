@@ -51,7 +51,7 @@ export async function ServicesOverview({
             return (
               <Reveal key={s.slug} delay={i * 0.05}>
                 <Link
-                  href={`/services/${s.slug}`}
+                  href={`/services#${s.slug}`}
                   className="group flex h-full flex-col rounded-[var(--radius-lg)] border border-border bg-background p-6 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]"
                 >
                   <span className="grid size-12 place-items-center rounded-xl bg-primary-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white">

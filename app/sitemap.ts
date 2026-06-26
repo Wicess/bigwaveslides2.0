@@ -3,7 +3,6 @@ import { env } from "@/lib/env";
 import { routing } from "@/i18n/routing";
 import { getProductSlugs } from "@/server/data/products";
 import { getRentalSlugs } from "@/server/data/rentals";
-import { getServiceSlugs } from "@/server/data/services";
 import { getPostSlugs, getBlogCategories, getPopularTags } from "@/server/data/blog";
 import { getProductCategories } from "@/server/data/products";
 
@@ -24,11 +23,10 @@ const STATIC_PATHS = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, rentals, services, posts, productCats, blogCats, tags] =
+  const [products, rentals, posts, productCats, blogCats, tags] =
     await Promise.all([
       getProductSlugs().catch(() => []),
       getRentalSlugs().catch(() => []),
-      getServiceSlugs().catch(() => []),
       getPostSlugs().catch(() => []),
       getProductCategories().catch(() => []),
       getBlogCategories().catch(() => []),
@@ -38,7 +36,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dynamicPaths = [
     ...products.map((p) => `/shop/${p.slug}`),
     ...rentals.map((p) => `/rent/${p.slug}`),
-    ...services.map((s) => `/services/${s.slug}`),
     ...posts.map((p) => `/blog/${p.slug}`),
     ...productCats.map((c) => `/shop/category/${c.slug}`),
     ...blogCats.map((c) => `/blog/category/${c.slug}`),

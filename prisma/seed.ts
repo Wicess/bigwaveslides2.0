@@ -434,21 +434,24 @@ async function seedProducts(categoryMap: Map<string, string>) {
 }
 
 // ───────────────────────── Services ─────────────────────────
+// Mirrors lib/services-content.ts (the single /services page). The DB copy
+// powers the header mega-menu and footer links, which anchor to /services#slug.
 const SERVICES = [
-  { slug: "birthday-parties", cat: "EVENT", t: L("Birthday Parties", "Fêtes d'anniversaire"), s: L("Unforgettable birthday splash parties at your place.", "Des anniversaires aquatiques inoubliables chez vous.") },
-  { slug: "pool-parties", cat: "EVENT", t: L("Pool Parties", "Fêtes à la piscine"), s: L("Level up your pool day with premium slides.", "Sublimez votre journée piscine avec nos toboggans.") },
-  { slug: "school-events", cat: "EVENT", t: L("School Events", "Événements scolaires"), s: L("Safe, insured fun for field days and fundraisers.", "Du plaisir assuré pour journées sportives et collectes.") },
-  { slug: "church-events", cat: "EVENT", t: L("Church Events", "Événements paroissiaux"), s: L("Family-friendly attractions for congregations.", "Des attractions familiales pour les communautés.") },
-  { slug: "corporate-events", cat: "EVENT", t: L("Corporate Events", "Événements d'entreprise"), s: L("Team picnics and company family days.", "Pique-niques d'équipe et journées familiales.") },
-  { slug: "family-gatherings", cat: "EVENT", t: L("Family Gatherings", "Réunions de famille"), s: L("Reunions and backyard get-togethers, handled.", "Retrouvailles et fêtes de jardin, clés en main.") },
-  { slug: "festivals", cat: "EVENT", t: L("Festivals", "Festivals"), s: L("High-capacity attractions for big crowds.", "Attractions à grande capacité pour les foules.") },
-  { slug: "community-events", cat: "EVENT", t: L("Community Events", "Événements communautaires"), s: L("Municipal and neighborhood celebrations.", "Célébrations municipales et de quartier.") },
-  { slug: "installation-services", cat: "INSTALL", t: L("Installation Services", "Services d'installation"), s: L("Professional install of permanent slides.", "Installation professionnelle de toboggans permanents.") },
-  { slug: "maintenance-services", cat: "MAINTENANCE", t: L("Maintenance Services", "Services d'entretien"), s: L("Inspection, cleaning, and repair programs.", "Programmes d'inspection, nettoyage et réparation.") },
-  { slug: "emergency-support", cat: "SUPPORT", t: L("Emergency Support", "Assistance d'urgence"), s: L("Rapid same-day support during your event.", "Assistance rapide le jour même de votre événement.") },
+  { slug: "event-rentals", cat: "EVENT", t: L("Backyard & Party Rentals", "Locations pour fêtes et jardins"), s: L("Birthdays, pool days, and backyard blowouts — delivered and set up.", "Anniversaires, journées piscine et fêtes de jardin — livrés et installés.") },
+  { slug: "corporate-community-events", cat: "EVENT", t: L("Corporate & Community Events", "Événements d'entreprise et communautaires"), s: L("Picnics, festivals, and municipal celebrations.", "Pique-niques, festivals et fêtes municipales.") },
+  { slug: "school-camp-church", cat: "EVENT", t: L("School, Camp & Church Events", "Écoles, camps et événements paroissiaux"), s: L("Safe, insured, age-appropriate fun.", "Du plaisir sûr, assuré et adapté à l'âge.") },
+  { slug: "water-slide-sales", cat: "INSTALL", t: L("Water Slide Sales", "Vente de toboggans"), s: L("Own commercial-grade slides built to last.", "Possédez des toboggans de qualité commerciale.") },
+  { slug: "custom-builds", cat: "INSTALL", t: L("Custom Water Slide & Waterpark Construction", "Construction sur mesure de parcs aquatiques"), s: L("We design and build permanent attractions and waterparks.", "Nous concevons et construisons des attractions permanentes.") },
+  { slug: "delivery-installation", cat: "INSTALL", t: L("Delivery, Installation & Anchoring", "Livraison, installation et ancrage"), s: L("Professional, by-the-book setup every time.", "Une installation professionnelle et rigoureuse.") },
+  { slug: "maintenance-inspection", cat: "MAINTENANCE", t: L("Maintenance, Inspection & Repair", "Entretien, inspection et réparation"), s: L("Keep your investment safe and ready.", "Gardez votre investissement sûr et prêt.") },
+  { slug: "event-staffing", cat: "SUPPORT", t: L("Event Staffing & On-Site Safety", "Personnel d'événement et sécurité"), s: L("Trained attendants who run the attraction for you.", "Des préposés formés qui opèrent l'attraction pour vous.") },
 ] as const;
 
 async function seedServices() {
+  // Drop services that are no longer part of the lineup (old per-event slugs).
+  await prisma.service.deleteMany({
+    where: { slug: { notIn: SERVICES.map((s) => s.slug) } },
+  });
   for (let i = 0; i < SERVICES.length; i++) {
     const sv = SERVICES[i]!;
     await prisma.service.upsert({

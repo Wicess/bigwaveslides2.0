@@ -134,7 +134,7 @@ export async function SiteFooter({
             {data.services.slice(0, 6).map((s) => (
               <li key={s.slug}>
                 <Link
-                  href={`/services/${s.slug}`}
+                  href={`/services#${s.slug}`}
                   className="text-sm text-white/75 transition-colors hover:text-white"
                 >
                   {loc(s.title)}

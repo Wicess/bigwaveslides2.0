@@ -4,32 +4,52 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import {
   PartyPopper,
+  Building2,
+  GraduationCap,
+  ShoppingBag,
+  HardHat,
+  Truck,
   Wrench,
-  Sparkles,
-  LifeBuoy,
+  ShieldCheck,
+  Check,
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
 import { routing, type AppLocale } from "@/i18n/routing";
-import { getAllServices } from "@/server/data/services";
 import { getLocalized } from "@/lib/localized";
+import {
+  SERVICE_GROUPS,
+  ALL_SERVICES,
+  SERVICES_HERO_IMAGE,
+  type ServiceItem,
+  type ServiceCtaKind,
+} from "@/lib/services-content";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
-import { Section, SectionHeader } from "@/components/ui/section";
+import { Section } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/ui/page-header";
+import { MediaImage } from "@/components/ui/media-image";
 import { Reveal } from "@/components/motion/reveal";
+import { cn } from "@/lib/utils";
 
 type Props = { params: Promise<{ locale: string }> };
 
-type ServiceCategory = "EVENT" | "INSTALL" | "MAINTENANCE" | "SUPPORT";
+const ICONS: Record<ServiceItem["icon"], LucideIcon> = {
+  party: PartyPopper,
+  building: Building2,
+  school: GraduationCap,
+  shop: ShoppingBag,
+  build: HardHat,
+  truck: Truck,
+  wrench: Wrench,
+  shield: ShieldCheck,
+};
 
-const ICONS: Record<ServiceCategory, LucideIcon> = {
-  EVENT: PartyPopper,
-  INSTALL: Wrench,
-  MAINTENANCE: Sparkles,
-  SUPPORT: LifeBuoy,
+const CTA_HREF: Record<ServiceCtaKind, string> = {
+  quote: "/contact",
+  shop: "/shop",
+  rent: "/rent",
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -38,83 +58,134 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: t("title"), description: t("desc") };
 }
 
-function ServiceCard({
-  slug,
-  title,
-  summary,
-  category,
-  cta,
-}: {
-  slug: string;
-  title: string;
-  summary: string;
-  category: ServiceCategory;
-  cta: string;
-}) {
-  const Icon = ICONS[category] ?? PartyPopper;
-  return (
-    <Link
-      href={`/services/${slug}`}
-      className="group flex h-full flex-col rounded-[var(--radius-lg)] border border-border bg-background p-6 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]"
-    >
-      <span className="grid size-12 place-items-center rounded-xl bg-primary-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
-        <Icon className="size-6" />
-      </span>
-      <h3 className="mt-4 text-lg font-semibold">{title}</h3>
-      <p className="mt-1 flex-1 text-sm text-muted-foreground">{summary}</p>
-      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-        {cta}
-        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-      </span>
-    </Link>
-  );
-}
-
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
   const t = await getTranslations("ServicesPage");
-  const tDetail = await getTranslations("ServiceDetail");
-  const services = await getAllServices().catch(() => []);
-
-  const events = services.filter((s) => s.category === "EVENT");
-  const support = services.filter((s) => s.category !== "EVENT");
-
-  const groups = [
-    { key: "events", label: t("eventsGroup"), items: events },
-    { key: "support", label: t("supportGroup"), items: support },
-  ].filter((g) => g.items.length > 0);
 
   return (
     <main>
-      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
+      {/* Hero — same cover-photo treatment as the article/about pages. */}
+      <header className="relative -mt-[108px] overflow-hidden border-b border-border bg-neutral-900 sm:-mt-[116px]">
+        <img
+          src={SERVICES_HERO_IMAGE}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 size-full object-cover"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/55 to-neutral-950/45"
+        />
+        <Container className="relative z-10 max-w-[84rem] pb-12 pt-[122px] sm:pb-14 sm:pt-[146px]">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-secondary-400">
+            {t("eyebrow")}
+          </p>
+          <h1 className="mt-4 max-w-4xl text-balance font-display text-[2rem] font-bold leading-[1.07] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:text-4xl lg:text-5xl">
+            {t("title")}
+          </h1>
+          <p className="mt-4 max-w-2xl text-base text-white/80 sm:text-lg">{t("desc")}</p>
 
-      {groups.map((group) => (
-        <Section key={group.key}>
-          <Container>
-            <SectionHeader title={group.label} />
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {group.items.map((s, i) => (
-                <Reveal key={s.slug} delay={i * 0.05}>
-                  <ServiceCard
-                    slug={s.slug}
-                    title={getLocalized(s.title, locale)}
-                    summary={getLocalized(s.summary, locale)}
-                    category={s.category as ServiceCategory}
-                    cta={tDetail("getQuote")}
-                  />
-                </Reveal>
-              ))}
+          {/* Quick-jump pills to each service. */}
+          <div className="mt-7 flex flex-wrap gap-2">
+            {ALL_SERVICES.map((s) => (
+              <a
+                key={s.slug}
+                href={`#${s.slug}`}
+                className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+              >
+                {getLocalized(s.title, locale)}
+              </a>
+            ))}
+          </div>
+        </Container>
+      </header>
+
+      {/* Service groups → alternating image/text rows. */}
+      {SERVICE_GROUPS.map((group, gi) => (
+        <Section
+          key={group.key}
+          spacing="default"
+          className={cn(gi % 2 === 1 && "bg-muted/40")}
+        >
+          <Container className="max-w-[84rem]">
+            <h2 className="mb-10 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+              <span className="h-px w-8 bg-primary/40" />
+              {getLocalized(group.label, locale)}
+            </h2>
+
+            <div className="space-y-16 lg:space-y-24">
+              {group.items.map((s, i) => {
+                const Icon = ICONS[s.icon];
+                const title = getLocalized(s.title, locale);
+                const paragraphs = getLocalized(s.body, locale).split(/\n{2,}/);
+                const flip = i % 2 === 1;
+                return (
+                  <Reveal key={s.slug}>
+                    <section
+                      id={s.slug}
+                      className="grid scroll-mt-28 items-center gap-8 lg:grid-cols-2 lg:gap-14"
+                    >
+                      {/* Image */}
+                      <div className={cn("relative", flip && "lg:order-2")}>
+                        <MediaImage
+                          src={s.image}
+                          alt={title}
+                          className="aspect-[4/3] w-full shadow-[var(--shadow-soft)]"
+                          sizes="(min-width:1024px) 42vw, 100vw"
+                        />
+                        <span className="absolute left-4 top-4 grid size-11 place-items-center rounded-xl bg-white/95 text-primary shadow-md backdrop-blur">
+                          <Icon className="size-6" />
+                        </span>
+                      </div>
+
+                      {/* Copy */}
+                      <div className={cn(flip && "lg:order-1")}>
+                        <h3 className="font-display text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+                          {title}
+                        </h3>
+                        <p className="mt-3 text-lg font-medium text-primary">
+                          {getLocalized(s.tagline, locale)}
+                        </p>
+                        <div className="mt-4 space-y-3 text-[1.025rem] leading-relaxed text-muted-foreground">
+                          {paragraphs.map((p, pi) => (
+                            <p key={pi}>{p}</p>
+                          ))}
+                        </div>
+
+                        <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          {t("highlights")}
+                        </p>
+                        <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                          {s.highlights.map((h, hi) => (
+                            <li key={hi} className="flex items-start gap-2 text-sm">
+                              <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                              <span>{getLocalized(h, locale)}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <Button asChild size="lg" variant="gradient" className="mt-7">
+                          <Link href={CTA_HREF[s.cta.kind]}>
+                            {getLocalized(s.cta.label, locale)}
+                            <ArrowRight className="size-4" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </section>
+                  </Reveal>
+                );
+              })}
             </div>
           </Container>
         </Section>
       ))}
 
-      {/* CTA */}
+      {/* Closing CTA */}
       <Section spacing="compact" className="pb-16">
-        <Container>
+        <Container className="max-w-[84rem]">
           <Reveal>
             <Card
               variant="glass"
