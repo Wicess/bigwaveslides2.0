@@ -217,7 +217,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     return (
                       <li
                         key={s.label}
-                        className="flex items-center gap-3 rounded-[var(--radius-lg)] border border-border p-3"
+                        className="flex items-center gap-3 rounded-xl border border-border bg-muted/40 p-3 transition-colors hover:border-primary/40 hover:bg-primary-50/60"
                       >
                         <Icon className="size-5 shrink-0 text-primary" />
                         <span className="min-w-0">
