@@ -51,8 +51,13 @@ export async function ShopView({
         </div>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[260px_1fr]">
-          {/* Desktop filters */}
-          <div className="hidden lg:block">{filters}</div>
+          {/* Desktop filters — a clean white card that stays in view while you
+              scroll the results (sticky top-28 clears the fixed header). */}
+          <div className="hidden lg:block">
+            <div className="sticky top-28 rounded-2xl border border-border bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+              {filters}
+            </div>
+          </div>
 
           {/* Mobile filters */}
           <details className="group rounded-[var(--radius-lg)] border border-border lg:hidden">

@@ -33,7 +33,7 @@ export default async function ShopPage({ params, searchParams }: Props) {
 
   return (
     <main>
-      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
+      <PageHeader tone="brand" eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
       <ShopView
         locale={locale}
         categories={categories}

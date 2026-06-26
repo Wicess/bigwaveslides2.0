@@ -298,14 +298,27 @@ function PanelCta({
   return (
     <Link
       href={href}
-      className="flex flex-col justify-between rounded-[var(--radius)] p-4 text-white [background:var(--gradient-deep)]"
+      className="group/cta relative flex flex-col justify-between overflow-hidden rounded-[var(--radius)] p-4 text-white"
     >
-      <div>
+      {/* Blurred, blueish water photo (from R2) behind the card. A blue
+          gradient over it keeps the text crisp while giving a soft, on-brand
+          backdrop. The image slowly zooms on hover. aria-hidden: decorative. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/hero/aquaforms.jpg"
+        alt=""
+        aria-hidden
+        className="absolute inset-0 size-full scale-110 object-cover blur-[3px] transition-transform duration-700 group-hover/cta:scale-125"
+      />
+      <div className="absolute inset-0 [background:linear-gradient(150deg,rgba(0,51,102,0.9)_0%,rgba(0,122,204,0.82)_55%,rgba(0,153,255,0.78)_100%)]" />
+
+      <div className="relative">
         <p className="font-semibold">{title}</p>
-        <p className="mt-1 text-sm text-white/80">{desc}</p>
+        <p className="mt-1 text-sm text-white/85">{desc}</p>
       </div>
-      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold">
-        {cta} <ArrowRight className="size-4" />
+      <span className="relative mt-4 inline-flex items-center gap-1 text-sm font-semibold">
+        {cta}{" "}
+        <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" />
       </span>
     </Link>
   );

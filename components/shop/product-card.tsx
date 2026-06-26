@@ -49,33 +49,46 @@ export async function ProductCard({
         : null;
 
   return (
-    <Link href={href} className={cn("group block", className)}>
-      <div className="relative">
+    // White rounded card matching the landing-page card style: a subtle ring +
+    // soft shadow, the whole card lifts on hover, and the photo gently zooms.
+    // `overflow-hidden` clips the zooming image to the rounded corners.
+    <Link
+      href={href}
+      className={cn(
+        "group flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-border/60 shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-soft)]",
+        className,
+      )}
+    >
+      <div className="relative overflow-hidden">
         {image ? (
           <MediaImage
             src={image}
             alt={name}
+            rounded={false}
             className="aspect-[4/3] w-full"
-            imgClassName="group-hover:scale-[1.04]"
+            imgClassName="transition-transform duration-700 ease-out group-hover:scale-105"
             sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw"
             priority={priority}
           />
         ) : (
-          <div className="aspect-[4/3] w-full rounded-[var(--radius-lg)] bg-muted" />
+          <div className="aspect-[4/3] w-full bg-muted" />
         )}
+        {/* Floating "Rent" / "Sale" chip, like the category/blog cards. */}
         <Badge
           variant={isRental ? "primary" : "accent"}
-          className="absolute left-3 top-3"
+          className="absolute left-3 top-3 shadow-sm"
         >
           {isRental ? t("rentBadge") : t("saleBadge")}
         </Badge>
       </div>
 
-      <div className="mt-3 px-0.5">
+      <div className="flex flex-1 flex-col p-4">
         <h3 className="line-clamp-1 font-semibold transition-colors group-hover:text-primary">
           {name}
         </h3>
-        <div className="mt-1.5 flex items-center justify-between gap-2">
+        {/* `mt-auto` pins this row to the bottom so cards of different title
+            lengths still line up their price/rating. */}
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
           <span className="flex items-center gap-1.5">
             <Stars rating={product.ratingAvg} size="size-3.5" />
             <span className="text-xs text-muted-foreground">

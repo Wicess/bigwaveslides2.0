@@ -54,6 +54,7 @@ export default async function ShopCategoryPage({ params, searchParams }: Props) 
   return (
     <main>
       <PageHeader
+        tone="brand"
         eyebrow={t("eyebrow")}
         title={getLocalized(category.name, locale)}
         description={getLocalized(category.description, locale) || t("desc")}
