@@ -549,7 +549,12 @@
     "tags": "Popular tags",
     "searchPlaceholder": "Search articles…",
     "backToBlog": "Back to blog",
-    "relatedTitle": "Keep reading"
+    "relatedTitle": "Keep reading",
+    "ctaTitle": "Ready to make a splash?",
+    "ctaText": "Tell us about your event and we'll send a free, no-obligation quote — delivery, professional setup, and full insurance included.",
+    "ctaQuote": "Request a free quote",
+    "ctaBrowse": "Browse our rentals",
+    "writtenBy": "Written by"
   },
   "Testimonials": {
     "eyebrow": "Testimonials",

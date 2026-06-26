@@ -549,7 +549,12 @@
     "tags": "Étiquettes populaires",
     "searchPlaceholder": "Rechercher des articles…",
     "backToBlog": "Retour au blogue",
-    "relatedTitle": "Continuer la lecture"
+    "relatedTitle": "Continuer la lecture",
+    "ctaTitle": "Prêt à faire des vagues ?",
+    "ctaText": "Parlez-nous de votre événement et nous vous enverrons un devis gratuit et sans engagement — livraison, installation professionnelle et assurance complète incluses.",
+    "ctaQuote": "Demander un devis gratuit",
+    "ctaBrowse": "Voir nos locations",
+    "writtenBy": "Rédigé par"
   },
   "Testimonials": {
     "eyebrow": "Témoignages",

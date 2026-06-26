@@ -22,7 +22,10 @@
       "Bash(node -e \"try{require\\('playwright'\\);console.log\\('playwright-ok'\\)}catch{console.log\\('no-playwright'\\)}\")",
       "Bash(node -e \"try{require\\('puppeteer'\\);console.log\\('puppeteer-ok'\\)}catch{console.log\\('no-puppeteer'\\)}\")",
       "Bash(npx dotenv *)",
-      "Bash(echo \"exit: $?\")"
+      "Bash(echo \"exit: $?\")",
+      "Bash(node -e \"const m=require\\('./messages/en.json'\\); console.log\\(JSON.stringify\\(m.Blog,null,1\\)\\)\")",
+      "Bash(node -e \"const a=require\\('./prisma/blog-posts.json'\\); console.log\\('Total:',a.length\\); a.forEach\\(p=>console.log\\('-',p.slug,'|',p.category,'|',p.tags.join\\(','\\),'|',p.readingMinutes+'min','| feat:'+p.featured\\)\\)\")",
+      "Bash(node -e \"const m=require\\('./messages/fr.json'\\); console.log\\('relatedTitle:', JSON.stringify\\(m.Blog.relatedTitle\\)\\); console.log\\('backToBlog:', JSON.stringify\\(m.Blog.backToBlog\\)\\)\")"
     ]
   }
 }

@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pkg from "@prisma/client";
 import type { ProductType } from "@prisma/client";
@@ -476,6 +477,39 @@ async function seedServices() {
 }
 
 // ───────────────────────── Blog ─────────────────────────
+// Localized display names for the blog taxonomy.
+const CATEGORY_NAMES: Record<string, { en: string; fr: string }> = {
+  guides: L("Guides", "Guides"),
+  planning: L("Planning", "Planification"),
+  safety: L("Safety", "Sécurité"),
+  events: L("Events", "Événements"),
+  pricing: L("Pricing", "Tarifs"),
+};
+const TAG_NAMES: Record<string, { en: string; fr: string }> = {
+  pricing: L("Pricing", "Tarifs"),
+  rentals: L("Rentals", "Locations"),
+  tips: L("Tips", "Conseils"),
+  parties: L("Parties", "Fêtes"),
+  safety: L("Safety", "Sécurité"),
+  events: L("Events", "Événements"),
+  corporate: L("Corporate", "Entreprises"),
+};
+
+type SeedPost = {
+  slug: string;
+  category: string;
+  tags: string[];
+  coverImage: string;
+  featured: boolean;
+  publishedDaysAgo: number;
+  readingMinutes: number;
+  title: { en: string; fr: string };
+  excerpt: { en: string; fr: string };
+  metaTitle: { en: string; fr: string };
+  metaDescription: { en: string; fr: string };
+  content: { en: string; fr: string };
+};
+
 async function seedBlog() {
   const author = await prisma.author.upsert({
     where: { id: "author-bigwave-team" },
@@ -483,79 +517,56 @@ async function seedBlog() {
     create: {
       id: "author-bigwave-team",
       name: "The Big Wave Team",
-      bio: L("Water-fun experts since day one.", "Experts du plaisir aquatique depuis le premier jour."),
+      bio: L(
+        "The crew behind Big Wave Slides — water-fun experts who deliver, set up, and sweat the details so your event is effortless.",
+        "L'équipe derrière Big Wave Slides — des experts du plaisir aquatique qui livrent, installent et soignent les détails pour que votre événement soit sans effort.",
+      ),
       avatar: img("author-team"),
     },
   });
 
-  const guides = await prisma.blogCategory.upsert({
-    where: { slug: "guides" },
-    update: {},
-    create: { slug: "guides", name: L("Guides", "Guides") },
-  });
-  const safety = await prisma.blogCategory.upsert({
-    where: { slug: "safety" },
-    update: {},
-    create: { slug: "safety", name: L("Safety", "Sécurité") },
-  });
+  // Rich, conversion-focused posts authored in Markdown. Stored in
+  // prisma/blog-posts.json (with R2 cover images) so re-seeding restores them.
+  const posts = JSON.parse(
+    readFileSync(new URL("./blog-posts.json", import.meta.url), "utf8"),
+  ) as SeedPost[];
 
-  // Blog cover images live on R2 (uploaded from images/Playground). Kept here
-  // so re-seeding restores the same images instead of placeholder photos.
-  const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog";
-  const POSTS = [
-    {
-      slug: "perfect-backyard-water-slide-party",
-      title: L("5 Tips for the Perfect Backyard Water Slide Party", "5 conseils pour une fête de jardin réussie"),
-      excerpt: L("Plan a splash hit with these simple tips.", "Réussissez votre fête avec ces conseils simples."),
-      categoryId: guides.id,
-      tags: ["parties", "tips"],
-      coverImage: `${R2}/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg`,
-    },
-    {
-      slug: "choose-the-right-water-slide",
-      title: L("How to Choose the Right Water Slide for Your Event", "Comment choisir le bon toboggan pour votre événement"),
-      excerpt: L("Match the slide to your space, ages, and crowd.", "Adaptez le toboggan à votre espace, âges et public."),
-      categoryId: guides.id,
-      tags: ["rentals", "tips"],
-      coverImage: `${R2}/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg`,
-    },
-    {
-      slug: "safety-setup-inspection-process",
-      title: L("Safety First: Our Setup & Inspection Process", "La sécurité d'abord : notre processus d'inspection"),
-      excerpt: L("How we keep every slide spotless and safe.", "Comment nous gardons chaque toboggan impeccable et sûr."),
-      categoryId: safety.id,
-      tags: ["safety"],
-      coverImage: `${R2}/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg`,
-    },
-  ];
+  // Create every category referenced by the posts.
+  const categoryIds = new Map<string, string>();
+  for (const slug of new Set(posts.map((p) => p.category))) {
+    const cat = await prisma.blogCategory.upsert({
+      where: { slug },
+      update: { name: CATEGORY_NAMES[slug] ?? L(slug, slug) },
+      create: { slug, name: CATEGORY_NAMES[slug] ?? L(slug, slug) },
+    });
+    categoryIds.set(slug, cat.id);
+  }
 
-  for (let i = 0; i < POSTS.length; i++) {
-    const post = POSTS[i]!;
+  for (const post of posts) {
+    const tags = {
+      connectOrCreate: post.tags.map((t) => ({
+        where: { slug: t },
+        create: { slug: t, name: TAG_NAMES[t] ?? L(t, t) },
+      })),
+    };
+    const common = {
+      title: post.title,
+      excerpt: post.excerpt,
+      content: post.content,
+      metaTitle: post.metaTitle,
+      metaDescription: post.metaDescription,
+      coverImage: post.coverImage,
+      status: "PUBLISHED" as const,
+      publishedAt: daysFromNow(-post.publishedDaysAgo),
+      readingMinutes: post.readingMinutes,
+      featured: post.featured,
+      authorId: author.id,
+      categoryId: categoryIds.get(post.category)!,
+    };
     await prisma.blogPost.upsert({
       where: { slug: post.slug },
-      update: { title: post.title, excerpt: post.excerpt, coverImage: post.coverImage },
-      create: {
-        slug: post.slug,
-        title: post.title,
-        excerpt: post.excerpt,
-        content: L(
-          "Full article content goes here. Edit this from the admin dashboard with the rich text editor.",
-          "Le contenu complet de l'article ici. Modifiable depuis le tableau de bord admin.",
-        ),
-        coverImage: post.coverImage,
-        status: "PUBLISHED",
-        publishedAt: daysFromNow(-7 * (i + 1)),
-        readingMinutes: 4 + i,
-        featured: i === 0,
-        authorId: author.id,
-        categoryId: post.categoryId,
-        tags: {
-          connectOrCreate: post.tags.map((t) => ({
-            where: { slug: t },
-            create: { slug: t, name: L(t, t) },
-          })),
-        },
-      },
+      update: { ...common, tags: { set: [], ...tags } },
+      create: { slug: post.slug, ...common, tags },
     });
   }
 }
