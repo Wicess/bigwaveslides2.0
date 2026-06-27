@@ -333,7 +333,9 @@
     "checkout": "Passer à la caisse",
     "viewCart": "Voir le panier complet",
     "buyLabel": "Achat",
-    "rentLabel": "Location"
+    "rentLabel": "Location",
+    "suggestTitle": "Vous aimerez aussi",
+    "suggestDesc": "Ajoutez-en plus à votre demande — tout est chiffré ensemble."
   },
   "OrderRequest": {
     "name": "Nom complet",

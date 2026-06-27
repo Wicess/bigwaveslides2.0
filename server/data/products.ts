@@ -251,6 +251,21 @@ export async function getProductSlugs() {
   ).catch(() => []);
 }
 
+/** Featured active products for "you might also like" on the checkout page. */
+export async function getCheckoutSuggestions(excludeIds: string[] = [], take = 6) {
+  return withRetry(() =>
+    prisma.product.findMany({
+      where: {
+        status: "ACTIVE",
+        ...(excludeIds.length ? { id: { notIn: excludeIds } } : {}),
+      },
+      select: cardSelect,
+      orderBy: [{ featured: "desc" }, { ratingAvg: "desc" }, { updatedAt: "desc" }],
+      take,
+    }),
+  ).catch(() => []);
+}
+
 export async function getApprovedReviews(productId: string) {
   return withRetry(() =>
     prisma.review.findMany({

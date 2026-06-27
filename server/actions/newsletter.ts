@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { notifyNewsletterSignup } from "@/lib/notifications";
 
 const schema = z.object({
   email: z.string().email(),
@@ -23,6 +24,14 @@ export async function subscribeNewsletter(input: {
   }
 
   try {
+    // Detect whether this is a brand-new (or re-activated) subscription so we
+    // only fire the welcome/admin emails when it's meaningful.
+    const existing = await prisma.newsletterSubscriber.findUnique({
+      where: { email: parsed.data.email },
+      select: { status: true },
+    });
+    const isNew = !existing || existing.status !== "SUBSCRIBED";
+
     await prisma.newsletterSubscriber.upsert({
       where: { email: parsed.data.email },
       update: { status: "SUBSCRIBED" },
@@ -32,6 +41,14 @@ export async function subscribeNewsletter(input: {
         source: parsed.data.source,
       },
     });
+
+    if (isNew) {
+      // Best-effort: never fail the subscription if email sending hiccups.
+      await notifyNewsletterSignup({
+        email: parsed.data.email,
+        locale: parsed.data.locale,
+      }).catch(() => {});
+    }
     return { ok: true };
   } catch {
     return { ok: false, error: "Subscription failed" };

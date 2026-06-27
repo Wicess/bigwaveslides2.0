@@ -4,6 +4,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { getCart } from "@/server/data/cart";
+import { getCheckoutSuggestions } from "@/server/data/products";
+import { getLocalized } from "@/lib/localized";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "@/i18n/navigation";
@@ -30,6 +32,18 @@ export default async function CheckoutPage({ params }: Props) {
     getSettings().catch((): SiteSettings => ({})),
   ]);
 
+  const rawSuggestions = await getCheckoutSuggestions(
+    cart.lines.map((l) => l.productId),
+  );
+  const suggestions = rawSuggestions.map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    name: getLocalized(p.name, locale),
+    image: p.media[0]?.url ?? null,
+    type: p.type,
+    priceCents: p.type === "SALE" ? p.salePriceCents : p.dailyRateCents,
+  }));
+
   return (
     <main className="pt-[108px] sm:pt-[116px]">
       <Section spacing="compact" className="pb-16">
@@ -50,6 +64,7 @@ export default async function CheckoutPage({ params }: Props) {
               cart={cart}
               locale={locale}
               deliveryFromCents={settings.fees?.deliveryBaseCents}
+              suggestions={suggestions}
             />
           </div>
         </Container>

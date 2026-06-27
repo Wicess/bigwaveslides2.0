@@ -333,7 +333,9 @@
     "checkout": "Checkout",
     "viewCart": "View full cart",
     "buyLabel": "Buy",
-    "rentLabel": "Rent"
+    "rentLabel": "Rent",
+    "suggestTitle": "You might also like",
+    "suggestDesc": "Add more to your request — it's all quoted together."
   },
   "OrderRequest": {
     "name": "Full name",

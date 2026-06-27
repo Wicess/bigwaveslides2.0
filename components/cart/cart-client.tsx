@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
-import { setQuantity, removeItem } from "@/server/actions/cart";
+import { setQuantity, removeItem, addToCart } from "@/server/actions/cart";
 import { toast } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,6 +23,15 @@ import { trackEvent } from "@/lib/analytics/client";
 import type { CartLine, CartSummary } from "@/server/data/cart";
 import { OrderRequestForm } from "@/components/cart/order-request-form";
 
+export type CheckoutSuggestion = {
+  id: string;
+  slug: string;
+  name: string;
+  image: string | null;
+  type: "SALE" | "RENTAL" | "BOTH";
+  priceCents: number | null;
+};
+
 function notifyChange() {
   window.dispatchEvent(new CustomEvent(CART_CHANGED_EVENT));
 }
@@ -31,16 +40,45 @@ export function CartClient({
   cart,
   locale,
   deliveryFromCents,
+  suggestions = [],
 }: {
   cart: CartSummary;
   locale: string;
   deliveryFromCents?: number;
+  suggestions?: CheckoutSuggestion[];
 }) {
   const t = useTranslations("Cart");
   const router = useRouter();
   const [lines, setLines] = useState<CartLine[]>(cart.lines);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  const [addingId, setAddingId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
+
+  // Re-pull the cart after a quick-add so the line list reflects the new item.
+  const refreshLines = async () => {
+    try {
+      const res = await fetch(`/api/cart/items?locale=${locale}`, { cache: "no-store" });
+      const data = (await res.json()) as CartSummary;
+      setLines(data.lines);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const quickAdd = (s: CheckoutSuggestion) => {
+    setAddingId(s.id);
+    startTransition(async () => {
+      const res = await addToCart(s.id);
+      if (res.ok) {
+        toast.success(t("added"));
+        notifyChange();
+        await refreshLines();
+      } else {
+        toast.error(res.error ?? t("updateError"));
+      }
+      setAddingId(null);
+    });
+  };
 
   const subtotalCents = lines.reduce((n, l) => n + l.lineTotalCents, 0);
   const count = lines.reduce((n, l) => n + l.quantity, 0);
@@ -172,7 +210,11 @@ export function CartClient({
     </Card>
   );
 
+  const inCart = new Set(lines.map((l) => l.productId));
+  const recommend = suggestions.filter((s) => !inCart.has(s.id)).slice(0, 4);
+
   return (
+    <>
     <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
       <div className="space-y-8">
         {/* Detailed booking — what you're renting / buying. */}
@@ -308,5 +350,60 @@ export function CartClient({
 
       <div className="lg:sticky lg:top-28 lg:self-start">{summary}</div>
     </div>
+
+      {/* You might also like — quick-add straight into this order. */}
+      {recommend.length > 0 ? (
+        <section className="mt-12 border-t border-border pt-8">
+          <h2 className="text-lg font-semibold">{t("suggestTitle")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("suggestDesc")}</p>
+          <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {recommend.map((s) => (
+              <div
+                key={s.id}
+                className="flex flex-col overflow-hidden rounded-2xl border border-border bg-white"
+              >
+                <Link
+                  href={s.type === "RENTAL" ? `/rent/${s.slug}` : `/shop/${s.slug}`}
+                  className="block aspect-[4/3] overflow-hidden bg-muted"
+                >
+                  {s.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={s.image} alt={s.name} className="size-full object-cover" />
+                  ) : null}
+                </Link>
+                <div className="flex flex-1 flex-col p-3">
+                  <Link
+                    href={s.type === "RENTAL" ? `/rent/${s.slug}` : `/shop/${s.slug}`}
+                    className="line-clamp-1 text-sm font-semibold hover:text-primary"
+                  >
+                    {s.name}
+                  </Link>
+                  {s.priceCents != null ? (
+                    <span className="mt-0.5 font-display text-sm font-bold text-primary">
+                      {formatPrice(s.priceCents, locale)}
+                      {s.type !== "SALE" ? (
+                        <span className="text-xs font-medium text-muted-foreground">
+                          {t("perDay")}
+                        </span>
+                      ) : null}
+                    </span>
+                  ) : null}
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    loading={addingId === s.id}
+                    onClick={() => quickAdd(s)}
+                    className="mt-2 w-full gap-1.5"
+                  >
+                    <ShoppingBag className="size-4" /> {t("addToCart")}
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+    </>
   );
 }

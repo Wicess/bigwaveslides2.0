@@ -331,6 +331,44 @@ export async function notifyStatusUpdate(s: {
   });
 }
 
+/* ───────────────── Newsletter ───────────────── */
+
+export async function notifyNewsletterSignup(s: {
+  email: string;
+  locale?: string;
+}): Promise<void> {
+  // Welcome the subscriber.
+  await sendEmail({
+    to: s.email,
+    replyTo: CONTACT_EMAIL,
+    subject: "You're on the list! 🌊 Big Wave Slides",
+    html: renderEmail({
+      heading: "Welcome to the Big Wave family!",
+      preheader: "Thanks for subscribing — splashy tips, offers, and new slides are headed your way.",
+      intro:
+        "Thanks for subscribing to Big Wave Slides. You'll be the first to hear about new slides, seasonal offers, and party-planning tips. Ready to make a splash?",
+      cta: { label: "Browse our slides", url: siteUrl("/rent") },
+      outro: "Not you, or changed your mind? Just reply to this email and we'll remove you right away.",
+    }),
+  });
+
+  // Alert the team.
+  const admins = await adminRecipients();
+  if (admins.length) {
+    await sendEmail({
+      to: admins,
+      replyTo: s.email,
+      subject: `New newsletter subscriber — ${s.email}`,
+      html: renderEmail({
+        heading: "New newsletter subscriber",
+        intro: `${s.email} just subscribed to the newsletter.`,
+        rows: [{ label: "Email", value: s.email }],
+        cta: { label: "View subscribers", url: siteUrl("/admin/newsletter") },
+      }),
+    });
+  }
+}
+
 /* ───────────────── Abandoned cart ───────────────── */
 
 export async function sendAbandonedCartReminder(email: string): Promise<void> {
