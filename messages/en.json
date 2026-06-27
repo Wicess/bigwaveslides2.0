@@ -331,7 +331,9 @@
     "emptyBody": "Browse our slides and add your favorites to start a request.",
     "browseShop": "Browse the shop",
     "checkout": "Checkout",
-    "viewCart": "View full cart"
+    "viewCart": "View full cart",
+    "buyLabel": "Buy",
+    "rentLabel": "Rent"
   },
   "OrderRequest": {
     "name": "Full name",

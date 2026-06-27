@@ -237,7 +237,7 @@ export function CartDrawer({ locale }: { locale: string }) {
                   </div>
                   <p className="mb-3 text-xs text-muted-foreground">{t("totalNote")}</p>
                   <Button asChild variant="gradient" size="lg" className="w-full gap-1.5">
-                    <Link href="/cart" onClick={() => setOpen(false)}>
+                    <Link href="/checkout" onClick={() => setOpen(false)}>
                       {t("checkout")} <ArrowRight className="size-4" />
                     </Link>
                   </Button>

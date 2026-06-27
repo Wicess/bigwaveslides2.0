@@ -39,7 +39,6 @@ export function CartClient({
   const t = useTranslations("Cart");
   const router = useRouter();
   const [lines, setLines] = useState<CartLine[]>(cart.lines);
-  const [step, setStep] = useState<"cart" | "checkout">("cart");
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
@@ -164,156 +163,150 @@ export function CartClient({
       </div>
       <p className="mt-1 text-xs text-muted-foreground">{t("totalNote")}</p>
 
-      {step === "cart" ? (
-        <Button
-          variant="gradient"
-          size="lg"
-          className="mt-5 w-full"
-          onClick={() => {
-            trackEvent({
-              type: "CHECKOUT_START",
-              meta: { itemCount: count, subtotalCents },
-            });
-            setStep("checkout");
-          }}
-        >
-          {t("requestOrder")}
-        </Button>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setStep("cart")}
-          className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-        >
-          <ArrowLeft className="size-4" /> {t("backToCart")}
-        </button>
-      )}
+      <Link
+        href="/rent"
+        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+      >
+        <ArrowLeft className="size-4" /> {t("browseShop")}
+      </Link>
     </Card>
   );
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-      <div>
-        {step === "cart" ? (
+      <div className="space-y-8">
+        {/* Detailed booking — what you're renting / buying. */}
+        <div>
+          <h2 className="mb-2 text-lg font-semibold">{t("title")}</h2>
           <ul className="divide-y divide-border">
             <AnimatePresence initial={false}>
-            {lines.map((line) => (
-              <motion.li
-                key={line.itemId}
-                layout
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, x: -24, transition: { duration: 0.2 } }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="flex gap-4 py-5"
-              >
-                <Link
-                  href={`/shop/${line.slug}`}
-                  className="size-24 shrink-0 overflow-hidden rounded-[var(--radius-lg)] bg-muted"
+              {lines.map((line) => (
+                <motion.li
+                  key={line.itemId}
+                  layout
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, x: -24, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex gap-4 py-5"
                 >
-                  {line.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={line.image}
-                      alt={line.name}
-                      className="size-full object-cover"
-                    />
-                  ) : null}
-                </Link>
+                  <Link
+                    href={line.type === "RENTAL" ? `/rent/${line.slug}` : `/shop/${line.slug}`}
+                    className="size-24 shrink-0 overflow-hidden rounded-[var(--radius-lg)] bg-muted"
+                  >
+                    {line.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={line.image}
+                        alt={line.name}
+                        className="size-full object-cover"
+                      />
+                    ) : null}
+                  </Link>
 
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <div className="flex items-start justify-between gap-3">
-                    <Link
-                      href={`/shop/${line.slug}`}
-                      className="font-semibold hover:text-primary"
-                    >
-                      {line.name}
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => remove(line)}
-                      aria-label={t("remove")}
-                      className="text-muted-foreground transition-colors hover:text-red-600"
-                    >
-                      <Trash2 className="size-4" />
-                    </button>
-                  </div>
-                  <span className="mt-0.5 text-sm text-muted-foreground">
-                    {formatPrice(line.unitPriceCents, locale)}
-                    {line.type !== "SALE" ? t("perDay") : ""}
-                  </span>
-
-                  <div className="mt-auto flex items-center justify-between pt-3">
-                    <div className="inline-flex items-center rounded-full border border-border">
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <div className="flex items-start justify-between gap-3">
+                      <Link
+                        href={line.type === "RENTAL" ? `/rent/${line.slug}` : `/shop/${line.slug}`}
+                        className="font-semibold hover:text-primary"
+                      >
+                        {line.name}
+                      </Link>
                       <button
                         type="button"
-                        onClick={() => changeQty(line, line.quantity - 1)}
-                        aria-label={t("decrease")}
-                        className="grid size-9 place-items-center rounded-l-full hover:bg-muted"
+                        onClick={() => remove(line)}
+                        aria-label={t("remove")}
+                        className="text-muted-foreground transition-colors hover:text-red-600"
                       >
-                        <Minus className="size-3.5" />
-                      </button>
-                      <span className="w-9 text-center text-sm font-semibold">
-                        {line.quantity}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => changeQty(line, line.quantity + 1)}
-                        aria-label={t("increase")}
-                        className="grid size-9 place-items-center rounded-r-full hover:bg-muted"
-                      >
-                        <Plus className="size-3.5" />
+                        <Trash2 className="size-4" />
                       </button>
                     </div>
-                    <span className="font-semibold">
-                      {formatPrice(line.lineTotalCents, locale)}
+                    <span className="mt-0.5 inline-flex w-fit items-center gap-1.5 text-sm text-muted-foreground">
+                      <span
+                        className={
+                          line.type === "SALE"
+                            ? "rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700"
+                            : "rounded-full bg-primary-50 px-2 py-0.5 text-xs font-semibold text-primary"
+                        }
+                      >
+                        {line.type === "SALE" ? t("buyLabel") : t("rentLabel")}
+                      </span>
+                      {formatPrice(line.unitPriceCents, locale)}
+                      {line.type !== "SALE" ? t("perDay") : ""}
                     </span>
+
+                    <div className="mt-auto flex items-center justify-between pt-3">
+                      <div className="inline-flex items-center rounded-full border border-border">
+                        <button
+                          type="button"
+                          onClick={() => changeQty(line, line.quantity - 1)}
+                          aria-label={t("decrease")}
+                          className="grid size-9 place-items-center rounded-l-full hover:bg-muted"
+                        >
+                          <Minus className="size-3.5" />
+                        </button>
+                        <span className="w-9 text-center text-sm font-semibold">
+                          {line.quantity}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => changeQty(line, line.quantity + 1)}
+                          aria-label={t("increase")}
+                          className="grid size-9 place-items-center rounded-r-full hover:bg-muted"
+                        >
+                          <Plus className="size-3.5" />
+                        </button>
+                      </div>
+                      <span className="font-semibold">
+                        {formatPrice(line.lineTotalCents, locale)}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </motion.li>
-            ))}
+                </motion.li>
+              ))}
             </AnimatePresence>
           </ul>
-        ) : (
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold">{t("yourDetails")}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">{t("detailsIntro")}</p>
+        </div>
 
-            <div className="mt-4 rounded-[var(--radius-lg)] bg-muted/50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("nextStepsTitle")}
-              </p>
-              <ol className="mt-2 space-y-1.5 text-sm">
-                {[t("step1"), t("step2"), t("step3")].map((step, i) => (
-                  <li key={i} className="flex gap-2.5">
-                    <span className="grid size-5 shrink-0 place-items-center rounded-full bg-primary text-[11px] font-bold text-white">
-                      {i + 1}
-                    </span>
-                    {step}
-                  </li>
-                ))}
-              </ol>
-            </div>
+        {/* Your details — submitting emails the quote PDF. */}
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold">{t("yourDetails")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("detailsIntro")}</p>
 
-            <div className="mt-5">
-              <OrderRequestForm
-                onSuccess={(num) => {
-                  trackEvent({
-                    type: "ORDER_REQUEST",
-                    meta: { orderNumber: num, itemCount: count, subtotalCents },
-                  });
-                  setOrderNumber(num);
-                  setLines([]);
-                  notifyChange();
-                  router.refresh();
-                }}
-              />
-            </div>
-          </Card>
-        )}
+          <div className="mt-4 rounded-[var(--radius-lg)] bg-muted/50 p-4">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {t("nextStepsTitle")}
+            </p>
+            <ol className="mt-2 space-y-1.5 text-sm">
+              {[t("step1"), t("step2"), t("step3")].map((stepText, i) => (
+                <li key={i} className="flex gap-2.5">
+                  <span className="grid size-5 shrink-0 place-items-center rounded-full bg-primary text-[11px] font-bold text-white">
+                    {i + 1}
+                  </span>
+                  {stepText}
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="mt-5">
+            <OrderRequestForm
+              onSuccess={(num) => {
+                trackEvent({
+                  type: "ORDER_REQUEST",
+                  meta: { orderNumber: num, itemCount: count, subtotalCents },
+                });
+                setOrderNumber(num);
+                setLines([]);
+                notifyChange();
+                router.refresh();
+              }}
+            />
+          </div>
+        </Card>
       </div>
 
-      {summary}
+      <div className="lg:sticky lg:top-28 lg:self-start">{summary}</div>
     </div>
   );
 }

@@ -331,7 +331,9 @@
     "emptyBody": "Parcourez nos toboggans et ajoutez vos favoris pour lancer une demande.",
     "browseShop": "Parcourir la boutique",
     "checkout": "Passer à la caisse",
-    "viewCart": "Voir le panier complet"
+    "viewCart": "Voir le panier complet",
+    "buyLabel": "Achat",
+    "rentLabel": "Location"
   },
   "OrderRequest": {
     "name": "Nom complet",

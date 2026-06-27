@@ -50,7 +50,6 @@ export async function ProductCard({
 
   const base = isRental ? `/rent/${product.slug}` : `/shop/${product.slug}`;
   const href = query ? `${base}?${query}` : base;
-  const rentHref = `/rent/checkout?product=${product.slug}`;
   const image = product.media[0]?.url;
 
   const priceCents = isRental ? product.dailyRateCents : product.salePriceCents;
@@ -113,8 +112,6 @@ export async function ProductCard({
         <div className="mt-auto pt-1">
           <ProductCardActions
             productId={product.id}
-            context={surface}
-            rentHref={rentHref}
             labels={{
               add: t("addToCart"),
               added: t("added"),

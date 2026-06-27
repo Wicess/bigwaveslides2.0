@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { ShoppingCart, Check, ArrowRight } from "lucide-react";
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { addToCart } from "@/server/actions/cart";
 import { CART_CHANGED_EVENT, OPEN_CART_EVENT } from "@/lib/cart-event";
 import { toast } from "@/components/ui/toaster";
@@ -16,14 +16,9 @@ import { Button } from "@/components/ui/button";
  */
 export function ProductCardActions({
   productId,
-  context,
-  rentHref,
   labels,
 }: {
   productId: string;
-  context: "rent" | "shop";
-  /** Destination for "Rent now" (the booking checkout). */
-  rentHref: string;
   labels: { add: string; added: string; primary: string };
 }) {
   const router = useRouter();
@@ -73,24 +68,18 @@ export function ProductCardActions({
         )}
       </Button>
 
-      {context === "rent" ? (
-        <Button asChild variant="gradient" size="sm" className="w-full gap-1.5">
-          <Link href={rentHref}>
-            {labels.primary} <ArrowRight className="size-4" />
-          </Link>
-        </Button>
-      ) : (
-        <Button
-          type="button"
-          variant="gradient"
-          size="sm"
-          loading={pending}
-          onClick={() => add(() => router.push("/cart"))}
-          className="w-full gap-1.5"
-        >
-          {labels.primary} <ArrowRight className="size-4" />
-        </Button>
-      )}
+      {/* "Rent now" / "Buy now" both add the item and go straight to the
+          unified checkout where the quote is generated and emailed. */}
+      <Button
+        type="button"
+        variant="gradient"
+        size="sm"
+        loading={pending}
+        onClick={() => add(() => router.push("/checkout"))}
+        className="w-full gap-1.5"
+      >
+        {labels.primary} <ArrowRight className="size-4" />
+      </Button>
     </div>
   );
 }
