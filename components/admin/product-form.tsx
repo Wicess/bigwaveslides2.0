@@ -29,6 +29,15 @@ export type ProductFormValues = {
   shortFr: string;
   descEn: string;
   descFr: string;
+  // Specifications a renter/buyer needs to know.
+  capacity: string;
+  ageRange: string;
+  dimensions: string;
+  weight: string;
+  powerRequired: string;
+  setupArea: string;
+  featuresEn: string;
+  featuresFr: string;
   images: string[];
 };
 
@@ -138,6 +147,39 @@ export function ProductForm({
         <Field label="Short description (FR)"><Textarea rows={2} {...register("shortFr")} /></Field>
         <Field label="Description (EN)"><Textarea rows={5} {...register("descEn")} /></Field>
         <Field label="Description (FR)"><Textarea rows={5} {...register("descFr")} /></Field>
+      </section>
+
+      {/* Specifications — the spec sheet shown to renters/buyers. */}
+      <section className="space-y-4 rounded-[var(--radius-lg)] border border-border p-4">
+        <p className="text-sm font-semibold">Specifications</p>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Field label="Capacity (people)">
+            <Input type="number" min="0" placeholder="e.g. 4" {...register("capacity")} />
+          </Field>
+          <Field label="Age range">
+            <Input placeholder="e.g. 5+" {...register("ageRange")} />
+          </Field>
+          <Field label="Weight">
+            <Input placeholder="e.g. 285 lbs" {...register("weight")} />
+          </Field>
+          <Field label="Dimensions (L × W × H)">
+            <Input placeholder="e.g. 28 ft L × 14 ft W × 18 ft H" {...register("dimensions")} />
+          </Field>
+          <Field label="Power required">
+            <Input placeholder="e.g. 2 × 1.5 HP blowers, 110V" {...register("powerRequired")} />
+          </Field>
+          <Field label="Setup space needed">
+            <Input placeholder="e.g. 33 × 19 ft level area" {...register("setupArea")} />
+          </Field>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Features (EN — one per line)">
+            <Textarea rows={5} placeholder={"Commercial-grade vinyl\nSafety netting\nFully insured"} {...register("featuresEn")} />
+          </Field>
+          <Field label="Features (FR — one per line)">
+            <Textarea rows={5} {...register("featuresFr")} />
+          </Field>
+        </div>
       </section>
 
       {/* Images — uploaded straight to Cloudflare R2 */}

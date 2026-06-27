@@ -5,8 +5,11 @@ import { notFound } from "next/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { getShopProducts, getProductCategories } from "@/server/data/products";
 import { parseShopQuery } from "@/lib/shop-query";
-import { PageHeader } from "@/components/ui/page-header";
+import { PhotoHero } from "@/components/ui/photo-hero";
 import { ShopView } from "@/components/shop/shop-view";
+
+const SHOP_HERO_IMAGE =
+  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552076322-pu88b6-custom-builds.jpg";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams };
@@ -33,7 +36,7 @@ export default async function ShopPage({ params, searchParams }: Props) {
 
   return (
     <main>
-      <PageHeader tone="brand" eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
+      <PhotoHero image={SHOP_HERO_IMAGE} eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
       <ShopView
         locale={locale}
         categories={categories}

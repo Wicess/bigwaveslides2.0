@@ -25,6 +25,19 @@ export default async function AdminEditProduct({ params }: Props) {
   const name = (product.name as { en?: string; fr?: string }) ?? {};
   const short = (product.shortDescription as { en?: string; fr?: string }) ?? {};
   const desc = (product.description as { en?: string; fr?: string }) ?? {};
+  const dims = (product.dimensions as { size?: string; weight?: string } | null) ?? {};
+  const space = (product.spaceRequired as { value?: string } | null) ?? {};
+  // Features are stored as an array of { en, fr } (or plain strings); split back
+  // into newline-separated EN/FR text for the form.
+  const featureList = Array.isArray(product.features)
+    ? (product.features as unknown[])
+    : [];
+  const featuresEn = featureList
+    .map((f) => (typeof f === "string" ? f : ((f as { en?: string })?.en ?? "")))
+    .join("\n");
+  const featuresFr = featureList
+    .map((f) => (typeof f === "string" ? f : ((f as { fr?: string })?.fr ?? "")))
+    .join("\n");
 
   const defaults: ProductFormValues = {
     id: product.id,
@@ -43,6 +56,14 @@ export default async function AdminEditProduct({ params }: Props) {
     shortFr: short.fr ?? "",
     descEn: desc.en ?? "",
     descFr: desc.fr ?? "",
+    capacity: product.capacity != null ? String(product.capacity) : "",
+    ageRange: product.ageRange ?? "",
+    dimensions: dims.size ?? "",
+    weight: dims.weight ?? "",
+    powerRequired: product.powerRequired ?? "",
+    setupArea: space.value ?? "",
+    featuresEn,
+    featuresFr,
     images: product.media.map((m) => m.url),
   };
 

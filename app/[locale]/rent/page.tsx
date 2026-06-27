@@ -10,8 +10,11 @@ import { parseISODate, toISODate } from "@/lib/rental-pricing";
 import type { ShopSort } from "@/server/data/products";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { PageHeader } from "@/components/ui/page-header";
+import { PhotoHero } from "@/components/ui/photo-hero";
 import { ProductCard } from "@/components/shop/product-card";
+
+const RENT_HERO_IMAGE =
+  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
 import { Pagination } from "@/components/shop/pagination";
 import { RentFilters } from "@/components/rent/rent-filters";
 import { Reveal } from "@/components/motion/reveal";
@@ -52,7 +55,7 @@ export default async function RentPage({ params, searchParams }: Props) {
 
   return (
     <main>
-      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
+      <PhotoHero image={RENT_HERO_IMAGE} eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
       <Section spacing="compact" className="pb-16">
         <Container>
           {dateParam ? (

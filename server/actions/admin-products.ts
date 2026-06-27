@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import { Prisma } from "@prisma/client";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requirePermission, logActivity } from "@/lib/admin-auth";
@@ -32,9 +33,26 @@ const productSchema = z.object({
   shortFr: z.string().max(400).optional().or(z.literal("")),
   descEn: z.string().max(5000).optional().or(z.literal("")),
   descFr: z.string().max(5000).optional().or(z.literal("")),
+  // Specifications (all optional, free text).
+  capacity: z.string().optional().or(z.literal("")),
+  ageRange: z.string().max(60).optional().or(z.literal("")),
+  dimensions: z.string().max(200).optional().or(z.literal("")),
+  weight: z.string().max(60).optional().or(z.literal("")),
+  powerRequired: z.string().max(160).optional().or(z.literal("")),
+  setupArea: z.string().max(200).optional().or(z.literal("")),
+  featuresEn: z.string().max(3000).optional().or(z.literal("")),
+  featuresFr: z.string().max(3000).optional().or(z.literal("")),
   // Ordered image URLs (uploaded to R2). First is the primary image.
   images: z.array(z.string().url()).max(12).optional(),
 });
+
+/** Zip EN/FR feature lines into [{ en, fr }] (FR falls back to EN per line). */
+function buildFeatures(en?: string, fr?: string) {
+  const enLines = (en ?? "").split("\n").map((s) => s.trim()).filter(Boolean);
+  const frLines = (fr ?? "").split("\n").map((s) => s.trim()).filter(Boolean);
+  if (enLines.length === 0) return null;
+  return enLines.map((line, i) => ({ en: line, fr: frLines[i] ?? line }));
+}
 
 export async function saveProduct(
   input: z.input<typeof productSchema>,
@@ -59,6 +77,20 @@ export async function saveProduct(
     featured: d.featured ?? false,
     shortDescription: { en: d.shortEn ?? "", fr: d.shortFr ?? "" },
     description: { en: d.descEn ?? "", fr: d.descFr ?? "" },
+    capacity:
+      d.capacity && d.capacity.trim() !== ""
+        ? Number.parseInt(d.capacity, 10) || null
+        : null,
+    ageRange: d.ageRange?.trim() || null,
+    powerRequired: d.powerRequired?.trim() || null,
+    // dimensions Json holds the printable size + weight; spaceRequired the
+    // setup footprint. Null when both empty so the detail page hides the row.
+    dimensions:
+      d.dimensions?.trim() || d.weight?.trim()
+        ? { size: d.dimensions?.trim() || undefined, weight: d.weight?.trim() || undefined }
+        : Prisma.JsonNull,
+    spaceRequired: d.setupArea?.trim() ? { value: d.setupArea.trim() } : Prisma.JsonNull,
+    features: buildFeatures(d.featuresEn, d.featuresFr) ?? Prisma.JsonNull,
     searchText: `${d.nameEn} ${d.shortEn ?? ""} ${d.sku}`,
   };
 

@@ -17,6 +17,8 @@ export default async function AdminNewProduct() {
     salePrice: "", dailyRate: "", deposit: "",
     categoryId: "", featured: false,
     shortEn: "", shortFr: "", descEn: "", descFr: "",
+    capacity: "", ageRange: "", dimensions: "", weight: "",
+    powerRequired: "", setupArea: "", featuresEn: "", featuresFr: "",
     images: [],
   };
 

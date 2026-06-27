@@ -11,6 +11,8 @@ import {
   ShieldCheck,
   Truck,
   Sparkles,
+  Weight,
+  Maximize2,
 } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import {
@@ -86,6 +88,17 @@ export default async function ProductDetailPage({ params }: Props) {
     product.type === "SALE" ? product.salePriceCents : product.dailyRateCents;
   const isRental = product.type !== "SALE";
 
+  const dims = (product.dimensions as { size?: string; weight?: string } | null) ?? null;
+  const space = (product.spaceRequired as { value?: string } | null) ?? null;
+  // Back-compat: older rows store dimensions as loose values, not { size }.
+  const dimText =
+    dims?.size ??
+    (product.dimensions
+      ? Object.values(product.dimensions as Record<string, unknown>)
+          .filter((v) => typeof v === "string" || typeof v === "number")
+          .join(" × ")
+      : "");
+
   const specs = [
     product.capacity != null
       ? { icon: Users, label: t("capacity"), value: t("people", { count: product.capacity }) }
@@ -93,18 +106,12 @@ export default async function ProductDetailPage({ params }: Props) {
     product.ageRange
       ? { icon: Baby, label: t("ageRange"), value: product.ageRange }
       : null,
+    dimText ? { icon: Ruler, label: t("dimensions"), value: dimText } : null,
+    dims?.weight ? { icon: Weight, label: t("weight"), value: dims.weight } : null,
     product.powerRequired
       ? { icon: Zap, label: t("power"), value: product.powerRequired }
       : null,
-    product.dimensions
-      ? {
-          icon: Ruler,
-          label: t("dimensions"),
-          value: Object.values(product.dimensions as Record<string, unknown>)
-            .filter((v) => typeof v === "string" || typeof v === "number")
-            .join(" × "),
-        }
-      : null,
+    space?.value ? { icon: Maximize2, label: t("spaceNeeded"), value: space.value } : null,
   ].filter(Boolean) as { icon: typeof Users; label: string; value: string }[];
 
   const related = await getRelatedProducts(product.id, product.categoryId);
