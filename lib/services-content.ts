@@ -20,6 +20,8 @@ export type ServiceItem = {
     | "wrench"
     | "shield";
   image: string;
+  /** Short clip that plays on hover over the image. */
+  video: string;
   title: LT;
   tagline: LT;
   /** Paragraphs separated by a blank line. */
@@ -32,6 +34,15 @@ export type ServiceGroup = { key: string; label: LT; items: ServiceItem[] };
 
 const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev";
 
+// Hover clips (uploaded to R2 from images/Videos).
+const VID = {
+  friendsA: `${R2}/videos/1782566574813-1q4s15-friends-laughing-on-water-slide-202606241410.mp4`,
+  friendsB: `${R2}/videos/1782566579369-fb50l4-friends-laughing-on-water-slide-202606241412.mp4`,
+  kids: `${R2}/videos/1782566583289-8xs9fp-inflatable-water-slide-kids-sliding-202606231740.mp4`,
+  hailuo: `${R2}/videos/1782566587792-sl9hf7-hailuo-2-3-cinematic-marketing-video-for-a-luxury-kids-birthday-party.-vibrant-modern-water-0.mp4`,
+  generic: `${R2}/videos/1782566593952-zwfmso-video-202606231747.mp4`,
+};
+
 export const SERVICES_HERO_IMAGE = `${R2}/services/1782552105034-d0i5ga-hero.jpg`;
 
 export const SERVICE_GROUPS: ServiceGroup[] = [
@@ -43,6 +54,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         slug: "event-rentals",
         icon: "party",
         image: `${R2}/services/1782552093459-u6mqiy-event-rentals.jpg`,
+        video: VID.friendsA,
         title: l("Backyard & Party Rentals", "Locations pour fêtes et jardins"),
         tagline: l(
           "Birthdays, pool days, and backyard blowouts — delivered, set up, and ready to splash.",
@@ -64,6 +76,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         slug: "corporate-community-events",
         icon: "building",
         image: `${R2}/services/1782552074294-bmchk4-corporate-community-events.jpg`,
+        video: VID.hailuo,
         title: l("Corporate & Community Events", "Événements d'entreprise et communautaires"),
         tagline: l(
           "Company picnics, festivals, and municipal celebrations people actually remember.",
@@ -85,6 +98,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         slug: "school-camp-church",
         icon: "school",
         image: `${R2}/services/1782552119390-i5m17c-school-camp-church.jpg`,
+        video: VID.kids,
         title: l("School, Camp & Church Events", "Écoles, camps et événements paroissiaux"),
         tagline: l(
           "Safe, insured, age-appropriate fun for field days, camps, and congregations.",
@@ -112,6 +126,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         slug: "water-slide-sales",
         icon: "shop",
         image: `${R2}/services/1782552122121-edy4y1-water-slide-sales.jpg`,
+        video: VID.generic,
         title: l("Water Slide Sales", "Vente de toboggans"),
         tagline: l(
           "Own commercial-grade slides built to take years of summers.",
@@ -133,6 +148,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         slug: "custom-builds",
         icon: "build",
         image: `${R2}/services/1782552076322-pu88b6-custom-builds.jpg`,
+        video: VID.friendsB,
         title: l(
           "Custom Water Slide & Waterpark Construction",
           "Construction sur mesure de toboggans et de parcs aquatiques",
@@ -163,6 +179,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         slug: "delivery-installation",
         icon: "truck",
         image: `${R2}/services/1782552087460-pj161e-delivery-installation.jpg`,
+        video: VID.friendsA,
         title: l("Delivery, Installation & Anchoring", "Livraison, installation et ancrage"),
         tagline: l(
           "Professional, by-the-book setup — every anchor, every time.",
@@ -184,6 +201,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         slug: "maintenance-inspection",
         icon: "wrench",
         image: `${R2}/services/1782552113063-v32fls-maintenance-inspection.jpg`,
+        video: VID.hailuo,
         title: l("Maintenance, Inspection & Repair", "Entretien, inspection et réparation"),
         tagline: l(
           "Keep your investment safe, clean, and ready season after season.",
@@ -205,6 +223,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         slug: "event-staffing",
         icon: "shield",
         image: `${R2}/services/1782552095056-no8wig-event-staffing.jpg`,
+        video: VID.kids,
         title: l("Event Staffing & On-Site Safety", "Personnel d'événement et sécurité sur place"),
         tagline: l(
           "Trained attendants so you can enjoy the day instead of lifeguarding it.",

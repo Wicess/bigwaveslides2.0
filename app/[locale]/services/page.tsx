@@ -18,7 +18,6 @@ import {
 import { routing, type AppLocale } from "@/i18n/routing";
 import { getLocalized } from "@/lib/localized";
 import {
-  SERVICE_GROUPS,
   ALL_SERVICES,
   SERVICES_HERO_IMAGE,
   type ServiceItem,
@@ -29,7 +28,7 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MediaImage } from "@/components/ui/media-image";
+import { HoverVideo } from "@/components/services/hover-video";
 import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
 
@@ -103,85 +102,75 @@ export default async function ServicesPage({ params }: Props) {
         </Container>
       </header>
 
-      {/* Service groups → alternating image/text rows. */}
-      {SERVICE_GROUPS.map((group, gi) => (
-        <Section
-          key={group.key}
-          spacing="default"
-          className={cn(gi % 2 === 1 && "bg-muted/40")}
-        >
-          <Container className="max-w-[84rem]">
-            <h2 className="mb-10 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">
-              <span className="h-px w-8 bg-primary/40" />
-              {getLocalized(group.label, locale)}
-            </h2>
+      {/* Services → continuous alternating bands (no gaps between sections);
+          hover an image to play its clip. */}
+      {ALL_SERVICES.map((s, i) => {
+        const Icon = ICONS[s.icon];
+        const title = getLocalized(s.title, locale);
+        const paragraphs = getLocalized(s.body, locale).split(/\n{2,}/);
+        const flip = i % 2 === 1;
+        return (
+          <section
+            key={s.slug}
+            id={s.slug}
+            className={cn("scroll-mt-28 py-12 sm:py-14", i % 2 === 1 && "bg-muted/40")}
+          >
+            <Container className="max-w-[84rem]">
+              <Reveal>
+                <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+                  {/* Media — image with hover-to-play video */}
+                  <div className={cn("relative", flip && "lg:order-2")}>
+                    <HoverVideo
+                      image={s.image}
+                      video={s.video}
+                      alt={title}
+                      className="aspect-[4/3] w-full shadow-[var(--shadow-soft)]"
+                      sizes="(min-width:1024px) 42vw, 100vw"
+                    />
+                    <span className="pointer-events-none absolute left-4 top-4 z-10 grid size-11 place-items-center rounded-xl bg-white/95 text-primary shadow-md backdrop-blur">
+                      <Icon className="size-6" />
+                    </span>
+                  </div>
 
-            <div className="space-y-16 lg:space-y-24">
-              {group.items.map((s, i) => {
-                const Icon = ICONS[s.icon];
-                const title = getLocalized(s.title, locale);
-                const paragraphs = getLocalized(s.body, locale).split(/\n{2,}/);
-                const flip = i % 2 === 1;
-                return (
-                  <Reveal key={s.slug}>
-                    <section
-                      id={s.slug}
-                      className="grid scroll-mt-28 items-center gap-8 lg:grid-cols-2 lg:gap-14"
-                    >
-                      {/* Image */}
-                      <div className={cn("relative", flip && "lg:order-2")}>
-                        <MediaImage
-                          src={s.image}
-                          alt={title}
-                          className="aspect-[4/3] w-full shadow-[var(--shadow-soft)]"
-                          sizes="(min-width:1024px) 42vw, 100vw"
-                        />
-                        <span className="absolute left-4 top-4 grid size-11 place-items-center rounded-xl bg-white/95 text-primary shadow-md backdrop-blur">
-                          <Icon className="size-6" />
-                        </span>
-                      </div>
+                  {/* Copy */}
+                  <div className={cn(flip && "lg:order-1")}>
+                    <h2 className="font-display text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+                      {title}
+                    </h2>
+                    <p className="mt-3 text-lg font-medium text-primary">
+                      {getLocalized(s.tagline, locale)}
+                    </p>
+                    <div className="mt-4 space-y-3 text-[1.025rem] leading-relaxed text-muted-foreground">
+                      {paragraphs.map((p, pi) => (
+                        <p key={pi}>{p}</p>
+                      ))}
+                    </div>
 
-                      {/* Copy */}
-                      <div className={cn(flip && "lg:order-1")}>
-                        <h3 className="font-display text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
-                          {title}
-                        </h3>
-                        <p className="mt-3 text-lg font-medium text-primary">
-                          {getLocalized(s.tagline, locale)}
-                        </p>
-                        <div className="mt-4 space-y-3 text-[1.025rem] leading-relaxed text-muted-foreground">
-                          {paragraphs.map((p, pi) => (
-                            <p key={pi}>{p}</p>
-                          ))}
-                        </div>
+                    <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                      {t("highlights")}
+                    </p>
+                    <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                      {s.highlights.map((h, hi) => (
+                        <li key={hi} className="flex items-start gap-2 text-sm">
+                          <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                          <span>{getLocalized(h, locale)}</span>
+                        </li>
+                      ))}
+                    </ul>
 
-                        <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                          {t("highlights")}
-                        </p>
-                        <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                          {s.highlights.map((h, hi) => (
-                            <li key={hi} className="flex items-start gap-2 text-sm">
-                              <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                              <span>{getLocalized(h, locale)}</span>
-                            </li>
-                          ))}
-                        </ul>
-
-                        <Button asChild size="lg" variant="gradient" className="mt-7">
-                          <Link href={CTA_HREF[s.cta.kind]}>
-                            {getLocalized(s.cta.label, locale)}
-                            <ArrowRight className="size-4" />
-                          </Link>
-                        </Button>
-                      </div>
-                    </section>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </Container>
-        </Section>
-      ))}
+                    <Button asChild size="lg" variant="gradient" className="mt-7">
+                      <Link href={CTA_HREF[s.cta.kind]}>
+                        {getLocalized(s.cta.label, locale)}
+                        <ArrowRight className="size-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              </Reveal>
+            </Container>
+          </section>
+        );
+      })}
 
       {/* Closing CTA */}
       <Section spacing="compact" className="pb-16">
