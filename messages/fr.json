@@ -62,7 +62,11 @@
     "rentBadge": "À louer",
     "saleBadge": "À vendre",
     "reviews": "avis",
-    "from": "dès"
+    "from": "dès",
+    "addToCart": "Ajouter au panier",
+    "added": "Ajouté",
+    "rentNow": "Louer",
+    "buyNow": "Acheter"
   },
   "Home": {
     "eyebrow": "Vente · Location · Installation",

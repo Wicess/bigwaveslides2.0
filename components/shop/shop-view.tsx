@@ -96,10 +96,10 @@ export async function ShopView({
                 </Button>
               </div>
             ) : (
-              <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-5 grid grid-cols-1 gap-x-4 gap-y-8 min-[440px]:grid-cols-2 lg:grid-cols-3">
                 {items.map((p, i) => (
                   <Reveal key={p.slug} delay={(i % 3) * 0.05}>
-                    <ProductCard product={p} locale={locale} priority={i < 3} />
+                    <ProductCard product={p} locale={locale} context="shop" priority={i < 3} />
                   </Reveal>
                 ))}
               </div>

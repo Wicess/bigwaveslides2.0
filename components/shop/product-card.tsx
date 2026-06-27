@@ -6,8 +6,10 @@ import { cn } from "@/lib/utils";
 import { MediaImage } from "@/components/ui/media-image";
 import { Stars } from "@/components/ui/stars";
 import { Badge } from "@/components/ui/badge";
+import { ProductCardActions } from "@/components/shop/product-card-actions";
 
 export type CardProduct = {
+  id: string;
   slug: string;
   type: "SALE" | "RENTAL" | "BOTH";
   name: unknown;
@@ -24,42 +26,46 @@ export async function ProductCard({
   className,
   priority,
   query,
+  context,
 }: {
   product: CardProduct;
   locale: string;
   className?: string;
   priority?: boolean;
-  /** Optional query string (without `?`) appended to the card link. */
+  /** Optional query string (without `?`) appended to the detail link. */
   query?: string;
+  /** Which surface this card lives on — drives the link + primary action.
+      Defaults to inferring from the product type. */
+  context?: "rent" | "shop";
 }) {
   const t = await getTranslations("Product");
   const name = getLocalized(product.name, locale);
-  const isRental = product.type === "RENTAL";
+
+  // On the rent page everything links to /rent and offers "Rent now"; on the
+  // shop page everything links to /shop and offers "Buy now". For BOTH-type
+  // products the page context decides.
+  const surface: "rent" | "shop" =
+    context ?? (product.type === "RENTAL" ? "rent" : "shop");
+  const isRental = surface === "rent";
+
   const base = isRental ? `/rent/${product.slug}` : `/shop/${product.slug}`;
   const href = query ? `${base}?${query}` : base;
+  const rentHref = `/rent/checkout?product=${product.slug}`;
   const image = product.media[0]?.url;
 
-  const price =
-    product.type === "SALE"
-      ? product.salePriceCents != null
-        ? formatPrice(product.salePriceCents, locale)
-        : null
-      : product.dailyRateCents != null
-        ? formatPrice(product.dailyRateCents, locale)
-        : null;
+  const priceCents = isRental ? product.dailyRateCents : product.salePriceCents;
+  const price = priceCents != null ? formatPrice(priceCents, locale) : null;
 
   return (
-    // White rounded card matching the landing-page card style: a subtle ring +
-    // soft shadow, the whole card lifts on hover, and the photo gently zooms.
-    // `overflow-hidden` clips the zooming image to the rounded corners.
-    <Link
-      href={href}
+    // The whole card lifts on hover; the photo + text link to the detail page,
+    // while the action buttons (a separate client component) sit below.
+    <div
       className={cn(
         "group flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-border/60 shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-soft)]",
         className,
       )}
     >
-      <div className="relative overflow-hidden">
+      <Link href={href} className="relative block overflow-hidden">
         {image ? (
           <MediaImage
             src={image}
@@ -67,46 +73,56 @@ export async function ProductCard({
             rounded={false}
             className="aspect-[4/3] w-full"
             imgClassName="transition-transform duration-700 ease-out group-hover:scale-105"
-            sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw"
+            sizes="(min-width:1280px) 25vw, (min-width:1024px) 33vw, (min-width:440px) 50vw, 100vw"
             priority={priority}
           />
         ) : (
           <div className="aspect-[4/3] w-full bg-muted" />
         )}
-        {/* Floating "Rent" / "Sale" chip, like the category/blog cards. */}
         <Badge
           variant={isRental ? "primary" : "accent"}
           className="absolute left-3 top-3 shadow-sm"
         >
           {isRental ? t("rentBadge") : t("saleBadge")}
         </Badge>
-      </div>
+      </Link>
 
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="line-clamp-1 font-semibold transition-colors group-hover:text-primary">
-          {name}
-        </h3>
-        {/* `mt-auto` pins this row to the bottom so cards of different title
-            lengths still line up their price/rating. */}
-        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+        <Link href={href} className="block">
+          <h3 className="line-clamp-1 font-semibold transition-colors group-hover:text-primary">
+            {name}
+          </h3>
+        </Link>
+
+        <div className="mt-2 flex items-center justify-between gap-2">
           <span className="flex items-center gap-1.5">
             <Stars rating={product.ratingAvg} size="size-3.5" />
-            <span className="text-xs text-muted-foreground">
-              ({product.ratingCount})
-            </span>
+            <span className="text-xs text-muted-foreground">({product.ratingCount})</span>
           </span>
           {price ? (
             <span className="font-display font-bold text-primary">
               {price}
               {isRental ? (
-                <span className="text-xs font-medium text-muted-foreground">
-                  {t("perDay")}
-                </span>
+                <span className="text-xs font-medium text-muted-foreground">{t("perDay")}</span>
               ) : null}
             </span>
           ) : null}
         </div>
+
+        {/* `mt-auto` pins the actions to the bottom so ragged titles still align. */}
+        <div className="mt-auto pt-1">
+          <ProductCardActions
+            productId={product.id}
+            context={surface}
+            rentHref={rentHref}
+            labels={{
+              add: t("addToCart"),
+              added: t("added"),
+              primary: isRental ? t("rentNow") : t("buyNow"),
+            }}
+          />
+        </div>
       </div>
-    </Link>
+    </div>
   );
 }

@@ -62,7 +62,11 @@
     "rentBadge": "For rent",
     "saleBadge": "For sale",
     "reviews": "reviews",
-    "from": "from"
+    "from": "from",
+    "addToCart": "Add to cart",
+    "added": "Added",
+    "rentNow": "Rent now",
+    "buyNow": "Buy now"
   },
   "Home": {
     "eyebrow": "Sell · Rent · Install",
