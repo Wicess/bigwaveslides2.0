@@ -283,6 +283,66 @@ const SLIDES: Slide[] = [
     power: "2 × 2 HP blowers, 110V",
     setup: "39 × 23 ft level area",
   },
+  {
+    slug: "mega-monsoon-28",
+    category: "tall-slides",
+    type: "BOTH",
+    featured: true,
+    name: L("Mega Monsoon 28", "Mega Monsoon 28"),
+    short: L(
+      "Event-grade dual-lane giant with a huge splash pool.",
+      "Géant à deux couloirs de calibre événementiel avec grande piscine.",
+    ),
+    desc: L(
+      "Our biggest crowd-mover. The Mega Monsoon's twin 28-foot lanes keep long festival lines flowing while a massive splash pool soaks everyone at the bottom. Rent it for big events or buy it for your venue.",
+      "Notre plus grande attraction. Les deux couloirs de 28 pieds du Mega Monsoon font avancer les longues files de festival pendant qu'une énorme piscine éclabousse tout le monde en bas. À louer pour les grands événements ou à acheter.",
+    ),
+    features: [
+      L("Event-grade dual lanes", "Doubles couloirs de calibre événementiel"),
+      L("Huge splash pool", "Énorme piscine"),
+      L("High throughput", "Débit élevé"),
+      L("Reinforced anchor points", "Points d'ancrage renforcés"),
+      L("Fully insured", "Entièrement assuré"),
+    ],
+    dailyRate: 620,
+    sale: 13500,
+    deposit: 300,
+    capacity: 2,
+    ageRange: "8+",
+    dimensions: "38 ft L × 19 ft W × 28 ft H",
+    weight: "640 lbs",
+    power: "3 × 2 HP blowers, 110V",
+    setup: "44 × 25 ft level area",
+  },
+  {
+    slug: "palm-paradise-24",
+    category: "racing-slides",
+    type: "RENTAL",
+    name: L("Palm Paradise 24", "Palm Paradise 24"),
+    short: L(
+      "Tropical dual-lane wave slide with palm-tree toppers.",
+      "Toboggan vague à deux couloirs avec palmiers.",
+    ),
+    desc: L(
+      "Bring the resort home. The Palm Paradise pairs two slick 24-foot wave lanes with leafy palm-tree toppers and a wide splash pool — a tropical showpiece that turns any backyard into a beach club.",
+      "Ramenez le complexe à la maison. Le Palm Paradise associe deux couloirs vague de 24 pieds, des palmiers et une grande piscine — une pièce tropicale qui transforme toute cour en club de plage.",
+    ),
+    features: [
+      L("Tropical palm-tree design", "Design tropical avec palmiers"),
+      L("Dual wave lanes", "Doubles couloirs vague"),
+      L("Wide splash pool", "Grande piscine"),
+      L("Commercial-grade vinyl", "Vinyle de qualité commerciale"),
+      L("Fully insured", "Entièrement assuré"),
+    ],
+    dailyRate: 430,
+    deposit: 200,
+    capacity: 2,
+    ageRange: "6+",
+    dimensions: "31 ft L × 16 ft W × 24 ft H",
+    weight: "420 lbs",
+    power: "2 × 1.5 HP blowers, 110V",
+    setup: "37 × 22 ft level area",
+  },
 ];
 
 async function main() {
@@ -299,7 +359,14 @@ async function main() {
   }
 
   for (const s of SLIDES) {
-    const url = await uploadImage(s.slug);
+    // Only upload + (re)set the photo when the product has none yet, so
+    // re-runs don't churn images for products that already have one.
+    const before = await prisma.product.findUnique({
+      where: { slug: s.slug },
+      select: { _count: { select: { media: true } } },
+    });
+    const needsImage = !before || before._count.media === 0;
+    const url = needsImage ? await uploadImage(s.slug) : null;
     const data = {
       name: s.name,
       slug: s.slug,
@@ -329,11 +396,13 @@ async function main() {
       select: { id: true },
     });
 
-    // Primary image
-    await prisma.productMedia.deleteMany({ where: { productId: product.id } });
-    await prisma.productMedia.create({
-      data: { productId: product.id, url, isPrimary: true, order: 0 },
-    });
+    // Primary image (only when we uploaded a fresh one).
+    if (url) {
+      await prisma.productMedia.deleteMany({ where: { productId: product.id } });
+      await prisma.productMedia.create({
+        data: { productId: product.id, url, isPrimary: true, order: 0 },
+      });
+    }
 
     // Rental units so rentable slides are bookable.
     if (s.type !== "SALE") {
@@ -345,7 +414,7 @@ async function main() {
       }
     }
 
-    console.log(`✓ ${s.slug} (${s.type}) → ${url}`);
+    console.log(`✓ ${s.slug} (${s.type}) → ${url ?? "kept existing image"}`);
   }
 
   console.log("\nDone.");
