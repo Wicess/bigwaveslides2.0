@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { PackageOpen } from "lucide-react";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { getRentalProducts } from "@/server/data/rentals";
-import { getProductCategories } from "@/server/data/products";
 import { parseISODate, toISODate } from "@/lib/rental-pricing";
 import type { ShopSort } from "@/server/data/products";
 import { Container } from "@/components/ui/container";
@@ -16,7 +15,6 @@ import { ProductCard } from "@/components/shop/product-card";
 const RENT_HERO_IMAGE =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
 import { Pagination } from "@/components/shop/pagination";
-import { RentFilters } from "@/components/rent/rent-filters";
 import { Reveal } from "@/components/motion/reveal";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -48,10 +46,7 @@ export default async function RentPage({ params, searchParams }: Props) {
   const dateParam = parseISODate(one(sp.date) ?? null);
   const cardQuery = dateParam ? `date=${toISODate(dateParam)}` : undefined;
 
-  const [categories, listing] = await Promise.all([
-    getProductCategories().catch(() => []),
-    getRentalProducts({ category, sort, page }),
-  ]);
+  const listing = await getRentalProducts({ category, sort, page });
 
   return (
     <main>
@@ -63,12 +58,6 @@ export default async function RentPage({ params, searchParams }: Props) {
               {t("dateBanner", { date: toISODate(dateParam) })}
             </p>
           ) : null}
-
-          <RentFilters
-            categories={categories}
-            activeCategory={category}
-            locale={locale}
-          />
 
           {listing.items.length === 0 ? (
             <div className="mt-12 flex flex-col items-center gap-4 text-center">
