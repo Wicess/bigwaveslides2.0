@@ -36,7 +36,19 @@ export default async function ShopPage({ params, searchParams }: Props) {
 
   return (
     <main>
-      <PhotoHero image={SHOP_HERO_IMAGE} eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
+      {/* Photo hero on tablet/desktop only — hidden on phones for a tighter,
+          app-like top. A compact text title stands in on mobile. */}
+      <PhotoHero
+        image={SHOP_HERO_IMAGE}
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("desc")}
+        className="hidden md:block"
+      />
+      <div className="px-5 pt-6 md:hidden">
+        <h1 className="font-display text-2xl font-bold tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("desc")}</p>
+      </div>
       <ShopView
         locale={locale}
         categories={categories}

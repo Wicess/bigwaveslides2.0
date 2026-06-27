@@ -329,7 +329,9 @@
     "backHome": "Back home",
     "emptyTitle": "Your cart is empty",
     "emptyBody": "Browse our slides and add your favorites to start a request.",
-    "browseShop": "Browse the shop"
+    "browseShop": "Browse the shop",
+    "checkout": "Checkout",
+    "viewCart": "View full cart"
   },
   "OrderRequest": {
     "name": "Full name",

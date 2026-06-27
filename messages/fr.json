@@ -329,7 +329,9 @@
     "backHome": "Retour à l’accueil",
     "emptyTitle": "Votre panier est vide",
     "emptyBody": "Parcourez nos toboggans et ajoutez vos favoris pour lancer une demande.",
-    "browseShop": "Parcourir la boutique"
+    "browseShop": "Parcourir la boutique",
+    "checkout": "Passer à la caisse",
+    "viewCart": "Voir le panier complet"
   },
   "OrderRequest": {
     "name": "Nom complet",

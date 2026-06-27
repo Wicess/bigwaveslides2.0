@@ -33,6 +33,8 @@ import { getLocalized } from "@/lib/localized";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { CartBadge } from "@/components/cart/cart-badge";
+import { CartDrawer } from "@/components/cart/cart-drawer";
+import { OPEN_CART_EVENT } from "@/lib/cart-event";
 import { LocaleSwitcher } from "./locale-switcher";
 import type { NavData } from "@/server/data/navigation";
 
@@ -203,10 +205,15 @@ export function SiteHeader({ locale, data }: Props) {
               <Phone className="size-[18px]" />
             </IconChip>
 
-            <IconChip href="/cart" label={t("cart")} className="relative">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT))}
+              aria-label={t("cart")}
+              className="relative grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10"
+            >
               <ShoppingBag className="size-[18px]" />
               <CartBadge />
-            </IconChip>
+            </button>
 
             <Link
               href="/contact"
@@ -243,6 +250,9 @@ export function SiteHeader({ locale, data }: Props) {
         onClose={() => setMobileOpen(false)}
         data={data}
       />
+
+      {/* Slide-in cart drawer — opens from the cart button / OPEN_CART event. */}
+      <CartDrawer locale={locale} />
     </header>
   );
 }
@@ -623,15 +633,18 @@ function MobileMenu({
 
               <div className="mt-4 flex items-center justify-between">
                 <LocaleSwitcher />
-                <Link
-                  href="/cart"
+                <button
+                  type="button"
                   aria-label={t("cart")}
-                  onClick={onClose}
+                  onClick={() => {
+                    onClose();
+                    window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT));
+                  }}
                   className="relative grid size-10 place-items-center rounded-xl border border-border text-foreground transition-colors hover:bg-muted hover:text-primary"
                 >
                   <ShoppingBag className="size-5" />
                   <CartBadge />
-                </Link>
+                </button>
               </div>
             </div>
           </motion.div>

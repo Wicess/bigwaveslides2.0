@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { ShoppingCart, Check, ArrowRight } from "lucide-react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { addToCart } from "@/server/actions/cart";
-import { CART_CHANGED_EVENT } from "@/lib/cart-event";
+import { CART_CHANGED_EVENT, OPEN_CART_EVENT } from "@/lib/cart-event";
 import { toast } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 
@@ -39,8 +39,14 @@ export function ProductCardActions({
         );
         setAdded(true);
         setTimeout(() => setAdded(false), 1600);
-        toast.success(labels.added);
-        after?.();
+        if (after) {
+          // "Buy now" — go straight to checkout.
+          after();
+        } else {
+          // "Add to cart" — slide the cart drawer open.
+          toast.success(labels.added);
+          window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT));
+        }
       } else {
         toast.error(res.error ?? "Couldn't add to cart");
       }

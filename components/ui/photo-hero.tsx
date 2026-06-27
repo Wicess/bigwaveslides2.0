@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Container } from "@/components/ui/container";
+import { cn } from "@/lib/utils";
 
 /**
  * PhotoHero — the full-bleed cover-photo banner used across inner pages (blog
@@ -14,15 +15,23 @@ export function PhotoHero({
   title,
   description,
   children,
+  className,
 }: {
   image: string;
   eyebrow?: ReactNode;
   title: ReactNode;
   description?: ReactNode;
   children?: ReactNode;
+  /** Extra classes on the <header> (e.g. `hidden md:block` to hide on mobile). */
+  className?: string;
 }) {
   return (
-    <header className="relative -mt-[108px] overflow-hidden border-b border-border bg-neutral-900 sm:-mt-[116px]">
+    <header
+      className={cn(
+        "relative -mt-[108px] overflow-hidden border-b border-border bg-neutral-900 sm:-mt-[116px]",
+        className,
+      )}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={image}
