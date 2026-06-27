@@ -5,9 +5,10 @@ import { notFound } from "next/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { getCart } from "@/server/data/cart";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { PageHeader } from "@/components/ui/page-header";
 import { CartClient } from "@/components/cart/cart-client";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -30,15 +31,27 @@ export default async function CheckoutPage({ params }: Props) {
   ]);
 
   return (
-    <main>
-      <PageHeader eyebrow={t("eyebrow")} title={t("checkout")} description={t("desc")} />
+    <main className="pt-[108px] sm:pt-[116px]">
       <Section spacing="compact" className="pb-16">
         <Container>
-          <CartClient
-            cart={cart}
-            locale={locale}
-            deliveryFromCents={settings.fees?.deliveryBaseCents}
-          />
+          <Link
+            href="/rent"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+          >
+            <ArrowLeft className="size-4" /> {t("browseShop")}
+          </Link>
+          <h1 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            {t("checkout")}
+          </h1>
+          <p className="mt-1.5 max-w-2xl text-muted-foreground">{t("desc")}</p>
+
+          <div className="mt-8">
+            <CartClient
+              cart={cart}
+              locale={locale}
+              deliveryFromCents={settings.fees?.deliveryBaseCents}
+            />
+          </div>
         </Container>
       </Section>
     </main>
