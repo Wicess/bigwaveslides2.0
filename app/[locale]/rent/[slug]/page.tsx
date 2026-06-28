@@ -9,25 +9,28 @@ import {
   getRelatedRentals,
   getRentalSlugs,
 } from "@/server/data/rentals";
-import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { getLocalized } from "@/lib/localized";
-import { parseISODate, toISODate } from "@/lib/rental-pricing";
+import { formatPrice } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
 import { Stars } from "@/components/ui/stars";
 import { Link } from "@/i18n/navigation";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductGallery, type GalleryItem } from "@/components/shop/product-gallery";
-import { InstantQuote } from "@/components/rent/instant-quote";
+import { ProductCardActions } from "@/components/shop/product-card-actions";
 import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
 import { productLd, absoluteUrl } from "@/lib/structured-data";
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: SearchParams;
 };
 
 export async function generateStaticParams() {
@@ -53,7 +56,7 @@ function asList(value: unknown, locale: string): string[] {
   return value.map((v) => getLocalized(v, locale, String(v))).filter(Boolean);
 }
 
-export default async function RentalDetailPage({ params, searchParams }: Props) {
+export default async function RentalDetailPage({ params }: Props) {
   const { locale, slug } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
@@ -63,13 +66,6 @@ export default async function RentalDetailPage({ params, searchParams }: Props) 
 
   const t = await getTranslations("RentalDetail");
   const tp = await getTranslations("Product");
-
-  const sp = await searchParams;
-  const dateParam = parseISODate(Array.isArray(sp.date) ? sp.date[0] : sp.date);
-  const initialStart = dateParam ? toISODate(dateParam) : undefined;
-
-  const settings = await getSettings().catch((): SiteSettings => ({}));
-  const fees = settings.fees ?? {};
 
   const name = getLocalized(product.name, locale);
   const shortDescription = getLocalized(product.shortDescription, locale);
@@ -128,7 +124,7 @@ export default async function RentalDetailPage({ params, searchParams }: Props) 
           sku: product.sku,
         })}
       />
-      <Section className="pt-28 sm:pt-32">
+      <Section spacing="compact" className="pt-28 sm:pt-32">
         <Container>
           <nav className="mb-6 text-sm text-muted-foreground">
             <Link href="/rent" className="hover:text-primary">
@@ -139,35 +135,45 @@ export default async function RentalDetailPage({ params, searchParams }: Props) 
           </nav>
 
           <div className="grid gap-10 lg:grid-cols-2">
-            {/* Gallery + info */}
-            <div className="space-y-8">
+            {/* Gallery + details accordion */}
+            <div className="space-y-6">
               <Reveal>
                 <ProductGallery items={gallery} title={name} />
               </Reveal>
 
-              <Reveal delay={0.05} className="space-y-6">
-                {description ? (
-                  <div>
-                    <h2 className="text-lg font-semibold">{t("about")}</h2>
-                    <p className="mt-2 whitespace-pre-line text-muted-foreground">
-                      {description}
-                    </p>
-                  </div>
-                ) : null}
+              <Reveal delay={0.05}>
+                <Accordion
+                  type="multiple"
+                  defaultValue={["about"]}
+                  className="rounded-[var(--radius-lg)] border border-border"
+                >
+                  {description ? (
+                    <AccordionItem value="about" className="px-4 last:border-b-0">
+                      <AccordionTrigger>{t("about")}</AccordionTrigger>
+                      <AccordionContent>
+                        <p className="whitespace-pre-line text-[0.95rem] leading-relaxed">
+                          {description}
+                        </p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ) : null}
 
-                {features.length > 0 ? (
-                  <div>
-                    <h2 className="text-lg font-semibold">{t("features")}</h2>
-                    <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                      {features.map((f) => (
-                        <li key={f} className="flex items-start gap-2 text-sm">
-                          <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
+                  {features.length > 0 ? (
+                    <AccordionItem value="features" className="px-4 last:border-b-0">
+                      <AccordionTrigger>{t("features")}</AccordionTrigger>
+                      <AccordionContent>
+                        <ul className="grid gap-2 sm:grid-cols-2">
+                          {features.map((f) => (
+                            <li key={f} className="flex items-start gap-2 text-foreground/80">
+                              <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" />
+                              {f}
+                            </li>
+                          ))}
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ) : null}
+                </Accordion>
               </Reveal>
             </div>
 
@@ -196,6 +202,21 @@ export default async function RentalDetailPage({ params, searchParams }: Props) 
 
                 <p className="mt-4 text-muted-foreground">{shortDescription}</p>
 
+                {product.dailyRateCents != null ? (
+                  <div className="mt-5 flex items-baseline gap-2">
+                    <span className="font-display text-4xl font-bold text-primary">
+                      {formatPrice(product.dailyRateCents, locale)}
+                    </span>
+                    <span className="text-muted-foreground">{tp("perDay")}</span>
+                  </div>
+                ) : null}
+
+                {product.depositCents ? (
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {t("refundableDeposit")}: {formatPrice(product.depositCents, locale)}
+                  </p>
+                ) : null}
+
                 {specs.length > 0 ? (
                   <ul className="mt-5 grid grid-cols-2 gap-3">
                     {specs.map((s) => {
@@ -221,15 +242,13 @@ export default async function RentalDetailPage({ params, searchParams }: Props) 
                 ) : null}
 
                 <div className="mt-6">
-                  <InstantQuote
+                  <ProductCardActions
                     productId={product.id}
-                    slug={product.slug}
-                    dailyRateCents={product.dailyRateCents ?? 0}
-                    depositCents={product.depositCents}
-                    deliveryBaseCents={fees.deliveryBaseCents}
-                    pickupCents={fees.pickupCents}
-                    initialStart={initialStart}
+                    labels={{ add: tp("addToCart"), added: tp("added"), primary: tp("rentNow") }}
                   />
+                  <p className="mt-2 text-center text-xs text-muted-foreground">
+                    {t("noPaymentNote")}
+                  </p>
                 </div>
 
                 <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-5">
@@ -252,7 +271,7 @@ export default async function RentalDetailPage({ params, searchParams }: Props) 
       </Section>
 
       {related.length > 0 ? (
-        <Section className="bg-muted/40">
+        <Section spacing="compact" className="border-t border-foreground/10 bg-muted/40">
           <Container>
             <SectionHeader title={t("relatedTitle")} />
             <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">

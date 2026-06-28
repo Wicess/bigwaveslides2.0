@@ -25,13 +25,17 @@ import { formatPrice } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Stars } from "@/components/ui/stars";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductGallery, type GalleryItem } from "@/components/shop/product-gallery";
-import { AddToCart } from "@/components/shop/add-to-cart";
+import { ProductCardActions } from "@/components/shop/product-card-actions";
 import { ReviewsSection } from "@/components/shop/reviews-section";
 import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -241,14 +245,12 @@ export default async function ProductDetailPage({ params }: Props) {
                 </ul>
               ) : null}
 
-              {/* CTAs */}
-              <div className="mt-7 space-y-3">
-                <AddToCart productId={product.id} productName={name} />
-                <Button asChild size="lg" variant="outline" className="w-full">
-                  <Link href="/contact">
-                    {t("requestQuote")}
-                  </Link>
-                </Button>
+              {/* CTAs — add to cart + buy now (→ checkout) */}
+              <div className="mt-7">
+                <ProductCardActions
+                  productId={product.id}
+                  labels={{ add: tp("addToCart"), added: tp("added"), primary: tp("buyNow") }}
+                />
               </div>
               <p className="mt-2 text-xs text-muted-foreground">{t("noPaymentNote")}</p>
 
@@ -269,52 +271,59 @@ export default async function ProductDetailPage({ params }: Props) {
         </Container>
       </Section>
 
-      {/* Tabs: description / features / reviews */}
-      <Section spacing="compact">
-        <Container>
-          <Tabs defaultValue="description">
-            <TabsList>
-              <TabsTrigger value="description">{t("tabDescription")}</TabsTrigger>
-              {features.length > 0 ? (
-                <TabsTrigger value="features">{t("tabFeatures")}</TabsTrigger>
-              ) : null}
-              <TabsTrigger value="reviews">
-                {t("tabReviews")} ({product.ratingCount})
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="description" className="max-w-3xl pt-6">
-              <p className="whitespace-pre-line text-muted-foreground">{description}</p>
-            </TabsContent>
+      {/* Details — collapsible dropdowns (description / features / reviews) */}
+      <Section spacing="compact" className="border-t border-foreground/10">
+        <Container className="max-w-3xl">
+          <Accordion
+            type="multiple"
+            defaultValue={["about"]}
+            className="rounded-[var(--radius-lg)] border border-border"
+          >
+            <AccordionItem value="about" className="px-4 last:border-b-0">
+              <AccordionTrigger>{t("tabDescription")}</AccordionTrigger>
+              <AccordionContent>
+                <p className="whitespace-pre-line text-[0.95rem] leading-relaxed">
+                  {description}
+                </p>
+              </AccordionContent>
+            </AccordionItem>
 
             {features.length > 0 ? (
-              <TabsContent value="features" className="pt-6">
-                <ul className="grid gap-3 sm:grid-cols-2">
-                  {features.map((f) => (
-                    <li key={f} className="flex items-start gap-3">
-                      <Check className="mt-0.5 size-5 shrink-0 text-primary" />
-                      <span className="text-sm">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </TabsContent>
+              <AccordionItem value="features" className="px-4 last:border-b-0">
+                <AccordionTrigger>{t("tabFeatures")}</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="grid gap-2.5 sm:grid-cols-2">
+                    {features.map((f) => (
+                      <li key={f} className="flex items-start gap-2.5 text-foreground/80">
+                        <Check className="mt-0.5 size-5 shrink-0 text-primary" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
             ) : null}
 
-            <TabsContent value="reviews" className="pt-6">
-              <ReviewsSection
-                productId={product.id}
-                ratingAvg={product.ratingAvg}
-                ratingCount={product.ratingCount}
-                locale={locale}
-              />
-            </TabsContent>
-          </Tabs>
+            <AccordionItem value="reviews" className="px-4 last:border-b-0">
+              <AccordionTrigger>
+                {t("tabReviews")} ({product.ratingCount})
+              </AccordionTrigger>
+              <AccordionContent>
+                <ReviewsSection
+                  productId={product.id}
+                  ratingAvg={product.ratingAvg}
+                  ratingCount={product.ratingCount}
+                  locale={locale}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Container>
       </Section>
 
       {/* Related */}
       {related.length > 0 ? (
-        <Section className="bg-muted/40">
+        <Section spacing="compact" className="border-t border-foreground/10 bg-muted/40">
           <Container>
             <SectionHeader title={t("relatedTitle")} />
             <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">
