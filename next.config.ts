@@ -7,12 +7,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
-    // Serve images directly from Cloudflare R2's CDN instead of Vercel's image
-    // optimizer. This keeps us off Vercel's Hobby-plan Image Optimization limits
-    // (transformations + cache writes) and shifts image bandwidth onto R2.
-    // Upload web-sized assets to R2; re-enable optimization (remove this line or
-    // wire a Cloudflare Images loader) if you move to a paid plan.
-    unoptimized: true,
+    // Optimize OFF Vercel via a custom loader (lib/image-loader.ts). Safe
+    // passthrough by default; set NEXT_PUBLIC_IMAGE_CDN=wsrv (free, works with
+    // our r2.dev images) or =cloudflare to turn on real resizing + AVIF/WebP,
+    // never touching Vercel's billed optimizer.
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
     remotePatterns: [
       { protocol: "https", hostname: "**.r2.dev" },
       { protocol: "https", hostname: "images.unsplash.com" },
