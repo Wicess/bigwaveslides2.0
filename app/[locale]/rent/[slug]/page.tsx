@@ -124,7 +124,7 @@ export default async function RentalDetailPage({ params }: Props) {
           sku: product.sku,
         })}
       />
-      <Section spacing="compact" className="pt-28 sm:pt-32">
+      <Section spacing="compact" className="pt-6 sm:pt-10">
         <Container>
           <nav className="mb-6 text-sm text-muted-foreground">
             <Link href="/rent" className="hover:text-primary">
@@ -246,9 +246,6 @@ export default async function RentalDetailPage({ params }: Props) {
                     productId={product.id}
                     labels={{ add: tp("addToCart"), added: tp("added"), primary: tp("rentNow") }}
                   />
-                  <p className="mt-2 text-center text-xs text-muted-foreground">
-                    {t("noPaymentNote")}
-                  </p>
                 </div>
 
                 <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-5">
@@ -271,7 +268,7 @@ export default async function RentalDetailPage({ params }: Props) {
       </Section>
 
       {related.length > 0 ? (
-        <Section spacing="compact" className="border-t border-foreground/10 bg-muted/40">
+        <Section spacing="compact" className="border-t border-foreground/10 bg-muted/70">
           <Container>
             <SectionHeader title={t("relatedTitle")} />
             <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">

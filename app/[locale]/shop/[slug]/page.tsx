@@ -148,7 +148,7 @@ export default async function ProductDetailPage({ params }: Props) {
           { name, url: canonical },
         ])}
       />
-      <Section className="pt-28 sm:pt-32">
+      <Section spacing="compact" className="pt-6 sm:pt-10">
         <Container>
           {/* Breadcrumb */}
           <nav className="mb-6 text-sm text-muted-foreground">
@@ -252,7 +252,6 @@ export default async function ProductDetailPage({ params }: Props) {
                   labels={{ add: tp("addToCart"), added: tp("added"), primary: tp("buyNow") }}
                 />
               </div>
-              <p className="mt-2 text-xs text-muted-foreground">{t("noPaymentNote")}</p>
 
               {/* Trust */}
               <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-border pt-5 text-sm">
@@ -323,7 +322,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
       {/* Related */}
       {related.length > 0 ? (
-        <Section spacing="compact" className="border-t border-foreground/10 bg-muted/40">
+        <Section spacing="compact" className="border-t border-foreground/10 bg-muted/70">
           <Container>
             <SectionHeader title={t("relatedTitle")} />
             <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">

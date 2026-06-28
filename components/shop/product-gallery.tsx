@@ -36,7 +36,7 @@ export function ProductGallery({
             src={current.url}
             controls
             playsInline
-            className="aspect-[4/3] w-full object-cover sm:aspect-square"
+            className="aspect-[4/3] w-full object-cover"
           />
         ) : (
           <MediaImage
@@ -45,7 +45,7 @@ export function ProductGallery({
             priority
             rounded={false}
             sizes="(min-width:1024px) 50vw, 100vw"
-            className="aspect-[4/3] w-full sm:aspect-square"
+            className="aspect-[4/3] w-full"
           />
         )}
       </div>
