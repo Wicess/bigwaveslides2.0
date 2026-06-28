@@ -1,66 +1,77 @@
 // reveal.tsx
-// A small wrapper component that fades + slides its children into view the
-// first time they are scrolled onto the screen. Think of it as: "wrap any
-// section in <Reveal> and it will gently animate in as the user scrolls down".
-//
-// If the visitor has turned on the OS "reduce motion" accessibility setting,
-// we skip the animation entirely and just render a normal <div> so nothing
-// moves.
-
-// "use client" tells Next.js this runs in the browser (it uses scroll/animation),
-// not only on the server.
+// Scroll-reveal wrapper: fades + glides its children into view the first time
+// they scroll on-screen. Supports a direction (up/down/left/right) and an
+// optional scale for a soft "zoom-in", with a slow, smooth easing for a
+// premium feel. Falls back to a plain <div> when the visitor prefers reduced
+// motion.
 "use client";
 
 import * as React from "react";
-// framer-motion gives us animated elements (motion.div) and a hook that tells
-// us whether the user prefers reduced motion.
 import { motion, useReducedMotion } from "framer-motion";
-// EASE_OUT is the shared timing curve so all animations feel consistent.
 import { EASE_OUT } from "./variants";
 
-// The props (inputs) this component accepts.
+type Direction = "up" | "down" | "left" | "right" | "none";
+
 type RevealProps = {
   children: React.ReactNode;
   className?: string;
-  /** Vertical offset to travel from (px). */
-  y?: number;
+  /** Direction the element travels in from. */
+  direction?: Direction;
+  /** Distance to travel (px). */
+  distance?: number;
+  /** Also scale up slightly from 96%. */
+  scale?: boolean;
   /** Delay before animating (s). */
   delay?: number;
+  /** Animation duration (s). */
+  duration?: number;
   /** Animate only the first time it enters the viewport. */
   once?: boolean;
+  /** Legacy: explicit vertical offset (overrides direction/distance). */
+  y?: number;
 };
 
-/** Scroll-reveal wrapper. Falls back to a plain element when reduced motion is on. */
+function offset(direction: Direction, distance: number) {
+  switch (direction) {
+    case "up":
+      return { y: distance };
+    case "down":
+      return { y: -distance };
+    case "left":
+      return { x: distance };
+    case "right":
+      return { x: -distance };
+    default:
+      return {};
+  }
+}
+
 export function Reveal({
   children,
   className,
-  y = 24,
+  direction = "up",
+  distance = 28,
+  scale = false,
   delay = 0,
+  duration = 0.7,
   once = true,
+  y,
 }: RevealProps) {
-  // true when the user has asked their device to minimize motion.
   const reduce = useReducedMotion();
 
-  // Accessibility fallback: if reduced motion is preferred, render a plain
-  // <div> with no animation at all.
   if (reduce) {
     return <div className={className}>{children}</div>;
   }
 
-  // Otherwise render an animated element:
-  // - initial: where it starts (invisible and pushed down by `y` pixels)
-  // - whileInView: the target once it scrolls into view (visible, no offset)
-  // - viewport.once: animate only the first time (don't replay on re-scroll)
-  // - viewport.margin "-80px": trigger slightly before it fully enters, so the
-  //   reveal feels timely rather than late.
-  // - transition: how long it takes, an optional delay, and the easing curve.
+  const from = y != null ? { y } : offset(direction, distance);
+
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, ...from, ...(scale ? { scale: 0.96 } : {}) }}
+      whileInView={{ opacity: 1, x: 0, y: 0, ...(scale ? { scale: 1 } : {}) }}
       viewport={{ once, margin: "-80px" }}
-      transition={{ duration: 0.6, delay, ease: EASE_OUT }}
+      transition={{ duration, delay, ease: EASE_OUT }}
     >
       {children}
     </motion.div>

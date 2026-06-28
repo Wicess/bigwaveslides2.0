@@ -49,7 +49,7 @@ export async function FeaturedSlides({
           {/* Only the first four products are shown. delay={i * 0.1} staggers
               each card's reveal animation so they appear one after another. */}
           {products.slice(0, 4).map((product, i) => (
-            <Reveal key={product.slug} delay={i * 0.1}>
+            <Reveal key={product.slug} delay={i * 0.1} scale>
               <FeaturedCard
                 product={product}
                 locale={locale}

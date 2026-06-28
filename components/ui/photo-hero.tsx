@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Container } from "@/components/ui/container";
+import { Parallax } from "@/components/motion/parallax";
 import { cn } from "@/lib/utils";
 
 /**
@@ -34,13 +35,15 @@ export function PhotoHero({
         className,
       )}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={image}
-        alt=""
-        aria-hidden
-        className="pointer-events-none absolute inset-0 size-full object-cover"
-      />
+      <Parallax className="pointer-events-none absolute inset-0" distance={50}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={image}
+          alt=""
+          aria-hidden
+          className="size-full scale-[1.18] object-cover"
+        />
+      </Parallax>
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/55 to-neutral-950/45"

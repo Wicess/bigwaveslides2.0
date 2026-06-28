@@ -84,12 +84,12 @@ export default async function AboutPage({ params }: Props) {
       <Section spacing="compact">
         <Container>
           <div className="grid gap-10 lg:grid-cols-2">
-            <Reveal className="space-y-4">
+            <Reveal direction="right" className="space-y-4">
               <SectionHeader title={t("storyTitle")} />
               <p className="text-muted-foreground">{t("storyP1")}</p>
               <p className="text-muted-foreground">{t("storyP2")}</p>
             </Reveal>
-            <Reveal delay={0.08}>
+            <Reveal direction="left" delay={0.08}>
               <Card
                 variant="glass"
                 className="flex h-full flex-col justify-center gap-3 p-8"

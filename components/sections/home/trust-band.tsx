@@ -10,6 +10,7 @@
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/container";
 import { Marquee } from "@/components/ui/marquee";
+import { Reveal } from "@/components/motion/reveal";
 
 // Base URL of the R2 bucket folder that holds the partner logo images.
 const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/partners";
@@ -33,9 +34,11 @@ export async function TrustBand() {
   return (
     <section className="relative overflow-hidden border-b border-border bg-white py-10 sm:py-12">
       <Container>
-        <p className="text-center text-sm font-bold uppercase tracking-[0.22em] text-primary">
-          {t("ourPartners")}
-        </p>
+        <Reveal>
+          <p className="text-center text-sm font-bold uppercase tracking-[0.22em] text-primary">
+            {t("ourPartners")}
+          </p>
+        </Reveal>
       </Container>
 
       {/*
@@ -43,7 +46,7 @@ export async function TrustBand() {
         sideways. `durationSeconds={44}` sets how long one full loop takes
         (bigger = slower), and `reverse` flips the scroll direction.
       */}
-      <div className="mt-8">
+      <Reveal className="mt-8" delay={0.1}>
         <Marquee durationSeconds={44} reverse>
           {PARTNERS.map((src, i) => (
             // Each logo sits in a fixed-size box. The "group/logo" name lets the
@@ -74,7 +77,7 @@ export async function TrustBand() {
             </span>
           ))}
         </Marquee>
-      </div>
+      </Reveal>
     </section>
   );
 }
