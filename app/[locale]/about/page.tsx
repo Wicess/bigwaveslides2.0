@@ -40,11 +40,27 @@ const STATS: { key: "Events" | "Slides" | "Years" | "Cities"; to: number; suffix
   { key: "Cities", to: 40, suffix: "+" },
 ];
 
-const TEAM: { name: string; role: string }[] = [
-  { name: "Marcus Reed", role: "Founder & CEO" },
-  { name: "Daniela Cruz", role: "Operations Lead" },
-  { name: "Tyrone Walsh", role: "Head of Safety" },
-  { name: "Aisha Bennett", role: "Customer Care" },
+const TEAM: { name: string; role: string; image: string }[] = [
+  {
+    name: "Marcus Reed",
+    role: "Founder & CEO",
+    image: "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/team/1782624097442-0xajff-marcus.jpg",
+  },
+  {
+    name: "Daniela Cruz",
+    role: "Operations Lead",
+    image: "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/team/1782624096502-4tq4jm-daniela.jpg",
+  },
+  {
+    name: "Tyrone Walsh",
+    role: "Head of Safety",
+    image: "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/team/1782624098761-ae6zut-tyrone.jpg",
+  },
+  {
+    name: "Aisha Bennett",
+    role: "Customer Care",
+    image: "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/team/1782624094683-yklqrn-aisha.jpg",
+  },
 ];
 
 export default async function AboutPage({ params }: Props) {
@@ -152,28 +168,52 @@ export default async function AboutPage({ params }: Props) {
       <Section spacing="compact" className="bg-muted/40">
         <Container>
           <SectionHeader
-            eyebrow={t("teamTitle")}
+            eyebrow={t("teamEyebrow")}
             title={t("teamTitle")}
             description={t("teamDesc")}
             align="center"
           />
-          <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {TEAM.map((m, i) => (
-              <Reveal key={m.name} delay={i * 0.05}>
-                <Card className="flex flex-col items-center gap-3 p-6 text-center">
-                  <span className="grid size-20 place-items-center rounded-full bg-[image:var(--gradient-wave)] text-2xl font-bold text-white">
-                    {m.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </span>
-                  <div>
-                    <p className="font-semibold">{m.name}</p>
-                    <p className="text-sm text-muted-foreground">{m.role}</p>
+          <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
+            {TEAM.map((m, i) => {
+              const first = m.name.split(" ")[0] ?? m.name;
+              return (
+                <Reveal key={m.name} delay={i * 0.05}>
+                  <div className="group flex flex-col">
+                    {/* Portrait */}
+                    <div className="relative overflow-hidden rounded-2xl bg-neutral-200">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={m.image}
+                        alt={m.name}
+                        className="aspect-[4/5] w-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-[1.03]"
+                      />
+                    </div>
+
+                    {/* Role + name */}
+                    <p className="mt-4 text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                      {m.role}
+                    </p>
+                    <h3 className="mt-1 font-serif text-2xl font-medium leading-tight">
+                      {m.name}
+                    </h3>
+
+                    {/* Talk-with pill */}
+                    <Link
+                      href="/contact"
+                      className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-neutral-900 py-2 pl-2 pr-4 text-sm font-medium text-white transition-transform hover:-translate-y-0.5"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={m.image}
+                        alt=""
+                        className="size-6 rounded-full object-cover"
+                      />
+                      {t("talkWith", { name: first })}
+                    </Link>
                   </div>
-                </Card>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
         </Container>
       </Section>
