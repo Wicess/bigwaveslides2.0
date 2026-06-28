@@ -6,6 +6,7 @@ import { Clock, ArrowLeft, ArrowUpRight } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { getPostBySlug, getPostSlugs, getRelatedPosts } from "@/server/data/blog";
 import { getLocalized } from "@/lib/localized";
+import { buildMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/format";
 import { getExternalResources } from "@/lib/blog-resources";
 import { extractHeadings } from "@/lib/toc";
@@ -34,10 +35,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return {};
-  return {
+  return buildMetadata({
+    locale,
+    path: `/blog/${slug}`,
     title: getLocalized(post.metaTitle ?? post.title, locale),
     description: getLocalized(post.metaDescription ?? post.excerpt, locale),
-  };
+    image: post.coverImage ?? null,
+    type: "article",
+  });
 }
 
 export default async function PostDetailPage({ params }: Props) {

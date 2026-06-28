@@ -16,6 +16,7 @@ const RENT_HERO_IMAGE =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
 import { Pagination } from "@/components/shop/pagination";
 import { Reveal } from "@/components/motion/reveal";
+import { buildMetadata } from "@/lib/seo";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams };
@@ -23,7 +24,18 @@ type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as AppLocale, namespace: "Rent" });
-  return { title: t("title"), description: t("desc") };
+  return buildMetadata({
+    locale,
+    path: "/rent",
+    title: t("title"),
+    description: t("desc"),
+    keywords: [
+      "water slide rentals",
+      "inflatable water slide rental",
+      "backyard water slide rental",
+      "water slide rental near me",
+    ],
+  });
 }
 
 function one(v: string | string[] | undefined) {

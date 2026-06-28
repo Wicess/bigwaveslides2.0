@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
+import { buildMetadata } from "@/lib/seo";
 import { getPosts, getBlogCategories, getPopularTags } from "@/server/data/blog";
 import { PageHeader } from "@/components/ui/page-header";
 import { BlogView } from "@/components/blog/blog-view";
@@ -16,7 +17,7 @@ export const revalidate = 600;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as AppLocale, namespace: "Blog" });
-  return { title: t("title"), description: t("desc") };
+  return buildMetadata({ locale, path: "/blog", title: t("title"), description: t("desc") });
 }
 
 function one(v: string | string[] | undefined) {

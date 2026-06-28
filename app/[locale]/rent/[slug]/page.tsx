@@ -10,6 +10,7 @@ import {
   getRentalSlugs,
 } from "@/server/data/rentals";
 import { getLocalized } from "@/lib/localized";
+import { buildMetadata } from "@/lib/seo";
 import { formatPrice } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
@@ -42,13 +43,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const product = await getRentalBySlug(slug);
   if (!product) return {};
-  return {
+  return buildMetadata({
+    locale,
+    path: `/rent/${slug}`,
     title: getLocalized(product.metaTitle ?? product.name, locale),
-    description: getLocalized(
-      product.metaDescription ?? product.shortDescription,
-      locale,
-    ),
-  };
+    description: getLocalized(product.metaDescription ?? product.shortDescription, locale),
+    image: product.media?.[0]?.url ?? null,
+  });
 }
 
 function asList(value: unknown, locale: string): string[] {

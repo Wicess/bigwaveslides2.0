@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { getLocalized } from "@/lib/localized";
+import { buildMetadata } from "@/lib/seo";
 import {
   ALL_SERVICES,
   SERVICES_HERO_IMAGE,
@@ -54,7 +55,18 @@ const CTA_HREF: Record<ServiceCtaKind, string> = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as AppLocale, namespace: "ServicesPage" });
-  return { title: t("title"), description: t("desc") };
+  return buildMetadata({
+    locale,
+    path: "/services",
+    title: t("title"),
+    description: t("desc"),
+    keywords: [
+      "water slide rental services",
+      "custom water slide construction",
+      "waterpark builder",
+      "event water slide installation",
+    ],
+  });
 }
 
 export default async function ServicesPage({ params }: Props) {

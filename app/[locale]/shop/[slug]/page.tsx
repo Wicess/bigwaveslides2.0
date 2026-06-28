@@ -21,6 +21,7 @@ import {
   getProductSlugs,
 } from "@/server/data/products";
 import { getLocalized } from "@/lib/localized";
+import { buildMetadata } from "@/lib/seo";
 import { formatPrice } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
@@ -52,13 +53,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return {};
-  return {
+  return buildMetadata({
+    locale,
+    path: `/shop/${slug}`,
     title: getLocalized(product.metaTitle ?? product.name, locale),
-    description: getLocalized(
-      product.metaDescription ?? product.shortDescription,
-      locale,
-    ),
-  };
+    description: getLocalized(product.metaDescription ?? product.shortDescription, locale),
+    image: product.media?.[0]?.url ?? null,
+  });
 }
 
 function asList(value: unknown, locale: string): string[] {

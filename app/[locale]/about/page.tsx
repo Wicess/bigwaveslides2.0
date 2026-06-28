@@ -10,6 +10,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { routing, type AppLocale } from "@/i18n/routing";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
@@ -24,7 +25,7 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as AppLocale, namespace: "About" });
-  return { title: t("title"), description: t("intro") };
+  return buildMetadata({ locale, path: "/about", title: t("title"), description: t("intro") });
 }
 
 const VALUES: { key: 1 | 2 | 3 | 4; icon: LucideIcon }[] = [

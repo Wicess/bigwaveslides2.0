@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { getShopProducts, getProductCategories } from "@/server/data/products";
 import { parseShopQuery } from "@/lib/shop-query";
+import { buildMetadata } from "@/lib/seo";
 import { PhotoHero } from "@/components/ui/photo-hero";
 import { ShopView } from "@/components/shop/shop-view";
 
@@ -17,7 +18,18 @@ type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as AppLocale, namespace: "Shop" });
-  return { title: t("title"), description: t("desc") };
+  return buildMetadata({
+    locale,
+    path: "/shop",
+    title: t("title"),
+    description: t("desc"),
+    keywords: [
+      "commercial water slides for sale",
+      "inflatable water slides for sale",
+      "buy water slide",
+      "giant inflatable water slide",
+    ],
+  });
 }
 
 export default async function ShopPage({ params, searchParams }: Props) {
