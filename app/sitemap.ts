@@ -5,6 +5,7 @@ import { getProductSlugs } from "@/server/data/products";
 import { getRentalSlugs } from "@/server/data/rentals";
 import { getPostSlugs, getBlogCategories, getPopularTags } from "@/server/data/blog";
 import { getProductCategories } from "@/server/data/products";
+import { US_STATES } from "@/lib/locations";
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -17,10 +18,14 @@ const STATIC_PATHS = [
   "/blog",
   "/testimonials",
   "/contact",
+  "/water-slide-rentals",
   "/faq",
   "/privacy-policy",
   "/terms-of-service",
 ];
+
+// Programmatic nationwide location pages.
+const LOCATION_PATHS = US_STATES.map((s) => `/water-slide-rentals/${s.slug}`);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [products, rentals, posts, productCats, blogCats, tags] =
@@ -42,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...tags.map((t) => `/blog/tag/${t.slug}`),
   ];
 
-  const allPaths = [...STATIC_PATHS, ...dynamicPaths];
+  const allPaths = [...STATIC_PATHS, ...LOCATION_PATHS, ...dynamicPaths];
   const now = new Date();
 
   // One entry per locale, with hreflang alternates linking the locale variants.

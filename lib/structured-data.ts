@@ -5,24 +5,6 @@ const NAME = "Big Wave Slides";
 
 type Json = Record<string, unknown>;
 
-// Cities/areas served — drives local-SEO relevance. Edit to match the real
-// delivery area (Columbus, OH metro by default). Used by both schema and the
-// programmatic location pages.
-export const AREA_SERVED = [
-  "Columbus",
-  "Dublin",
-  "Westerville",
-  "Gahanna",
-  "Hilliard",
-  "Grove City",
-  "Powell",
-  "Pickerington",
-  "Reynoldsburg",
-  "Worthington",
-  "New Albany",
-  "Upper Arlington",
-];
-
 export function organizationLd(contact?: {
   email?: string;
   phone?: string;
@@ -36,14 +18,29 @@ export function organizationLd(contact?: {
     name: NAME,
     url: SITE,
     logo: `${SITE}/icon.png`,
-    image: `${SITE}/api/og`,
+    image: `${SITE}/icon.png`,
     priceRange: "$$",
-    areaServed: AREA_SERVED.map((city) => ({ "@type": "City", name: city })),
+    // Nationwide delivery across the United States.
+    areaServed: { "@type": "Country", name: "United States" },
     ...(contact?.email ? { email: contact.email } : {}),
     ...(contact?.phone ? { telephone: contact.phone } : {}),
     ...(contact?.address
       ? { address: { "@type": "PostalAddress", streetAddress: contact.address } }
       : {}),
+  };
+}
+
+/** Per-state LocalBusiness for the programmatic location landing pages. */
+export function localBusinessAreaLd(area: string, url: string): Json {
+  return {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+    name: `${NAME} — Water Slide Rentals in ${area}`,
+    url,
+    logo: `${SITE}/icon.png`,
+    image: `${SITE}/icon.png`,
+    priceRange: "$$",
+    areaServed: { "@type": "State", name: area },
   };
 }
 

@@ -46,8 +46,9 @@ export async function SiteFooter({
 
   // Static link lists, defined once here and mapped into the columns below.
   const exploreLinks = [
-    { href: "/shop", label: tn("shop") },
     { href: "/rent", label: tn("rent") },
+    { href: "/shop", label: tn("shop") },
+    { href: "/water-slide-rentals", label: "Service Areas" },
     { href: "/blog", label: tn("blog") },
     { href: "/about", label: tn("about") },
     { href: "/contact", label: tn("contact") },
