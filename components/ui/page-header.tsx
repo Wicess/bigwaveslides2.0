@@ -63,7 +63,7 @@ export function PageHeader({
         "relative overflow-hidden pb-10 pt-28 sm:pt-32 lg:pb-14",
         // Slide the banner up under the sticky header so the photo reaches the
         // top of the page; bump the top padding back so text clears the nav.
-        overlapHeader && "-mt-[108px] pt-[150px] pb-16 sm:-mt-[116px] sm:pt-[184px] lg:pb-20",
+        overlapHeader && "-mt-[108px] pt-[124px] pb-9 sm:-mt-[116px] sm:pt-[148px] sm:pb-12 lg:pb-12",
         brand
           ? "border-b border-white/10 text-white [background:linear-gradient(180deg,#0a1a2f_0%,#0e2742_100%)]"
           : "border-b border-border",
