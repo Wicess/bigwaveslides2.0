@@ -81,7 +81,7 @@ export default async function AboutPage({ params }: Props) {
       />
 
       {/* Story + mission */}
-      <Section>
+      <Section spacing="compact">
         <Container>
           <div className="grid gap-10 lg:grid-cols-2">
             <Reveal className="space-y-4">
@@ -103,7 +103,7 @@ export default async function AboutPage({ params }: Props) {
       </Section>
 
       {/* Stats */}
-      <Section spacing="compact" className="bg-muted/40">
+      <Section spacing="compact" className="border-t border-border bg-muted/50">
         <Container>
           <SectionHeader title={t("statsTitle")} align="center" />
           <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -124,7 +124,7 @@ export default async function AboutPage({ params }: Props) {
       </Section>
 
       {/* Values */}
-      <Section>
+      <Section spacing="compact" className="border-t border-border">
         <Container>
           <SectionHeader title={t("valuesTitle")} align="center" />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -149,17 +149,15 @@ export default async function AboutPage({ params }: Props) {
       </Section>
 
       {/* Team */}
-      <Section spacing="compact" className="bg-muted/40">
+      <Section spacing="compact" className="border-t border-border bg-muted/50">
         <Container>
           <SectionHeader
-            eyebrow={t("teamEyebrow")}
             title={t("teamTitle")}
             description={t("teamDesc")}
             align="center"
           />
           <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
             {TEAM.map((m, i) => {
-              const first = m.name.split(" ")[0] ?? m.name;
               return (
                 <Reveal key={m.name} delay={i * 0.05}>
                   <div className="group flex flex-col">
@@ -180,20 +178,6 @@ export default async function AboutPage({ params }: Props) {
                     <h3 className="mt-1 font-serif text-2xl font-medium leading-tight">
                       {m.name}
                     </h3>
-
-                    {/* Talk-with pill */}
-                    <Link
-                      href="/contact"
-                      className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-neutral-900 py-2 pl-2 pr-4 text-sm font-medium text-white transition-transform hover:-translate-y-0.5"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={m.image}
-                        alt=""
-                        className="size-6 rounded-full object-cover"
-                      />
-                      {t("talkWith", { name: first })}
-                    </Link>
                   </div>
                 </Reveal>
               );
@@ -203,7 +187,7 @@ export default async function AboutPage({ params }: Props) {
       </Section>
 
       {/* CTA */}
-      <Section spacing="compact" className="pb-16">
+      <Section spacing="compact" className="border-t border-border pb-16">
         <Container>
           <Reveal>
             <Card
