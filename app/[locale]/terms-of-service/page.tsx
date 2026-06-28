@@ -6,7 +6,10 @@ import { routing } from "@/i18n/routing";
 import { TERMS, pickLocale } from "@/lib/legal-content";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { PageHeader } from "@/components/ui/page-header";
+import { PhotoHero } from "@/components/ui/photo-hero";
+
+const TERMS_HERO =
+  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484404870-axgpl1-aquasplash-water-world-at-shanghai-lsnow-indoor-skiing-theme-resort-shanghai-china-photo28-1-2048x1534.jpg";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -23,8 +26,8 @@ export default async function TermsPage({ params }: Props) {
 
   return (
     <main>
-      <PageHeader title={data.title} description={data.intro} />
-      <Section spacing="compact" className="pb-16">
+      <PhotoHero image={TERMS_HERO} title={data.title} description={data.intro} />
+      <Section spacing="compact" className="bg-muted/30 pb-16">
         <Container className="max-w-3xl space-y-8">
           {data.sections.map((s) => (
             <section key={s.heading}>

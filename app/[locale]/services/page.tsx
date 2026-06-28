@@ -26,7 +26,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Card } from "@/components/ui/card";
+import { PhotoHero } from "@/components/ui/photo-hero";
 import { Button } from "@/components/ui/button";
 import { HoverVideo } from "@/components/services/hover-video";
 import { Reveal } from "@/components/motion/reveal";
@@ -66,41 +66,21 @@ export default async function ServicesPage({ params }: Props) {
 
   return (
     <main>
-      {/* Hero — same cover-photo treatment as the article/about pages. */}
-      <header className="relative -mt-[108px] overflow-hidden border-b border-border bg-neutral-900 sm:-mt-[116px]">
-        <img
-          src={SERVICES_HERO_IMAGE}
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute inset-0 size-full object-cover"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/55 to-neutral-950/45"
-        />
-        <Container className="relative z-10 max-w-[84rem] pb-12 pt-[122px] sm:pb-14 sm:pt-[146px]">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-secondary-400">
-            {t("eyebrow")}
-          </p>
-          <h1 className="mt-4 max-w-4xl text-balance font-display text-[2rem] font-bold leading-[1.07] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:text-4xl lg:text-5xl">
-            {t("title")}
-          </h1>
-          <p className="mt-4 max-w-2xl text-base text-white/80 sm:text-lg">{t("desc")}</p>
-
-          {/* Quick-jump pills to each service. */}
-          <div className="mt-7 flex flex-wrap gap-2">
-            {ALL_SERVICES.map((s) => (
-              <a
-                key={s.slug}
-                href={`#${s.slug}`}
-                className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-              >
-                {getLocalized(s.title, locale)}
-              </a>
-            ))}
-          </div>
-        </Container>
-      </header>
+      {/* Hero — centered animated title (shared PhotoHero). */}
+      <PhotoHero image={SERVICES_HERO_IMAGE} title={t("title")} description={t("desc")}>
+        {/* Quick-jump pills to each service. */}
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          {ALL_SERVICES.map((s) => (
+            <a
+              key={s.slug}
+              href={`#${s.slug}`}
+              className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+            >
+              {getLocalized(s.title, locale)}
+            </a>
+          ))}
+        </div>
+      </PhotoHero>
 
       {/* Services → continuous alternating bands (no gaps between sections);
           hover an image to play its clip. */}
@@ -134,10 +114,11 @@ export default async function ServicesPage({ params }: Props) {
 
                   {/* Copy */}
                   <div className={cn(flip && "lg:order-1")}>
-                    <h2 className="font-display text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+                    <h2 className="font-display text-[1.7rem] font-bold leading-[1.1] tracking-tight text-foreground sm:text-4xl">
                       {title}
                     </h2>
-                    <p className="mt-3 text-lg font-medium text-primary">
+                    <span aria-hidden className="mt-3 block h-1 w-12 rounded-full bg-[linear-gradient(90deg,#0099ff,#00d4ff)]" />
+                    <p className="mt-4 text-lg font-medium leading-relaxed text-foreground/70">
                       {getLocalized(s.tagline, locale)}
                     </p>
                     <div className="mt-4 space-y-3 text-[1.025rem] leading-relaxed text-muted-foreground">
@@ -172,19 +153,31 @@ export default async function ServicesPage({ params }: Props) {
         );
       })}
 
-      {/* Closing CTA */}
-      <Section spacing="compact" className="pb-16">
+      {/* Closing CTA — photo background with scrim */}
+      <Section spacing="compact" className="border-t border-foreground/10 pb-16">
         <Container className="max-w-[84rem]">
           <Reveal>
-            <Card
-              variant="glass"
-              className="flex flex-col items-center gap-4 p-10 text-center"
-            >
-              <h2 className="text-2xl font-bold sm:text-3xl">{t("ctaTitle")}</h2>
-              <Button asChild size="lg" variant="gradient">
-                <Link href="/contact">{t("ctaButton")}</Link>
-              </Button>
-            </Card>
+            <div className="relative overflow-hidden rounded-3xl px-6 py-14 text-center shadow-[var(--shadow-soft)] sm:py-16">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={SERVICES_HERO_IMAGE}
+                alt=""
+                aria-hidden
+                className="absolute inset-0 size-full object-cover"
+              />
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,26,47,0.92)_0%,rgba(14,39,66,0.8)_100%)]"
+              />
+              <div className="relative">
+                <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">
+                  {t("ctaTitle")}
+                </h2>
+                <Button asChild size="lg" variant="gradient" className="mt-6">
+                  <Link href="/contact">{t("ctaButton")}</Link>
+                </Button>
+              </div>
+            </div>
           </Reveal>
         </Container>
       </Section>

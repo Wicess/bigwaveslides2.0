@@ -7,9 +7,12 @@ import { routing } from "@/i18n/routing";
 import { FAQS, pickLocale } from "@/lib/legal-content";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { PageHeader } from "@/components/ui/page-header";
+import { PhotoHero } from "@/components/ui/photo-hero";
 import { JsonLd } from "@/components/seo/json-ld";
 import { faqLd } from "@/lib/structured-data";
+
+const FAQ_HERO =
+  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -27,8 +30,8 @@ export default async function FaqPage({ params }: Props) {
   return (
     <main>
       <JsonLd data={faqLd(data.items.map((i) => ({ q: i.q, a: i.a })))} />
-      <PageHeader title={data.title} description={data.intro} />
-      <Section spacing="compact" className="pb-16">
+      <PhotoHero image={FAQ_HERO} title={data.title} description={data.intro} />
+      <Section spacing="compact" className="bg-muted/30 pb-16">
         <Container className="max-w-3xl">
           <ul className="space-y-3">
             {data.items.map((item) => (
