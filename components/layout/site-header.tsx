@@ -103,35 +103,6 @@ export function SiteHeader({ locale, data }: Props) {
               onMouseLeave={() => setOpenMenu(null)}
             >
               <MegaItem
-                id="shop"
-                label={tn("shop")}
-                href="/shop"
-                open={openMenu === "shop"}
-                onOpen={setOpenMenu}
-              >
-                <div className="grid grid-cols-[1.4fr_1fr] gap-5">
-                  <div>
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      {t("megaShopTitle")}
-                    </p>
-                    <div className="grid grid-cols-2 gap-1">
-                      {data.categories.map((c) => (
-                        <PanelLink key={c.slug} href={`/shop/category/${c.slug}`}>
-                          {loc(c.name)}
-                        </PanelLink>
-                      ))}
-                    </div>
-                  </div>
-                  <PanelCta
-                    href="/shop"
-                    title={t("megaShopTitle")}
-                    desc={t("megaShopDesc")}
-                    cta={t("viewAll")}
-                  />
-                </div>
-              </MegaItem>
-
-              <MegaItem
                 id="rent"
                 label={tn("rent")}
                 href="/rent"
@@ -156,6 +127,35 @@ export function SiteHeader({ locale, data }: Props) {
                     title={t("megaRentTitle")}
                     desc={t("megaRentDesc")}
                     cta={t("checkAvailability")}
+                  />
+                </div>
+              </MegaItem>
+
+              <MegaItem
+                id="shop"
+                label={tn("shop")}
+                href="/shop"
+                open={openMenu === "shop"}
+                onOpen={setOpenMenu}
+              >
+                <div className="grid grid-cols-[1.4fr_1fr] gap-5">
+                  <div>
+                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t("megaShopTitle")}
+                    </p>
+                    <div className="grid grid-cols-2 gap-1">
+                      {data.categories.map((c) => (
+                        <PanelLink key={c.slug} href={`/shop/category/${c.slug}`}>
+                          {loc(c.name)}
+                        </PanelLink>
+                      ))}
+                    </div>
+                  </div>
+                  <PanelCta
+                    href="/shop"
+                    title={t("megaShopTitle")}
+                    desc={t("megaShopDesc")}
+                    cta={t("viewAll")}
                   />
                 </div>
               </MegaItem>
@@ -505,8 +505,8 @@ function MobileMenu({
   const tn = useTranslations("Nav");
 
   const sections = [
-    { label: tn("shop"), href: "/shop" },
     { label: tn("rent"), href: "/rent" },
+    { label: tn("shop"), href: "/shop" },
     { label: tn("services"), href: "/services" },
     { label: tn("blog"), href: "/blog" },
     { label: tn("about"), href: "/about" },
