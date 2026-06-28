@@ -17,18 +17,6 @@ import { formatPrice } from "@/lib/format";
 import { MediaImage } from "@/components/ui/media-image";
 import type { CardProduct } from "@/components/shop/product-card";
 
-// Featured-card photos live on Cloudflare R2 (CDN object storage), not in the
-// app's /public folder, so big images load fast and don't bloat the build.
-const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/featured";
-
-/** Curated water-slide imagery for the featured cards (served from R2). */
-const FEATURED_IMAGES = [
-  `${R2}/serengeti.jpg`,
-  `${R2}/blaster.jpg`,
-  `${R2}/rapids.jpg`,
-  `${R2}/aquasplash.jpg`,
-];
-
 export async function FeaturedSlides({
   products,
   locale,
@@ -65,7 +53,6 @@ export async function FeaturedSlides({
               <FeaturedCard
                 product={product}
                 locale={locale}
-                image={FEATURED_IMAGES[i]}
                 // Not above the fold, so these images load lazily, not eagerly.
                 priority={false}
               />
