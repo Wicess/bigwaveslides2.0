@@ -7,10 +7,9 @@ import { getCart } from "@/server/data/cart";
 import { getCheckoutSuggestions } from "@/server/data/products";
 import { getLocalized } from "@/lib/localized";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
-import { ArrowLeft } from "lucide-react";
-import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
+import { Reveal } from "@/components/motion/reveal";
 import { CartClient } from "@/components/cart/cart-client";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -45,28 +44,26 @@ export default async function CheckoutPage({ params }: Props) {
   }));
 
   return (
-    <main className="pt-[108px] sm:pt-[116px]">
-      <Section spacing="compact" className="pb-16">
+    <main>
+      <Section spacing="compact" className="pb-16 pt-8 sm:pt-10">
         <Container>
-          <Link
-            href="/rent"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-          >
-            <ArrowLeft className="size-4" /> {t("browseShop")}
-          </Link>
-          <h1 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            {t("checkout")}
-          </h1>
-          <p className="mt-1.5 max-w-2xl text-muted-foreground">{t("desc")}</p>
-
-          <div className="mt-8">
-            <CartClient
-              cart={cart}
-              locale={locale}
-              deliveryFromCents={settings.fees?.deliveryBaseCents}
-              suggestions={suggestions}
+          {/* Animated, centered title */}
+          <Reveal className="mb-8 text-center sm:mb-10">
+            <h1 className="text-shimmer bg-[linear-gradient(90deg,#0a1a2f_0%,#0099ff_35%,#00d4ff_50%,#0099ff_65%,#0a1a2f_100%)] font-display text-4xl font-extrabold uppercase tracking-tight sm:text-6xl">
+              {t("checkout")}
+            </h1>
+            <span
+              aria-hidden
+              className="mx-auto mt-3 block h-1 w-16 rounded-full bg-[linear-gradient(90deg,#0099ff,#00d4ff)] sm:w-24"
             />
-          </div>
+          </Reveal>
+
+          <CartClient
+            cart={cart}
+            locale={locale}
+            deliveryFromCents={settings.fees?.deliveryBaseCents}
+            suggestions={suggestions}
+          />
         </Container>
       </Section>
     </main>

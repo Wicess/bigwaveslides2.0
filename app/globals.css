@@ -114,6 +114,22 @@
   color: transparent;
 }
 
+/* Shimmering gradient text — pair with a wide bg-[linear-gradient(...)] and
+   bg-clip-text text-transparent. The 200% background slides for a sheen. */
+@utility text-shimmer {
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: bws-shimmer 5s linear infinite;
+}
+
+@keyframes bws-shimmer {
+  to {
+    background-position: -200% center;
+  }
+}
+
 /* Marquee (logo strips / kinetic bands) — duplicate children to loop seamlessly */
 @utility animate-marquee {
   animation: bws-marquee var(--marquee-duration, 32s) linear infinite;
