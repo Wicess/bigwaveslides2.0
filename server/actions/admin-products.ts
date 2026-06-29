@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requirePermission, logActivity } from "@/lib/admin-auth";
+import { submitToIndexNow, localizedUrls } from "@/lib/indexnow";
 
 export type AdminActionResult = { ok: boolean; error?: string; id?: string };
 
@@ -126,6 +127,13 @@ export async function saveProduct(
     });
     revalidateTag("products");
     revalidatePath("/admin/products");
+    // Notify search engines instantly when an active product changes.
+    if (d.status === "ACTIVE") {
+      const paths: string[] = [];
+      if (d.type === "RENTAL" || d.type === "BOTH") paths.push(`/rent/${d.slug}`, "/rent");
+      if (d.type === "SALE" || d.type === "BOTH") paths.push(`/shop/${d.slug}`, "/shop");
+      void submitToIndexNow(paths.flatMap((p) => localizedUrls(p)));
+    }
     return { ok: true, id };
   } catch (error) {
     const message =

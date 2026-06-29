@@ -4,6 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requirePermission, logActivity } from "@/lib/admin-auth";
+import { submitToIndexNow, localizedUrls } from "@/lib/indexnow";
 
 export type AdminActionResult = { ok: boolean; error?: string; id?: string };
 
@@ -66,6 +67,13 @@ export async function savePost(
       summary: `${d.id ? "Updated" : "Created"} post ${d.titleEn}`,
     });
     revalidatePath("/admin/blog");
+    // Notify search engines instantly when a post is published/updated.
+    if (d.status === "PUBLISHED") {
+      void submitToIndexNow([
+        ...localizedUrls(`/blog/${d.slug}`),
+        ...localizedUrls("/blog"),
+      ]);
+    }
     return { ok: true, id };
   } catch {
     return { ok: false, error: "Couldn't save the post (slug may be in use)." };
