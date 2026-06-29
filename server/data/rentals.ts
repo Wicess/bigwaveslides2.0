@@ -11,7 +11,7 @@ export type RentalQuery = {
   pageSize?: number;
 };
 
-export const RENTAL_PAGE_SIZE = 9;
+export const RENTAL_PAGE_SIZE = 12;
 
 const cardSelect = {
   id: true,

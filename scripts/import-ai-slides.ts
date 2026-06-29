@@ -146,9 +146,11 @@ async function main() {
   const byTs = new Map<string, string[]>();
   for (const f of all) {
     const m = f.match(/(2026062913\d\d|2026062912\d\d)/); // only the new 12:xx / 13:xx batch
-    if (!m) continue;
-    const ts = m[1];
-    (byTs.get(ts) ?? byTs.set(ts, []).get(ts)!).push(f);
+    const ts = m?.[1];
+    if (!ts) continue;
+    const arr = byTs.get(ts) ?? [];
+    arr.push(f);
+    byTs.set(ts, arr);
   }
 
   const catIds = new Map<string, string>();
