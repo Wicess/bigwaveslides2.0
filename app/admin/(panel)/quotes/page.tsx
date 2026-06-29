@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import { requirePermission } from "@/lib/admin-auth";
 import { getAdminQuotes } from "@/server/data/admin";
 import { formatDate } from "@/lib/format";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { StatusBadge } from "@/components/admin/status-badge";
 
@@ -12,7 +14,15 @@ export default async function AdminQuotesPage() {
 
   return (
     <div>
-      <AdminPageHeader title="Quotes" description="General, product, and service quote requests." />
+      <AdminPageHeader
+        title="Quotes"
+        description="General, product, and service quote requests."
+        action={
+          <Button asChild size="sm" variant="gradient">
+            <Link href="/admin/quotes/new"><Plus className="size-4" /> New quote</Link>
+          </Button>
+        }
+      />
       <Card className="overflow-hidden">
         {quotes.length === 0 ? (
           <p className="p-8 text-center text-sm text-muted-foreground">No quotes yet.</p>
