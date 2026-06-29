@@ -33,6 +33,57 @@ export type SeoInput = {
   noindex?: boolean;
 };
 
+/**
+ * Keyword-rich SEO copy for a RENTAL product page. Brand-free, high-intent —
+ * leads with "Water Slide Rental" so an unknown brand doesn't waste the title.
+ */
+export function rentProductSeo(name: string, locale: string) {
+  const fr = locale === "fr";
+  return {
+    title: fr
+      ? `Location ${name} — glissade d'eau gonflable`
+      : `${name} Water Slide Rental — Delivered & Set Up`,
+    description: fr
+      ? `Louez la glissade d'eau gonflable ${name} : livraison, installation et assurance comprises pour anniversaires, fêtes de piscine, écoles et églises. Obtenez un devis gratuit.`
+      : `Rent the ${name} inflatable water slide — delivered, set up and fully insured for birthday parties, pool parties, and school & church events. Get a free water slide rental quote.`,
+    keywords: fr
+      ? [`location ${name}`, "location glissade d'eau", "glissade d'eau gonflable", "location glissade d'eau gonflable", "location glissade d'eau près de moi"]
+      : [`${name} rental`, "water slide rental", "inflatable water slide rental", "water slide rental near me", "backyard water slide rental", "party water slide rental"],
+  };
+}
+
+/** Keyword-rich SEO copy for a SALE product page (buying intent). */
+export function saleProductSeo(name: string, locale: string) {
+  const fr = locale === "fr";
+  return {
+    title: fr
+      ? `${name} — glissade d'eau gonflable à vendre`
+      : `${name} — Commercial Water Slide for Sale`,
+    description: fr
+      ? `Achetez la glissade d'eau gonflable commerciale ${name} : qualité robuste, idéale pour la location et la revente, livraison partout aux États-Unis. Demandez un devis.`
+      : `Buy the ${name} commercial inflatable water slide — heavy-duty, built for rentals and resale, with nationwide delivery. Request a water slide price quote.`,
+    keywords: fr
+      ? [`${name} à vendre`, "glissade d'eau à vendre", "glissade d'eau gonflable à vendre", "acheter glissade d'eau", "glissade d'eau commerciale"]
+      : [`buy ${name}`, "commercial water slides for sale", "buy inflatable water slides", "inflatable water slides for sale", "commercial inflatable water slides"],
+  };
+}
+
+/** Keyword-rich SEO copy for a product category listing page. */
+export function categorySeo(name: string, locale: string) {
+  const fr = locale === "fr";
+  return {
+    title: fr
+      ? `${name} — location et vente de glissades d'eau`
+      : `${name} — Rentals & For Sale | Inflatable Water Slides`,
+    description: fr
+      ? `Découvrez nos ${name.toLowerCase()} à louer et à vendre : glissades d'eau gonflables livrées, installées et assurées partout aux États-Unis. Devis gratuit.`
+      : `Browse ${name.toLowerCase()} to rent or buy — inflatable water slides delivered, set up, and insured nationwide. Get a fast, free water slide rental quote.`,
+    keywords: fr
+      ? [`location ${name.toLowerCase()}`, "location glissade d'eau", "glissade d'eau gonflable"]
+      : [`${name.toLowerCase()} rentals`, "water slide rentals", "inflatable water slide rentals", "commercial water slides for sale"],
+  };
+}
+
 export function buildMetadata({
   locale,
   path,

@@ -15,7 +15,7 @@ import {
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
-import { routing, type AppLocale } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { getLocalized } from "@/lib/localized";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -54,17 +54,23 @@ const CTA_HREF: Record<ServiceCtaKind, string> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as AppLocale, namespace: "ServicesPage" });
+  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/services",
-    title: t("title"),
-    description: t("desc"),
+    title: fr
+      ? "Installation, livraison & montage de glissades d'eau"
+      : "Water Slide Installation, Delivery & Setup Services",
+    description: fr
+      ? "Livraison, installation professionnelle, nettoyage et construction sur mesure de glissades d'eau — pour fêtes, événements et parcs aquatiques partout aux États-Unis. Devis gratuit."
+      : "Professional water slide delivery, setup, cleaning and custom builds — for parties, events and water-park projects nationwide. Get a free water slide service quote.",
     keywords: [
-      "water slide rental services",
-      "custom water slide construction",
-      "waterpark builder",
-      "event water slide installation",
+      "water slide installation",
+      "professional water slide installation",
+      "water slide delivery",
+      "water slide setup",
+      "commercial water slide installation",
+      "water slide cleaning service",
     ],
   });
 }

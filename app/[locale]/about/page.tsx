@@ -9,7 +9,7 @@ import {
   Heart,
   type LucideIcon,
 } from "lucide-react";
-import { routing, type AppLocale } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
@@ -24,8 +24,22 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as AppLocale, namespace: "About" });
-  return buildMetadata({ locale, path: "/about", title: t("title"), description: t("intro") });
+  const fr = locale === "fr";
+  return buildMetadata({
+    locale,
+    path: "/about",
+    title: fr
+      ? "À propos — location & vente de glissades d'eau aux États-Unis"
+      : "About Us — Water Slide Rentals & Sales Across the USA",
+    description: fr
+      ? "Spécialistes de la location et de la vente de glissades d'eau gonflables : entièrement assurés, propres et ponctuels pour des fêtes et événements inoubliables partout aux États-Unis."
+      : "Family-run water slide rental and sales specialists — fully insured, spotless, and on time for unforgettable parties and events nationwide. Meet the team behind the splash.",
+    keywords: [
+      "water slide rental company",
+      "inflatable rental company",
+      "water slide rentals USA",
+    ],
+  });
 }
 
 const VALUES: { key: 1 | 2 | 3 | 4; icon: LucideIcon }[] = [

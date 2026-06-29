@@ -43,11 +43,14 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   ),
   title: {
-    default: "Big Wave Slides — Sell · Rent · Install Water Slides",
-    template: "%s · Big Wave Slides",
+    // Keyword-first, brand-free: an unknown brand in every title wastes the
+    // most valuable SEO space. Pages set their own complete titles, so the
+    // template is a pass-through (no automatic brand suffix).
+    default: "Water Slide Rentals & Inflatable Water Slides for Sale | USA",
+    template: "%s",
   },
   description:
-    "Premium water slides to buy, rent, and install for unforgettable parties, events, and gatherings.",
+    "Rent or buy inflatable water slides across the USA — delivered, set up, and fully insured for birthday parties, pool parties, and events. Get a free water slide rental quote.",
   openGraph: {
     type: "website",
     siteName: "Big Wave Slides",

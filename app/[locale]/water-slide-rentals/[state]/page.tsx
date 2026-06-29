@@ -42,17 +42,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, state } = await params;
   const loc = getStateBySlug(state);
   if (!loc) return {};
+  const cities3 = loc.cities.slice(0, 3).join(", ");
   return buildMetadata({
     locale,
     path: `/water-slide-rentals/${loc.slug}`,
-    title: `Water Slide Rentals in ${loc.name}`,
-    description: `Premium inflatable water slide rentals delivered across ${loc.name} — including ${loc.cities
-      .slice(0, 3)
-      .join(", ")}. Fully insured, delivered, and set up for birthdays, events & festivals. Free quote.`,
+    title: `Water Slide Rentals in ${loc.name} — Delivered & Set Up`,
+    description: `Rent inflatable water slides in ${loc.name} — delivered, set up and fully insured for birthday parties, pool parties, school and church events in ${cities3} and nearby. Get a free water slide rental quote.`,
     keywords: [
       `water slide rentals ${loc.name}`,
       `inflatable water slide rental ${loc.name}`,
       `water slide rental near me`,
+      `bounce house water slide rental ${loc.name}`,
+      `backyard water slide rental ${loc.name}`,
+      `party water slide rental ${loc.name}`,
       ...loc.cities.map((c) => `water slide rental ${c}`),
     ],
   });

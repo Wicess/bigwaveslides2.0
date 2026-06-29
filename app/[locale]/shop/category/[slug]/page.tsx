@@ -10,6 +10,7 @@ import {
 } from "@/server/data/products";
 import { parseShopQuery } from "@/lib/shop-query";
 import { getLocalized } from "@/lib/localized";
+import { buildMetadata, categorySeo } from "@/lib/seo";
 import { PageHeader } from "@/components/ui/page-header";
 import { ShopView } from "@/components/shop/shop-view";
 
@@ -28,10 +29,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const category = await getCategoryBySlug(slug);
   if (!category) return {};
-  return {
-    title: getLocalized(category.metaTitle ?? category.name, locale),
-    description: getLocalized(category.metaDescription ?? category.description, locale),
-  };
+  const name = getLocalized(category.name, locale);
+  const seo = categorySeo(name, locale);
+  const customTitle = category.metaTitle ? getLocalized(category.metaTitle, locale) : "";
+  const customDesc = category.metaDescription ? getLocalized(category.metaDescription, locale) : "";
+  return buildMetadata({
+    locale,
+    path: `/shop/category/${slug}`,
+    title: customTitle || seo.title,
+    description: customDesc || seo.description,
+    keywords: seo.keywords,
+  });
 }
 
 export default async function ShopCategoryPage({ params, searchParams }: Props) {

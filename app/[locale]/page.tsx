@@ -11,10 +11,12 @@
  * language code (e.g. "en", "es") is captured and passed in via `params`, so
  * the same file serves every supported language.
  */
+import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { buildMetadata } from "@/lib/seo";
 import { getHomeData, type HomeData } from "@/server/data/home";
 import { Hero } from "@/components/sections/home/hero";
 import { TrustBand } from "@/components/sections/home/trust-band";
@@ -27,6 +29,43 @@ import { FinalCta } from "@/components/sections/home/final-cta";
 
 // In the App Router, `params` arrives as a Promise that we `await` below.
 type Props = { params: Promise<{ locale: string }> };
+
+// Conversion-first homepage metadata. Leads with the highest-intent keyword
+// ("Water Slide Rentals Near You"), stacks the buying signals (delivery, setup,
+// insurance, free quote), and adds a clear CTA — for a brand-new brand this
+// wins clicks far better than putting the unknown brand name first.
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const fr = locale === "fr";
+  return buildMetadata({
+    locale,
+    path: "/",
+    title: fr
+      ? "Location de glissades d'eau près de chez vous — livrées & assurées"
+      : "Water Slide Rentals Near You — Delivered, Set Up & Insured",
+    description: fr
+      ? "Louez ou achetez des glissades d'eau gonflables partout aux États-Unis — livraison, installation et assurance comprises. Parfait pour anniversaires, fêtes de piscine et événements. Obtenez un devis gratuit en quelques minutes — réservez aujourd'hui !"
+      : "Rent or buy inflatable water slides anywhere in the USA — delivery, setup & full insurance all included. Perfect for birthday parties, pool parties & events. Get a free quote in minutes — book today!",
+    keywords: fr
+      ? [
+          "location glissade d'eau",
+          "location glissade d'eau près de moi",
+          "location glissade d'eau gonflable",
+          "glissade d'eau gonflable à vendre",
+          "location de fête",
+        ]
+      : [
+          "water slide rentals",
+          "water slide rental near me",
+          "inflatable water slide rentals",
+          "commercial water slides for sale",
+          "buy water slides",
+          "party water slide rentals",
+          "backyard water slide rentals",
+          "birthday party water slide rentals",
+        ],
+  });
+}
 
 // Safe default used when the data fetch fails (see getHomeData().catch below).
 // The page still renders with empty lists instead of crashing.

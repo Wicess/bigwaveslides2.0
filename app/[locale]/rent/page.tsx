@@ -3,7 +3,7 @@ import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { PackageOpen } from "lucide-react";
-import { routing, type AppLocale } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { getRentalProducts } from "@/server/data/rentals";
 import { parseISODate, toISODate } from "@/lib/rental-pricing";
 import type { ShopSort } from "@/server/data/products";
@@ -23,17 +23,23 @@ type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as AppLocale, namespace: "Rent" });
+  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/rent",
-    title: t("title"),
-    description: t("desc"),
+    title: fr
+      ? "Location de glissades d'eau — gonflables livrées & installées"
+      : "Water Slide Rentals — Inflatable Slides Delivered & Set Up",
+    description: fr
+      ? "Louez des glissades d'eau gonflables près de chez vous — livraison, installation et assurance comprises pour anniversaires, fêtes de piscine, écoles et églises. Devis gratuit."
+      : "Rent inflatable water slides near you — delivered, set up and fully insured for birthday parties, pool parties, and school & church events. Get a free rental quote.",
     keywords: [
       "water slide rentals",
-      "inflatable water slide rental",
-      "backyard water slide rental",
+      "inflatable water slide rentals",
       "water slide rental near me",
+      "backyard water slide rentals",
+      "party water slide rentals",
+      "giant water slide rentals",
     ],
   });
 }
