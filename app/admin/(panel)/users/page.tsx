@@ -15,7 +15,8 @@ export default async function AdminUsersPage() {
       <AdminPageHeader title="Admin users" description="Staff accounts and their roles." />
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <Card className="overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Desktop table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm">
               <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
@@ -51,6 +52,33 @@ export default async function AdminUsersPage() {
               </tbody>
             </table>
           </div>
+
+          {/* Mobile cards */}
+          <ul className="divide-y divide-border md:hidden">
+            {users.map((u) => (
+              <li key={u.id} className="p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <span className="min-w-0">
+                    <span className="block truncate font-medium">
+                      {u.name}
+                      {!u.isActive ? <Badge variant="outline" className="ml-2">Inactive</Badge> : null}
+                    </span>
+                    <span className="block truncate text-xs text-muted-foreground">{u.email}</span>
+                    <span className="mt-0.5 block text-xs text-muted-foreground">
+                      {u.role?.name ?? "—"} · {u.lastLoginAt ? formatDate(u.lastLoginAt, "en") : "Never"}
+                    </span>
+                  </span>
+                  <div className="flex shrink-0 gap-1">
+                    <EditUserButton
+                      user={{ id: u.id, name: u.name, email: u.email, roleId: u.roleId }}
+                      roles={roles}
+                    />
+                    <ToggleUserButton id={u.id} isActive={u.isActive} />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </Card>
 
         <Card className="h-fit p-5">
