@@ -116,6 +116,12 @@ export default async function LocaleLayout({
     // `lang` is set per locale so screen readers and search engines know the language.
     <html lang={locale}>
       <body className="min-h-dvh antialiased">
+        {/* Speed: warm up connections to the image hosts (R2 CDN + wsrv resizer)
+            so the first images don't pay full DNS+TLS latency. React hoists
+            these resource hints into <head>. */}
+        <link rel="preconnect" href="https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev" crossOrigin="" />
+        <link rel="preconnect" href="https://wsrv.nl" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://wsrv.nl" />
         {/* "Skip to content" link: hidden until focused via keyboard (accessibility). */}
         <a
           href="#main-content"
