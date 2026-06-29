@@ -32,7 +32,10 @@ function useWsrv(src: string): boolean {
 }
 
 export default function imageLoader({ src, width, quality }: LoaderArgs): string {
-  const q = quality ?? 72;
+  // Floor the quality at 82: next/image defaults to 75, which visibly softens
+  // detailed marketing photos once re-encoded to WebP. 82 keeps them crisp
+  // while still far smaller than the full-resolution originals.
+  const q = Math.max(quality ?? 82, 82);
 
   // Never transform data URIs or SVGs.
   if (src.startsWith("data:") || src.endsWith(".svg")) return src;

@@ -4,7 +4,7 @@
 // Run:  dotenv -e .env.local -- tsx scripts/indexnow-submit.ts
 //   or: SITE=https://bigwaveslides.com tsx scripts/indexnow-submit.ts
 const KEY = "a6c8a198654f4812ae52d2692674c8a2";
-const SITE = (process.env.SITE ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://bigwaveslides.com").replace(/\/$/, "");
+const SITE = (process.env.SITE ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bigwaveslides.com").replace(/\/$/, "");
 
 async function main() {
   const host = new URL(SITE).host;
