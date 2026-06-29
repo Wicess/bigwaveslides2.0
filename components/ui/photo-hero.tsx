@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Parallax } from "@/components/motion/parallax";
 import { cn } from "@/lib/utils";
@@ -36,13 +37,19 @@ export function PhotoHero({
       )}
     >
       <Parallax className="pointer-events-none absolute inset-0" distance={50}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={image}
-          alt=""
-          aria-hidden
-          className="size-full scale-[1.18] object-cover"
-        />
+        <div className="relative size-full">
+          {/* `priority` preloads the hero so it paints immediately (no black
+              flash on first load / client nav); the custom loader resizes it. */}
+          <Image
+            src={image}
+            alt=""
+            aria-hidden
+            fill
+            priority
+            sizes="100vw"
+            className="scale-[1.18] object-cover"
+          />
+        </div>
       </Parallax>
       <div
         aria-hidden

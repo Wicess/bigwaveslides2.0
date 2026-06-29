@@ -245,6 +245,94 @@
   }
 }
 
+/* ── Scroll-driven reveal (used by <Reveal>) ──────────────────────────────
+   Content is visible by default. Where supported, elements glide in as they
+   enter the viewport — entirely in CSS, so nothing waits on JS/hydration.
+   Above-the-fold elements are past their entry range at load, so they render
+   in their final (visible) state with no flash. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      animation: bws-reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+    [data-reveal="down"] {
+      animation-name: bws-reveal-down;
+    }
+    [data-reveal="left"] {
+      animation-name: bws-reveal-left;
+    }
+    [data-reveal="right"] {
+      animation-name: bws-reveal-right;
+    }
+    [data-reveal="none"] {
+      animation-name: bws-reveal-fade;
+    }
+    [data-reveal-scale] {
+      animation-name: bws-reveal-scale;
+    }
+  }
+}
+@keyframes bws-reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes bws-reveal-down {
+  from {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes bws-reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes bws-reveal-right {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes bws-reveal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes bws-reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Lenis smooth-scroll (required base styles) */
 @layer base {
   html.lenis,

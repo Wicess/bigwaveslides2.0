@@ -57,6 +57,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: ["/api/og"],
   },
+  // Search-engine ownership verification (Google Search Console + Bing).
+  verification: {
+    google: "EiaEaBxPwPlkg1Q-kchHGk0G47tnHzV55VN85wQAf1I",
+    other: { "msvalidate.01": "A8C9495020F192A25CD68B7F02D73D38" },
+  },
 };
 
 export const viewport: Viewport = {

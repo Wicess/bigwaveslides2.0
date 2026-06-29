@@ -181,32 +181,25 @@ export async function SiteFooter({
             ) : null}
           </ul>
 
-          {/* Social section — only shown if at least one social URL is set.
-              Each individual button is likewise guarded by its own check. */}
-          {social.instagram || social.facebook || social.tiktok ? (
-            <div className="mt-7">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
-                {t("followUs")}
-              </p>
-              <div className="mt-3 flex gap-2.5">
-                {social.instagram ? (
-                  <SocialLink href={social.instagram} label="Instagram">
-                    <InstagramIcon className="size-[18px]" />
-                  </SocialLink>
-                ) : null}
-                {social.facebook ? (
-                  <SocialLink href={social.facebook} label="Facebook">
-                    <FacebookIcon className="size-[18px]" />
-                  </SocialLink>
-                ) : null}
-                {social.tiktok ? (
-                  <SocialLink href={social.tiktok} label="TikTok">
-                    <TiktokIcon className="size-[18px]" />
-                  </SocialLink>
-                ) : null}
-              </div>
+          {/* Social section — icons are always shown. Each one is an active
+              link only when its URL is set in the admin panel; otherwise it
+              renders inactive (dimmed, non-clickable) until a link is added. */}
+          <div className="mt-7">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
+              {t("followUs")}
+            </p>
+            <div className="mt-3 flex gap-2.5">
+              <SocialLink href={social.instagram} label="Instagram">
+                <InstagramIcon className="size-[18px]" />
+              </SocialLink>
+              <SocialLink href={social.facebook} label="Facebook">
+                <FacebookIcon className="size-[18px]" />
+              </SocialLink>
+              <SocialLink href={social.tiktok} label="TikTok">
+                <TiktokIcon className="size-[18px]" />
+              </SocialLink>
             </div>
-          ) : null}
+          </div>
         </div>
       </Container>
 
@@ -234,19 +227,33 @@ export async function SiteFooter({
 }
 
 /**
- * SocialLink — a circular icon button linking to a social profile. It opens in
- * a new tab (`target="_blank"`) and uses `rel="noopener noreferrer"`, a security
- * best practice that prevents the new page from accessing this window.
+ * SocialLink — a circular icon button for a social profile. When `href` is set
+ * (via the admin panel) it's an active link that opens in a new tab with the
+ * `rel="noopener noreferrer"` security best practice. When no link is set it
+ * renders inactive: dimmed and non-clickable, so the icon is always visible but
+ * only "lights up" once a real URL is added in the admin panel.
  */
 function SocialLink({
   href,
   label,
   children,
 }: {
-  href: string;
+  href?: string;
   label: string;
   children: React.ReactNode;
 }) {
+  // Inactive state — no link configured yet.
+  if (!href) {
+    return (
+      <span
+        aria-label={`${label} (not linked yet)`}
+        aria-disabled="true"
+        className="grid size-11 cursor-default place-items-center rounded-full bg-white/5 text-white/30 ring-1 ring-white/5"
+      >
+        {children}
+      </span>
+    );
+  }
   return (
     <a
       href={href}

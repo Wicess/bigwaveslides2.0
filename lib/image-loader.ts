@@ -18,15 +18,28 @@ type LoaderArgs = { src: string; width: number; quality?: number };
 const MODE = process.env.NEXT_PUBLIC_IMAGE_CDN;
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
+// Default behaviour: resize remote (R2/Unsplash/etc.) images through wsrv.nl —
+// a free, Cloudflare-backed image proxy — so we ship right-sized WebP instead
+// of full-resolution originals, with ZERO Vercel optimizer cost. Local/relative
+// assets pass through untouched. Set NEXT_PUBLIC_IMAGE_CDN=off to disable, or
+// =cloudflare to use Cloudflare Image Resizing on a proxied domain instead.
+function useWsrv(src: string): boolean {
+  if (MODE === "off") return false;
+  if (MODE === "wsrv") return true;
+  if (MODE === "cloudflare") return false;
+  // Auto: optimize only absolute http(s) images (our R2 CDN + remote hosts).
+  return src.startsWith("http");
+}
+
 export default function imageLoader({ src, width, quality }: LoaderArgs): string {
   const q = quality ?? 72;
 
   // Never transform data URIs or SVGs.
   if (src.startsWith("data:") || src.endsWith(".svg")) return src;
 
-  if (MODE === "wsrv") {
+  if (useWsrv(src)) {
     const absolute = src.startsWith("http") ? src : `${SITE}${src}`;
-    // output=webp + we (allow webp); n=-1 keeps animation; il = interlace.
+    // w = target width, q = quality, output=webp for modern compression.
     return `https://wsrv.nl/?url=${encodeURIComponent(absolute)}&w=${width}&q=${q}&output=webp`;
   }
 

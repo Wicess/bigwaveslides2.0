@@ -109,6 +109,7 @@ const SLIDES: Slide[] = [
     slug: "double-drop-racer-22",
     category: "racing-slides",
     type: "RENTAL",
+    featured: true,
     name: L("Double Drop Racer 22", "Double Drop Racer 22"),
     short: L(
       "Dual-lane racing slide — race a friend to the splash.",
@@ -287,7 +288,6 @@ const SLIDES: Slide[] = [
     slug: "mega-monsoon-28",
     category: "tall-slides",
     type: "BOTH",
-    featured: true,
     name: L("Mega Monsoon 28", "Mega Monsoon 28"),
     short: L(
       "Event-grade dual-lane giant with a huge splash pool.",
@@ -318,6 +318,7 @@ const SLIDES: Slide[] = [
     slug: "palm-paradise-24",
     category: "racing-slides",
     type: "RENTAL",
+    featured: true,
     name: L("Palm Paradise 24", "Palm Paradise 24"),
     short: L(
       "Tropical dual-lane wave slide with palm-tree toppers.",

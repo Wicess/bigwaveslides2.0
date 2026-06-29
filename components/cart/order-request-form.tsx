@@ -138,7 +138,6 @@ export function OrderRequestForm({
         {!pending ? <Send className="size-4" /> : null}
         {pending ? t("submitting") : t("submit")}
       </Button>
-      <p className="text-center text-xs text-muted-foreground">{t("noPaymentNote")}</p>
     </form>
   );
 }

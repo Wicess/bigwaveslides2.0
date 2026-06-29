@@ -172,10 +172,59 @@ export default async function ProductDetailPage({ params }: Props) {
           </nav>
 
           <div className="grid gap-10 lg:grid-cols-2">
-            {/* Gallery */}
-            <Reveal>
-              <ProductGallery items={gallery} title={name} />
-            </Reveal>
+            {/* Gallery + details (description / features / reviews) */}
+            <div className="space-y-6">
+              <Reveal>
+                <ProductGallery items={gallery} title={name} />
+              </Reveal>
+
+              <Reveal delay={0.05}>
+                <Accordion
+                  type="multiple"
+                  defaultValue={["about"]}
+                  className="rounded-[var(--radius-lg)] border border-border"
+                >
+                  <AccordionItem value="about" className="px-4 last:border-b-0">
+                    <AccordionTrigger>{t("tabDescription")}</AccordionTrigger>
+                    <AccordionContent>
+                      <p className="whitespace-pre-line text-[0.95rem] leading-relaxed">
+                        {description}
+                      </p>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {features.length > 0 ? (
+                    <AccordionItem value="features" className="px-4 last:border-b-0">
+                      <AccordionTrigger>{t("tabFeatures")}</AccordionTrigger>
+                      <AccordionContent>
+                        <ul className="grid gap-2.5 sm:grid-cols-2">
+                          {features.map((f) => (
+                            <li key={f} className="flex items-start gap-2.5 text-foreground/80">
+                              <Check className="mt-0.5 size-5 shrink-0 text-primary" />
+                              <span>{f}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ) : null}
+
+                  <AccordionItem value="reviews" className="px-4 last:border-b-0">
+                    <AccordionTrigger>
+                      {t("tabReviews")} ({product.ratingCount})
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <ReviewsSection
+                        productId={product.id}
+                        ratingAvg={product.ratingAvg}
+                        ratingCount={product.ratingCount}
+                        locale={locale}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </Reveal>
+            </div>
 
             {/* Summary / buy box */}
             <Reveal delay={0.08} className="flex flex-col">
@@ -271,55 +320,6 @@ export default async function ProductDetailPage({ params }: Props) {
         </Container>
       </Section>
 
-      {/* Details — collapsible dropdowns (description / features / reviews) */}
-      <Section spacing="compact" className="border-t border-foreground/10">
-        <Container className="max-w-3xl">
-          <Accordion
-            type="multiple"
-            defaultValue={["about"]}
-            className="rounded-[var(--radius-lg)] border border-border"
-          >
-            <AccordionItem value="about" className="px-4 last:border-b-0">
-              <AccordionTrigger>{t("tabDescription")}</AccordionTrigger>
-              <AccordionContent>
-                <p className="whitespace-pre-line text-[0.95rem] leading-relaxed">
-                  {description}
-                </p>
-              </AccordionContent>
-            </AccordionItem>
-
-            {features.length > 0 ? (
-              <AccordionItem value="features" className="px-4 last:border-b-0">
-                <AccordionTrigger>{t("tabFeatures")}</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="grid gap-2.5 sm:grid-cols-2">
-                    {features.map((f) => (
-                      <li key={f} className="flex items-start gap-2.5 text-foreground/80">
-                        <Check className="mt-0.5 size-5 shrink-0 text-primary" />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            ) : null}
-
-            <AccordionItem value="reviews" className="px-4 last:border-b-0">
-              <AccordionTrigger>
-                {t("tabReviews")} ({product.ratingCount})
-              </AccordionTrigger>
-              <AccordionContent>
-                <ReviewsSection
-                  productId={product.id}
-                  ratingAvg={product.ratingAvg}
-                  ratingCount={product.ratingCount}
-                  locale={locale}
-                />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </Container>
-      </Section>
 
       {/* Related */}
       {related.length > 0 ? (
