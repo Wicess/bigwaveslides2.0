@@ -33,43 +33,74 @@ export default async function AdminProductsPage() {
         {products.length === 0 ? (
           <p className="p-8 text-center text-sm text-muted-foreground">No products yet.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
-                <tr>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">SKU</th>
-                  <th className="px-4 py-3">Type</th>
-                  <th className="px-4 py-3">Price</th>
-                  <th className="px-4 py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {products.map((p) => {
-                  const price = p.type === "SALE" ? p.salePriceCents : p.dailyRateCents;
-                  return (
-                    <tr key={p.id} className="hover:bg-muted/30">
-                      <td className="px-4 py-3">
-                        <Link href={`/admin/products/${p.id}`} className="font-semibold text-primary">
-                          {getLocalized(p.name, "en")}
-                        </Link>
-                        {p.featured ? <Badge variant="secondary" className="ml-2">Featured</Badge> : null}
-                        <span className="block text-xs text-muted-foreground">
-                          {p.category?.name ? getLocalized(p.category.name, "en") : "Uncategorized"}
+          <>
+            {/* Desktop table */}
+            <div className="hidden overflow-x-auto md:block">
+              <table className="w-full text-sm">
+                <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
+                  <tr>
+                    <th className="px-4 py-3">Name</th>
+                    <th className="px-4 py-3">SKU</th>
+                    <th className="px-4 py-3">Type</th>
+                    <th className="px-4 py-3">Price</th>
+                    <th className="px-4 py-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {products.map((p) => {
+                    const price = p.type === "SALE" ? p.salePriceCents : p.dailyRateCents;
+                    return (
+                      <tr key={p.id} className="hover:bg-muted/30">
+                        <td className="px-4 py-3">
+                          <Link href={`/admin/products/${p.id}`} className="font-semibold text-primary">
+                            {getLocalized(p.name, "en")}
+                          </Link>
+                          {p.featured ? <Badge variant="secondary" className="ml-2">Featured</Badge> : null}
+                          <span className="block text-xs text-muted-foreground">
+                            {p.category?.name ? getLocalized(p.category.name, "en") : "Uncategorized"}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 font-mono text-xs">{p.sku}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{p.type}</td>
+                        <td className="px-4 py-3 font-semibold">
+                          {price != null ? formatPrice(price, "en") : "—"}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">{p.status}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <ul className="divide-y divide-border md:hidden">
+              {products.map((p) => {
+                const price = p.type === "SALE" ? p.salePriceCents : p.dailyRateCents;
+                return (
+                  <li key={p.id}>
+                    <Link href={`/admin/products/${p.id}`} className="block p-4 active:bg-muted/40">
+                      <div className="flex items-start justify-between gap-3">
+                        <span className="min-w-0">
+                          <span className="block truncate font-semibold text-primary">
+                            {getLocalized(p.name, "en")}
+                            {p.featured ? <Badge variant="secondary" className="ml-2">Featured</Badge> : null}
+                          </span>
+                          <span className="block truncate text-xs text-muted-foreground">
+                            {p.category?.name ? getLocalized(p.category.name, "en") : "Uncategorized"} · {p.sku}
+                          </span>
                         </span>
-                      </td>
-                      <td className="px-4 py-3 font-mono text-xs">{p.sku}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{p.type}</td>
-                      <td className="px-4 py-3 font-semibold">
-                        {price != null ? formatPrice(price, "en") : "—"}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">{p.status}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                        <span className="shrink-0 text-right">
+                          <span className="block font-semibold">{price != null ? formatPrice(price, "en") : "—"}</span>
+                          <span className="block text-xs text-muted-foreground">{p.type} · {p.status}</span>
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
         )}
       </Card>
     </div>
