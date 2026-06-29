@@ -487,6 +487,8 @@ const CATEGORY_NAMES: Record<string, { en: string; fr: string }> = {
   safety: L("Safety", "Sécurité"),
   events: L("Events", "Événements"),
   pricing: L("Pricing", "Tarifs"),
+  buying: L("Buying", "Achat"),
+  ownership: L("Ownership", "Entretien"),
 };
 const TAG_NAMES: Record<string, { en: string; fr: string }> = {
   pricing: L("Pricing", "Tarifs"),
@@ -496,6 +498,12 @@ const TAG_NAMES: Record<string, { en: string; fr: string }> = {
   safety: L("Safety", "Sécurité"),
   events: L("Events", "Événements"),
   corporate: L("Corporate", "Entreprises"),
+  guides: L("Guides", "Guides"),
+  buying: L("Buying", "Achat"),
+  commercial: L("Commercial", "Commercial"),
+  community: L("Community", "Communauté"),
+  seasonal: L("Seasonal", "Saisonnier"),
+  ownership: L("Ownership", "Entretien"),
 };
 
 type SeedPost = {
