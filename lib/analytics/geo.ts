@@ -84,6 +84,66 @@ function safeDecode(value: string): string {
   }
 }
 
+/** True when geo is missing or the region is still an unexpanded code. */
+export function needsGeoEnrichment(geo: GeoInfo): boolean {
+  if (!geo.country) return true;
+  if (geo.regionCode && (!geo.region || geo.region === geo.regionCode)) return true;
+  return false;
+}
+
+function isPublicIp(ip: string | null | undefined): ip is string {
+  if (!ip) return false;
+  if (ip === "::1" || ip.startsWith("127.") || ip.startsWith("10.")) return false;
+  if (ip.startsWith("192.168.") || ip.startsWith("172.")) return false;
+  return true;
+}
+
+// Small per-instance cache so we don't re-query the same IP repeatedly.
+const ipCache = new Map<string, GeoInfo>();
+
+/**
+ * Resolve full, human-readable geo (full country + region/state name + city)
+ * from an IP via ipapi.co. Best-effort: returns null on any failure/timeout so
+ * tracking and checkout never break. Edge headers only spell out US/CA states,
+ * so this expands region names worldwide (e.g. Cameroon).
+ */
+export async function geoFromIp(ip: string | null | undefined): Promise<GeoInfo | null> {
+  if (!isPublicIp(ip)) return null;
+  const cached = ipCache.get(ip);
+  if (cached) return cached;
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 1500);
+    const res = await fetch(`https://ipapi.co/${encodeURIComponent(ip)}/json/`, {
+      signal: controller.signal,
+      headers: { accept: "application/json" },
+    }).finally(() => clearTimeout(timer));
+    if (!res.ok) return null;
+    const d = (await res.json()) as Record<string, unknown>;
+    if (d.error) return null;
+    const info: GeoInfo = {
+      country: (d.country_name as string) ?? null,
+      countryCode: ((d.country_code as string) ?? "").toUpperCase() || null,
+      region: (d.region as string) ?? null,
+      regionCode: ((d.region_code as string) ?? "").toUpperCase() || null,
+      city: (d.city as string) ?? null,
+    };
+    ipCache.set(ip, info);
+    return info;
+  } catch {
+    return null;
+  }
+}
+
+/** Read the client IP from a request's edge/proxy headers. */
+export function ipFromHeaders(headers: Headers): string | null {
+  return (
+    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headers.get("x-real-ip") ||
+    null
+  );
+}
+
 export type UaInfo = {
   device: DeviceType;
   browser: string | null;

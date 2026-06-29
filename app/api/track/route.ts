@@ -3,7 +3,13 @@ import { cookies } from "next/headers";
 import { randomUUID } from "node:crypto";
 import type { AnalyticsEventType } from "@prisma/client";
 import { recordEvent } from "@/lib/analytics/track";
-import { geoFromHeaders, parseUserAgent } from "@/lib/analytics/geo";
+import {
+  geoFromHeaders,
+  geoFromIp,
+  ipFromHeaders,
+  needsGeoEnrichment,
+  parseUserAgent,
+} from "@/lib/analytics/geo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,6 +31,7 @@ const ALLOWED: ReadonlySet<AnalyticsEventType> = new Set([
   "BOOKING_REQUEST",
   "QUOTE_REQUEST",
   "CONTACT",
+  "NEWSLETTER_SUBSCRIBE",
 ]);
 
 export async function POST(req: NextRequest) {
@@ -60,7 +67,21 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
-    const geo = geoFromHeaders(req.headers);
+    let geo = geoFromHeaders(req.headers);
+    // Expand region/state names worldwide via IP when edge headers only give a
+    // code (US/CA are already expanded). Cached per-IP; best-effort.
+    if (needsGeoEnrichment(geo)) {
+      const enriched = await geoFromIp(ipFromHeaders(req.headers));
+      if (enriched) {
+        geo = {
+          country: enriched.country ?? geo.country,
+          countryCode: enriched.countryCode ?? geo.countryCode,
+          region: enriched.region ?? geo.region,
+          regionCode: enriched.regionCode ?? geo.regionCode,
+          city: enriched.city ?? geo.city,
+        };
+      }
+    }
     const userAgent = req.headers.get("user-agent");
     const ua = parseUserAgent(userAgent);
 

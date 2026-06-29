@@ -17,6 +17,12 @@ export default async function AdminOrderDetail({ params }: Props) {
   if (!order) notFound();
 
   const address = (order.deliveryAddress as { address?: string; city?: string } | null) ?? {};
+  const geo = (order.geo as { country?: string; region?: string; city?: string; ip?: string } | null) ?? null;
+  const placedFrom =
+    geo && (geo.city || geo.region || geo.country)
+      ? [geo.city, geo.region, geo.country].filter(Boolean).join(", ") +
+        (geo.ip ? ` · ${geo.ip}` : "")
+      : "—";
 
   return (
     <div>
@@ -60,6 +66,10 @@ export default async function AdminOrderDetail({ params }: Props) {
               <div><dt className="text-muted-foreground">Email</dt><dd>{order.guestEmail ?? "—"}</dd></div>
               <div><dt className="text-muted-foreground">Phone</dt><dd>{order.contactPhone ?? order.guestPhone ?? "—"}</dd></div>
               <div><dt className="text-muted-foreground">Address</dt><dd>{[address.address, address.city].filter(Boolean).join(", ") || "—"}</dd></div>
+              <div className="sm:col-span-2">
+                <dt className="text-muted-foreground">Placed from (IP location)</dt>
+                <dd>{placedFrom}</dd>
+              </div>
             </dl>
             {order.notes ? (
               <p className="mt-3 whitespace-pre-line border-t border-border pt-3 text-sm text-muted-foreground">

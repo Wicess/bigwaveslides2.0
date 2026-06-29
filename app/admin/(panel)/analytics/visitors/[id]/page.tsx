@@ -60,6 +60,7 @@ const EVENT_META: Record<
   BOOKING_REQUEST: { icon: CalendarCheck, label: "Requested a booking", color: "text-emerald-700 bg-emerald-50" },
   QUOTE_REQUEST: { icon: FileText, label: "Requested a quote", color: "text-blue-600 bg-blue-50" },
   CONTACT: { icon: Mail, label: "Sent a message", color: "text-blue-600 bg-blue-50" },
+  NEWSLETTER_SUBSCRIBE: { icon: Mail, label: "Subscribed to newsletter", color: "text-fuchsia-600 bg-fuchsia-50" },
 };
 
 function metaSummary(meta: unknown): string | null {

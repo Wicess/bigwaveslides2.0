@@ -13,6 +13,7 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 // A "server action" — a function that runs on the server but is called like a
 // normal async function from the browser.
 import { subscribeNewsletter } from "@/server/actions/newsletter";
+import { trackEvent } from "@/lib/analytics/client";
 import { toast } from "@/components/ui/toaster";
 // cn merges Tailwind class names together safely.
 import { cn } from "@/lib/utils";
@@ -36,6 +37,7 @@ export function NewsletterForm({ className }: { className?: string }) {
     setLoading(false);
     if (res.ok) {
       // Success: show a popup, clear the field, and swap to the "done" message.
+      trackEvent({ type: "NEWSLETTER_SUBSCRIBE", meta: { source: "footer", email } });
       toast.success(t("subscribeSuccess"));
       setEmail("");
       setDone(true);

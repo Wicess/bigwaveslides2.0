@@ -2,10 +2,12 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { getCartCookie, clearCartCookie } from "@/lib/cart-session";
 import { orderNumber } from "@/lib/ref-number";
 import { notifyOrderRequest } from "@/lib/notifications";
+import { geoFromHeaders, geoFromIp, ipFromHeaders, needsGeoEnrichment } from "@/lib/analytics/geo";
 
 const schema = z.object({
   name: z.string().min(2).max(120),
@@ -83,9 +85,24 @@ export async function createOrderRequest(
 
     const subtotalCents = items.reduce((n, i) => n + i.lineTotalCents, 0);
 
+    // Resolve the location the order is being placed from (IP-based, via edge
+    // headers). Stored on the order so staff see where each request originated.
+    const hdrs = await headers();
+    const ip = ipFromHeaders(hdrs);
+    let geo = geoFromHeaders(hdrs);
+    if (needsGeoEnrichment(geo)) {
+      const enriched = await geoFromIp(ip);
+      if (enriched) geo = enriched;
+    }
+    const orderGeo =
+      geo.country || geo.region || geo.city
+        ? { country: geo.country, region: geo.region, city: geo.city, ip }
+        : undefined;
+
     const order = await prisma.order.create({
       data: {
         orderNumber: orderNumber(),
+        ...(orderGeo ? { geo: orderGeo } : {}),
         guestName: data.name,
         guestEmail: data.email,
         guestPhone: data.phone,

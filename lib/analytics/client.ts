@@ -11,7 +11,8 @@ export type ClientEventType =
   | "ORDER_REQUEST"
   | "BOOKING_REQUEST"
   | "QUOTE_REQUEST"
-  | "CONTACT";
+  | "CONTACT"
+  | "NEWSLETTER_SUBSCRIBE";
 
 export type ClientEventPayload = {
   type: ClientEventType;
