@@ -44,6 +44,25 @@ export function localBusinessAreaLd(area: string, url: string): Json {
   };
 }
 
+/** Service schema for the use-case landing pages (birthday parties, etc.). */
+export function serviceLd(s: { name: string; description: string; url: string }): Json {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: s.name,
+    name: s.name,
+    description: s.description,
+    url: s.url,
+    areaServed: { "@type": "Country", name: "United States" },
+    provider: {
+      "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+      "@id": `${SITE}/#business`,
+      name: NAME,
+      url: SITE,
+    },
+  };
+}
+
 export function websiteLd(): Json {
   return {
     "@context": "https://schema.org",

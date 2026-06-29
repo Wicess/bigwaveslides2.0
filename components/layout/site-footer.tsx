@@ -49,6 +49,7 @@ export async function SiteFooter({
     { href: "/rent", label: tn("rent") },
     { href: "/shop", label: tn("shop") },
     { href: "/water-slide-rentals", label: "Service Areas" },
+    { href: "/water-slides-for", label: "Occasions" },
     { href: "/blog", label: tn("blog") },
     { href: "/about", label: tn("about") },
     { href: "/contact", label: tn("contact") },
