@@ -1,22 +1,21 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * DropdownMenu — a small, accessible popover menu for the admin panel.
- * Closes on outside click / Escape, animates in, and flips to stay on-screen.
- * Compose with <DropdownItem> (button) and <DropdownLink> (navigation).
- *
- *   <DropdownMenu>
- *     <DropdownLink href="…">Open</DropdownLink>
- *     <DropdownItem onSelect={…}>Archive</DropdownItem>
- *     <DropdownItem onSelect={…} destructive>Delete</DropdownItem>
- *   </DropdownMenu>
+ * DropdownMenu — an accessible popover menu for the admin panel.
+ * The menu is rendered in a portal with fixed positioning, so it is never
+ * clipped by a parent's `overflow` (tables, cards). Closes on outside click,
+ * Escape, or scroll; flips above the trigger when there's little room below.
  */
 const MenuCtx = React.createContext<{ close: () => void }>({ close: () => {} });
+
+type Coords = { top?: number; bottom?: number; left: number };
 
 export function DropdownMenu({
   children,
@@ -25,56 +24,95 @@ export function DropdownMenu({
   label = "Open menu",
 }: {
   children: React.ReactNode;
-  /** Custom trigger; defaults to a kebab icon button. */
   trigger?: React.ReactNode;
   align?: "start" | "end";
   label?: string;
 }) {
   const [open, setOpen] = React.useState(false);
-  const ref = React.useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = React.useState<Coords | null>(null);
+  const [mounted, setMounted] = React.useState(false);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const menuRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => setMounted(true), []);
+
+  const place = React.useCallback(() => {
+    const el = triggerRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const openUp = window.innerHeight - r.bottom < 240;
+    setCoords({
+      top: openUp ? undefined : r.bottom + 6,
+      bottom: openUp ? window.innerHeight - r.top + 6 : undefined,
+      left: align === "end" ? r.right : r.left,
+    });
+  }, [align]);
+
+  const toggle = () => {
+    if (!open) place();
+    setOpen((v) => !v);
+  };
 
   React.useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      const t = e.target as Node;
+      if (triggerRef.current?.contains(t) || menuRef.current?.contains(t))
+        return;
+      setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onScroll = () => setOpen(false);
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", onScroll);
     return () => {
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", onScroll);
     };
   }, [open]);
 
   return (
-    <div ref={ref} className="relative inline-block text-left">
+    <>
       <button
+        ref={triggerRef}
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={label}
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggle}
         className={cn(
-          "grid size-9 place-items-center rounded-xl border border-border bg-white text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary",
+          "border-border text-muted-foreground hover:border-primary/40 hover:text-primary grid size-9 place-items-center rounded-xl border bg-white transition-colors",
           open && "border-primary/40 text-primary",
         )}
       >
         {trigger ?? <MoreHorizontal className="size-[18px]" />}
       </button>
 
-      {open ? (
-        <div
-          role="menu"
-          className={cn(
-            "admin-pop absolute z-40 mt-2 min-w-[11rem] overflow-hidden rounded-2xl border border-border bg-white p-1.5 shadow-[var(--shadow-soft)]",
-            align === "end" ? "right-0 origin-top-right" : "left-0 origin-top-left",
-          )}
-        >
-          <MenuCtx.Provider value={{ close: () => setOpen(false) }}>{children}</MenuCtx.Provider>
-        </div>
-      ) : null}
-    </div>
+      {open && mounted && coords
+        ? createPortal(
+            <div
+              ref={menuRef}
+              role="menu"
+              className="admin-pop border-border fixed z-[60] min-w-[12rem] overflow-hidden rounded-2xl border bg-white p-1.5 shadow-[var(--shadow-soft)]"
+              style={{
+                top: coords.top,
+                bottom: coords.bottom,
+                left: coords.left,
+                transform: align === "end" ? "translateX(-100%)" : undefined,
+              }}
+            >
+              <MenuCtx.Provider value={{ close: () => setOpen(false) }}>
+                {children}
+              </MenuCtx.Provider>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   );
 }
 
@@ -140,13 +178,50 @@ export function DropdownLink({
 }
 
 export function DropdownSeparator() {
-  return <div className="my-1 h-px bg-border" role="separator" />;
+  return <div className="bg-border my-1 h-px" role="separator" />;
 }
 
 export function DropdownLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+    <p className="text-muted-foreground/70 px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase">
       {children}
     </p>
+  );
+}
+
+/** A destructive menu item that confirms, runs a server action, then refreshes. */
+export function DeleteMenuItem({
+  action,
+  confirm,
+  children,
+}: {
+  action: () => Promise<{ ok: boolean; error?: string } | void>;
+  confirm: string;
+  children: React.ReactNode;
+}) {
+  const { close } = React.useContext(MenuCtx);
+  const router = useRouter();
+  const [pending, start] = React.useTransition();
+  return (
+    <button
+      type="button"
+      role="menuitem"
+      disabled={pending}
+      onClick={() => {
+        if (!window.confirm(confirm)) return;
+        start(async () => {
+          const res = await action();
+          close();
+          if (res && res.ok === false) {
+            window.alert(res.error ?? "Couldn't delete.");
+          } else {
+            router.refresh();
+          }
+        });
+      }}
+      className={cn(itemCls(true), "disabled:opacity-50")}
+    >
+      {children}
+    </button>
   );
 }

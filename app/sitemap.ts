@@ -3,7 +3,11 @@ import { env } from "@/lib/env";
 import { routing } from "@/i18n/routing";
 import { getProductSlugs } from "@/server/data/products";
 import { getRentalSlugs } from "@/server/data/rentals";
-import { getPostSlugs, getBlogCategories, getPopularTags } from "@/server/data/blog";
+import {
+  getPostSlugs,
+  getBlogCategories,
+  getPopularTags,
+} from "@/server/data/blog";
 import { getProductCategories } from "@/server/data/products";
 import { US_STATES } from "@/lib/locations";
 import { USE_CASES } from "@/lib/use-cases";
@@ -47,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...products.map((p) => `/shop/${p.slug}`),
     ...rentals.map((p) => `/rent/${p.slug}`),
     ...posts.map((p) => `/blog/${p.slug}`),
-    ...productCats.map((c) => `/shop/category/${c.slug}`),
+    ...productCats.map((c) => `/shop?category=${c.slug}`),
     ...blogCats.map((c) => `/blog/category/${c.slug}`),
     ...tags.map((t) => `/blog/tag/${t.slug}`),
   ];

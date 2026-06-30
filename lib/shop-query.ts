@@ -15,6 +15,7 @@ export function parseShopQuery(sp: Raw) {
   };
   return {
     q: one(sp.q),
+    category: one(sp.category),
     sort: (one(sp.sort) as ShopSort) || "featured",
     minPriceCents: num(one(sp.minPrice)),
     maxPriceCents: num(one(sp.maxPrice)),

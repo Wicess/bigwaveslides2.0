@@ -7,7 +7,12 @@ import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { getLocalized } from "@/lib/localized";
 import { cn } from "@/lib/utils";
 
-type Category = { id: string; slug: string; name: unknown; image: string | null };
+type Category = {
+  id: string;
+  slug: string;
+  name: unknown;
+  image: string | null;
+};
 
 const PRICE_BANDS = [
   { min: 0, max: 50000, label: "price_0-50000" },
@@ -60,16 +65,17 @@ export function ShopFilters({
     params.get("minRating") ||
     params.get("q");
 
-  const categoryHref = (slug?: string) => {
-    const qs = withParams(() => {});
-    return slug ? `/shop/category/${slug}${qs}` : `/shop${qs}`;
-  };
+  const categoryHref = (slug?: string) =>
+    `/shop${withParams((sp) => {
+      if (slug) sp.set("category", slug);
+      else sp.delete("category");
+    })}`;
 
   return (
     <aside className="space-y-8">
       {/* Categories */}
       <div>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <h3 className="text-muted-foreground mb-3 text-sm font-semibold tracking-wide uppercase">
           {t("filterCategory")}
         </h3>
         <ul className="space-y-1">
@@ -77,8 +83,8 @@ export function ShopFilters({
             <Link
               href={categoryHref()}
               className={cn(
-                "block rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-muted",
-                !activeCategory && "bg-primary-50 font-semibold text-primary",
+                "hover:bg-muted block rounded-lg px-3 py-1.5 text-sm transition-colors",
+                !activeCategory && "bg-primary-50 text-primary font-semibold",
               )}
             >
               {t("allProducts")}
@@ -89,9 +95,9 @@ export function ShopFilters({
               <Link
                 href={categoryHref(c.slug)}
                 className={cn(
-                  "block rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-muted",
+                  "hover:bg-muted block rounded-lg px-3 py-1.5 text-sm transition-colors",
                   activeCategory === c.slug &&
-                    "bg-primary-50 font-semibold text-primary",
+                    "bg-primary-50 text-primary font-semibold",
                 )}
               >
                 {getLocalized(c.name, locale)}
@@ -103,7 +109,7 @@ export function ShopFilters({
 
       {/* Price */}
       <div>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <h3 className="text-muted-foreground mb-3 text-sm font-semibold tracking-wide uppercase">
           {t("filterPrice")}
         </h3>
         <ul className="space-y-1">
@@ -121,14 +127,15 @@ export function ShopFilters({
                         sp.delete("maxPrice");
                       } else {
                         sp.set("minPrice", String(band.min));
-                        if (band.max != null) sp.set("maxPrice", String(band.max));
+                        if (band.max != null)
+                          sp.set("maxPrice", String(band.max));
                         else sp.delete("maxPrice");
                       }
                     })
                   }
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-sm transition-colors hover:bg-muted",
-                    checked && "bg-primary-50 font-semibold text-primary",
+                    "hover:bg-muted flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-sm transition-colors",
+                    checked && "bg-primary-50 text-primary font-semibold",
                   )}
                 >
                   <span
@@ -148,7 +155,7 @@ export function ShopFilters({
 
       {/* Rating */}
       <div>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <h3 className="text-muted-foreground mb-3 text-sm font-semibold tracking-wide uppercase">
           {t("filterRating")}
         </h3>
         <ul className="space-y-1">
@@ -165,8 +172,8 @@ export function ShopFilters({
                     })
                   }
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-sm transition-colors hover:bg-muted",
-                    checked && "bg-primary-50 font-semibold text-primary",
+                    "hover:bg-muted flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-sm transition-colors",
+                    checked && "bg-primary-50 text-primary font-semibold",
                   )}
                 >
                   <span className="text-amber-400" aria-hidden>
@@ -184,7 +191,7 @@ export function ShopFilters({
       {hasFilters ? (
         <Link
           href="/shop"
-          className="inline-block text-sm font-semibold text-primary hover:underline"
+          className="text-primary inline-block text-sm font-semibold hover:underline"
         >
           {t("clearFilters")}
         </Link>

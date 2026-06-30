@@ -13,7 +13,10 @@ const SHOP_HERO_IMAGE =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552076322-pu88b6-custom-builds.jpg";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams };
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: SearchParams;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -64,8 +67,10 @@ export default async function ShopPage({ params, searchParams }: Props) {
         className="hidden md:block"
       />
       <div className="px-5 pt-6 md:hidden">
-        <h1 className="font-display text-2xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{t("desc")}</p>
+        <h1 className="font-display text-2xl font-bold tracking-tight">
+          {t("title")}
+        </h1>
+        <p className="text-muted-foreground mt-1 text-sm">{t("desc")}</p>
       </div>
       <ShopView
         locale={locale}
@@ -74,6 +79,7 @@ export default async function ShopPage({ params, searchParams }: Props) {
         total={listing.total}
         page={listing.page}
         pageCount={listing.pageCount}
+        activeCategory={query.category}
         query={query.q}
       />
     </main>

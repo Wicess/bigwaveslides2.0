@@ -1,82 +1,13 @@
-import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
-import {
-  getShopProducts,
-  getProductCategories,
-  getCategoryBySlug,
-} from "@/server/data/products";
-import { parseShopQuery } from "@/lib/shop-query";
-import { getLocalized } from "@/lib/localized";
-import { buildMetadata, categorySeo } from "@/lib/seo";
-import { PageHeader } from "@/components/ui/page-header";
-import { ShopView } from "@/components/shop/shop-view";
+import { redirect } from "next/navigation";
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-type Props = {
-  params: Promise<{ locale: string; slug: string }>;
-  searchParams: SearchParams;
-};
+/**
+ * The standalone category page was retired — category browsing now happens on
+ * the main, fully-styled /shop page filtered by `?category=`. We redirect here
+ * so any existing links/bookmarks/SEO for the old path land on the right place.
+ */
+type Props = { params: Promise<{ locale: string; slug: string }> };
 
-export async function generateStaticParams() {
-  const categories = await getProductCategories().catch(() => []);
-  return categories.map((c) => ({ slug: c.slug }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export default async function ShopCategoryRedirect({ params }: Props) {
   const { locale, slug } = await params;
-  const category = await getCategoryBySlug(slug);
-  if (!category) return {};
-  const name = getLocalized(category.name, locale);
-  const seo = categorySeo(name, locale);
-  const customTitle = category.metaTitle ? getLocalized(category.metaTitle, locale) : "";
-  const customDesc = category.metaDescription ? getLocalized(category.metaDescription, locale) : "";
-  return buildMetadata({
-    locale,
-    path: `/shop/category/${slug}`,
-    title: customTitle || seo.title,
-    description: customDesc || seo.description,
-    keywords: seo.keywords,
-  });
-}
-
-export default async function ShopCategoryPage({ params, searchParams }: Props) {
-  const { locale, slug } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
-
-  const category = await getCategoryBySlug(slug);
-  if (!category) notFound();
-
-  const t = await getTranslations("Shop");
-  const sp = await searchParams;
-  const query = { ...parseShopQuery(sp), category: slug };
-
-  const [categories, listing] = await Promise.all([
-    getProductCategories().catch(() => []),
-    getShopProducts(query),
-  ]);
-
-  return (
-    <main>
-      <PageHeader
-        tone="brand"
-        eyebrow={t("eyebrow")}
-        title={getLocalized(category.name, locale)}
-        description={getLocalized(category.description, locale) || t("desc")}
-      />
-      <ShopView
-        locale={locale}
-        categories={categories}
-        items={listing.items}
-        total={listing.total}
-        page={listing.page}
-        pageCount={listing.pageCount}
-        activeCategory={slug}
-        query={query.q}
-      />
-    </main>
-  );
+  redirect(`/${locale}/shop?category=${encodeURIComponent(slug)}`);
 }

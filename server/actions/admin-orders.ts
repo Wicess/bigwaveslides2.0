@@ -7,7 +7,12 @@ import { requirePermission, logActivity } from "@/lib/admin-auth";
 import { notifyStatusUpdate } from "@/lib/notifications";
 import { statusLabel } from "@/lib/status-labels";
 
-const ORDER_STATUS = ["PENDING", "PROCESSING", "FULFILLED", "CANCELLED"] as const;
+const ORDER_STATUS = [
+  "PENDING",
+  "PROCESSING",
+  "FULFILLED",
+  "CANCELLED",
+] as const;
 const PAYMENT_STATUS = [
   "PENDING",
   "INVOICE_SENT",
@@ -32,7 +37,9 @@ type UpdateOrderInput = {
   invoiceNote?: string;
 };
 
-export async function updateOrder(input: UpdateOrderInput): Promise<AdminActionResult> {
+export async function updateOrder(
+  input: UpdateOrderInput,
+): Promise<AdminActionResult> {
   const session = await requirePermission("order.update");
   const parsed = schema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Invalid data." };
@@ -74,5 +81,25 @@ export async function updateOrder(input: UpdateOrderInput): Promise<AdminActionR
     return { ok: true };
   } catch {
     return { ok: false, error: "Couldn't update the order." };
+  }
+}
+
+/** Permanently delete an order (line items cascade). */
+export async function deleteOrder(id: string): Promise<AdminActionResult> {
+  const session = await requirePermission("order.update");
+  try {
+    const order = await prisma.order.delete({
+      where: { id },
+      select: { orderNumber: true },
+    });
+    await logActivity(session.id, "order.delete", {
+      entityType: "Order",
+      entityId: id,
+      summary: `Order ${order.orderNumber} deleted`,
+    });
+    revalidatePath("/admin/orders");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't delete the order." };
   }
 }

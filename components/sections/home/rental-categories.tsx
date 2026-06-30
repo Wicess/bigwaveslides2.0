@@ -49,7 +49,7 @@ function CategoryCard({ card }: { card: Card }) {
     // rest fade back, drawing the eye to it.
     <Link
       href={card.href}
-      className="group/card relative my-4 flex aspect-[3/4] w-60 shrink-0 snap-start flex-col justify-between overflow-hidden rounded-[1.5rem] p-5 text-white shadow-[0_14px_36px_-16px_rgba(0,0,0,0.6)] ring-1 ring-white/10 transition-all duration-500 ease-out will-change-transform hover:!opacity-100 hover:scale-[1.04] hover:shadow-[0_28px_55px_-18px_rgba(0,0,0,0.8)] hover:ring-white/50 group-hover:opacity-40"
+      className="group/card relative my-4 flex aspect-[3/4] w-60 shrink-0 snap-start flex-col justify-between overflow-hidden rounded-[1.5rem] p-5 text-white shadow-[0_14px_36px_-16px_rgba(0,0,0,0.6)] ring-1 ring-white/10 transition-all duration-500 ease-out will-change-transform group-hover:opacity-40 hover:scale-[1.04] hover:!opacity-100 hover:shadow-[0_28px_55px_-18px_rgba(0,0,0,0.8)] hover:ring-white/50"
     >
       {/* Background photo (slowly zooms in on hover). Falls back to a solid
           accent-colored panel if the card has no image. Served straight from R2
@@ -65,13 +65,13 @@ function CategoryCard({ card }: { card: Card }) {
           className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
         />
       ) : (
-        <div className="absolute inset-0 bg-accent" />
+        <div className="bg-accent absolute inset-0" />
       )}
 
       {/* Scrims for legible copy — lift a touch on hover so the photo pops */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/10 to-black/75 transition-opacity duration-500 group-hover/card:opacity-75" />
 
-      <h3 className="relative font-display text-lg font-bold leading-snug tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+      <h3 className="font-display relative text-lg leading-snug font-bold tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
         {card.title}
       </h3>
 
@@ -81,7 +81,7 @@ function CategoryCard({ card }: { card: Card }) {
             {card.desc}
           </p>
         ) : null}
-        <span className="mt-3 inline-flex size-9 items-center justify-center rounded-full bg-white/15 backdrop-blur transition-colors duration-300 group-hover/card:bg-white group-hover/card:text-accent">
+        <span className="group-hover/card:text-accent mt-3 inline-flex size-9 items-center justify-center rounded-full bg-white/15 backdrop-blur transition-colors duration-300 group-hover/card:bg-white">
           <ArrowUpRight className="size-4" />
         </span>
       </div>
@@ -106,7 +106,7 @@ export async function RentalCategories({
     // One card per real category from the database, using its own HD image.
     ...categories.map((c) => ({
       key: c.slug,
-      href: `/shop/category/${c.slug}`,
+      href: `/shop?category=${c.slug}`,
       image: c.image ?? undefined,
       title: getLocalized(c.name, locale),
       desc: c.description ? getLocalized(c.description, locale) : "",
@@ -141,7 +141,7 @@ export async function RentalCategories({
       className="overflow-hidden [background:linear-gradient(180deg,#0a1a2f_0%,#0e2742_100%)]"
     >
       <Container>
-        <h2 className="text-balance text-center text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-5xl">
+        <h2 className="text-center text-3xl leading-[1.1] font-bold tracking-tight text-balance text-white sm:text-4xl lg:text-5xl">
           {t("categoriesTitle")}
         </h2>
       </Container>
