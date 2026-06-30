@@ -31,20 +31,6 @@ type Category = {
 // We serve images from R2 (the cloud) instead of the local /public folder.
 const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev";
 
-/**
- * Curated water-slide imagery per category (served from R2).
- * This maps a category's "slug" (its URL-friendly id) to a hand-picked photo,
- * so each category always shows a nice, on-brand image instead of whatever the
- * database happens to have.
- */
-const CATEGORY_IMAGES: Record<string, string> = {
-  "inflatable-water-slides": `${R2}/categories/inflatable.jpg`,
-  "slip-n-slides": `${R2}/categories/slip.jpg`,
-  "combo-units": `${R2}/categories/combo.jpg`,
-  "pool-slides": `${R2}/categories/pool.jpg`,
-  "park-attractions": `${R2}/categories/park.jpg`,
-};
-
 type Card = {
   key: string;
   href: string;
@@ -116,13 +102,11 @@ export async function RentalCategories({
 
   // Build the list of cards we'll display.
   const cards: Card[] = [
-    // First, one card per real category from the database. For the image we
-    // prefer our curated R2 photo; if there isn't one, fall back to the
-    // category's own image, and if that's missing too, leave it undefined.
+    // One card per real category from the database, using its own HD image.
     ...categories.map((c) => ({
       key: c.slug,
       href: `/shop/category/${c.slug}`,
-      image: CATEGORY_IMAGES[c.slug] ?? c.image ?? undefined,
+      image: c.image ?? undefined,
       title: getLocalized(c.name, locale),
       desc: c.description ? getLocalized(c.description, locale) : "",
     })),
