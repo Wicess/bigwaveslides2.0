@@ -57,7 +57,9 @@ export function CartClient({
   // Re-pull the cart after a quick-add so the line list reflects the new item.
   const refreshLines = async () => {
     try {
-      const res = await fetch(`/api/cart/items?locale=${locale}`, { cache: "no-store" });
+      const res = await fetch(`/api/cart/items?locale=${locale}`, {
+        cache: "no-store",
+      });
       const data = (await res.json()) as CartSummary;
       setLines(data.lines);
     } catch {
@@ -140,11 +142,21 @@ export function CartClient({
   if (orderNumber) {
     return (
       <Card className="mx-auto max-w-xl p-8 text-center sm:p-10">
-        <CheckCircle2 className="mx-auto size-14 text-primary" />
+        <CheckCircle2 className="text-primary mx-auto size-14" />
         <h2 className="mt-4 text-2xl font-bold">{t("successTitle")}</h2>
-        <p className="mt-2 text-muted-foreground">{t("successBody")}</p>
-        <p className="mt-4 inline-block rounded-full bg-muted px-4 py-2 font-mono text-sm font-semibold">
+        <p className="text-muted-foreground mt-2">{t("successBody")}</p>
+        <p className="bg-muted mt-4 inline-block rounded-full px-4 py-2 font-mono text-sm font-semibold">
           {t("orderRef")}: {orderNumber}
+        </p>
+        <p className="bg-primary-50 text-foreground/80 mx-auto mt-5 max-w-md rounded-2xl p-4 text-sm leading-relaxed">
+          {t("successReachOut")}{" "}
+          <a
+            href="mailto:contact@bigwaveslides.com"
+            className="text-primary font-semibold hover:underline"
+          >
+            contact@bigwaveslides.com
+          </a>
+          .
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <Button asChild variant="gradient">
@@ -162,9 +174,11 @@ export function CartClient({
   if (lines.length === 0) {
     return (
       <div className="flex flex-col items-center gap-4 py-12 text-center">
-        <ShoppingBag className="size-14 text-muted-foreground" />
+        <ShoppingBag className="text-muted-foreground size-14" />
         <h2 className="text-xl font-semibold">{t("emptyTitle")}</h2>
-        <p className="max-w-sm text-sm text-muted-foreground">{t("emptyBody")}</p>
+        <p className="text-muted-foreground max-w-sm text-sm">
+          {t("emptyBody")}
+        </p>
         <Button asChild variant="gradient" size="lg">
           <Link href="/shop">{t("browseShop")}</Link>
         </Button>
@@ -180,30 +194,34 @@ export function CartClient({
           <dt className="text-muted-foreground">
             {t("subtotal")} ({t("itemCount", { count })})
           </dt>
-          <dd className="font-semibold">{formatPrice(subtotalCents, locale)}</dd>
+          <dd className="font-semibold">
+            {formatPrice(subtotalCents, locale)}
+          </dd>
         </div>
         <div className="flex items-start justify-between gap-3">
-          <dt className="flex items-center gap-1.5 text-muted-foreground">
+          <dt className="text-muted-foreground flex items-center gap-1.5">
             <Truck className="size-4" /> {t("delivery")}
           </dt>
-          <dd className="text-right text-xs text-muted-foreground">
+          <dd className="text-muted-foreground text-right text-xs">
             {deliveryFromCents
-              ? t("deliveryFrom", { amount: formatPrice(deliveryFromCents, locale) })
+              ? t("deliveryFrom", {
+                  amount: formatPrice(deliveryFromCents, locale),
+                })
               : t("deliveryQuoted")}
           </dd>
         </div>
       </dl>
-      <div className="mt-4 flex justify-between border-t border-border pt-4">
+      <div className="border-border mt-4 flex justify-between border-t pt-4">
         <span className="font-semibold">{t("estTotal")}</span>
-        <span className="font-display text-xl font-bold text-primary">
+        <span className="font-display text-primary text-xl font-bold">
           {formatPrice(subtotalCents, locale)}
         </span>
       </div>
-      <p className="mt-1 text-xs text-muted-foreground">{t("totalNote")}</p>
+      <p className="text-muted-foreground mt-1 text-xs">{t("totalNote")}</p>
 
       <Link
         href="/rent"
-        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+        className="text-primary mt-5 inline-flex items-center gap-1.5 text-sm font-semibold hover:underline"
       >
         <ArrowLeft className="size-4" /> {t("browseShop")}
       </Link>
@@ -215,174 +233,198 @@ export function CartClient({
 
   return (
     <>
-    <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-      <div className="space-y-8">
-        {/* Detailed booking — what you're renting / buying. */}
-        <div>
-          <h2 className="mb-2 text-lg font-semibold">{t("title")}</h2>
-          <ul className="divide-y divide-border">
-            <AnimatePresence initial={false}>
-              {lines.map((line) => (
-                <motion.li
-                  key={line.itemId}
-                  layout
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, x: -24, transition: { duration: 0.2 } }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex gap-4 py-5"
-                >
-                  <Link
-                    href={line.type === "RENTAL" ? `/rent/${line.slug}` : `/shop/${line.slug}`}
-                    className="size-24 shrink-0 overflow-hidden rounded-[var(--radius-lg)] bg-muted"
+      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+        <div className="space-y-8">
+          {/* Detailed booking — what you're renting / buying. */}
+          <div>
+            <h2 className="mb-2 text-lg font-semibold">{t("title")}</h2>
+            <ul className="divide-border divide-y">
+              <AnimatePresence initial={false}>
+                {lines.map((line) => (
+                  <motion.li
+                    key={line.itemId}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -24, transition: { duration: 0.2 } }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex gap-4 py-5"
                   >
-                    {line.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={line.image}
-                        alt={line.name}
-                        className="size-full object-cover"
-                      />
-                    ) : null}
-                  </Link>
+                    <Link
+                      href={
+                        line.type === "RENTAL"
+                          ? `/rent/${line.slug}`
+                          : `/shop/${line.slug}`
+                      }
+                      className="bg-muted size-24 shrink-0 overflow-hidden rounded-[var(--radius-lg)]"
+                    >
+                      {line.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={line.image}
+                          alt={line.name}
+                          className="size-full object-cover"
+                        />
+                      ) : null}
+                    </Link>
 
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <div className="flex items-start justify-between gap-3">
-                      <Link
-                        href={line.type === "RENTAL" ? `/rent/${line.slug}` : `/shop/${line.slug}`}
-                        className="font-semibold hover:text-primary"
-                      >
-                        {line.name}
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => remove(line)}
-                        aria-label={t("remove")}
-                        className="text-muted-foreground transition-colors hover:text-red-600"
-                      >
-                        <Trash2 className="size-4" />
-                      </button>
-                    </div>
-                    <span className="mt-0.5 inline-flex w-fit items-center gap-1.5 text-sm text-muted-foreground">
-                      <span
-                        className={
-                          line.type === "SALE"
-                            ? "rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700"
-                            : "rounded-full bg-primary-50 px-2 py-0.5 text-xs font-semibold text-primary"
-                        }
-                      >
-                        {line.type === "SALE" ? t("buyLabel") : t("rentLabel")}
-                      </span>
-                      {formatPrice(line.unitPriceCents, locale)}
-                      {line.type !== "SALE" ? t("perDay") : ""}
-                    </span>
-
-                    <div className="mt-auto flex items-center justify-between pt-3">
-                      <div className="inline-flex items-center rounded-full border border-border">
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <div className="flex items-start justify-between gap-3">
+                        <Link
+                          href={
+                            line.type === "RENTAL"
+                              ? `/rent/${line.slug}`
+                              : `/shop/${line.slug}`
+                          }
+                          className="hover:text-primary font-semibold"
+                        >
+                          {line.name}
+                        </Link>
                         <button
                           type="button"
-                          onClick={() => changeQty(line, line.quantity - 1)}
-                          aria-label={t("decrease")}
-                          className="grid size-9 place-items-center rounded-l-full hover:bg-muted"
+                          onClick={() => remove(line)}
+                          aria-label={t("remove")}
+                          className="text-muted-foreground transition-colors hover:text-red-600"
                         >
-                          <Minus className="size-3.5" />
-                        </button>
-                        <span className="w-9 text-center text-sm font-semibold">
-                          {line.quantity}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => changeQty(line, line.quantity + 1)}
-                          aria-label={t("increase")}
-                          className="grid size-9 place-items-center rounded-r-full hover:bg-muted"
-                        >
-                          <Plus className="size-3.5" />
+                          <Trash2 className="size-4" />
                         </button>
                       </div>
-                      <span className="font-semibold">
-                        {formatPrice(line.lineTotalCents, locale)}
+                      <span className="text-muted-foreground mt-0.5 inline-flex w-fit items-center gap-1.5 text-sm">
+                        <span
+                          className={
+                            line.type === "SALE"
+                              ? "rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700"
+                              : "bg-primary-50 text-primary rounded-full px-2 py-0.5 text-xs font-semibold"
+                          }
+                        >
+                          {line.type === "SALE"
+                            ? t("buyLabel")
+                            : t("rentLabel")}
+                        </span>
+                        {formatPrice(line.unitPriceCents, locale)}
+                        {line.type !== "SALE" ? t("perDay") : ""}
                       </span>
+
+                      <div className="mt-auto flex items-center justify-between pt-3">
+                        <div className="border-border inline-flex items-center rounded-full border">
+                          <button
+                            type="button"
+                            onClick={() => changeQty(line, line.quantity - 1)}
+                            aria-label={t("decrease")}
+                            className="hover:bg-muted grid size-9 place-items-center rounded-l-full"
+                          >
+                            <Minus className="size-3.5" />
+                          </button>
+                          <span className="w-9 text-center text-sm font-semibold">
+                            {line.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => changeQty(line, line.quantity + 1)}
+                            aria-label={t("increase")}
+                            className="hover:bg-muted grid size-9 place-items-center rounded-r-full"
+                          >
+                            <Plus className="size-3.5" />
+                          </button>
+                        </div>
+                        <span className="font-semibold">
+                          {formatPrice(line.lineTotalCents, locale)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </motion.li>
-              ))}
-            </AnimatePresence>
-          </ul>
+                  </motion.li>
+                ))}
+              </AnimatePresence>
+            </ul>
+          </div>
+
+          {/* Your details — submitting emails the quote PDF. */}
+          <Card className="p-6">
+            <h2 className="text-lg font-semibold">{t("yourDetails")}</h2>
+            <p className="text-muted-foreground mt-1 text-sm">
+              {t("detailsIntro")}
+            </p>
+
+            <div className="bg-muted/50 mt-4 rounded-[var(--radius-lg)] p-4">
+              <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                {t("nextStepsTitle")}
+              </p>
+              <ol className="mt-2 space-y-1.5 text-sm">
+                {[t("step1"), t("step2"), t("step3")].map((stepText, i) => (
+                  <li key={i} className="flex gap-2.5">
+                    <span className="bg-primary grid size-5 shrink-0 place-items-center rounded-full text-[11px] font-bold text-white">
+                      {i + 1}
+                    </span>
+                    {stepText}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="mt-5">
+              <OrderRequestForm
+                onSuccess={(num) => {
+                  trackEvent({
+                    type: "ORDER_REQUEST",
+                    meta: { orderNumber: num, itemCount: count, subtotalCents },
+                  });
+                  setOrderNumber(num);
+                  setLines([]);
+                  notifyChange();
+                  router.refresh();
+                }}
+              />
+            </div>
+          </Card>
         </div>
 
-        {/* Your details — submitting emails the quote PDF. */}
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold">{t("yourDetails")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("detailsIntro")}</p>
-
-          <div className="mt-4 rounded-[var(--radius-lg)] bg-muted/50 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t("nextStepsTitle")}
-            </p>
-            <ol className="mt-2 space-y-1.5 text-sm">
-              {[t("step1"), t("step2"), t("step3")].map((stepText, i) => (
-                <li key={i} className="flex gap-2.5">
-                  <span className="grid size-5 shrink-0 place-items-center rounded-full bg-primary text-[11px] font-bold text-white">
-                    {i + 1}
-                  </span>
-                  {stepText}
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          <div className="mt-5">
-            <OrderRequestForm
-              onSuccess={(num) => {
-                trackEvent({
-                  type: "ORDER_REQUEST",
-                  meta: { orderNumber: num, itemCount: count, subtotalCents },
-                });
-                setOrderNumber(num);
-                setLines([]);
-                notifyChange();
-                router.refresh();
-              }}
-            />
-          </div>
-        </Card>
+        <div className="lg:sticky lg:top-28 lg:self-start">{summary}</div>
       </div>
-
-      <div className="lg:sticky lg:top-28 lg:self-start">{summary}</div>
-    </div>
 
       {/* You might also like — quick-add straight into this order. */}
       {recommend.length > 0 ? (
-        <section className="mt-12 border-t border-border pt-8">
+        <section className="border-border mt-12 border-t pt-8">
           <h2 className="text-lg font-semibold">{t("suggestTitle")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("suggestDesc")}</p>
+          <p className="text-muted-foreground mt-1 text-sm">
+            {t("suggestDesc")}
+          </p>
           <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {recommend.map((s) => (
               <div
                 key={s.id}
-                className="flex flex-col overflow-hidden rounded-2xl border border-border bg-white"
+                className="border-border flex flex-col overflow-hidden rounded-2xl border bg-white"
               >
                 <Link
-                  href={s.type === "RENTAL" ? `/rent/${s.slug}` : `/shop/${s.slug}`}
-                  className="block aspect-[4/3] overflow-hidden bg-muted"
+                  href={
+                    s.type === "RENTAL" ? `/rent/${s.slug}` : `/shop/${s.slug}`
+                  }
+                  className="bg-muted block aspect-[4/3] overflow-hidden"
                 >
                   {s.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={s.image} alt={s.name} className="size-full object-cover" />
+                    <img
+                      src={s.image}
+                      alt={s.name}
+                      className="size-full object-cover"
+                    />
                   ) : null}
                 </Link>
                 <div className="flex flex-1 flex-col p-3">
                   <Link
-                    href={s.type === "RENTAL" ? `/rent/${s.slug}` : `/shop/${s.slug}`}
-                    className="line-clamp-1 text-sm font-semibold hover:text-primary"
+                    href={
+                      s.type === "RENTAL"
+                        ? `/rent/${s.slug}`
+                        : `/shop/${s.slug}`
+                    }
+                    className="hover:text-primary line-clamp-1 text-sm font-semibold"
                   >
                     {s.name}
                   </Link>
                   {s.priceCents != null ? (
-                    <span className="mt-0.5 font-display text-sm font-bold text-primary">
+                    <span className="font-display text-primary mt-0.5 text-sm font-bold">
                       {formatPrice(s.priceCents, locale)}
                       {s.type !== "SALE" ? (
-                        <span className="text-xs font-medium text-muted-foreground">
+                        <span className="text-muted-foreground text-xs font-medium">
                           {t("perDay")}
                         </span>
                       ) : null}

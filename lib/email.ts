@@ -16,7 +16,8 @@ function getTransport(): Transporter | null {
   return cached;
 }
 
-export const FROM = env.SMTP_FROM ?? "Big Wave Slides <contact@bigwaveslides.com>";
+export const FROM =
+  env.SMTP_FROM ?? "Big Wave Slides <contact@bigwaveslides.com>";
 
 export type SendResult = { ok: boolean; skipped?: boolean; error?: string };
 
@@ -41,7 +42,9 @@ async function sendViaBrevo(opts: {
   attachments?: EmailAttachment[];
 }): Promise<SendResult> {
   const sender = parseFrom(FROM);
-  const recipients = (Array.isArray(opts.to) ? opts.to : [opts.to]).map((email) => ({ email }));
+  const recipients = (Array.isArray(opts.to) ? opts.to : [opts.to]).map(
+    (email) => ({ email }),
+  );
   try {
     const res = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
@@ -68,9 +71,16 @@ async function sendViaBrevo(opts: {
       }),
     });
     if (!res.ok) {
-      console.error("[email error] brevo", res.status, await res.text().catch(() => ""));
+      console.error(
+        "[email] FAILED via Brevo",
+        res.status,
+        await res.text().catch(() => ""),
+      );
       return { ok: false, error: `brevo ${res.status}` };
     }
+    console.info(
+      `[email] sent via Brevo: "${opts.subject}" → ${Array.isArray(opts.to) ? opts.to.join(", ") : opts.to}`,
+    );
     return { ok: true };
   } catch (error) {
     console.error("[email error] brevo", error);
@@ -98,9 +108,11 @@ export async function sendEmail(opts: {
 
   const transport = getTransport();
   if (!transport) {
-    if (process.env.NODE_ENV !== "production") {
-      console.info(`[email skipped] ${opts.subject} → ${opts.to}`);
-    }
+    // No email provider configured at runtime — this is why "emails don't send".
+    // Set BREVO_API_KEY (or SMTP_*) in the environment and RESTART the server.
+    console.warn(
+      `[email] NO PROVIDER configured (BREVO_API_KEY / SMTP_* missing) — skipped: "${opts.subject}" → ${opts.to}`,
+    );
     return { ok: true, skipped: true };
   }
   try {
@@ -135,7 +147,8 @@ const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const CONTACT_EMAIL = "contact@bigwaveslides.com";
 const CONTACT_PHONE = "+1 (614) 302-5899";
 // Hosted on R2 CDN so it renders in email clients independently of site deploys.
-const EMAIL_LOGO = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/brand/logo-email.png";
+const EMAIL_LOGO =
+  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/brand/logo-email.png";
 
 export type EmailRow = { label: string; value: string };
 
@@ -152,6 +165,12 @@ export function renderEmail(opts: {
   outro?: string;
 }): string {
   const preheader = opts.preheader ?? opts.intro;
+
+  // Only show the website link when it's a real public URL — never leak a
+  // localhost dev address into a customer's inbox.
+  const siteLink = /localhost|127\.0\.0\.1/.test(SITE)
+    ? ""
+    : `&nbsp;·&nbsp;<a href="${SITE}" style="color:#0099FF;text-decoration:none">${SITE.replace(/^https?:\/\//, "")}</a>`;
 
   const rows = (opts.rows ?? [])
     .map(
@@ -197,8 +216,7 @@ export function renderEmail(opts: {
             <a href="mailto:${CONTACT_EMAIL}" style="color:#0099FF;text-decoration:none">${CONTACT_EMAIL}</a>
             &nbsp;·&nbsp;
             <a href="tel:+16143025899" style="color:#0099FF;text-decoration:none">${CONTACT_PHONE}</a>
-            &nbsp;·&nbsp;
-            <a href="${SITE}" style="color:#0099FF;text-decoration:none">${SITE.replace(/^https?:\/\//, "")}</a>
+            ${siteLink}
           </p>
         </td></tr>
       </table>
