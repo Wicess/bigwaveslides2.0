@@ -1,0 +1,19 @@
+{
+  "// note": "Recommended extensions for this stack (Next.js + TS + Tailwind + Prisma). VS Code will prompt to install these.",
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "Prisma.prisma",
+    "usernamehw.errorlens",
+    "yoavbls.pretty-ts-errors",
+    "eamodio.gitlens",
+    "wix.vscode-import-cost",
+    "christian-kohler.path-intellisense",
+    "formulahendry.auto-rename-tag",
+    "mikestead.dotenv",
+    "streetsidesoftware.code-spell-checker",
+    "ms-playwright.playwright",
+    "vitest.explorer"
+  ]
+}
