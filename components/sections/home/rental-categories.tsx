@@ -19,7 +19,6 @@ import { getLocalized } from "@/lib/localized";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Marquee } from "@/components/ui/marquee";
-import { MediaImage } from "@/components/ui/media-image";
 
 type Category = {
   slug: string;
@@ -67,15 +66,16 @@ function CategoryCard({ card }: { card: Card }) {
       className="group/card relative my-4 flex aspect-[3/4] w-60 shrink-0 snap-start flex-col justify-between overflow-hidden rounded-[1.5rem] p-5 text-white shadow-[0_14px_36px_-16px_rgba(0,0,0,0.6)] ring-1 ring-white/10 transition-all duration-500 ease-out will-change-transform hover:!opacity-100 hover:scale-[1.04] hover:shadow-[0_28px_55px_-18px_rgba(0,0,0,0.8)] hover:ring-white/50 group-hover:opacity-40"
     >
       {/* Background photo (slowly zooms in on hover). Falls back to a solid
-          accent-colored panel if the card has no image. */}
+          accent-colored panel if the card has no image. Served straight from R2
+          at full original quality (no resizing) so these hero category cards
+          stay crisp. */}
       {card.image ? (
-        <MediaImage
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           src={card.image}
           alt={card.title}
-          rounded={false}
-          className="absolute inset-0 size-full"
-          imgClassName="transition-transform duration-700 ease-out group-hover/card:scale-110"
-          sizes="240px"
+          loading="lazy"
+          className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
         />
       ) : (
         <div className="absolute inset-0 bg-accent" />

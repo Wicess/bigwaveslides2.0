@@ -140,14 +140,15 @@ export default async function RentalDetailPage({ params }: Props) {
             <span className="text-foreground">{name}</span>
           </nav>
 
-          <div className="grid gap-10 lg:grid-cols-2">
-            {/* Gallery + details accordion */}
-            <div className="space-y-6">
-              <Reveal>
-                <ProductGallery items={gallery} title={name} />
-              </Reveal>
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+            {/* A — Gallery */}
+            <Reveal className="lg:col-start-1 lg:row-start-1">
+              <ProductGallery items={gallery} title={name} />
+            </Reveal>
 
-              <Reveal delay={0.05}>
+            {/* C — Details accordion: under the gallery on desktop, but BELOW
+                the buy box on mobile (DOM order A → B → C). */}
+            <Reveal delay={0.05} className="lg:col-start-1 lg:row-start-2">
                 <Accordion
                   type="multiple"
                   defaultValue={["about"]}
@@ -180,12 +181,12 @@ export default async function RentalDetailPage({ params }: Props) {
                     </AccordionItem>
                   ) : null}
                 </Accordion>
-              </Reveal>
-            </div>
+            </Reveal>
 
-            {/* Buy box — sticky on desktop */}
-            <Reveal delay={0.1}>
-              <div className="lg:sticky lg:top-28">
+            {/* B — Buy box (price + add to cart / rent now). Right column on
+                desktop; on mobile it sits directly under the images. */}
+            <Reveal delay={0.1} className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
+              <div className="flex flex-col lg:sticky lg:top-28">
                 <div className="flex items-center gap-3">
                   <Badge variant="primary">{tp("rentBadge")}</Badge>
                   {unitsAvailable > 0 ? (
@@ -224,7 +225,7 @@ export default async function RentalDetailPage({ params }: Props) {
                 ) : null}
 
                 {specs.length > 0 ? (
-                  <ul className="mt-5 grid grid-cols-2 gap-3">
+                  <ul className="order-1 mt-5 grid grid-cols-2 gap-3 lg:order-none">
                     {specs.map((s) => {
                       const Icon = s.icon;
                       return (

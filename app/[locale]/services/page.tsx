@@ -85,14 +85,14 @@ export default async function ServicesPage({ params }: Props) {
   return (
     <main>
       {/* Hero — centered animated title (shared PhotoHero). */}
-      <PhotoHero image={SERVICES_HERO_IMAGE} title={t("title")} description={t("desc")}>
-        {/* Quick-jump pills to each service. */}
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+      <PhotoHero image={SERVICES_HERO_IMAGE} title={t("title")} description={t("desc")} compact>
+        {/* Quick-jump pills to each service — compact so the hero stays short. */}
+        <div className="mt-4 flex flex-wrap justify-center gap-1.5 sm:mt-5 sm:gap-2">
           {ALL_SERVICES.map((s) => (
             <a
               key={s.slug}
               href={`#${s.slug}`}
-              className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+              className="rounded-full border border-white/25 bg-white/10 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:px-3.5 sm:py-1.5 sm:text-xs"
             >
               {getLocalized(s.title, locale)}
             </a>

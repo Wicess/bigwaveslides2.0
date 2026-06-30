@@ -20,6 +20,7 @@ export function PhotoHero({
   description,
   children,
   className,
+  compact = false,
 }: {
   image: string;
   eyebrow?: ReactNode;
@@ -28,6 +29,8 @@ export function PhotoHero({
   children?: ReactNode;
   /** Extra classes on the <header> (e.g. `hidden md:block` to hide on mobile). */
   className?: string;
+  /** Shorter banner (less bottom padding) — used where there are jump links. */
+  compact?: boolean;
 }) {
   return (
     <header
@@ -55,7 +58,12 @@ export function PhotoHero({
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/55 to-neutral-950/45"
       />
-      <Container className="relative z-10 max-w-[84rem] pb-9 pt-[118px] text-center sm:pb-14 sm:pt-[150px]">
+      <Container
+        className={cn(
+          "relative z-10 max-w-[84rem] pt-[118px] text-center sm:pt-[150px]",
+          compact ? "pb-5 sm:pb-9" : "pb-9 sm:pb-14",
+        )}
+      >
         <div className="hero-rise mx-auto flex max-w-3xl flex-col items-center">
           <h1 className="text-shimmer bg-[linear-gradient(110deg,#ffffff_0%,#bfe6ff_30%,#ffffff_50%,#bfe6ff_70%,#ffffff_100%)] text-balance font-display text-[1.7rem] font-extrabold leading-[1.08] tracking-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.55)] sm:text-5xl lg:text-6xl">
             {title}

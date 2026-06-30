@@ -296,7 +296,7 @@ export function TestimonialsCarousel({
 
           {/* The row of progress dots. The dot matching `active` (the centered
               card) widens and brightens; the rest stay small and faded. */}
-          <div className="mt-5 flex justify-center gap-2">
+          <div className="mt-5 hidden justify-center gap-2 sm:flex">
             {order.map((idx, i) => (
               <span
                 key={idx}

@@ -176,14 +176,14 @@ export default async function ProductDetailPage({ params }: Props) {
             <span className="text-foreground">{name}</span>
           </nav>
 
-          <div className="grid gap-10 lg:grid-cols-2">
-            {/* Gallery + details (description / features / reviews) */}
-            <div className="space-y-6">
-              <Reveal>
-                <ProductGallery items={gallery} title={name} />
-              </Reveal>
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+            {/* A — Gallery */}
+            <Reveal className="lg:col-start-1 lg:row-start-1">
+              <ProductGallery items={gallery} title={name} />
+            </Reveal>
 
-              <Reveal delay={0.05}>
+            {/* C — Details: under the gallery on desktop, below the buy box on mobile. */}
+            <Reveal delay={0.05} className="lg:col-start-1 lg:row-start-2">
                 <Accordion
                   type="multiple"
                   defaultValue={["about"]}
@@ -228,11 +228,11 @@ export default async function ProductDetailPage({ params }: Props) {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
-              </Reveal>
-            </div>
+            </Reveal>
 
-            {/* Summary / buy box */}
-            <Reveal delay={0.08} className="flex flex-col">
+            {/* B — Buy box (price + add to cart / buy now): right column on
+                desktop, directly under the images on mobile. */}
+            <Reveal delay={0.08} className="flex flex-col lg:col-start-2 lg:row-start-1 lg:row-span-2">
               <div className="flex items-center gap-3">
                 <Badge variant={isRental ? "primary" : "accent"}>
                   {isRental ? tp("rentBadge") : tp("saleBadge")}
@@ -277,7 +277,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
               {/* Specs */}
               {specs.length > 0 ? (
-                <ul className="mt-6 grid grid-cols-2 gap-3">
+                <ul className="order-1 mt-6 grid grid-cols-2 gap-3 lg:order-none">
                   {specs.map((s) => {
                     const Icon = s.icon;
                     return (

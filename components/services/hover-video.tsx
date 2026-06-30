@@ -25,24 +25,41 @@ export function HoverVideo({
   priority?: boolean;
 }) {
   const ref = React.useRef<HTMLVideoElement>(null);
+  const boxRef = React.useRef<HTMLDivElement>(null);
   const [ready, setReady] = React.useState(false);
   const [active, setActive] = React.useState(false);
 
-  const play = () => {
+  const play = React.useCallback(() => {
     setActive(true);
     const v = ref.current;
-    if (v) {
-      v.currentTime = 0;
-      void v.play().catch(() => {});
-    }
-  };
-  const stop = () => {
+    if (v) void v.play().catch(() => {});
+  }, []);
+  const stop = React.useCallback(() => {
     setActive(false);
     ref.current?.pause();
-  };
+  }, []);
+
+  // On touch devices (no hover), auto-play when the clip scrolls into view and
+  // pause when it leaves — so the videos play on scroll without needing a hover.
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(hover: hover)").matches) return; // desktop keeps hover
+    const el = boxRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.isIntersecting && entry.intersectionRatio >= 0.6) play();
+        else stop();
+      },
+      { threshold: [0, 0.6, 1] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [play, stop]);
 
   return (
     <div
+      ref={boxRef}
       className={cn(
         "group/hv relative overflow-hidden rounded-[var(--radius-lg)] bg-muted",
         className,
