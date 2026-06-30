@@ -7,7 +7,13 @@ import { prisma } from "@/lib/prisma";
 import { getCartCookie, clearCartCookie } from "@/lib/cart-session";
 import { orderNumber } from "@/lib/ref-number";
 import { notifyOrderRequest } from "@/lib/notifications";
-import { geoFromHeaders, geoFromIp, ipFromHeaders, needsGeoEnrichment } from "@/lib/analytics/geo";
+import {
+  geoFromHeaders,
+  geoFromIp,
+  ipFromHeaders,
+  needsGeoEnrichment,
+} from "@/lib/analytics/geo";
+import { rateLimit, clientKeyFromHeaders } from "@/lib/rate-limit";
 
 const schema = z.object({
   name: z.string().min(2).max(120),
@@ -37,6 +43,19 @@ export async function createOrderRequest(
     return { ok: true, orderNumber: orderNumber() };
   }
 
+  // Anti-spam: 6 order requests per IP per 10 minutes.
+  const limit = rateLimit(
+    clientKeyFromHeaders(await headers(), "order-request"),
+    6,
+    10 * 60 * 1000,
+  );
+  if (!limit.ok) {
+    return {
+      ok: false,
+      error: "Please wait a moment before submitting again.",
+    };
+  }
+
   const parsed = schema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, error: "Please check your details and try again." };
@@ -53,7 +72,13 @@ export async function createOrderRequest(
         items: {
           include: {
             product: {
-              include: { media: { where: { isPrimary: true }, take: 1, select: { url: true } } },
+              include: {
+                media: {
+                  where: { isPrimary: true },
+                  take: 1,
+                  select: { url: true },
+                },
+              },
             },
           },
         },
@@ -115,7 +140,10 @@ export async function createOrderRequest(
           data.address || data.city
             ? { address: data.address || "", city: data.city || "" }
             : undefined,
-        notes: [data.eventDate ? `Event date: ${data.eventDate}` : "", data.notes || ""]
+        notes: [
+          data.eventDate ? `Event date: ${data.eventDate}` : "",
+          data.notes || "",
+        ]
           .filter(Boolean)
           .join("\n"),
         locale: data.locale,
@@ -136,7 +164,8 @@ export async function createOrderRequest(
       name: data.name,
       email: data.email,
       phone: data.phone,
-      address: [data.address, data.city].filter(Boolean).join(", ") || undefined,
+      address:
+        [data.address, data.city].filter(Boolean).join(", ") || undefined,
       heroImageUrl: cart.items[0]?.product.media[0]?.url,
       items: items.map((i) => ({
         name: i.name,

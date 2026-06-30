@@ -10,7 +10,15 @@ const CART_EVENT_TYPES = [
   "ORDER_REQUEST",
 ] as const;
 
-export type AnalyticsOverview = Awaited<ReturnType<typeof getAnalyticsOverview>>;
+export type AnalyticsOverview = Awaited<
+  ReturnType<typeof getAnalyticsOverview>
+>;
+
+// Exclude crawler/bot traffic from the headline analytics so the numbers
+// reflect real humans. `NOT_BOT` filters Visitor rows directly; `NOT_BOT_REL`
+// filters Visit/AnalyticsEvent rows via their visitor relation.
+const NOT_BOT = { device: { not: "BOT" as const } };
+const NOT_BOT_REL = { visitor: { device: { not: "BOT" as const } } };
 
 function startOfToday(): Date {
   const d = new Date();
@@ -39,38 +47,63 @@ export async function getAnalyticsOverview(days = 30) {
       dailyViews,
       dailyVisits,
     ] = await Promise.all([
-      prisma.visitor.count({ where: { lastSeenAt: { gte: since } } }),
-      prisma.visitor.count({ where: { lastSeenAt: { gte: today } } }),
-      prisma.visit.count({ where: { startedAt: { gte: since } } }),
-      prisma.visit.count({ where: { startedAt: { gte: today } } }),
-      prisma.analyticsEvent.count({
-        where: { type: "PAGE_VIEW", createdAt: { gte: since } },
+      prisma.visitor.count({
+        where: { lastSeenAt: { gte: since }, ...NOT_BOT },
+      }),
+      prisma.visitor.count({
+        where: { lastSeenAt: { gte: today }, ...NOT_BOT },
+      }),
+      prisma.visit.count({
+        where: { startedAt: { gte: since }, ...NOT_BOT_REL },
+      }),
+      prisma.visit.count({
+        where: { startedAt: { gte: today }, ...NOT_BOT_REL },
       }),
       prisma.analyticsEvent.count({
-        where: { type: "PAGE_VIEW", createdAt: { gte: today } },
+        where: { type: "PAGE_VIEW", createdAt: { gte: since }, ...NOT_BOT_REL },
+      }),
+      prisma.analyticsEvent.count({
+        where: { type: "PAGE_VIEW", createdAt: { gte: today }, ...NOT_BOT_REL },
       }),
       prisma.analyticsEvent.groupBy({
         by: ["type"],
-        where: { type: { in: [...CART_EVENT_TYPES] }, createdAt: { gte: since } },
+        where: {
+          type: { in: [...CART_EVENT_TYPES] },
+          createdAt: { gte: since },
+          ...NOT_BOT_REL,
+        },
         _count: { _all: true },
       }),
       prisma.analyticsEvent.groupBy({
         by: ["path"],
-        where: { type: "PAGE_VIEW", createdAt: { gte: since }, path: { not: null } },
+        where: {
+          type: "PAGE_VIEW",
+          createdAt: { gte: since },
+          path: { not: null },
+          ...NOT_BOT_REL,
+        },
         _count: { _all: true },
         orderBy: { _count: { path: "desc" } },
         take: 10,
       }),
       prisma.visitor.groupBy({
         by: ["country"],
-        where: { lastSeenAt: { gte: since }, country: { not: null } },
+        where: {
+          lastSeenAt: { gte: since },
+          country: { not: null },
+          ...NOT_BOT,
+        },
         _count: { _all: true },
         orderBy: { _count: { country: "desc" } },
         take: 8,
       }),
       prisma.visitor.groupBy({
         by: ["region", "country"],
-        where: { lastSeenAt: { gte: since }, region: { not: null } },
+        where: {
+          lastSeenAt: { gte: since },
+          region: { not: null },
+          ...NOT_BOT,
+        },
         _count: { _all: true },
         orderBy: { _count: { region: "desc" } },
         take: 8,
@@ -81,14 +114,16 @@ export async function getAnalyticsOverview(days = 30) {
         _count: { _all: true },
       }),
       prisma.$queryRaw<{ day: Date; count: bigint }[]>`
-        SELECT date_trunc('day', "createdAt") AS day, count(*) AS count
-        FROM "AnalyticsEvent"
-        WHERE type = 'PAGE_VIEW' AND "createdAt" >= ${since}
+        SELECT date_trunc('day', e."createdAt") AS day, count(*) AS count
+        FROM "AnalyticsEvent" e
+        JOIN "Visitor" v ON v.id = e."visitorId"
+        WHERE e.type = 'PAGE_VIEW' AND e."createdAt" >= ${since} AND v.device <> 'BOT'
         GROUP BY day ORDER BY day ASC`,
       prisma.$queryRaw<{ day: Date; count: bigint }[]>`
-        SELECT date_trunc('day', "startedAt") AS day, count(*) AS count
-        FROM "Visit"
-        WHERE "startedAt" >= ${since}
+        SELECT date_trunc('day', vi."startedAt") AS day, count(*) AS count
+        FROM "Visit" vi
+        JOIN "Visitor" v ON v.id = vi."visitorId"
+        WHERE vi."startedAt" >= ${since} AND v.device <> 'BOT'
         GROUP BY day ORDER BY day ASC`,
     ]);
 
@@ -180,19 +215,26 @@ function emptyOverview(days: number) {
 const PER_PAGE = 25;
 
 /** Paginated visitor list for the admin "Visitors" page. */
-export async function getVisitorsList(opts: { page?: number; q?: string } = {}) {
+export async function getVisitorsList(
+  opts: { page?: number; q?: string; includeBots?: boolean } = {},
+) {
   const page = Math.max(1, opts.page ?? 1);
   const q = opts.q?.trim();
-  const where = q
-    ? {
-        OR: [
-          { country: { contains: q, mode: "insensitive" as const } },
-          { region: { contains: q, mode: "insensitive" as const } },
-          { city: { contains: q, mode: "insensitive" as const } },
-          { visitorKey: { contains: q, mode: "insensitive" as const } },
-        ],
-      }
-    : {};
+  // Hide crawler/bot visitors by default; callers opt in to see them.
+  const botFilter = opts.includeBots ? {} : { device: { not: "BOT" as const } };
+  const where = {
+    ...botFilter,
+    ...(q
+      ? {
+          OR: [
+            { country: { contains: q, mode: "insensitive" as const } },
+            { region: { contains: q, mode: "insensitive" as const } },
+            { city: { contains: q, mode: "insensitive" as const } },
+            { visitorKey: { contains: q, mode: "insensitive" as const } },
+          ],
+        }
+      : {}),
+  };
 
   return withRetry(async () => {
     const [total, visitors] = await Promise.all([
@@ -219,8 +261,20 @@ export async function getVisitorsList(opts: { page?: number; q?: string } = {}) 
         },
       }),
     ]);
-    return { visitors, total, page, perPage: PER_PAGE, pages: Math.ceil(total / PER_PAGE) };
-  }).catch(() => ({ visitors: [], total: 0, page, perPage: PER_PAGE, pages: 0 }));
+    return {
+      visitors,
+      total,
+      page,
+      perPage: PER_PAGE,
+      pages: Math.ceil(total / PER_PAGE),
+    };
+  }).catch(() => ({
+    visitors: [],
+    total: 0,
+    page,
+    perPage: PER_PAGE,
+    pages: 0,
+  }));
 }
 
 /** One visitor with their full session-by-session movement timeline. */

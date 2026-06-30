@@ -37,9 +37,17 @@ export function rateLimit(
 
 /** Derive a client key from forwarded headers. */
 export function clientKey(req: Request, scope: string): string {
+  return clientKeyFromHeaders(req.headers, scope);
+}
+
+/**
+ * Derive a client key from a Headers object (e.g. from `next/headers` inside a
+ * Server Action, which has no Request).
+ */
+export function clientKeyFromHeaders(headers: Headers, scope: string): string {
   const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
+    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    headers.get("x-real-ip") ??
     "unknown";
   return `${scope}:${ip}`;
 }

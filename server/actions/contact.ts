@@ -1,8 +1,10 @@
 "use server";
 
 import { z } from "zod";
+import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { notifyContact } from "@/lib/notifications";
+import { rateLimit, clientKeyFromHeaders } from "@/lib/rate-limit";
 
 const schema = z.object({
   name: z.string().min(2).max(120),
@@ -23,6 +25,19 @@ export async function submitContact(
   // Silently accept (and drop) honeypot submissions.
   if (input.website) return { ok: true };
 
+  // Anti-spam: 5 messages per IP per 10 minutes.
+  const limit = rateLimit(
+    clientKeyFromHeaders(await headers(), "contact"),
+    5,
+    10 * 60 * 1000,
+  );
+  if (!limit.ok) {
+    return {
+      ok: false,
+      error: "Please wait a moment before sending another message.",
+    };
+  }
+
   const parsed = schema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, error: "Please check your details and try again." };
@@ -41,7 +56,12 @@ export async function submitContact(
         sourcePage: "contact",
       },
     });
-    await notifyContact({ name, email, subject: subject || undefined, message });
+    await notifyContact({
+      name,
+      email,
+      subject: subject || undefined,
+      message,
+    });
     return { ok: true };
   } catch {
     return { ok: false, error: "Something went wrong. Please try again." };
