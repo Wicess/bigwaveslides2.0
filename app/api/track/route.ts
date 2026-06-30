@@ -10,6 +10,7 @@ import {
   needsGeoEnrichment,
   parseUserAgent,
 } from "@/lib/analytics/geo";
+import { visitorFingerprint, sessionFingerprint } from "@/lib/analytics/fingerprint";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -46,26 +47,8 @@ export async function POST(req: NextRequest) {
 
     const secure = process.env.NODE_ENV === "production";
     const jar = await cookies();
-    let visitorKey = jar.get(VISITOR_COOKIE)?.value;
-    let sessionKey = jar.get(SESSION_COOKIE)?.value;
-
-    if (!visitorKey) visitorKey = randomUUID();
-    if (!sessionKey) sessionKey = randomUUID();
-
-    res.cookies.set(VISITOR_COOKIE, visitorKey, {
-      maxAge: ONE_YEAR,
-      httpOnly: true,
-      sameSite: "lax",
-      secure,
-      path: "/",
-    });
-    res.cookies.set(SESSION_COOKIE, sessionKey, {
-      maxAge: SESSION_WINDOW,
-      httpOnly: true,
-      sameSite: "lax",
-      secure,
-      path: "/",
-    });
+    const cookieVisitor = jar.get(VISITOR_COOKIE)?.value;
+    const cookieSession = jar.get(SESSION_COOKIE)?.value;
 
     let geo = geoFromHeaders(req.headers);
     // Expand region/state names worldwide via IP when edge headers only give a
@@ -84,6 +67,30 @@ export async function POST(req: NextRequest) {
     }
     const userAgent = req.headers.get("user-agent");
     const ua = parseUserAgent(userAgent);
+
+    // Identity: the visitor cookie is authoritative for real browsers. When it's
+    // absent (bots, crawlers, privacy/cookie-cleared clients) fall back to a
+    // stable fingerprint of user-agent + geo so identical/returning clients
+    // collapse onto one Visitor instead of a fresh random id per request.
+    const visitorKey = cookieVisitor ?? visitorFingerprint(userAgent, geo);
+    const sessionKey =
+      cookieSession ??
+      (cookieVisitor ? randomUUID() : sessionFingerprint(visitorKey, new Date()));
+
+    res.cookies.set(VISITOR_COOKIE, visitorKey, {
+      maxAge: ONE_YEAR,
+      httpOnly: true,
+      sameSite: "lax",
+      secure,
+      path: "/",
+    });
+    res.cookies.set(SESSION_COOKIE, sessionKey, {
+      maxAge: SESSION_WINDOW,
+      httpOnly: true,
+      sameSite: "lax",
+      secure,
+      path: "/",
+    });
 
     await recordEvent({
       visitorKey,
