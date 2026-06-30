@@ -30,7 +30,10 @@ function unitPrice(p: {
   salePriceCents: number | null;
   dailyRateCents: number | null;
 }): number {
-  return (p.type === "SALE" ? p.salePriceCents : p.dailyRateCents) ?? 0;
+  // The cart is the PURCHASE (buy) cart — renting goes through the booking flow.
+  // So always use the sale price; only fall back to the daily rate for a
+  // rental-only product that somehow ends up here.
+  return p.salePriceCents ?? p.dailyRateCents ?? 0;
 }
 
 /** Resolve the active cart for the current session, shaped for display. */

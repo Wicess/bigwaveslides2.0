@@ -17,7 +17,7 @@ const CONTACT_EMAIL = "contact@bigwaveslides.com";
 // Always-on admin recipients (in addition to the settings email + env extras).
 // These monitored inboxes guarantee delivery even if the contact@ self-send
 // is filtered to spam.
-const DEFAULT_ADMIN_NOTIFY = ["zacksnyder916@gmail.com"];
+const DEFAULT_ADMIN_NOTIFY = ["kenjones086@gmail.com"];
 
 /** All inboxes that should receive admin notifications (settings + defaults + env). */
 async function adminRecipients(): Promise<string[]> {
@@ -55,7 +55,12 @@ export type OrderEmailInput = {
   phone?: string;
   address?: string;
   heroImageUrl?: string;
-  items: { name: string; quantity: number; unitPriceCents: number; lineTotalCents: number }[];
+  items: {
+    name: string;
+    quantity: number;
+    unitPriceCents: number;
+    lineTotalCents: number;
+  }[];
   subtotalCents: number;
   totalCents: number;
   locale: string;
@@ -67,7 +72,12 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     number: o.orderNumber,
     dateLabel: formatDate(new Date(), o.locale),
     heroImageUrl: o.heroImageUrl,
-    customer: { name: o.name, email: o.email, phone: o.phone, address: o.address },
+    customer: {
+      name: o.name,
+      email: o.email,
+      phone: o.phone,
+      address: o.address,
+    },
     items: o.items.map((i) => ({
       name: i.name,
       qtyLabel: String(i.quantity),
@@ -80,7 +90,10 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
 
   const rows: EmailRow[] = [
     { label: "Reference", value: o.orderNumber },
-    { label: "Items", value: String(o.items.reduce((n, i) => n + i.quantity, 0)) },
+    {
+      label: "Items",
+      value: String(o.items.reduce((n, i) => n + i.quantity, 0)),
+    },
     { label: "Estimated total", value: formatPrice(o.totalCents, o.locale) },
   ];
 
@@ -91,12 +104,17 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     attachments,
     html: renderEmail({
       heading: `Thanks, ${o.name.split(" ")[0] || o.name}! Your quote is attached`,
-      preheader: "Your personalized quote is attached as a PDF. Sign it and reply to confirm your order.",
+      preheader:
+        "Your personalized quote is attached as a PDF. Sign it and reply to confirm your order.",
       intro:
         "Thanks for your order request with Big Wave Slides. Your personalized quote is attached as a PDF. To confirm your order, please review and sign the attached quote, then return it by replying to this email. We'll follow up with an invoice and next steps.",
       rows,
-      cta: { label: "Reply to confirm", url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${o.orderNumber}` },
-      outro: "Have a question first? Just reply to this email and a real person will help.",
+      cta: {
+        label: "Reply to confirm",
+        url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${o.orderNumber}`,
+      },
+      outro:
+        "Have a question first? Just reply to this email and a real person will help.",
     }),
   });
 
@@ -135,7 +153,12 @@ export type BookingEmailInput = {
   eventType?: string;
   headcount?: string;
   surfaceType?: string;
-  items: { name: string; days: number; dailyRateCents: number; lineTotalCents: number }[];
+  items: {
+    name: string;
+    days: number;
+    dailyRateCents: number;
+    lineTotalCents: number;
+  }[];
   subtotalCents: number;
   deliveryFeeCents: number;
   pickupFeeCents: number;
@@ -144,7 +167,9 @@ export type BookingEmailInput = {
   locale: string;
 };
 
-export async function notifyBookingRequest(b: BookingEmailInput): Promise<void> {
+export async function notifyBookingRequest(
+  b: BookingEmailInput,
+): Promise<void> {
   const datesLabel = `${formatDate(b.startAt, b.locale)} – ${formatDate(b.endAt, b.locale)}`;
 
   const durationDays = b.items[0]?.days ?? 0;
@@ -153,11 +178,18 @@ export async function notifyBookingRequest(b: BookingEmailInput): Promise<void> 
     number: b.bookingNumber,
     dateLabel: formatDate(new Date(), b.locale),
     heroImageUrl: b.heroImageUrl,
-    customer: { name: b.name, email: b.email, phone: b.phone, address: b.address },
+    customer: {
+      name: b.name,
+      email: b.email,
+      phone: b.phone,
+      address: b.address,
+    },
     rental: {
       arrival: formatDate(b.startAt, b.locale),
       ret: formatDate(b.endAt, b.locale),
-      duration: durationDays ? `${durationDays} day${durationDays === 1 ? "" : "s"}` : undefined,
+      duration: durationDays
+        ? `${durationDays} day${durationDays === 1 ? "" : "s"}`
+        : undefined,
       type: b.eventType,
       headcount: b.headcount,
       surface: b.surfaceType,
@@ -192,13 +224,20 @@ export async function notifyBookingRequest(b: BookingEmailInput): Promise<void> 
     attachments,
     html: renderEmail({
       heading: `Thanks, ${b.name.split(" ")[0] || b.name}! Your rental quote is attached`,
-      preheader: "Your rental agreement is attached. Sign and return it to confirm your dates.",
+      preheader:
+        "Your rental agreement is attached. Sign and return it to confirm your dates.",
       intro:
         "Thanks for your booking request — we've tentatively held your dates. Your rental quote & agreement is attached as a PDF. To confirm your booking, you'll need to sign the attached agreement and return it to us (reply to this email, or sign online). Once received, we'll send your invoice and lock in your dates.",
       rows,
       cta: b.contractNumber
-        ? { label: "Review & sign online", url: siteUrl(`/contract/${b.contractNumber}`) }
-        : { label: "Reply to confirm", url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${b.bookingNumber}` },
+        ? {
+            label: "Review & sign online",
+            url: siteUrl(`/contract/${b.contractNumber}`),
+          }
+        : {
+            label: "Reply to confirm",
+            url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${b.bookingNumber}`,
+          },
       outro: `Please sign the attached agreement and return it to ${CONTACT_EMAIL}. Questions? Just reply and we'll help.`,
     }),
   });
@@ -271,7 +310,8 @@ export async function notifyContact(c: {
     subject: "We received your message — Big Wave Slides",
     html: renderEmail({
       heading: `Thanks, ${c.name.split(" ")[0] || c.name}!`,
-      preheader: "We've received your message and a team member will reach out shortly.",
+      preheader:
+        "We've received your message and a team member will reach out shortly.",
       intro:
         "Thanks for reaching out to Big Wave Slides. A member of our team will get back to you very shortly. Here's a copy of what you sent us:",
       quote: c.message,
@@ -299,12 +339,14 @@ export async function notifyContact(c: {
           { label: "Email", value: c.email },
           ...(c.subject ? [{ label: "Subject", value: c.subject }] : []),
         ],
-        cta: { label: `Reply to ${c.name.split(" ")[0] || c.name}`, url: `mailto:${c.email}?subject=${replySubject}` },
+        cta: {
+          label: `Reply to ${c.name.split(" ")[0] || c.name}`,
+          url: `mailto:${c.email}?subject=${replySubject}`,
+        },
       }),
     });
   }
 }
-
 
 /* ───────────────── Status updates (admin-triggered) ───────────────── */
 
@@ -325,7 +367,9 @@ export async function notifyStatusUpdate(s: {
       outro: s.note,
       cta: {
         label: "View in your account",
-        url: siteUrl(s.kind === "order" ? "/account/orders" : "/account/bookings"),
+        url: siteUrl(
+          s.kind === "order" ? "/account/orders" : "/account/bookings",
+        ),
       },
     }),
   });
@@ -344,11 +388,13 @@ export async function notifyNewsletterSignup(s: {
     subject: "You're on the list! 🌊 Big Wave Slides",
     html: renderEmail({
       heading: "Welcome to the Big Wave family!",
-      preheader: "Thanks for subscribing — splashy tips, offers, and new slides are headed your way.",
+      preheader:
+        "Thanks for subscribing — splashy tips, offers, and new slides are headed your way.",
       intro:
         "Thanks for subscribing to Big Wave Slides. You'll be the first to hear about new slides, seasonal offers, and party-planning tips. Ready to make a splash?",
       cta: { label: "Browse our slides", url: siteUrl("/rent") },
-      outro: "Not you, or changed your mind? Just reply to this email and we'll remove you right away.",
+      outro:
+        "Not you, or changed your mind? Just reply to this email and we'll remove you right away.",
     }),
   });
 
@@ -377,7 +423,8 @@ export async function sendAbandonedCartReminder(email: string): Promise<void> {
     subject: "You left something in your cart 🌊",
     html: renderEmail({
       heading: "Still thinking it over?",
-      intro: "Your cart is waiting! Finish your request in a couple of clicks — no payment needed, we'll send you a personalized quote.",
+      intro:
+        "Your cart is waiting! Finish your request in a couple of clicks — no payment needed, we'll send you a personalized quote.",
       cta: { label: "Return to your cart", url: siteUrl("/cart") },
     }),
   });

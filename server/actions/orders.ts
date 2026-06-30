@@ -89,10 +89,10 @@ export async function createOrderRequest(
     }
 
     const items = cart.items.map((item) => {
+      // Cart = purchase, so snapshot the sale (buy) price; fall back to the
+      // daily rate only for a rental-only product that slipped into the cart.
       const unit =
-        (item.product.type === "SALE"
-          ? item.product.salePriceCents
-          : item.product.dailyRateCents) ?? 0;
+        item.product.salePriceCents ?? item.product.dailyRateCents ?? 0;
       const name =
         (item.product.name as { en?: string; fr?: string })[
           data.locale as "en" | "fr"
