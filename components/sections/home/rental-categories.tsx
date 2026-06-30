@@ -145,18 +145,16 @@ export async function RentalCategories({
         </h2>
       </Container>
 
-      {/* Mobile (hidden on sm+ screens): a horizontal strip you swipe through.
-          "snap-x snap-mandatory" makes each card snap neatly into place as you
-          scroll. The scrollbar is hidden for a cleaner look. */}
-      <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {cards.map((card) => (
-          <CategoryCard key={card.key} card={card} />
-        ))}
+      {/* The cards auto-scroll left→right forever in a Marquee on every screen
+          size (it pauses on hover/touch). Faster loop on mobile so it feels
+          lively on a small screen. */}
+      <div className="mt-8 sm:hidden">
+        <Marquee durationSeconds={32}>
+          {cards.map((card) => (
+            <CategoryCard key={card.key} card={card} />
+          ))}
+        </Marquee>
       </div>
-
-      {/* Desktop (sm+ only): the same cards in a Marquee that auto-scrolls
-          forever. durationSeconds controls how long one full loop takes; the
-          Marquee component pauses the animation on hover. */}
       <div className="mt-8 hidden sm:block">
         <Marquee durationSeconds={55}>
           {cards.map((card) => (

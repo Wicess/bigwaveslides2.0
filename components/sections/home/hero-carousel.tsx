@@ -138,7 +138,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
 
       {/* Slide indicators — the little dots at the bottom. Clicking one jumps
           to that slide. left-1/2 + -translate-x-1/2 centers the row. */}
-      <div className="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2.5">
+      <div className="absolute bottom-7 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-2.5 sm:flex">
         {slides.map((slide, i) => (
           <button
             key={`dot-${slide.type}-${i}`}
