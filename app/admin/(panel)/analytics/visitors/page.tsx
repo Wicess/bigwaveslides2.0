@@ -71,49 +71,73 @@ export default async function VisitorsPage({
             No visitors yet. Traffic will appear here once the site is live.
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="px-4 py-3 font-semibold">Visitor</th>
-                  <th className="px-4 py-3 font-semibold">Location</th>
-                  <th className="px-4 py-3 font-semibold">Device</th>
-                  <th className="px-4 py-3 text-right font-semibold">Sessions</th>
-                  <th className="px-4 py-3 text-right font-semibold">Views</th>
-                  <th className="px-4 py-3 font-semibold">First seen</th>
-                  <th className="px-4 py-3 font-semibold">Last seen</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {visitors.map((v) => (
-                  <tr key={v.id} className="transition-colors hover:bg-muted/30">
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/admin/analytics/visitors/${v.id}`}
-                        className="font-mono text-xs font-semibold text-primary hover:underline"
-                      >
-                        #{v.visitorKey.slice(0, 8)}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="flex items-center gap-1.5">
-                        <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
-                        {locationLabel(v)}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 capitalize text-muted-foreground">
-                      {v.device.toLowerCase()}
-                      {v.browser ? ` · ${v.browser}` : ""}
-                    </td>
-                    <td className="px-4 py-3 text-right font-semibold">{v.visitCount}</td>
-                    <td className="px-4 py-3 text-right font-semibold">{v.pageViewCount}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{dt(v.firstSeenAt)}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{dt(v.lastSeenAt)}</td>
+          <>
+            {/* Desktop table */}
+            <div className="hidden overflow-x-auto md:block">
+              <table className="w-full text-sm">
+                <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                  <tr>
+                    <th className="px-4 py-3 font-semibold">Visitor</th>
+                    <th className="px-4 py-3 font-semibold">Location</th>
+                    <th className="px-4 py-3 font-semibold">Device</th>
+                    <th className="px-4 py-3 text-right font-semibold">Sessions</th>
+                    <th className="px-4 py-3 text-right font-semibold">Views</th>
+                    <th className="px-4 py-3 font-semibold">First seen</th>
+                    <th className="px-4 py-3 font-semibold">Last seen</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {visitors.map((v) => (
+                    <tr key={v.id} className="transition-colors hover:bg-muted/30">
+                      <td className="px-4 py-3">
+                        <Link
+                          href={`/admin/analytics/visitors/${v.id}`}
+                          className="font-mono text-xs font-semibold text-primary hover:underline"
+                        >
+                          #{v.visitorKey.slice(0, 8)}
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="flex items-center gap-1.5">
+                          <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
+                          {locationLabel(v)}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 capitalize text-muted-foreground">
+                        {v.device.toLowerCase()}
+                        {v.browser ? ` · ${v.browser}` : ""}
+                      </td>
+                      <td className="px-4 py-3 text-right font-semibold">{v.visitCount}</td>
+                      <td className="px-4 py-3 text-right font-semibold">{v.pageViewCount}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{dt(v.firstSeenAt)}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{dt(v.lastSeenAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <ul className="divide-y divide-border md:hidden">
+              {visitors.map((v) => (
+                <li key={v.id}>
+                  <Link href={`/admin/analytics/visitors/${v.id}`} className="block p-4 active:bg-muted/40">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-mono text-xs font-semibold text-primary">#{v.visitorKey.slice(0, 8)}</span>
+                      <span className="text-xs text-muted-foreground">{dt(v.lastSeenAt)}</span>
+                    </div>
+                    <div className="mt-1 flex items-center gap-1.5 text-sm">
+                      <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
+                      {locationLabel(v)}
+                    </div>
+                    <div className="mt-1 text-xs capitalize text-muted-foreground">
+                      {v.device.toLowerCase()}{v.browser ? ` · ${v.browser}` : ""} · {v.visitCount} sessions · {v.pageViewCount} views
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </Card>
 

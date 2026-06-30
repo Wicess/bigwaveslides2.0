@@ -111,28 +111,56 @@ export async function geoFromIp(ip: string | null | undefined): Promise<GeoInfo 
   if (!isPublicIp(ip)) return null;
   const cached = ipCache.get(ip);
   if (cached) return cached;
+  // Try ipapi.co (https) first, then ip-api.com as a fallback. Both return
+  // fully-expanded region/state names worldwide.
+  const info = (await fromIpapiCo(ip)) ?? (await fromIpApiCom(ip));
+  if (info) ipCache.set(ip, info);
+  return info;
+}
+
+async function fetchJson(url: string): Promise<Record<string, unknown> | null> {
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 1500);
-    const res = await fetch(`https://ipapi.co/${encodeURIComponent(ip)}/json/`, {
+    const timer = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch(url, {
       signal: controller.signal,
       headers: { accept: "application/json" },
     }).finally(() => clearTimeout(timer));
     if (!res.ok) return null;
-    const d = (await res.json()) as Record<string, unknown>;
-    if (d.error) return null;
-    const info: GeoInfo = {
-      country: (d.country_name as string) ?? null,
-      countryCode: ((d.country_code as string) ?? "").toUpperCase() || null,
-      region: (d.region as string) ?? null,
-      regionCode: ((d.region_code as string) ?? "").toUpperCase() || null,
-      city: (d.city as string) ?? null,
-    };
-    ipCache.set(ip, info);
-    return info;
+    return (await res.json()) as Record<string, unknown>;
   } catch {
     return null;
   }
+}
+
+async function fromIpapiCo(ip: string): Promise<GeoInfo | null> {
+  const d = await fetchJson(`https://ipapi.co/${encodeURIComponent(ip)}/json/`);
+  if (!d || d.error) return null;
+  const country = (d.country_name as string) ?? null;
+  if (!country) return null;
+  return {
+    country,
+    countryCode: ((d.country_code as string) ?? "").toUpperCase() || null,
+    region: (d.region as string) ?? null,
+    regionCode: ((d.region_code as string) ?? "").toUpperCase() || null,
+    city: (d.city as string) ?? null,
+  };
+}
+
+async function fromIpApiCom(ip: string): Promise<GeoInfo | null> {
+  const d = await fetchJson(
+    `http://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,country,countryCode,regionName,region,city`,
+  );
+  if (!d || d.status !== "success") return null;
+  const country = (d.country as string) ?? null;
+  if (!country) return null;
+  return {
+    country,
+    countryCode: ((d.countryCode as string) ?? "").toUpperCase() || null,
+    region: (d.regionName as string) ?? null, // full name, e.g. "Littoral"
+    regionCode: ((d.region as string) ?? "").toUpperCase() || null,
+    city: (d.city as string) ?? null,
+  };
 }
 
 /** Read the client IP from a request's edge/proxy headers. */

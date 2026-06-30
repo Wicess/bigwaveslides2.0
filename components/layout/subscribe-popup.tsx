@@ -28,16 +28,13 @@ export function SubscribePopup({ locale = "en" }: { locale?: string }) {
     if (typeof window === "undefined") return;
     if (localStorage.getItem(STORAGE_KEY) === "1") return;
 
-    // Show after the first 10s, then keep re-appearing every 10s while closed.
-    const tick = () => {
-      if (localStorage.getItem(STORAGE_KEY) === "1") return;
-      setOpen((prev) => prev || true);
+    // Show after the first 10s, then keep re-appearing every 10s while closed,
+    // until the visitor subscribes.
+    const show = () => {
+      if (localStorage.getItem(STORAGE_KEY) !== "1") setOpen(true);
     };
-    const first = window.setTimeout(tick, INTERVAL_MS);
-    const interval = window.setInterval(() => {
-      if (localStorage.getItem(STORAGE_KEY) === "1") return;
-      setOpen(true);
-    }, INTERVAL_MS);
+    const first = window.setTimeout(show, INTERVAL_MS);
+    const interval = window.setInterval(show, INTERVAL_MS);
     return () => {
       window.clearTimeout(first);
       window.clearInterval(interval);
