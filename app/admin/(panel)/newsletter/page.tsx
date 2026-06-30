@@ -3,6 +3,9 @@ import { getAdminSubscribers } from "@/server/data/admin-cms";
 import { formatDate } from "@/lib/format";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { NewsletterTable, type SubscriberRow } from "@/components/admin/newsletter-table";
+import { Reveal } from "@/components/admin/admin-ui";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminNewsletterPage() {
   await requirePermission("newsletter.manage");
@@ -21,10 +24,13 @@ export default async function AdminNewsletterPage() {
   return (
     <div>
       <AdminPageHeader
+        eyebrow="CRM & comms"
         title="Newsletter"
         description={`${active} active subscriber${active === 1 ? "" : "s"} of ${subs.length} total.`}
       />
-      <NewsletterTable subscribers={rows} />
+      <Reveal delay={0.05}>
+        <NewsletterTable subscribers={rows} />
+      </Reveal>
     </div>
   );
 }

@@ -1,95 +1,188 @@
 import Link from "next/link";
-import { Plus, Tags } from "lucide-react";
+import { Plus, Tags, Newspaper, Eye, ExternalLink } from "lucide-react";
 import { requirePermission } from "@/lib/admin-auth";
 import { getAdminPosts } from "@/server/data/admin-cms";
 import { getLocalized } from "@/lib/localized";
 import { formatDate } from "@/lib/format";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import {
+  AdminCard,
+  CountPill,
+  EmptyState,
+  IconChip,
+  Reveal,
+  Th,
+  Toolbar,
+} from "@/components/admin/admin-ui";
+import { FilterSelect } from "@/components/admin/list-controls";
+import { DropdownMenu, DropdownLink } from "@/components/admin/dropdown-menu";
 
-export default async function AdminBlogPage() {
+export const dynamic = "force-dynamic";
+
+type Props = { searchParams: Promise<{ status?: string }> };
+
+export default async function AdminBlogPage({ searchParams }: Props) {
   await requirePermission("blog.write");
-  const posts = await getAdminPosts();
+  const { status } = await searchParams;
+  const all = await getAdminPosts();
+  const posts = all.filter((p) => !status || p.status === status);
 
   return (
     <div>
       <AdminPageHeader
+        eyebrow="Content"
         title="Blog"
         description="Articles, guides, and news."
         action={
           <div className="flex gap-2">
             <Button asChild variant="outline" size="sm">
-              <Link href="/admin/blog/taxonomy"><Tags className="size-4" /> Taxonomy</Link>
+              <Link href="/admin/blog/taxonomy">
+                <Tags className="size-4" /> Taxonomy
+              </Link>
             </Button>
             <Button asChild size="sm" variant="gradient">
-              <Link href="/admin/blog/new"><Plus className="size-4" /> New post</Link>
+              <Link href="/admin/blog/new">
+                <Plus className="size-4" /> New post
+              </Link>
             </Button>
           </div>
         }
       />
-      <Card className="overflow-hidden">
-        {posts.length === 0 ? (
-          <p className="p-8 text-center text-sm text-muted-foreground">No posts yet.</p>
-        ) : (
-          <>
-            {/* Desktop table */}
-            <div className="hidden overflow-x-auto md:block">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
-                  <tr>
-                    <th className="px-4 py-3">Title</th>
-                    <th className="px-4 py-3">Author</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Published</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {posts.map((p) => (
-                    <tr key={p.id} className="hover:bg-muted/30">
-                      <td className="px-4 py-3">
-                        <Link href={`/admin/blog/${p.id}`} className="font-semibold text-primary">
-                          {getLocalized(p.title, "en")}
-                        </Link>
-                        {p.featured ? <Badge variant="secondary" className="ml-2">Featured</Badge> : null}
-                        <span className="block text-xs text-muted-foreground">
-                          {p.category?.name ? getLocalized(p.category.name, "en") : "Uncategorized"}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">{p.author?.name ?? "—"}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{p.status}</td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {p.publishedAt ? formatDate(p.publishedAt, "en") : "—"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
 
-            {/* Mobile cards */}
-            <ul className="divide-y divide-border md:hidden">
-              {posts.map((p) => (
-                <li key={p.id}>
-                  <Link href={`/admin/blog/${p.id}`} className="block p-4 active:bg-muted/40">
-                    <span className="block font-semibold text-primary">
-                      {getLocalized(p.title, "en")}
-                      {p.featured ? <Badge variant="secondary" className="ml-2">Featured</Badge> : null}
-                    </span>
-                    <span className="mt-0.5 block text-xs text-muted-foreground">
-                      {p.category?.name ? getLocalized(p.category.name, "en") : "Uncategorized"} · {p.author?.name ?? "—"}
-                    </span>
-                    <span className="mt-1 block text-xs text-muted-foreground">
-                      {p.status} · {p.publishedAt ? formatDate(p.publishedAt, "en") : "Draft"}
-                    </span>
+      <Toolbar>
+        <div className="flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-foreground">All posts</h2>
+          <CountPill>{posts.length}</CountPill>
+        </div>
+        <FilterSelect
+          name="status"
+          placeholder="Any status"
+          className="w-full sm:w-44"
+          options={[
+            { value: "PUBLISHED", label: "Published" },
+            { value: "DRAFT", label: "Draft" },
+          ]}
+        />
+      </Toolbar>
+
+      <Reveal delay={0.05}>
+        <AdminCard className="overflow-hidden">
+          {posts.length === 0 ? (
+            <EmptyState
+              icon={Newspaper}
+              title="No posts yet"
+              hint="Write your first article to start the blog."
+              action={
+                <Button asChild size="sm" variant="gradient">
+                  <Link href="/admin/blog/new">
+                    <Plus className="size-4" /> New post
                   </Link>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </Card>
+                </Button>
+              }
+            />
+          ) : (
+            <>
+              {/* Desktop table */}
+              <div className="hidden overflow-x-auto md:block">
+                <table className="w-full text-sm">
+                  <thead className="border-b border-border bg-muted/50">
+                    <tr>
+                      <Th>Title</Th>
+                      <Th>Author</Th>
+                      <Th>Status</Th>
+                      <Th>Published</Th>
+                      <Th className="text-right">Actions</Th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/70">
+                    {posts.map((p) => {
+                      const live = p.status === "PUBLISHED";
+                      return (
+                        <tr key={p.id} className="group transition-colors hover:bg-primary-50/40">
+                          <td className="px-5 py-3.5">
+                            <Link href={`/admin/blog/${p.id}`} className="flex items-center gap-3">
+                              <IconChip icon={Newspaper} />
+                              <span className="min-w-0">
+                                <span className="flex items-center gap-2">
+                                  <span className="truncate font-semibold text-foreground group-hover:text-primary">
+                                    {getLocalized(p.title, "en")}
+                                  </span>
+                                  {p.featured ? <Badge variant="secondary">Featured</Badge> : null}
+                                </span>
+                                <span className="block truncate text-xs text-muted-foreground">
+                                  {p.category?.name
+                                    ? getLocalized(p.category.name, "en")
+                                    : "Uncategorized"}
+                                </span>
+                              </span>
+                            </Link>
+                          </td>
+                          <td className="px-5 py-3.5 text-muted-foreground">
+                            {p.author?.name ?? "—"}
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground/70">
+                              <span
+                                className={`size-2 rounded-full ${live ? "bg-green-500" : "bg-muted-foreground/40"}`}
+                              />
+                              {p.status}
+                            </span>
+                          </td>
+                          <td className="whitespace-nowrap px-5 py-3.5 text-muted-foreground">
+                            {p.publishedAt ? formatDate(p.publishedAt, "en") : "—"}
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <div className="flex justify-end">
+                              <DropdownMenu>
+                                <DropdownLink href={`/admin/blog/${p.id}`}>
+                                  <Eye className="size-4" /> Edit post
+                                </DropdownLink>
+                                {live && p.slug ? (
+                                  <DropdownLink href={`/blog/${p.slug}`} target="_blank">
+                                    <ExternalLink className="size-4" /> View live
+                                  </DropdownLink>
+                                ) : null}
+                              </DropdownMenu>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile cards */}
+              <ul className="divide-y divide-border/70 md:hidden">
+                {posts.map((p) => (
+                  <li key={p.id}>
+                    <Link href={`/admin/blog/${p.id}`} className="flex items-center gap-3 p-4 active:bg-primary-50/40">
+                      <IconChip icon={Newspaper} />
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-center gap-2">
+                          <span className="truncate font-semibold text-foreground">
+                            {getLocalized(p.title, "en")}
+                          </span>
+                          {p.featured ? <Badge variant="secondary">Featured</Badge> : null}
+                        </span>
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {p.category?.name ? getLocalized(p.category.name, "en") : "Uncategorized"} ·{" "}
+                          {p.author?.name ?? "—"}
+                        </span>
+                        <span className="mt-0.5 block text-xs text-muted-foreground">
+                          {p.status} · {p.publishedAt ? formatDate(p.publishedAt, "en") : "Draft"}
+                        </span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </AdminCard>
+      </Reveal>
     </div>
   );
 }

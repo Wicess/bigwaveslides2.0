@@ -1,7 +1,7 @@
 import { requirePermission } from "@/lib/admin-auth";
 import { getAllSettings } from "@/server/data/admin-cms";
-import { Card } from "@/components/ui/card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminCard, Reveal } from "@/components/admin/admin-ui";
 import { SettingsForm, type SettingsValues } from "@/components/admin/settings-form";
 
 export default async function AdminSettingsPage() {
@@ -33,10 +33,16 @@ export default async function AdminSettingsPage() {
 
   return (
     <div>
-      <AdminPageHeader title="Settings" description="Contact info, hours, fees, and social links." />
-      <Card className="p-6">
-        <SettingsForm defaults={defaults} />
-      </Card>
+      <AdminPageHeader
+        eyebrow="Governance"
+        title="Settings"
+        description="Contact info, hours, fees, and social links."
+      />
+      <Reveal delay={0.05}>
+        <AdminCard className="p-6 sm:p-8">
+          <SettingsForm defaults={defaults} />
+        </AdminCard>
+      </Reveal>
     </div>
   );
 }
