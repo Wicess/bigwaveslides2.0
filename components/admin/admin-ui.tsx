@@ -150,3 +150,85 @@ export function IconChip({
     </span>
   );
 }
+
+/** Gradient initials avatar. */
+export function Avatar({ name, className }: { name?: string | null; className?: string }) {
+  const initials = (name ?? "?")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]!.toUpperCase())
+    .join("");
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "grid size-10 shrink-0 place-items-center rounded-full text-sm font-bold text-white shadow-[var(--shadow-glow)] [background:var(--gradient-wave)]",
+        className,
+      )}
+    >
+      {initials || "?"}
+    </span>
+  );
+}
+
+/** Small count pill, e.g. next to a page title. */
+export function CountPill({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-bold text-primary">
+      {children}
+    </span>
+  );
+}
+
+/** Centered empty-state for lists. */
+export function EmptyState({
+  icon: Icon,
+  title,
+  hint,
+  action,
+}: {
+  icon: LucideIcon;
+  title: string;
+  hint?: string;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
+      <span className="grid size-14 place-items-center rounded-2xl bg-primary-50 text-primary">
+        <Icon className="size-6" />
+      </span>
+      <p className="mt-4 font-display text-base font-bold text-foreground">{title}</p>
+      {hint ? <p className="mt-1 max-w-sm text-sm text-muted-foreground">{hint}</p> : null}
+      {action ? <div className="mt-5">{action}</div> : null}
+    </div>
+  );
+}
+
+/** Toolbar row above a list — slot in filters/search on the left, actions right. */
+export function Toolbar({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <div
+      className={cn(
+        "admin-rise mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Sticky, styled <thead> cell. */
+export function Th({ children, className }: { children?: ReactNode; className?: string }) {
+  return (
+    <th
+      className={cn(
+        "whitespace-nowrap px-5 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground",
+        className,
+      )}
+    >
+      {children}
+    </th>
+  );
+}

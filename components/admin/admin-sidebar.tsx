@@ -309,13 +309,11 @@ export function AdminShell({
   }, [open]);
 
   return (
-    <div className="min-h-dvh bg-[var(--admin-canvas)] lg:p-4">
-      <div className="flex min-h-dvh overflow-hidden bg-[var(--admin-panel)] lg:min-h-[calc(100dvh-2rem)] lg:rounded-[2rem] lg:shadow-[0_40px_90px_-40px_rgba(0,0,0,0.65)]">
-        {/* Desktop nav rail */}
-        <aside className="hidden w-[270px] shrink-0 border-r border-border/70 lg:block">
-          <div className="sticky top-0 h-[calc(100dvh-2rem)]">
-            <NavBody name={name} role={role} />
-          </div>
+    <div className="h-dvh overflow-hidden bg-[var(--admin-canvas)] lg:p-4">
+      <div className="flex h-full overflow-hidden bg-[var(--admin-panel)] lg:rounded-[2rem] lg:shadow-[0_40px_90px_-40px_rgba(0,0,0,0.65)]">
+        {/* Desktop nav rail — fixed full-height; only the content column scrolls. */}
+        <aside className="hidden h-full w-[268px] shrink-0 border-r border-border/70 lg:block">
+          <NavBody name={name} role={role} />
         </aside>
 
         {/* Mobile drawer + backdrop */}
@@ -351,11 +349,11 @@ export function AdminShell({
           </div>
         </div>
 
-        {/* Content column */}
-        <div className="flex min-w-0 flex-1 flex-col">
+        {/* Content column — the only scroll container, fills the full width */}
+        <div className="flex h-full min-w-0 flex-1 flex-col">
           <TopBar name={name} onOpenMenu={() => setOpen(true)} />
-          <main className="admin-scroll mx-auto w-full max-w-6xl flex-1 p-4 sm:p-6 lg:p-8">
-            {children}
+          <main className="admin-scroll w-full flex-1 overflow-y-auto px-4 pb-12 pt-5 sm:px-6 lg:px-8 xl:px-10">
+            <div className="mx-auto w-full max-w-[1700px]">{children}</div>
           </main>
         </div>
       </div>
