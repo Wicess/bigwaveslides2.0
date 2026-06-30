@@ -99,7 +99,7 @@ export function SubscribePopup({ locale = "en" }: { locale?: string }) {
           </div>
         ) : (
           <>
-            <div className="flex items-center gap-2 text-primary">
+            <div className="flex items-center gap-2 text-primary-700">
               <Sparkles className="size-4" />
               <span className="text-xs font-bold uppercase tracking-wider">Limited offer</span>
             </div>

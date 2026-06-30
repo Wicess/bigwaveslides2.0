@@ -84,13 +84,14 @@ export function SiteHeader({ locale, data }: Props) {
             >
               <Image
                 src="/logo.png"
-                alt="Big Wave Slides"
+                alt=""
+                aria-hidden
                 width={56}
                 height={56}
                 priority
                 className="h-12 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
               />
-              <span className="font-brand text-[1.65rem] font-bold tracking-[-0.01em] text-white">
+              <span aria-hidden className="font-brand text-[1.65rem] font-bold tracking-[-0.01em] text-white">
                 BWS
               </span>
             </Link>
@@ -557,12 +558,13 @@ function MobileMenu({
               >
                 <Image
                   src="/logo.png"
-                  alt="Big Wave Slides"
+                  alt=""
+                  aria-hidden
                   width={150}
                   height={127}
                   className="h-10 w-auto"
                 />
-                <span className="font-brand text-xl font-bold tracking-[-0.01em] text-foreground">
+                <span aria-hidden className="font-brand text-xl font-bold tracking-[-0.01em] text-foreground">
                   BWS
                 </span>
               </Link>

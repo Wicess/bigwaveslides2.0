@@ -170,7 +170,7 @@ export async function LatestBlog({
                     ) : null}
                     {/* Category badge, shown only if the post has a category. */}
                     {p.category ? (
-                      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-primary shadow-sm backdrop-blur">
+                      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-primary-700 shadow-sm backdrop-blur">
                         {getLocalized(p.category.name, locale)}
                       </span>
                     ) : null}
@@ -199,7 +199,7 @@ export async function LatestBlog({
                     </p>
                     {/* "Read more" call-to-action. On hover the arrow nudges
                         right to hint that the card is clickable. */}
-                    <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                    <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700">
                       {t("readMore")}
                       <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
                     </span>

@@ -43,8 +43,9 @@ export function WhatsAppFab({ phone, label, message }: WhatsAppFabProps) {
       </span>
 
       {/* Label: bold call-to-action with a quieter "on WhatsApp" subline
-          (subline hidden on mobile to keep the button compact). */}
-      <span className="text-left leading-none">
+          (subline hidden on mobile to keep the button compact). Decorative —
+          the link's aria-label provides the accessible name. */}
+      <span aria-hidden className="text-left leading-none">
         <span className="block text-[11px] font-extrabold uppercase tracking-wide sm:text-sm">
           Chat now
         </span>

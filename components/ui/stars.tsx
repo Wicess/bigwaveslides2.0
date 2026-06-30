@@ -25,6 +25,7 @@ export function Stars({
   const rounded = Math.round(rating);
   return (
     <div
+      role="img"
       className={cn("inline-flex items-center gap-0.5", className)}
       // Screen-reader label showing the exact rating (the icons are decorative).
       aria-label={`${rating.toFixed(1)} out of 5`}

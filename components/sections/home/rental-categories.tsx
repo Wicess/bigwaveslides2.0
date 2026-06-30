@@ -59,7 +59,8 @@ function CategoryCard({ card }: { card: Card }) {
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={card.image}
-          alt={card.title}
+          alt=""
+          aria-hidden
           loading="lazy"
           className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
         />

@@ -35,7 +35,7 @@ export async function TrustBand() {
     <section className="relative overflow-hidden border-b border-border bg-white py-10 sm:py-12">
       <Container>
         <Reveal>
-          <p className="text-center text-sm font-bold uppercase tracking-[0.22em] text-primary">
+          <p className="text-center text-sm font-bold uppercase tracking-[0.22em] text-primary-700">
             {t("ourPartners")}
           </p>
         </Reveal>
