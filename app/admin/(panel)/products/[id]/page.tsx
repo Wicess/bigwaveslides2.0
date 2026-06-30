@@ -1,13 +1,13 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { requirePermission } from "@/lib/admin-auth";
 import { getAdminProduct, getCategoryOptions } from "@/server/data/admin";
 import { getLocalized } from "@/lib/localized";
-import { Card } from "@/components/ui/card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminCard, BackLink, Reveal } from "@/components/admin/admin-ui";
 import { ProductForm, type ProductFormValues } from "@/components/admin/product-form";
 import { DeleteProductButton } from "@/components/admin/delete-product-button";
+
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -69,19 +69,20 @@ export default async function AdminEditProduct({ params }: Props) {
 
   return (
     <div>
-      <Link href="/admin/products" className="mb-4 inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
-        <ArrowLeft className="size-4" /> Products
-      </Link>
+      <BackLink href="/admin/products">Products</BackLink>
       <AdminPageHeader
+        eyebrow="Edit product"
         title={getLocalized(product.name, "en")}
         action={<DeleteProductButton id={product.id} />}
       />
-      <Card className="p-6">
-        <ProductForm
-          defaults={defaults}
-          categories={categories.map((c) => ({ id: c.id, name: getLocalized(c.name, "en") }))}
-        />
-      </Card>
+      <Reveal delay={0.05}>
+        <AdminCard className="p-6 sm:p-8">
+          <ProductForm
+            defaults={defaults}
+            categories={categories.map((c) => ({ id: c.id, name: getLocalized(c.name, "en") }))}
+          />
+        </AdminCard>
+      </Reveal>
     </div>
   );
 }

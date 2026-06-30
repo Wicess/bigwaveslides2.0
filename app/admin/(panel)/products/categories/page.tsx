@@ -1,10 +1,11 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { requirePermission } from "@/lib/admin-auth";
 import { getAdminCategoriesList } from "@/server/data/admin";
 import { getLocalized } from "@/lib/localized";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { BackLink, Reveal } from "@/components/admin/admin-ui";
 import { CategoryManager, type CategoryItem } from "@/components/admin/category-manager";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminCategoriesPage() {
   await requirePermission("category.write");
@@ -21,11 +22,15 @@ export default async function AdminCategoriesPage() {
 
   return (
     <div>
-      <Link href="/admin/products" className="mb-4 inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
-        <ArrowLeft className="size-4" /> Products
-      </Link>
-      <AdminPageHeader title="Categories" description="Create, edit and delete catalog categories." />
-      <CategoryManager categories={items} />
+      <BackLink href="/admin/products">Products</BackLink>
+      <AdminPageHeader
+        eyebrow="Commerce"
+        title="Categories"
+        description="Create, edit and delete catalog categories."
+      />
+      <Reveal delay={0.05}>
+        <CategoryManager categories={items} />
+      </Reveal>
     </div>
   );
 }

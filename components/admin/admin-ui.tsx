@@ -1,6 +1,6 @@
 import type { ComponentType, ReactNode } from "react";
 import Link from "next/link";
-import { ArrowRight, type LucideIcon } from "lucide-react";
+import { ArrowRight, ArrowLeft, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -148,6 +148,30 @@ export function IconChip({
     >
       <Icon className="size-[18px]" />
     </span>
+  );
+}
+
+/** Back navigation link used at the top of detail pages. */
+export function BackLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="admin-rise mb-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-semibold text-foreground/70 transition-colors hover:border-primary/40 hover:text-primary"
+    >
+      <ArrowLeft className="size-4" /> {children}
+    </Link>
+  );
+}
+
+/** Section card title with an icon chip. */
+export function SectionTitle({ icon: Icon, children }: { icon: LucideIcon; children: ReactNode }) {
+  return (
+    <h2 className="mb-4 flex items-center gap-2.5 font-display text-base font-bold text-foreground">
+      <span className="grid size-8 place-items-center rounded-lg bg-primary-50 text-primary">
+        <Icon className="size-[18px]" />
+      </span>
+      {children}
+    </h2>
   );
 }
 

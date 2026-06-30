@@ -1,10 +1,8 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { requirePermission } from "@/lib/admin-auth";
 import { getBlogTaxonomy } from "@/server/data/admin-cms";
 import { getLocalized } from "@/lib/localized";
-import { Card } from "@/components/ui/card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminCard, BackLink, Reveal } from "@/components/admin/admin-ui";
 import { PostForm, type PostFormValues } from "@/components/admin/post-form";
 
 export default async function AdminNewPost() {
@@ -20,17 +18,17 @@ export default async function AdminNewPost() {
 
   return (
     <div>
-      <Link href="/admin/blog" className="mb-4 inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
-        <ArrowLeft className="size-4" /> Blog
-      </Link>
-      <AdminPageHeader title="New post" />
-      <Card className="p-6">
-        <PostForm
-          defaults={defaults}
-          authors={authors}
-          categories={categories.map((c) => ({ id: c.id, name: getLocalized(c.name, "en") }))}
-        />
-      </Card>
+      <BackLink href="/admin/blog">Blog</BackLink>
+      <AdminPageHeader eyebrow="Content" title="New post" description="Write a new article or guide." />
+      <Reveal delay={0.05}>
+        <AdminCard className="p-6 sm:p-8">
+          <PostForm
+            defaults={defaults}
+            authors={authors}
+            categories={categories.map((c) => ({ id: c.id, name: getLocalized(c.name, "en") }))}
+          />
+        </AdminCard>
+      </Reveal>
     </div>
   );
 }

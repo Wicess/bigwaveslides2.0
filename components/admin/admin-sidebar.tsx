@@ -116,7 +116,7 @@ function NavBody({
         </span>
       </div>
 
-      <nav className="admin-scroll flex-1 space-y-6 overflow-y-auto px-4 py-5">
+      <nav className="admin-noscrollbar flex-1 space-y-6 overflow-y-auto px-4 py-5">
         {GROUPS.map((group) => (
           <div key={group.label}>
             <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70">
@@ -352,8 +352,8 @@ export function AdminShell({
         {/* Content column — the only scroll container, fills the full width */}
         <div className="flex h-full min-w-0 flex-1 flex-col">
           <TopBar name={name} onOpenMenu={() => setOpen(true)} />
-          <main className="admin-scroll w-full flex-1 overflow-y-auto px-4 pb-12 pt-5 sm:px-6 lg:px-8 xl:px-10">
-            <div className="mx-auto w-full max-w-[1700px]">{children}</div>
+          <main className="admin-scroll w-full flex-1 overflow-y-auto px-4 pb-6 pt-4 sm:px-6 lg:px-8 xl:px-10">
+            <div className="mx-auto h-full w-full max-w-[1700px]">{children}</div>
           </main>
         </div>
       </div>

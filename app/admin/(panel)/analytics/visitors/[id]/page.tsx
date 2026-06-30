@@ -1,7 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  ArrowLeft,
   Eye,
   LogOut,
   ShoppingCart,
@@ -17,8 +15,8 @@ import {
 import type { AnalyticsEventType } from "@prisma/client";
 import { getVisitorDetail } from "@/server/data/analytics";
 import { formatDate } from "@/lib/format";
-import { Card } from "@/components/ui/card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminCard, BackLink, Reveal } from "@/components/admin/admin-ui";
 
 export const dynamic = "force-dynamic";
 
@@ -101,47 +99,48 @@ export default async function VisitorDetailPage({
 
   return (
     <div>
-      <Link
-        href="/admin/analytics/visitors"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
-      >
-        <ArrowLeft className="size-4" /> Visitors
-      </Link>
+      <BackLink href="/admin/analytics/visitors">Visitors</BackLink>
       <AdminPageHeader
+        eyebrow="Insights"
         title={`Visitor #${visitor.visitorKey.slice(0, 8)}`}
         description={`📍 ${location}`}
       />
 
       {/* Profile */}
-      <Card className="p-5">
-        <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {info.map((i) => (
-            <div key={i.label}>
-              <dt className="text-xs uppercase tracking-wider text-muted-foreground">{i.label}</dt>
-              <dd className="mt-0.5 truncate font-medium">{i.value}</dd>
-            </div>
-          ))}
-        </dl>
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 border-t border-border pt-4 text-xs text-muted-foreground">
-          <span>Unique ID: <span className="font-mono">{visitor.visitorKey}</span></span>
-          <span>First seen: {dateTime(visitor.firstSeenAt)}</span>
-          <span>Last seen: {dateTime(visitor.lastSeenAt)}</span>
-        </div>
-      </Card>
+      <Reveal delay={0.05}>
+        <AdminCard className="p-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {info.map((i) => (
+              <div key={i.label}>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {i.label}
+                </p>
+                <p className="mt-0.5 truncate font-medium text-foreground">{i.value}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 border-t border-border pt-4 text-xs text-muted-foreground">
+            <span>Unique ID: <span className="font-mono">{visitor.visitorKey}</span></span>
+            <span>First seen: {dateTime(visitor.firstSeenAt)}</span>
+            <span>Last seen: {dateTime(visitor.lastSeenAt)}</span>
+          </div>
+        </AdminCard>
+      </Reveal>
 
       {/* Movement timeline, grouped by session */}
-      <h2 className="mb-3 mt-8 text-lg font-semibold">Movement timeline</h2>
+      <h2 className="mb-3 mt-8 font-display text-lg font-bold text-foreground">Movement timeline</h2>
       {visitor.visits.length === 0 ? (
-        <Card className="p-8 text-center text-sm text-muted-foreground">
+        <AdminCard className="p-8 text-center text-sm text-muted-foreground">
           No sessions recorded for this visitor.
-        </Card>
+        </AdminCard>
       ) : (
         <div className="space-y-5">
           {visitor.visits.map((visit, idx) => {
             const arrived = visit.startedAt;
             const left = visit.endedAt ?? visit.lastSeenAt;
             return (
-              <Card key={visit.id} className="p-5">
+              <Reveal key={visit.id} delay={Math.min(idx * 0.04, 0.3)}>
+              <AdminCard className="p-5">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                   <h3 className="font-semibold">
                     Session {visitor.visits.length - idx}
@@ -195,7 +194,8 @@ export default async function VisitorDetailPage({
                     );
                   })}
                 </ol>
-              </Card>
+              </AdminCard>
+              </Reveal>
             );
           })}
         </div>

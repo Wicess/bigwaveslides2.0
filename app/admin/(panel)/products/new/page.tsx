@@ -1,10 +1,8 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { requirePermission } from "@/lib/admin-auth";
 import { getCategoryOptions } from "@/server/data/admin";
 import { getLocalized } from "@/lib/localized";
-import { Card } from "@/components/ui/card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminCard, BackLink, Reveal } from "@/components/admin/admin-ui";
 import { ProductForm, type ProductFormValues } from "@/components/admin/product-form";
 
 export default async function AdminNewProduct() {
@@ -24,16 +22,16 @@ export default async function AdminNewProduct() {
 
   return (
     <div>
-      <Link href="/admin/products" className="mb-4 inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
-        <ArrowLeft className="size-4" /> Products
-      </Link>
-      <AdminPageHeader title="New product" />
-      <Card className="p-6">
-        <ProductForm
-          defaults={defaults}
-          categories={categories.map((c) => ({ id: c.id, name: getLocalized(c.name, "en") }))}
-        />
-      </Card>
+      <BackLink href="/admin/products">Products</BackLink>
+      <AdminPageHeader eyebrow="Commerce" title="New product" description="Add a slide, bounce house or combo to the catalog." />
+      <Reveal delay={0.05}>
+        <AdminCard className="p-6 sm:p-8">
+          <ProductForm
+            defaults={defaults}
+            categories={categories.map((c) => ({ id: c.id, name: getLocalized(c.name, "en") }))}
+          />
+        </AdminCard>
+      </Reveal>
     </div>
   );
 }
