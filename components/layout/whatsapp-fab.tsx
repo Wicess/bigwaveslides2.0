@@ -33,7 +33,7 @@ export function WhatsAppFab({ phone, label, message }: WhatsAppFabProps) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="group fixed bottom-20 left-3 z-50 flex items-center gap-1.5 rounded-full py-1.5 pl-1.5 pr-3 text-white shadow-[0_10px_30px_-8px_rgba(16,142,86,0.7)] ring-1 ring-white/15 transition-transform duration-200 hover:scale-[1.04] [background:linear-gradient(135deg,#3ad07f_0%,#22b06a_45%,#109e5e_100%)] sm:bottom-6 sm:left-6 sm:gap-2.5 sm:py-2.5 sm:pl-2.5 sm:pr-5"
+      className="group fixed bottom-10 left-3 z-50 flex items-center gap-1.5 rounded-full py-1.5 pl-1.5 pr-3 text-white shadow-[0_10px_30px_-8px_rgba(16,142,86,0.7)] ring-1 ring-white/15 transition-transform duration-200 hover:scale-[1.04] [background:linear-gradient(135deg,#3ad07f_0%,#22b06a_45%,#109e5e_100%)] sm:bottom-6 sm:left-6 sm:gap-2.5 sm:py-2.5 sm:pl-2.5 sm:pr-5"
     >
       {/* Left badge with the three randomly-jiggling "typing" dots. */}
       <span className="flex size-6 items-center justify-center gap-[2px] rounded-full bg-white/20 shadow-inner sm:size-9 sm:gap-[3px]">

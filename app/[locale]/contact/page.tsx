@@ -45,7 +45,6 @@ export default async function ContactPage({ params }: Props) {
         info={{
           email: contact.email,
           phone: contact.phone,
-          address: contact.address,
           whatsappDigits: whatsappDigits || undefined,
         }}
       />

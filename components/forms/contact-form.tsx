@@ -18,7 +18,7 @@ import { EASE_OUT } from "@/components/motion/variants";
 const formSchema = z.object({
   name: z.string().min(2, "Please enter your name"),
   email: z.string().email("Enter a valid email"),
-  phone: z.string().optional(),
+  phone: z.string().min(5, "Enter a phone number"),
   subject: z.string().optional(),
   message: z.string().min(10, "Tell us a little more"),
   website: z.string().optional(),
@@ -129,14 +129,17 @@ export function ContactForm() {
           </div>
 
           <div className="grid gap-3.5 sm:grid-cols-2">
-            <Input
-              type="tel"
-              {...register("phone")}
-              placeholder={t("phPhone")}
-              aria-label={t("formPhone")}
-              autoComplete="tel"
-              className={fieldClass}
-            />
+            <div>
+              <Input
+                type="tel"
+                {...register("phone")}
+                placeholder={t("phPhone")}
+                aria-label={t("formPhone")}
+                autoComplete="tel"
+                className={fieldClass}
+              />
+              <FieldError msg={errors.phone?.message} />
+            </div>
             <Input
               {...register("subject")}
               placeholder={t("phSubject")}

@@ -14,7 +14,7 @@
  */
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import { Mail, Phone, MapPin, ShieldCheck, Sparkles, Clock } from "lucide-react";
+import { Mail, Phone, ShieldCheck, Sparkles, Clock } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import {
   InstagramIcon,
@@ -171,12 +171,6 @@ export async function SiteFooter({
                 >
                   {contact.phone}
                 </a>
-              </li>
-            ) : null}
-            {contact.address ? (
-              <li className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-secondary" />
-                {contact.address}
               </li>
             ) : null}
           </ul>

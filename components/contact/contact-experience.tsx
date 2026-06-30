@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Phone, Mail, MapPin, MessageCircle, ChevronRight, ArrowUpRight } from "lucide-react";
+import { Phone, Mail, MessageCircle, ChevronRight, ArrowUpRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
@@ -12,7 +12,6 @@ import { EASE_OUT } from "@/components/motion/variants";
 type ContactInfo = {
   email?: string;
   phone?: string;
-  address?: string;
   whatsappDigits?: string;
 };
 
@@ -44,9 +43,6 @@ export function ContactExperience({ info }: { info: ContactInfo }) {
           value: info.email,
           href: `mailto:${info.email}`,
         }
-      : null,
-    info.address
-      ? { key: "address", icon: MapPin, label: t("addressLabel"), value: info.address, href: undefined }
       : null,
   ].filter(Boolean) as {
     key: string;

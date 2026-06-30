@@ -71,7 +71,7 @@
   "Home": {
     "eyebrow": "Sell · Rent · Install",
     "tagline": "Ride the Big Wave",
-    "subtitle": "Premium water slides to buy, rent, and install for unforgettable parties, events, and gatherings.",
+    "subtitle": "Premium Water Slides, Bounce Houses, for a fun summer and Events.",
     "rentNowAt": "Rent now at",
     "ctaShop": "Shop Slides",
     "ctaRent": "Rent for Your Event",
@@ -187,7 +187,7 @@
     "desc": "Questions, quotes, or bookings — we usually reply within a few hours.",
     "formName": "Full name",
     "formEmail": "Email",
-    "formPhone": "Phone (optional)",
+    "formPhone": "Phone",
     "formSubject": "Subject",
     "formMessage": "Your message",
     "send": "Send message",
@@ -216,7 +216,7 @@
     "sendIntro": "Fill out the form below with your details and message, and we'll get right back to you.",
     "phName": "Full name",
     "phEmail": "Email address",
-    "phPhone": "Phone number (optional)",
+    "phPhone": "Phone number",
     "phSubject": "Subject (optional)",
     "phMessage": "Write your message here…"
   },

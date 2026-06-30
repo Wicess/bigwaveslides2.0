@@ -71,7 +71,7 @@
   "Home": {
     "eyebrow": "Vente · Location · Installation",
     "tagline": "Surfez la Grande Vague",
-    "subtitle": "Toboggans aquatiques premium à acheter, louer et installer pour des fêtes, événements et rassemblements inoubliables.",
+    "subtitle": "Toboggans aquatiques et châteaux gonflables premium, pour un été et des événements amusants.",
     "rentNowAt": "Louez dès maintenant à",
     "ctaShop": "Voir les toboggans",
     "ctaRent": "Louer pour votre événement",
@@ -187,7 +187,7 @@
     "desc": "Questions, devis ou réservations — nous répondons généralement en quelques heures.",
     "formName": "Nom complet",
     "formEmail": "E-mail",
-    "formPhone": "Téléphone (facultatif)",
+    "formPhone": "Téléphone",
     "formSubject": "Sujet",
     "formMessage": "Votre message",
     "send": "Envoyer le message",
@@ -216,7 +216,7 @@
     "sendIntro": "Remplissez le formulaire ci-dessous avec vos coordonnées et votre message, nous vous répondrons rapidement.",
     "phName": "Nom complet",
     "phEmail": "Adresse email",
-    "phPhone": "Numéro de téléphone (facultatif)",
+    "phPhone": "Numéro de téléphone",
     "phSubject": "Sujet (facultatif)",
     "phMessage": "Écrivez votre message ici…"
   },

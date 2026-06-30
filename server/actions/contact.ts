@@ -7,7 +7,7 @@ import { notifyContact } from "@/lib/notifications";
 const schema = z.object({
   name: z.string().min(2).max(120),
   email: z.string().email(),
-  phone: z.string().max(40).optional().or(z.literal("")),
+  phone: z.string().min(5).max(40),
   subject: z.string().max(160).optional().or(z.literal("")),
   message: z.string().min(10).max(4000),
   locale: z.string().default("en"),

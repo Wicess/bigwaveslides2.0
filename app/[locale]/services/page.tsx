@@ -111,7 +111,10 @@ export default async function ServicesPage({ params }: Props) {
           <section
             key={s.slug}
             id={s.slug}
-            className={cn("scroll-mt-28 py-12 sm:py-14", i % 2 === 1 && "bg-muted/40")}
+            className={cn(
+              "scroll-mt-28 overflow-x-clip py-12 sm:py-14",
+              i % 2 === 1 && "bg-muted/40",
+            )}
           >
             <Container className="max-w-[84rem]">
               <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
