@@ -60,7 +60,7 @@ export async function ProductCard({
     // while the action buttons (a separate client component) sit below.
     <div
       className={cn(
-        "group flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-border/60 shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-soft)]",
+        "group ring-border/60 flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-soft)]",
         className,
       )}
     >
@@ -76,11 +76,11 @@ export async function ProductCard({
             priority={priority}
           />
         ) : (
-          <div className="aspect-[4/3] w-full bg-muted" />
+          <div className="bg-muted aspect-[4/3] w-full" />
         )}
         <Badge
           variant={isRental ? "primary" : "accent"}
-          className="absolute left-3 top-3 shadow-sm"
+          className="absolute top-3 left-3 shadow-sm"
         >
           {isRental ? t("rentBadge") : t("saleBadge")}
         </Badge>
@@ -88,7 +88,7 @@ export async function ProductCard({
 
       <div className="flex flex-1 flex-col p-4">
         <Link href={href} className="block">
-          <h3 className="line-clamp-1 font-semibold transition-colors group-hover:text-primary">
+          <h3 className="group-hover:text-primary line-clamp-1 font-semibold transition-colors">
             {name}
           </h3>
         </Link>
@@ -96,13 +96,17 @@ export async function ProductCard({
         <div className="mt-2 flex items-center justify-between gap-2">
           <span className="flex items-center gap-1.5">
             <Stars rating={product.ratingAvg} size="size-3.5" />
-            <span className="text-xs text-muted-foreground">({product.ratingCount})</span>
+            <span className="text-muted-foreground text-xs">
+              ({product.ratingCount})
+            </span>
           </span>
           {price ? (
-            <span className="font-display font-bold text-primary">
+            <span className="font-display text-primary font-bold">
               {price}
               {isRental ? (
-                <span className="text-xs font-medium text-muted-foreground">{t("perDay")}</span>
+                <span className="text-muted-foreground text-xs font-medium">
+                  {t("perDay")}
+                </span>
               ) : null}
             </span>
           ) : null}
@@ -112,6 +116,7 @@ export async function ProductCard({
         <div className="mt-auto pt-1">
           <ProductCardActions
             productId={product.id}
+            mode={isRental ? "RENT" : "BUY"}
             labels={{
               add: t("addToCart"),
               added: t("added"),

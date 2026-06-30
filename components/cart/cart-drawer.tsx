@@ -17,6 +17,7 @@ type Line = {
   name: string;
   image: string | null;
   type: "SALE" | "RENTAL" | "BOTH";
+  mode: "BUY" | "RENT";
   unitPriceCents: number;
   quantity: number;
   lineTotalCents: number;
@@ -37,7 +38,9 @@ export function CartDrawer({ locale }: { locale: string }) {
 
   const refresh = React.useCallback(async () => {
     try {
-      const res = await fetch(`/api/cart/items?locale=${locale}`, { cache: "no-store" });
+      const res = await fetch(`/api/cart/items?locale=${locale}`, {
+        cache: "no-store",
+      });
       setCart((await res.json()) as CartData);
     } catch {
       /* ignore */
@@ -68,7 +71,9 @@ export function CartDrawer({ locale }: { locale: string }) {
   }, [open]);
 
   const broadcast = (count?: number) =>
-    window.dispatchEvent(new CustomEvent(CART_CHANGED_EVENT, { detail: { count } }));
+    window.dispatchEvent(
+      new CustomEvent(CART_CHANGED_EVENT, { detail: { count } }),
+    );
 
   const changeQty = async (itemId: string, quantity: number) => {
     setBusy(itemId);
@@ -109,22 +114,26 @@ export function CartDrawer({ locale }: { locale: string }) {
               aria-hidden
             />
             <motion.aside
-              className="fixed inset-y-0 right-0 z-[61] flex w-full max-w-[26rem] flex-col bg-background shadow-2xl"
+              className="bg-background fixed inset-y-0 right-0 z-[61] flex w-full max-w-[26rem] flex-col shadow-2xl"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "tween", duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
+              transition={{
+                type: "tween",
+                duration: 0.28,
+                ease: [0.32, 0.72, 0, 1],
+              }}
               role="dialog"
               aria-label={t("title")}
               style={{ paddingTop: "env(safe-area-inset-top)" }}
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-border px-5 py-4">
-                <h2 className="flex items-center gap-2 font-display text-lg font-bold">
-                  <ShoppingBag className="size-5 text-primary" />
+              <div className="border-border flex items-center justify-between border-b px-5 py-4">
+                <h2 className="font-display flex items-center gap-2 text-lg font-bold">
+                  <ShoppingBag className="text-primary size-5" />
                   {t("title")}
                   {cart ? (
-                    <span className="text-sm font-medium text-muted-foreground">
+                    <span className="text-muted-foreground text-sm font-medium">
                       ({t("itemCount", { count: cart.count })})
                     </span>
                   ) : null}
@@ -133,7 +142,7 @@ export function CartDrawer({ locale }: { locale: string }) {
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close"
-                  className="grid size-9 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  className="text-muted-foreground hover:bg-muted hover:text-foreground grid size-9 place-items-center rounded-full transition-colors"
                 >
                   <X className="size-5" />
                 </button>
@@ -143,10 +152,17 @@ export function CartDrawer({ locale }: { locale: string }) {
               <div className="flex-1 overflow-y-auto px-5 py-4">
                 {empty ? (
                   <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-                    <ShoppingBag className="size-12 text-muted-foreground" />
+                    <ShoppingBag className="text-muted-foreground size-12" />
                     <p className="font-semibold">{t("emptyTitle")}</p>
-                    <p className="max-w-xs text-sm text-muted-foreground">{t("emptyBody")}</p>
-                    <Button asChild variant="outline" className="mt-2" onClick={() => setOpen(false)}>
+                    <p className="text-muted-foreground max-w-xs text-sm">
+                      {t("emptyBody")}
+                    </p>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="mt-2"
+                      onClick={() => setOpen(false)}
+                    >
                       <Link href="/rent">{t("browseShop")}</Link>
                     </Button>
                   </div>
@@ -155,9 +171,13 @@ export function CartDrawer({ locale }: { locale: string }) {
                     {lines.map((line) => (
                       <li key={line.itemId} className="flex gap-3">
                         <Link
-                          href={line.type === "RENTAL" ? `/rent/${line.slug}` : `/shop/${line.slug}`}
+                          href={
+                            line.mode === "RENT"
+                              ? `/rent/${line.slug}`
+                              : `/shop/${line.slug}`
+                          }
                           onClick={() => setOpen(false)}
-                          className="size-20 shrink-0 overflow-hidden rounded-xl bg-muted"
+                          className="bg-muted size-20 shrink-0 overflow-hidden rounded-xl"
                         >
                           {line.image ? (
                             <MediaImage
@@ -172,30 +192,34 @@ export function CartDrawer({ locale }: { locale: string }) {
 
                         <div className="flex min-w-0 flex-1 flex-col">
                           <div className="flex items-start justify-between gap-2">
-                            <p className="line-clamp-2 text-sm font-semibold">{line.name}</p>
+                            <p className="line-clamp-2 text-sm font-semibold">
+                              {line.name}
+                            </p>
                             <button
                               type="button"
                               onClick={() => remove(line.itemId)}
                               disabled={busy === line.itemId}
                               aria-label={t("remove")}
-                              className="shrink-0 text-muted-foreground transition-colors hover:text-red-600 disabled:opacity-50"
+                              className="text-muted-foreground shrink-0 transition-colors hover:text-red-600 disabled:opacity-50"
                             >
                               <Trash2 className="size-4" />
                             </button>
                           </div>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-muted-foreground text-xs">
                             {formatPrice(line.unitPriceCents, locale)}
-                            {line.type !== "SALE" ? t("perDay") : ""}
+                            {line.mode === "RENT" ? t("perDay") : ""}
                           </p>
 
                           <div className="mt-auto flex items-center justify-between gap-2 pt-2">
-                            <div className="flex items-center rounded-full border border-border">
+                            <div className="border-border flex items-center rounded-full border">
                               <button
                                 type="button"
-                                onClick={() => changeQty(line.itemId, line.quantity - 1)}
+                                onClick={() =>
+                                  changeQty(line.itemId, line.quantity - 1)
+                                }
                                 disabled={busy === line.itemId}
                                 aria-label={t("decrease")}
-                                className="grid size-8 place-items-center text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                className="text-muted-foreground hover:text-foreground grid size-8 place-items-center disabled:opacity-50"
                               >
                                 <Minus className="size-3.5" />
                               </button>
@@ -204,10 +228,12 @@ export function CartDrawer({ locale }: { locale: string }) {
                               </span>
                               <button
                                 type="button"
-                                onClick={() => changeQty(line.itemId, line.quantity + 1)}
+                                onClick={() =>
+                                  changeQty(line.itemId, line.quantity + 1)
+                                }
                                 disabled={busy === line.itemId}
                                 aria-label={t("increase")}
-                                className="grid size-8 place-items-center text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                className="text-muted-foreground hover:text-foreground grid size-8 place-items-center disabled:opacity-50"
                               >
                                 <Plus className="size-3.5" />
                               </button>
@@ -226,17 +252,28 @@ export function CartDrawer({ locale }: { locale: string }) {
               {/* Footer */}
               {!empty ? (
                 <div
-                  className="border-t border-border px-5 pt-4"
-                  style={{ paddingBottom: "max(env(safe-area-inset-bottom), 1.25rem)" }}
+                  className="border-border border-t px-5 pt-4"
+                  style={{
+                    paddingBottom: "max(env(safe-area-inset-bottom), 1.25rem)",
+                  }}
                 >
                   <div className="mb-3 flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">{t("subtotal")}</span>
-                    <span className="font-display text-lg font-bold text-primary">
+                    <span className="text-muted-foreground text-sm">
+                      {t("subtotal")}
+                    </span>
+                    <span className="font-display text-primary text-lg font-bold">
                       {formatPrice(cart?.subtotalCents ?? 0, locale)}
                     </span>
                   </div>
-                  <p className="mb-3 text-xs text-muted-foreground">{t("totalNote")}</p>
-                  <Button asChild variant="gradient" size="lg" className="w-full gap-1.5">
+                  <p className="text-muted-foreground mb-3 text-xs">
+                    {t("totalNote")}
+                  </p>
+                  <Button
+                    asChild
+                    variant="gradient"
+                    size="lg"
+                    className="w-full gap-1.5"
+                  >
                     <Link href="/checkout" onClick={() => setOpen(false)}>
                       {t("checkout")} <ArrowRight className="size-4" />
                     </Link>

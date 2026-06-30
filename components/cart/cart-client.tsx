@@ -252,7 +252,7 @@ export function CartClient({
                   >
                     <Link
                       href={
-                        line.type === "RENTAL"
+                        line.mode === "RENT"
                           ? `/rent/${line.slug}`
                           : `/shop/${line.slug}`
                       }
@@ -272,7 +272,7 @@ export function CartClient({
                       <div className="flex items-start justify-between gap-3">
                         <Link
                           href={
-                            line.type === "RENTAL"
+                            line.mode === "RENT"
                               ? `/rent/${line.slug}`
                               : `/shop/${line.slug}`
                           }
@@ -292,17 +292,17 @@ export function CartClient({
                       <span className="text-muted-foreground mt-0.5 inline-flex w-fit items-center gap-1.5 text-sm">
                         <span
                           className={
-                            line.type === "SALE"
-                              ? "rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700"
-                              : "bg-primary-50 text-primary rounded-full px-2 py-0.5 text-xs font-semibold"
+                            line.mode === "RENT"
+                              ? "bg-primary-50 text-primary rounded-full px-2 py-0.5 text-xs font-semibold"
+                              : "rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700"
                           }
                         >
-                          {line.type === "SALE"
-                            ? t("buyLabel")
-                            : t("rentLabel")}
+                          {line.mode === "RENT"
+                            ? t("rentLabel")
+                            : t("buyLabel")}
                         </span>
                         {formatPrice(line.unitPriceCents, locale)}
-                        {line.type !== "SALE" ? t("perDay") : ""}
+                        {line.mode === "RENT" ? t("perDay") : ""}
                       </span>
 
                       <div className="mt-auto flex items-center justify-between pt-3">

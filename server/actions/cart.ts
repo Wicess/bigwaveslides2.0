@@ -37,16 +37,22 @@ async function countFor(cartId: string): Promise<number> {
 async function touch(cartId: string) {
   await prisma.cart.update({
     where: { id: cartId },
-    data: { lastActivityAt: new Date(), status: "ACTIVE", reminderSentAt: null },
+    data: {
+      lastActivityAt: new Date(),
+      status: "ACTIVE",
+      reminderSentAt: null,
+    },
   });
 }
 
 export async function addToCart(
   productId: string,
   quantity = 1,
+  mode: "BUY" | "RENT" = "BUY",
 ): Promise<CartActionResult> {
   if (!productId) return { ok: false, error: "Missing product" };
   const qty = Math.min(MAX_QTY, Math.max(1, Math.floor(quantity)));
+  const cartMode = mode === "RENT" ? "RENT" : "BUY";
 
   try {
     // Guard against adding an unknown/inactive product.
@@ -57,8 +63,9 @@ export async function addToCart(
     if (!product) return { ok: false, error: "Product unavailable" };
 
     const cartId = await ensureCart();
+    // Buy and rent of the same product are kept as separate lines.
     const existing = await prisma.cartItem.findFirst({
-      where: { cartId, productId, variationId: null },
+      where: { cartId, productId, variationId: null, mode: cartMode },
     });
     if (existing) {
       await prisma.cartItem.update({
@@ -66,7 +73,9 @@ export async function addToCart(
         data: { quantity: Math.min(MAX_QTY, existing.quantity + qty) },
       });
     } else {
-      await prisma.cartItem.create({ data: { cartId, productId, quantity: qty } });
+      await prisma.cartItem.create({
+        data: { cartId, productId, quantity: qty, mode: cartMode },
+      });
     }
     await touch(cartId);
     revalidatePath("/cart");

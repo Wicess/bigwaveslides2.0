@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { getCartCookie, clearCartCookie } from "@/lib/cart-session";
 import { orderNumber } from "@/lib/ref-number";
 import { notifyOrderRequest } from "@/lib/notifications";
+import { cartUnitPrice } from "@/server/data/cart";
 import {
   geoFromHeaders,
   geoFromIp,
@@ -89,16 +90,16 @@ export async function createOrderRequest(
     }
 
     const items = cart.items.map((item) => {
-      // Cart = purchase, so snapshot the sale (buy) price; fall back to the
-      // daily rate only for a rental-only product that slipped into the cart.
-      const unit =
-        item.product.salePriceCents ?? item.product.dailyRateCents ?? 0;
-      const name =
+      // Price each line by its mode: BUY → sale price, RENT → daily rate.
+      const mode = item.mode === "RENT" ? "RENT" : "BUY";
+      const unit = cartUnitPrice(item.product, mode);
+      const baseName =
         (item.product.name as { en?: string; fr?: string })[
           data.locale as "en" | "fr"
         ] ??
         (item.product.name as { en?: string }).en ??
         item.product.sku;
+      const name = mode === "RENT" ? `${baseName} (Rental)` : baseName;
       return {
         productId: item.productId,
         name,

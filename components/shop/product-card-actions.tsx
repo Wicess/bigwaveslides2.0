@@ -17,9 +17,12 @@ import { Button } from "@/components/ui/button";
 export function ProductCardActions({
   productId,
   labels,
+  mode = "BUY",
 }: {
   productId: string;
   labels: { add: string; added: string; primary: string };
+  /** Buy (sale price) or Rent (daily rate) — sets how the line is priced. */
+  mode?: "BUY" | "RENT";
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -27,7 +30,7 @@ export function ProductCardActions({
 
   const add = (after?: () => void) =>
     startTransition(async () => {
-      const res = await addToCart(productId);
+      const res = await addToCart(productId, 1, mode);
       if (res.ok) {
         window.dispatchEvent(
           new CustomEvent(CART_CHANGED_EVENT, { detail: { count: res.count } }),

@@ -11,6 +11,8 @@ export type CartLine = {
   name: string;
   image: string | null;
   type: "SALE" | "RENTAL" | "BOTH";
+  /** Whether this line is being bought or rented. */
+  mode: "BUY" | "RENT";
   unitPriceCents: number;
   quantity: number;
   lineTotalCents: number;
@@ -25,15 +27,17 @@ export type CartSummary = {
 
 const EMPTY: CartSummary = { id: null, lines: [], count: 0, subtotalCents: 0 };
 
-function unitPrice(p: {
-  type: string;
-  salePriceCents: number | null;
-  dailyRateCents: number | null;
-}): number {
-  // The cart is the PURCHASE (buy) cart — renting goes through the booking flow.
-  // So always use the sale price; only fall back to the daily rate for a
-  // rental-only product that somehow ends up here.
-  return p.salePriceCents ?? p.dailyRateCents ?? 0;
+/**
+ * Price a line by its mode: a BUY line uses the sale price, a RENT line uses the
+ * daily rate. Each falls back to the other only if its own price is missing.
+ */
+export function cartUnitPrice(
+  p: { salePriceCents: number | null; dailyRateCents: number | null },
+  mode: "BUY" | "RENT",
+): number {
+  return mode === "RENT"
+    ? (p.dailyRateCents ?? p.salePriceCents ?? 0)
+    : (p.salePriceCents ?? p.dailyRateCents ?? 0);
 }
 
 /** Resolve the active cart for the current session, shaped for display. */
@@ -72,7 +76,8 @@ export async function getCart(locale = "en"): Promise<CartSummary> {
   if (!cart) return EMPTY;
 
   const lines: CartLine[] = cart.items.map((item) => {
-    const price = unitPrice(item.product);
+    const mode = item.mode === "RENT" ? "RENT" : "BUY";
+    const price = cartUnitPrice(item.product, mode);
     return {
       itemId: item.id,
       productId: item.productId,
@@ -80,6 +85,7 @@ export async function getCart(locale = "en"): Promise<CartSummary> {
       name: getLocalized(item.product.name, locale),
       image: item.product.media[0]?.url ?? null,
       type: item.product.type,
+      mode,
       unitPriceCents: price,
       quantity: item.quantity,
       lineTotalCents: price * item.quantity,
