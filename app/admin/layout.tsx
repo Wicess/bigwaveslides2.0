@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function AdminRootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-dvh bg-muted/30 antialiased">
+      <body className="admin-theme min-h-dvh bg-[var(--admin-canvas)] antialiased">
         {children}
         <Toaster />
       </body>

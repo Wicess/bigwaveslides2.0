@@ -378,3 +378,121 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ADMIN THEME — "Cocoa & Amber"
+   A self-contained, premium warm palette for the staff admin panel, distinct
+   from the public ocean-blue storefront. Scoped to `.admin-theme`, it simply
+   re-points the existing design tokens, so every admin page (which is built on
+   bg-primary / bg-muted / border-border / text-foreground …) re-skins at once.
+   ──────────────────────────────────────────────────────────────────────── */
+.admin-theme {
+  /* Primary — amber/orange */
+  --color-primary: #e8741b;
+  --color-primary-50: #fdf2e8;
+  --color-primary-100: #fbe2cc;
+  --color-primary-200: #f6c499;
+  --color-primary-300: #f1a566;
+  --color-primary-400: #ed8d3d;
+  --color-primary-500: #e8741b;
+  --color-primary-600: #cc5f12;
+  --color-primary-700: #a44a10;
+  --color-primary-800: #6f3414;
+  --color-primary-900: #482414;
+
+  --color-secondary: #f4a14e;
+  --color-secondary-400: #f7b572;
+  --color-secondary-600: #e0863a;
+
+  /* Accent — deep cocoa, used for the dark CTA/goal surfaces */
+  --color-accent: #4a2a18;
+  --color-accent-light: #6b3f26;
+  --color-ink: #2c1a10;
+
+  /* Semantic */
+  --color-background: #ffffff; /* cards stay white */
+  --color-foreground: #3a2417; /* warm near-black brown */
+  --color-muted: #f3ece3; /* warm cream fills */
+  --color-muted-foreground: #927d6c;
+  --color-border: #ece1d4;
+  --color-ring: #e8741b;
+
+  /* Generous, soft rounding to match the reference */
+  --radius: 1rem;
+  --radius-sm: 0.625rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+
+  /* Warm elevation */
+  --shadow-soft: 0 16px 40px -22px rgba(74, 42, 24, 0.35);
+  --shadow-glow: 0 14px 38px -14px rgba(232, 116, 27, 0.45);
+
+  /* Warm gradients (reused by Button variant="gradient" etc.) */
+  --gradient-wave: linear-gradient(125deg, #f59140 0%, #e2620f 100%);
+  --gradient-deep: linear-gradient(155deg, #57341f 0%, #3a2014 100%);
+
+  /* Admin-only surfaces (used by the shell) */
+  --admin-canvas: #3a2218; /* dark cocoa page backdrop */
+  --admin-panel: #f4ece3; /* cream content surface */
+  --admin-sidebar: #ffffff; /* white rail */
+  --admin-card: #ffffff;
+}
+
+/* ── On-mount motion: cards / rows rise+fade in. Stagger via inline
+   animation-delay in the markup. Purely CSS, so it works in Server Components
+   with no hydration gate. ── */
+@keyframes admin-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes admin-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes admin-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.admin-theme .admin-rise {
+  animation: admin-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.admin-theme .admin-pop {
+  animation: admin-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.admin-theme .admin-slide-in {
+  animation: admin-slide-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* Hover lift for interactive cards */
+.admin-theme .admin-lift {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.admin-theme .admin-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 48px -24px rgba(74, 42, 24, 0.45);
+}
+/* Thin warm scrollbar inside the admin */
+.admin-theme .admin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #d8c7b4 transparent;
+}
