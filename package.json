@@ -16,6 +16,8 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "dotenv -e .env.local -- tsx prisma/seed.ts",
     "db:merge-visitors": "dotenv -e .env.local -- tsx scripts/merge-duplicate-visitors.ts",
+    "db:seed-blog": "dotenv -e .env.local -- tsx scripts/seed-blog.ts",
+    "gen:indexing-urls": "dotenv -e .env.local -- tsx scripts/gen-indexing-urls.ts",
     "admin:set-password": "dotenv -e .env.local -- tsx scripts/set-admin-password.ts",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
