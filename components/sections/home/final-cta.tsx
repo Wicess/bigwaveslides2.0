@@ -11,6 +11,7 @@ import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
+import { optimizedSrc } from "@/lib/image-loader";
 
 // Background photo, served from Cloudflare R2 (CDN) rather than /public so the
 // large image loads quickly and stays out of the app bundle.
@@ -34,7 +35,7 @@ export async function FinalCta() {
                 download until it's near the viewport since it's far down the page. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={CTA_BG}
+              src={optimizedSrc(CTA_BG, 1600)}
               alt=""
               className="absolute inset-0 -z-10 size-full object-cover"
               loading="lazy"
@@ -68,7 +69,7 @@ export async function FinalCta() {
                 <Button
                   asChild
                   size="lg"
-                  className="bg-white text-primary shadow-xl transition-transform duration-200 hover:-translate-y-0.5 hover:bg-white/90"
+                  className="text-primary bg-white shadow-xl transition-transform duration-200 hover:-translate-y-0.5 hover:bg-white/90"
                 >
                   <Link href="/contact">
                     {t("ctaButton")} <ArrowRight className="size-4" />

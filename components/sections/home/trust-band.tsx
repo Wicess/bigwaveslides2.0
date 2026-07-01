@@ -11,6 +11,7 @@ import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/container";
 import { Marquee } from "@/components/ui/marquee";
 import { Reveal } from "@/components/motion/reveal";
+import { optimizedSrc } from "@/lib/image-loader";
 
 // Base URL of the R2 bucket folder that holds the partner logo images.
 const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/partners";
@@ -32,10 +33,10 @@ export async function TrustBand() {
   const t = await getTranslations("Home");
 
   return (
-    <section className="relative overflow-hidden border-b border-border bg-white py-10 sm:py-12">
+    <section className="border-border relative overflow-hidden border-b bg-white py-10 sm:py-12">
       <Container>
         <Reveal>
-          <p className="text-center text-sm font-bold uppercase tracking-[0.22em] text-primary-700">
+          <p className="text-primary-700 text-center text-sm font-bold tracking-[0.22em] uppercase">
             {t("ourPartners")}
           </p>
         </Reveal>
@@ -55,7 +56,7 @@ export async function TrustBand() {
               key={src}
               className="group/logo grid h-16 w-32 shrink-0 place-items-center sm:h-20 sm:w-40"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {}
               {/*
                 Logos come from many brands with different colors/backgrounds.
                 To make them look like one consistent set we:
@@ -69,10 +70,10 @@ export async function TrustBand() {
                 animates that change smoothly over 0.3s.
               */}
               <img
-                src={src}
+                src={optimizedSrc(src, 320)}
                 alt={`Partner ${i + 1}`}
                 loading="lazy"
-                className="max-h-full max-w-full object-contain opacity-60 grayscale transition-all duration-300 [mix-blend-mode:multiply] group-hover/logo:scale-105 group-hover/logo:opacity-100 group-hover/logo:grayscale-0"
+                className="max-h-full max-w-full object-contain opacity-60 [mix-blend-mode:multiply] grayscale transition-all duration-300 group-hover/logo:scale-105 group-hover/logo:opacity-100 group-hover/logo:grayscale-0"
               />
             </span>
           ))}

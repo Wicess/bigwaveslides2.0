@@ -24,6 +24,7 @@ import { getLocalized } from "@/lib/localized";
 import { Container } from "@/components/ui/container";
 import { Stars } from "@/components/ui/stars";
 import { cn } from "@/lib/utils";
+import { optimizedSrc } from "@/lib/image-loader";
 
 // Background image (hosted on Cloudflare R2) shown behind the reviews.
 const BG =
@@ -60,18 +61,18 @@ function ReviewCard({
   return (
     <article className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-[0_24px_55px_-22px_rgba(0,0,0,0.55)]">
       <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-        <p className="font-bold text-foreground">{item.authorName}</p>
+        <p className="text-foreground font-bold">{item.authorName}</p>
         <Stars rating={item.rating} size="size-4" />
       </div>
-      <div className="mt-2.5 flex items-center gap-1.5 text-primary">
+      <div className="text-primary mt-2.5 flex items-center gap-1.5">
         <BadgeCheck className="size-4" />
         <span className="text-sm font-medium">{verifiedLabel}</span>
       </div>
-      <blockquote className="mt-4 flex-1 text-pretty leading-relaxed text-foreground/90">
+      <blockquote className="text-foreground/90 mt-4 flex-1 leading-relaxed text-pretty">
         {getLocalized(item.quote, locale)}
       </blockquote>
       {location ? (
-        <p className="mt-5 text-sm text-muted-foreground">{location}</p>
+        <p className="text-muted-foreground mt-5 text-sm">{location}</p>
       ) : null}
     </article>
   );
@@ -143,7 +144,8 @@ export function TestimonialsCarousel({
         // Choose a random visible slot to replace, and a random off-screen
         // review to put there.
         const slot = Math.floor(Math.random() * cur.length);
-        const incoming = candidates[Math.floor(Math.random() * candidates.length)]!;
+        const incoming =
+          candidates[Math.floor(Math.random() * candidates.length)]!;
         const next = cur.slice();
         next[slot] = incoming;
         return next;
@@ -228,12 +230,17 @@ export function TestimonialsCarousel({
       {/* Full-bleed darkened backdrop */}
       <div className="absolute inset-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={BG} alt="" className="size-full object-cover" loading="lazy" />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/80 to-ink/90" />
+        <img
+          src={optimizedSrc(BG, 1400)}
+          alt=""
+          className="size-full object-cover"
+          loading="lazy"
+        />
+        <div className="from-ink/85 via-ink/80 to-ink/90 absolute inset-0 bg-gradient-to-b" />
       </div>
 
       <Container>
-        <h2 className="text-center font-display text-3xl font-extrabold uppercase tracking-tight text-white drop-shadow-[0_3px_16px_rgba(0,0,0,0.6)] sm:text-4xl lg:text-5xl">
+        <h2 className="font-display text-center text-3xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_3px_16px_rgba(0,0,0,0.6)] sm:text-4xl lg:text-5xl">
           {t("testimonialsTitle")}
         </h2>
 
@@ -278,7 +285,7 @@ export function TestimonialsCarousel({
             ref={scrollerRef}
             onScroll={syncActive}
             onPointerDown={pause}
-            className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-mandatory [scrollbar-width:none] gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             {order.map((idx) => {
               const item = testimonials[idx]!;

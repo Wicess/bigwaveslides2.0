@@ -16,6 +16,7 @@ import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Stars } from "@/components/ui/stars";
 import { Reveal } from "@/components/motion/reveal";
+import { optimizedSrc } from "@/lib/image-loader";
 import {
   HeroCarousel,
   type HeroSlide,
@@ -75,7 +76,7 @@ export async function Hero({
               R2; the eslint-disable just silences the next/image suggestion. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={WORDMARK}
+            src={optimizedSrc(WORDMARK, 760)}
             alt="Big Wave Slides"
             width={1949}
             height={741}

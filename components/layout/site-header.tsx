@@ -30,6 +30,7 @@ import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { getLocalized } from "@/lib/localized";
 import { cn } from "@/lib/utils";
+import { optimizedSrc } from "@/lib/image-loader";
 import { Button } from "@/components/ui/button";
 import { CartBadge } from "@/components/cart/cart-badge";
 import { CartDrawer } from "@/components/cart/cart-drawer";
@@ -373,7 +374,10 @@ function PanelCta({
           backdrop. The image slowly zooms on hover. aria-hidden: decorative. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/hero/aquaforms.jpg"
+        src={optimizedSrc(
+          "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/hero/aquaforms.jpg",
+          640,
+        )}
         alt=""
         aria-hidden
         className="absolute inset-0 size-full scale-110 object-cover blur-[3px] transition-transform duration-700 group-hover/cta:scale-125"

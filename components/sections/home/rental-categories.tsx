@@ -19,6 +19,7 @@ import { getLocalized } from "@/lib/localized";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Marquee } from "@/components/ui/marquee";
+import { optimizedSrc } from "@/lib/image-loader";
 
 type Category = {
   slug: string;
@@ -58,7 +59,7 @@ function CategoryCard({ card }: { card: Card }) {
       {card.image ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={card.image}
+          src={optimizedSrc(card.image, 800)}
           alt=""
           aria-hidden
           loading="lazy"

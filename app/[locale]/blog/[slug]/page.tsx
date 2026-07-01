@@ -11,6 +11,7 @@ import {
 } from "@/server/data/blog";
 import { getLocalized } from "@/lib/localized";
 import { buildMetadata } from "@/lib/seo";
+import { optimizedSrc } from "@/lib/image-loader";
 import { formatDate } from "@/lib/format";
 import { getExternalResources } from "@/lib/blog-resources";
 import { extractHeadings } from "@/lib/toc";
@@ -157,7 +158,7 @@ export default async function PostDetailPage({ params }: Props) {
           {post.coverImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={post.coverImage}
+              src={optimizedSrc(post.coverImage, 1600)}
               alt={title}
               className="pointer-events-none absolute inset-0 size-full object-cover"
             />

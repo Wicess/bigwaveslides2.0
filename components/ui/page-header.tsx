@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
+import { optimizedSrc } from "@/lib/image-loader";
 
 /**
  * PageHeader — the title banner at the top of inner pages (e.g. /about,
@@ -60,21 +61,23 @@ export function PageHeader({
   return (
     <section
       className={cn(
-        "relative overflow-hidden pb-10 pt-28 sm:pt-32 lg:pb-14",
+        "relative overflow-hidden pt-28 pb-10 sm:pt-32 lg:pb-14",
         // Slide the banner up under the sticky header so the photo reaches the
         // top of the page; bump the top padding back so text clears the nav.
-        overlapHeader && "-mt-[108px] pt-[124px] pb-9 sm:-mt-[116px] sm:pt-[148px] sm:pb-12 lg:pb-12",
+        overlapHeader &&
+          "-mt-[108px] pt-[124px] pb-9 sm:-mt-[116px] sm:pt-[148px] sm:pb-12 lg:pb-12",
         brand
           ? "border-b border-white/10 text-white [background:linear-gradient(180deg,#0a1a2f_0%,#0e2742_100%)]"
-          : "border-b border-border",
+          : "border-border border-b",
       )}
     >
       {/* Optional photo background. `-z-20` keeps it behind both the overlay
           (below) and the text. `object-cover` fills the banner without
           distortion. */}
       {backgroundImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={backgroundImage}
+          src={optimizedSrc(backgroundImage, 1600)}
           alt=""
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-20 size-full object-cover"
@@ -98,7 +101,9 @@ export function PageHeader({
               : "radial-gradient(50% 60% at 80% 0%, rgba(0,212,255,0.14), transparent 70%)",
         }}
       />
-      <Container className={cn(centered && "flex flex-col items-center text-center")}>
+      <Container
+        className={cn(centered && "flex flex-col items-center text-center")}
+      >
         {/* Each piece below renders only if its prop was provided. */}
         {eyebrow ? (
           <Eyebrow className={brand ? "text-secondary-400" : undefined}>
@@ -107,7 +112,7 @@ export function PageHeader({
         ) : null}
         <h1
           className={cn(
-            "mt-3 max-w-3xl text-balance font-display font-bold leading-[1.03] tracking-tight",
+            "font-display mt-3 max-w-3xl leading-[1.03] font-bold tracking-tight text-balance",
             centered
               ? "text-5xl sm:text-6xl lg:text-7xl"
               : "text-4xl sm:text-5xl lg:text-6xl",
@@ -115,7 +120,10 @@ export function PageHeader({
           )}
           style={
             onPhoto
-              ? { textShadow: "0 2px 18px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.5)" }
+              ? {
+                  textShadow:
+                    "0 2px 18px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.5)",
+                }
               : undefined
           }
         >

@@ -18,6 +18,7 @@ import {
 import { routing } from "@/i18n/routing";
 import { getLocalized } from "@/lib/localized";
 import { buildMetadata } from "@/lib/seo";
+import { optimizedSrc } from "@/lib/image-loader";
 import {
   ALL_SERVICES,
   SERVICES_HERO_IMAGE,
@@ -85,7 +86,12 @@ export default async function ServicesPage({ params }: Props) {
   return (
     <main>
       {/* Hero — centered animated title (shared PhotoHero). */}
-      <PhotoHero image={SERVICES_HERO_IMAGE} title={t("title")} description={t("desc")} compact>
+      <PhotoHero
+        image={SERVICES_HERO_IMAGE}
+        title={t("title")}
+        description={t("desc")}
+        compact
+      >
         {/* Quick-jump pills to each service — compact so the hero stays short. */}
         <div className="mt-4 flex flex-wrap justify-center gap-1.5 sm:mt-5 sm:gap-2">
           {ALL_SERVICES.map((s) => (
@@ -130,7 +136,7 @@ export default async function ServicesPage({ params }: Props) {
                     className="aspect-[4/3] w-full shadow-[var(--shadow-soft)]"
                     sizes="(min-width:1024px) 42vw, 100vw"
                   />
-                  <span className="pointer-events-none absolute left-4 top-4 z-10 grid size-11 place-items-center rounded-xl bg-white/95 text-primary shadow-md backdrop-blur">
+                  <span className="text-primary pointer-events-none absolute top-4 left-4 z-10 grid size-11 place-items-center rounded-xl bg-white/95 shadow-md backdrop-blur">
                     <Icon className="size-6" />
                   </span>
                 </Reveal>
@@ -141,26 +147,29 @@ export default async function ServicesPage({ params }: Props) {
                   delay={0.1}
                   className={cn(flip && "lg:order-1")}
                 >
-                  <h2 className="font-display text-[1.7rem] font-bold leading-[1.1] tracking-tight text-foreground sm:text-4xl">
+                  <h2 className="font-display text-foreground text-[1.7rem] leading-[1.1] font-bold tracking-tight sm:text-4xl">
                     {title}
                   </h2>
-                  <span aria-hidden className="mt-3 block h-1 w-12 rounded-full bg-[linear-gradient(90deg,#0099ff,#00d4ff)]" />
-                  <p className="mt-4 text-lg font-medium leading-relaxed text-foreground/70">
+                  <span
+                    aria-hidden
+                    className="mt-3 block h-1 w-12 rounded-full bg-[linear-gradient(90deg,#0099ff,#00d4ff)]"
+                  />
+                  <p className="text-foreground/70 mt-4 text-lg leading-relaxed font-medium">
                     {getLocalized(s.tagline, locale)}
                   </p>
-                  <div className="mt-4 space-y-3 text-[1.025rem] leading-relaxed text-muted-foreground">
+                  <div className="text-muted-foreground mt-4 space-y-3 text-[1.025rem] leading-relaxed">
                     {paragraphs.map((p, pi) => (
                       <p key={pi}>{p}</p>
                     ))}
                   </div>
 
-                  <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <p className="text-muted-foreground mt-6 text-xs font-semibold tracking-wide uppercase">
                     {t("highlights")}
                   </p>
                   <ul className="mt-3 grid gap-2 sm:grid-cols-2">
                     {s.highlights.map((h, hi) => (
                       <li key={hi} className="flex items-start gap-2 text-sm">
-                        <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                        <Check className="text-primary mt-0.5 size-4 shrink-0" />
                         <span>{getLocalized(h, locale)}</span>
                       </li>
                     ))}
@@ -180,13 +189,16 @@ export default async function ServicesPage({ params }: Props) {
       })}
 
       {/* Closing CTA — photo background with scrim */}
-      <Section spacing="compact" className="border-t border-foreground/10 pb-16">
+      <Section
+        spacing="compact"
+        className="border-foreground/10 border-t pb-16"
+      >
         <Container className="max-w-[84rem]">
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl px-6 py-14 text-center shadow-[var(--shadow-soft)] sm:py-16">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={SERVICES_HERO_IMAGE}
+                src={optimizedSrc(SERVICES_HERO_IMAGE, 1600)}
                 alt=""
                 aria-hidden
                 className="absolute inset-0 size-full object-cover"
