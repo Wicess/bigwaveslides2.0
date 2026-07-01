@@ -18,7 +18,6 @@
 import * as React from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   Phone,
   ShoppingBag,
@@ -91,7 +90,10 @@ export function SiteHeader({ locale, data }: Props) {
                 priority
                 className="h-12 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
               />
-              <span aria-hidden className="font-brand text-[1.65rem] font-bold tracking-[-0.01em] text-white">
+              <span
+                aria-hidden
+                className="font-brand text-[1.65rem] font-bold tracking-[-0.01em] text-white"
+              >
                 BWS
               </span>
             </Link>
@@ -112,7 +114,7 @@ export function SiteHeader({ locale, data }: Props) {
               >
                 <div className="grid grid-cols-[1.4fr_1fr] gap-5">
                   <div>
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase">
                       {t("popularRentals")}
                     </p>
                     <div className="grid gap-1">
@@ -141,12 +143,15 @@ export function SiteHeader({ locale, data }: Props) {
               >
                 <div className="grid grid-cols-[1.4fr_1fr] gap-5">
                   <div>
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase">
                       {t("megaShopTitle")}
                     </p>
                     <div className="grid grid-cols-2 gap-1">
                       {data.categories.map((c) => (
-                        <PanelLink key={c.slug} href={`/shop/category/${c.slug}`}>
+                        <PanelLink
+                          key={c.slug}
+                          href={`/shop/category/${c.slug}`}
+                        >
                           {loc(c.name)}
                         </PanelLink>
                       ))}
@@ -170,7 +175,7 @@ export function SiteHeader({ locale, data }: Props) {
               >
                 <div className="grid grid-cols-[1.4fr_1fr] gap-5">
                   <div>
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase">
                       {t("megaServicesTitle")}
                     </p>
                     <div className="grid grid-cols-2 gap-1">
@@ -208,7 +213,9 @@ export function SiteHeader({ locale, data }: Props) {
 
             <button
               type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT))}
+              onClick={() =>
+                window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT))
+              }
               aria-label={t("cart")}
               className="relative grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10"
             >
@@ -218,14 +225,14 @@ export function SiteHeader({ locale, data }: Props) {
 
             <Link
               href="/contact"
-              className="hidden h-11 items-center rounded-md bg-white px-5 font-brand text-xs font-bold uppercase tracking-wider text-neutral-900 transition-transform hover:-translate-y-0.5 hover:bg-white/90 md:inline-flex"
+              className="font-brand hidden h-11 items-center rounded-md bg-white px-5 text-xs font-bold tracking-wider text-neutral-900 uppercase transition-transform hover:-translate-y-0.5 hover:bg-white/90 md:inline-flex"
             >
               {t("getQuote")}
             </Link>
 
             <Link
               href="/contact"
-              className="hidden h-11 items-center rounded-md bg-[#a3e635] px-5 font-brand text-xs font-bold uppercase tracking-wider text-neutral-900 shadow-[0_6px_20px_-8px_rgba(163,230,53,0.85)] transition-transform hover:-translate-y-0.5 hover:bg-[#8fd11f] sm:inline-flex"
+              className="font-brand hidden h-11 items-center rounded-md bg-[#a3e635] px-5 text-xs font-bold tracking-wider text-neutral-900 uppercase shadow-[0_6px_20px_-8px_rgba(163,230,53,0.85)] transition-transform hover:-translate-y-0.5 hover:bg-[#8fd11f] sm:inline-flex"
             >
               {tn("contact")}
             </Link>
@@ -295,7 +302,7 @@ function MegaItem({
     >
       <Link
         href={href}
-        className="inline-flex items-center gap-1 rounded-lg px-3.5 py-2 font-brand text-[15px] font-medium text-white/85 transition-colors hover:text-white"
+        className="font-brand inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-[15px] font-medium text-white/85 transition-colors hover:text-white"
       >
         {label}
         <ChevronDown
@@ -309,7 +316,7 @@ function MegaItem({
           so the mouse can travel from the link into the panel without it closing. */}
       <div
         className={cn(
-          "absolute left-0 top-full w-[min(42rem,90vw)] pt-[2.4rem] transition-all duration-200",
+          "absolute top-full left-0 w-[min(42rem,90vw)] pt-[2.4rem] transition-all duration-200",
           open
             ? "visible z-[70] translate-y-0 opacity-100"
             : "invisible z-[60] translate-y-1 opacity-0",
@@ -334,7 +341,7 @@ function PanelLink({
   return (
     <Link
       href={href}
-      className="rounded-lg px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-primary-50 hover:text-primary"
+      className="text-foreground/80 hover:bg-primary-50 hover:text-primary rounded-lg px-3 py-2 text-sm font-medium transition-colors"
     >
       {children}
     </Link>
@@ -396,7 +403,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="rounded-lg px-3.5 py-2 font-brand text-[15px] font-medium text-white/85 transition-colors hover:text-white"
+      className="font-brand rounded-lg px-3.5 py-2 text-[15px] font-medium text-white/85 transition-colors hover:text-white"
     >
       {children}
     </Link>
@@ -471,8 +478,10 @@ function HeaderLocale() {
               startTransition(() => router.replace(pathname, { locale: l }))
             }
             className={cn(
-              "rounded-sm px-2.5 py-1.5 font-brand text-xs font-bold uppercase transition-colors",
-              isActive ? "bg-white text-neutral-900" : "text-white/70 hover:text-white",
+              "font-brand rounded-sm px-2.5 py-1.5 text-xs font-bold uppercase transition-colors",
+              isActive
+                ? "bg-white text-neutral-900"
+                : "text-white/70 hover:text-white",
             )}
           >
             {l}
@@ -517,141 +526,139 @@ function MobileMenu({
   const phone = data.settings.contact?.phone;
 
   return (
-    // AnimatePresence keeps the element mounted long enough to play its exit
-    // animation when `open` flips back to false (otherwise it would vanish instantly).
-    <AnimatePresence>
-      {open ? (
-        // Full-screen overlay that fades in/out. `fixed inset-0` covers the
-        // whole viewport; `z-[100]` sits above everything, including the header.
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[100] lg:hidden"
+    // Always rendered; open/close is a pure CSS transition (no framer-motion),
+    // so the header no longer pulls the animation library into every page's
+    // bundle — a big main-thread / TBT win site-wide. `inert` when closed keeps
+    // the off-screen drawer out of tab order and pointer events.
+    <div
+      inert={!open}
+      className={cn(
+        "fixed inset-0 z-[100] overflow-hidden lg:hidden",
+        open ? "pointer-events-auto" : "pointer-events-none",
+      )}
+    >
+      {/* Dimmed backdrop behind the panel — tapping it closes the menu. */}
+      <button
+        aria-label={t("closeMenu")}
+        onClick={onClose}
+        className={cn(
+          "bg-ink/50 absolute inset-0 backdrop-blur-md transition-opacity duration-300 ease-out",
+          open ? "opacity-100" : "opacity-0",
+        )}
+      />
+      {/* The drawer panel slides in from the right (translate-x-full → 0). */}
+      <div
+        className={cn(
+          "bg-background absolute top-0 right-0 flex h-dvh w-[84%] max-w-xs flex-col shadow-2xl transition-transform duration-300 ease-out",
+          open ? "translate-x-0" : "translate-x-full",
+        )}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center justify-between px-6 pb-4"
+          style={{ paddingTop: "max(env(safe-area-inset-top), 1.25rem)" }}
         >
-          {/* Dimmed backdrop behind the panel — tapping it closes the menu. */}
-          <button
-            aria-label={t("closeMenu")}
+          <Link
+            href="/"
             onClick={onClose}
-            className="absolute inset-0 bg-ink/50 backdrop-blur-md"
-          />
-          {/* The drawer panel. It slides in from the right (x: 100% → 0) using a
-              spring animation for a natural feel, and slides back out on exit. */}
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 360, damping: 38, mass: 0.9 }}
-            className="absolute right-0 top-0 flex h-dvh w-[84%] max-w-xs flex-col bg-background shadow-2xl"
+            aria-label="Big Wave Slides — home"
+            className="flex items-center gap-2.5"
           >
-            {/* Header */}
+            <Image
+              src="/logo.png"
+              alt=""
+              aria-hidden
+              width={150}
+              height={127}
+              className="h-10 w-auto"
+            />
+            <span
+              aria-hidden
+              className="font-brand text-foreground text-xl font-bold tracking-[-0.01em]"
+            >
+              BWS
+            </span>
+          </Link>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t("closeMenu")}
+            className="text-foreground hover:bg-muted grid size-10 place-items-center rounded-full transition-colors active:scale-95"
+          >
+            <X className="size-6" />
+          </button>
+        </div>
+
+        {/* Nav — clean text links. Each row animates in one after another:
+                the `delay` grows with the index `i`, creating a staggered effect. */}
+        <nav className="flex-1 overflow-y-auto px-6">
+          {sections.map((s, i) => (
             <div
-              className="flex items-center justify-between px-6 pb-4"
-              style={{ paddingTop: "max(env(safe-area-inset-top), 1.25rem)" }}
+              key={s.href}
+              className={cn(
+                "transition-all duration-300 ease-out",
+                open ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0",
+              )}
+              style={{ transitionDelay: open ? `${60 + i * 45}ms` : "0ms" }}
             >
               <Link
-                href="/"
+                href={s.href}
                 onClick={onClose}
-                aria-label="Big Wave Slides — home"
-                className="flex items-center gap-2.5"
+                className="group border-border text-foreground hover:text-primary flex items-center justify-between border-b py-4 text-lg font-semibold transition-colors"
               >
-                <Image
-                  src="/logo.png"
-                  alt=""
-                  aria-hidden
-                  width={150}
-                  height={127}
-                  className="h-10 w-auto"
-                />
-                <span aria-hidden className="font-brand text-xl font-bold tracking-[-0.01em] text-foreground">
-                  BWS
-                </span>
+                {s.label}
+                <ArrowRight className="text-muted-foreground/50 group-hover:text-primary size-4 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
               </Link>
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label={t("closeMenu")}
-                className="grid size-10 place-items-center rounded-full text-foreground transition-colors hover:bg-muted active:scale-95"
-              >
-                <X className="size-6" />
-              </button>
             </div>
+          ))}
+        </nav>
 
-            {/* Nav — clean text links. Each row animates in one after another:
-                the `delay` grows with the index `i`, creating a staggered effect. */}
-            <nav className="flex-1 overflow-y-auto px-6">
-              {sections.map((s, i) => (
-                <motion.div
-                  key={s.href}
-                  initial={{ opacity: 0, x: 24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    delay: 0.06 + i * 0.045,
-                    ease: [0.22, 1, 0.36, 1],
-                    duration: 0.4,
-                  }}
-                >
-                  <Link
-                    href={s.href}
-                    onClick={onClose}
-                    className="group flex items-center justify-between border-b border-border py-4 text-lg font-semibold text-foreground transition-colors hover:text-primary"
-                  >
-                    {s.label}
-                    <ArrowRight className="size-4 -translate-x-1 text-muted-foreground/50 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:text-primary group-hover:opacity-100" />
-                  </Link>
-                </motion.div>
-              ))}
-            </nav>
-
-            {/* Footer actions — primary buttons, phone, language, and cart.
+        {/* Footer actions — primary buttons, phone, language, and cart.
                 The inline `paddingBottom` respects the phone's bottom safe area
                 (e.g. the iPhone home-bar) so controls aren't hidden behind it. */}
-            <div
-              className="border-t border-border px-6 pt-4"
-              style={{ paddingBottom: "max(env(safe-area-inset-bottom), 1.25rem)" }}
+        <div
+          className="border-border border-t px-6 pt-4"
+          style={{ paddingBottom: "max(env(safe-area-inset-bottom), 1.25rem)" }}
+        >
+          <div className="flex flex-col gap-2.5">
+            <Button asChild variant="gradient" size="lg">
+              <Link href="/contact" onClick={onClose}>
+                {t("getQuote")}
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link href="/contact" onClick={onClose}>
+                {tn("contact")}
+              </Link>
+            </Button>
+          </div>
+
+          {phone ? (
+            <a
+              href={`tel:${phone.replace(/[^+\d]/g, "")}`}
+              className="text-muted-foreground hover:text-primary mt-4 flex items-center justify-center gap-2 text-sm font-medium transition-colors"
             >
-              <div className="flex flex-col gap-2.5">
-                <Button asChild variant="gradient" size="lg">
-                  <Link href="/contact" onClick={onClose}>
-                    {t("getQuote")}
-                  </Link>
-                </Button>
-                <Button asChild size="lg" variant="outline">
-                  <Link href="/contact" onClick={onClose}>
-                    {tn("contact")}
-                  </Link>
-                </Button>
-              </div>
+              <Phone className="size-4" /> {phone}
+            </a>
+          ) : null}
 
-              {phone ? (
-                <a
-                  href={`tel:${phone.replace(/[^+\d]/g, "")}`}
-                  className="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-                >
-                  <Phone className="size-4" /> {phone}
-                </a>
-              ) : null}
-
-              <div className="mt-4 flex items-center justify-between">
-                <LocaleSwitcher />
-                <button
-                  type="button"
-                  aria-label={t("cart")}
-                  onClick={() => {
-                    onClose();
-                    window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT));
-                  }}
-                  className="relative grid size-10 place-items-center rounded-xl border border-border text-foreground transition-colors hover:bg-muted hover:text-primary"
-                >
-                  <ShoppingBag className="size-5" />
-                  <CartBadge />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>
+          <div className="mt-4 flex items-center justify-between">
+            <LocaleSwitcher />
+            <button
+              type="button"
+              aria-label={t("cart")}
+              onClick={() => {
+                onClose();
+                window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT));
+              }}
+              className="border-border text-foreground hover:bg-muted hover:text-primary relative grid size-10 place-items-center rounded-xl border transition-colors"
+            >
+              <ShoppingBag className="size-5" />
+              <CartBadge />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

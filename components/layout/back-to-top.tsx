@@ -1,14 +1,14 @@
 // back-to-top.tsx
 // A floating round button (bottom-right) that appears once the user has
 // scrolled down a bit, and smooth-scrolls them back to the top when clicked.
-// It animates in/out with framer-motion.
+// It fades/scales in and out with a CSS transition (no framer-motion, so this
+// tiny helper no longer pulls the animation library into every page's bundle).
 
 "use client";
 
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
-// AnimatePresence lets us animate an element as it's removed from the page.
-import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export function BackToTop({ label }: { label: string }) {
   // Whether the button is currently visible.
@@ -25,23 +25,23 @@ export function BackToTop({ label }: { label: string }) {
   }, []);
 
   return (
-    // AnimatePresence keeps the exit animation playing as the button leaves.
-    <AnimatePresence>
-      {show ? (
-        <motion.button
-          type="button"
-          // initial -> animate: how it fades/scales in; exit: how it fades out.
-          initial={{ opacity: 0, scale: 0.8, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: 10 }}
-          // Smoothly scroll the page back to the top when clicked.
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          aria-label={label}
-          className="fixed bottom-6 right-6 z-50 grid size-11 place-items-center rounded-full bg-accent text-white shadow-[var(--shadow-soft)] transition-colors hover:bg-accent-light"
-        >
-          <ArrowUp className="size-5" />
-        </motion.button>
-      ) : null}
-    </AnimatePresence>
+    // Always rendered; visibility + fade/scale handled by a CSS transition so
+    // there's no framer-motion AnimatePresence. Hidden from AT + tab order when
+    // not shown.
+    <button
+      type="button"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      aria-label={label}
+      aria-hidden={!show}
+      tabIndex={show ? 0 : -1}
+      className={cn(
+        "bg-accent hover:bg-accent-light fixed right-6 bottom-6 z-50 grid size-11 place-items-center rounded-full text-white shadow-[var(--shadow-soft)] transition-all duration-300 ease-out",
+        show
+          ? "translate-y-0 scale-100 opacity-100"
+          : "pointer-events-none translate-y-2.5 scale-90 opacity-0",
+      )}
+    >
+      <ArrowUp className="size-5" />
+    </button>
   );
 }

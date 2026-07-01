@@ -16,7 +16,27 @@ const EnvSchema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
-  NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
+  // Canonical site URL. Normalised so every absolute URL we emit (canonical,
+  // hreflang, sitemap, OG, robots, JSON-LD) uses the SAME host Google Search
+  // Console is verified on — www. The apex (bigwaveslides.com) 308-redirects to
+  // www in production, so canonicals MUST be www or GSC sees a redirect and
+  // won't index them. Forcing it here means it's right even if the deployed env
+  // var is the apex. Trailing slash is stripped via `.origin`.
+  NEXT_PUBLIC_SITE_URL: z
+    .string()
+    .url()
+    .default("http://localhost:3000")
+    .transform((raw) => {
+      try {
+        const u = new URL(raw);
+        if (u.hostname === "bigwaveslides.com") {
+          u.hostname = "www.bigwaveslides.com";
+        }
+        return u.origin;
+      } catch {
+        return raw.replace(/\/+$/, "");
+      }
+    }),
 
   // Database (Phase 4)
   DATABASE_URL: z.string().optional(),

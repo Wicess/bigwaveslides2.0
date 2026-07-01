@@ -31,7 +31,11 @@ function useWsrv(src: string): boolean {
   return src.startsWith("http");
 }
 
-export default function imageLoader({ src, width, quality }: LoaderArgs): string {
+export default function imageLoader({
+  src,
+  width,
+  quality,
+}: LoaderArgs): string {
   // Floor the quality at 82: next/image defaults to 75, which visibly softens
   // detailed marketing photos once re-encoded to WebP. 82 keeps them crisp
   // while still far smaller than the full-resolution originals.
@@ -41,9 +45,7 @@ export default function imageLoader({ src, width, quality }: LoaderArgs): string
   if (src.startsWith("data:") || src.endsWith(".svg")) return src;
 
   if (useWsrv(src)) {
-    const absolute = src.startsWith("http") ? src : `${SITE}${src}`;
-    // w = target width, q = quality, output=webp for modern compression.
-    return `https://wsrv.nl/?url=${encodeURIComponent(absolute)}&w=${width}&q=${q}&output=webp`;
+    return wsrvUrl(src.startsWith("http") ? src : `${SITE}${src}`, width, q);
   }
 
   if (MODE === "cloudflare") {
@@ -61,4 +63,31 @@ export default function imageLoader({ src, width, quality }: LoaderArgs): string
 
   // Passthrough — original image, no optimization.
   return src;
+}
+
+/**
+ * Build a wsrv.nl transform URL — resized + re-encoded to AVIF.
+ *
+ * AVIF is ~40–50% smaller than WebP at the same visual quality (and universally
+ * supported by 2026 browsers), so we ship far fewer bytes WITHOUT the softening
+ * that comes from lowering quality. `q` is floored high (82) to keep detailed
+ * marketing photos crisp; `we` (without-enlargement) stops small display sizes
+ * upscaling the source into blur.
+ */
+function wsrvUrl(absolute: string, width: number, q: number): string {
+  return `https://wsrv.nl/?url=${encodeURIComponent(
+    absolute,
+  )}&w=${width}&q=${q}&output=avif&we`;
+}
+
+/**
+ * Optimize a plain `<img>` source for cases where `next/image` isn't used
+ * (transparent logos, full-bleed decorative covers). Returns a resized AVIF URL
+ * for remote images; passes data URIs, SVGs and local/relative assets through
+ * untouched. Respects NEXT_PUBLIC_IMAGE_CDN=off.
+ */
+export function optimizedSrc(src: string, width: number, quality = 82): string {
+  if (!src || src.startsWith("data:") || src.endsWith(".svg")) return src;
+  if (!useWsrv(src) || !src.startsWith("http")) return src;
+  return wsrvUrl(src, width, Math.max(quality, 82));
 }

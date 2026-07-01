@@ -1,40 +1,30 @@
 // parallax.tsx
 // Subtle scroll-linked movement. Wrap an element and it drifts vertically as it
-// passes through the viewport, adding depth without layout shift. Disabled for
-// visitors who prefer reduced motion. Best used on a slightly oversized element
-// (e.g. a background image scaled to ~115%) so the drift never reveals edges.
-"use client";
-
+// passes through the viewport, adding depth without layout shift.
+//
+// This is now PURE CSS (scroll-driven `animation-timeline: view()`) — no
+// framer-motion, no "use client", no hydration. That strips framer-motion out
+// of every page whose only motion was a hero parallax (all PhotoHero pages),
+// which is a large main-thread / TBT win. Browsers without scroll-timeline
+// support (and reduced-motion users) simply see a static image. The animation
+// itself lives in globals.css (`.bws-parallax`). Best used on a slightly
+// oversized element (e.g. a background image scaled to ~118%) so the drift
+// never reveals edges.
 import * as React from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export function Parallax({
   children,
   className,
-  /** Total travel (px) across the scroll range. */
-  distance = 60,
 }: {
   children: React.ReactNode;
   className?: string;
+  /** Accepted for backwards compatibility; travel is now CSS-defined. */
   distance?: number;
 }) {
-  const reduce = useReducedMotion();
-  const ref = React.useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(
-    scrollYProgress,
-    [0, 1],
-    reduce ? [0, 0] : [distance / 2, -distance / 2],
-  );
-
   return (
-    <div ref={ref} className={className}>
-      <motion.div style={{ y }} className="size-full">
-        {children}
-      </motion.div>
+    <div className={className}>
+      <div className={cn("bws-parallax size-full")}>{children}</div>
     </div>
   );
 }
