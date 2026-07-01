@@ -16,7 +16,10 @@ import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Stars } from "@/components/ui/stars";
 import { Reveal } from "@/components/motion/reveal";
-import { HeroCarousel, type HeroSlide } from "@/components/sections/home/hero-carousel";
+import {
+  HeroCarousel,
+  type HeroSlide,
+} from "@/components/sections/home/hero-carousel";
 
 // Images/videos are hosted on Cloudflare R2 (object storage) instead of the
 // app's /public folder. This keeps the app bundle small and serves big media
@@ -55,7 +58,7 @@ export async function Hero({
     // navbar so the background reaches the very top of the screen. min-h-svh
     // makes it fill the visible screen height. overflow-hidden clips the
     // zooming carousel images. The sm: value is the wider phone/desktop variant.
-    <section className="relative -mt-[6.75rem] flex min-h-svh w-full items-center justify-center overflow-hidden bg-ink sm:-mt-[7.25rem]">
+    <section className="bg-ink relative -mt-[6.75rem] flex min-h-svh w-full items-center justify-center overflow-hidden sm:-mt-[7.25rem]">
       <HeroCarousel slides={SLIDES} />
 
       {/* z-10 lifts this text/buttons above the background carousel (z-index).
@@ -65,9 +68,9 @@ export async function Hero({
         {/* <Reveal> is a small wrapper that fades/slides the content in as it
             appears. y={18} starts it 18px lower and animates it up. */}
         <Reveal y={18}>
-          {/* The logo is an image, so we add a screen-reader-only real heading
-              for accessibility and SEO (sr-only hides it visually). */}
-          <h1 className="sr-only">Big Wave Slides</h1>
+          {/* The logo is an image; its alt text carries the brand name, so the
+              real <h1> below is the descriptive, keyword-rich tagline (better
+              on-page SEO signal than a hidden brand-only heading). */}
           {/* Plain <img> (not next/image) because it's a transparent logo from
               R2; the eslint-disable just silences the next/image suggestion. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -93,17 +96,20 @@ export async function Hero({
 
         {/* Subtitle. delay staggers each block so they appear one after another. */}
         <Reveal y={16} delay={0.15}>
-          <p
-            className="mx-auto mt-7 max-w-xl text-lg font-medium leading-relaxed text-white sm:text-xl"
+          <h1
+            className="mx-auto mt-7 max-w-xl text-lg leading-relaxed font-medium text-white sm:text-xl"
             // textShadow keeps white text legible over busy/light photos.
-            style={{ textShadow: "0 2px 14px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.6)" }}
+            style={{
+              textShadow:
+                "0 2px 14px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.6)",
+            }}
           >
             {t("subtitle")}{" "}
             <span className="font-semibold text-white">
               {t("rentNowAt")}{" "}
-              <span className="font-extrabold text-secondary-400">$199</span>.
+              <span className="text-secondary-400 font-extrabold">$199</span>.
             </span>
-          </p>
+          </h1>
         </Reveal>
 
         {/* The two main call-to-action buttons: rent (primary) and buy. */}
@@ -138,8 +144,10 @@ export async function Hero({
           >
             <Stars rating={rating} />
             <span className="text-sm text-white/90">
-              <span className="font-semibold text-white">{rating.toFixed(1)}</span> ·{" "}
-              {t("trustReviews", { count: reviewCount })}
+              <span className="font-semibold text-white">
+                {rating.toFixed(1)}
+              </span>{" "}
+              · {t("trustReviews", { count: reviewCount })}
             </span>
           </div>
         </Reveal>

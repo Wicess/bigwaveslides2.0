@@ -4,7 +4,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Clock, ArrowLeft, ArrowUpRight } from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { getPostBySlug, getPostSlugs, getRelatedPosts } from "@/server/data/blog";
+import {
+  getPostBySlug,
+  getPostSlugs,
+  getRelatedPosts,
+} from "@/server/data/blog";
 import { getLocalized } from "@/lib/localized";
 import { buildMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/format";
@@ -35,6 +39,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return {};
+  // Keyword signal derived from the post's own taxonomy (tags + category).
+  const keywords = [
+    ...post.tags.map((tg) => getLocalized(tg.name, locale)),
+    ...(post.category ? [getLocalized(post.category.name, locale)] : []),
+  ].filter(Boolean) as string[];
   return buildMetadata({
     locale,
     path: `/blog/${slug}`,
@@ -42,6 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: getLocalized(post.metaDescription ?? post.excerpt, locale),
     image: post.coverImage ?? null,
     type: "article",
+    keywords,
   });
 }
 
@@ -72,8 +82,12 @@ export default async function PostDetailPage({ params }: Props) {
   // stacked under the article (mobile) — defined once here.
   const ctaCard = (
     <div className="overflow-hidden rounded-2xl p-6 text-white [background:linear-gradient(135deg,#0a1a2f_0%,#0e2742_100%)]">
-      <h2 className="font-display text-lg font-bold leading-snug">{t("ctaTitle")}</h2>
-      <p className="mt-2 text-sm leading-relaxed text-white/75">{t("ctaText")}</p>
+      <h2 className="font-display text-lg leading-snug font-bold">
+        {t("ctaTitle")}
+      </h2>
+      <p className="mt-2 text-sm leading-relaxed text-white/75">
+        {t("ctaText")}
+      </p>
       <div className="mt-5 flex flex-col gap-2.5">
         <Button asChild variant="gradient" size="md" className="w-full">
           <Link href="/contact">{t("ctaQuote")}</Link>
@@ -92,23 +106,31 @@ export default async function PostDetailPage({ params }: Props) {
 
   const resourcesCard =
     resources.length > 0 ? (
-      <div className="rounded-2xl border border-border bg-background p-6">
-        <h2 className="font-display text-base font-semibold">{t("furtherReading")}</h2>
-        <p className="mt-1 text-xs text-muted-foreground">{t("furtherReadingDesc")}</p>
-        <ul className="mt-3 divide-y divide-border">
+      <div className="border-border bg-background rounded-2xl border p-6">
+        <h2 className="font-display text-base font-semibold">
+          {t("furtherReading")}
+        </h2>
+        <p className="text-muted-foreground mt-1 text-xs">
+          {t("furtherReadingDesc")}
+        </p>
+        <ul className="divide-border mt-3 divide-y">
           {resources.map((r) => (
             <li key={r.href}>
               <a
                 href={r.href}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="group flex items-center justify-between gap-3 py-2.5 transition-colors hover:text-primary"
+                className="group hover:text-primary flex items-center justify-between gap-3 py-2.5 transition-colors"
               >
                 <span>
-                  <span className="block text-sm font-semibold leading-snug">{r.label}</span>
-                  <span className="block text-xs text-muted-foreground">{r.source}</span>
+                  <span className="block text-sm leading-snug font-semibold">
+                    {r.label}
+                  </span>
+                  <span className="text-muted-foreground block text-xs">
+                    {r.source}
+                  </span>
                 </span>
-                <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
+                <ArrowUpRight className="text-muted-foreground group-hover:text-primary size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             </li>
           ))}
@@ -131,12 +153,12 @@ export default async function PostDetailPage({ params }: Props) {
 
       <article>
         {/* ── Compact hero: cover photo behind the nav + just the title. ── */}
-        <header className="relative -mt-[108px] overflow-hidden border-b border-border bg-neutral-900 sm:-mt-[116px]">
+        <header className="border-border relative -mt-[108px] overflow-hidden border-b bg-neutral-900 sm:-mt-[116px]">
           {post.coverImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={post.coverImage}
-              alt=""
-              aria-hidden
+              alt={title}
               className="pointer-events-none absolute inset-0 size-full object-cover"
             />
           ) : null}
@@ -144,7 +166,7 @@ export default async function PostDetailPage({ params }: Props) {
             aria-hidden
             className="pointer-events-none absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/55 to-neutral-950/45"
           />
-          <Container className="relative z-10 max-w-[84rem] pb-12 pt-[122px] sm:pb-14 sm:pt-[146px]">
+          <Container className="relative z-10 max-w-[84rem] pt-[122px] pb-12 sm:pt-[146px] sm:pb-14">
             <Link
               href="/blog"
               className="inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-white/80 transition-colors hover:text-white"
@@ -152,7 +174,7 @@ export default async function PostDetailPage({ params }: Props) {
               <ArrowLeft className="size-4" />
               {t("backToBlog")}
             </Link>
-            <h1 className="mt-6 max-w-4xl text-balance font-display text-[2rem] font-bold leading-[1.07] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:text-4xl lg:text-5xl">
+            <h1 className="font-display mt-6 max-w-4xl text-[2rem] leading-[1.07] font-bold tracking-tight text-balance text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:text-4xl lg:text-5xl">
               {title}
             </h1>
           </Container>
@@ -162,25 +184,28 @@ export default async function PostDetailPage({ params }: Props) {
         <Section spacing="default">
           <Container className="max-w-[84rem]">
             {/* Byline — refined, sits above the columns. */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-border pb-6">
+            <div className="border-border flex flex-wrap items-center gap-x-4 gap-y-3 border-b pb-6">
               {post.author?.avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={post.author.avatar}
                   alt=""
-                  className="size-10 rounded-full object-cover ring-1 ring-border"
+                  className="ring-border size-10 rounded-full object-cover ring-1"
                 />
               ) : null}
               {post.author?.name ? (
                 <span className="text-sm">
-                  <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">
+                  <span className="text-muted-foreground block text-[11px] tracking-wide uppercase">
                     {t("writtenBy")}
                   </span>
                   <span className="font-semibold">{post.author.name}</span>
                 </span>
               ) : null}
-              <span aria-hidden className="hidden h-8 w-px bg-border sm:block" />
-              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+              <span
+                aria-hidden
+                className="bg-border hidden h-8 w-px sm:block"
+              />
+              <div className="text-muted-foreground flex flex-wrap items-center gap-3 text-sm">
                 {post.category ? (
                   <Link href={`/blog/category/${post.category.slug}`}>
                     <Badge variant="primary">
@@ -208,15 +233,15 @@ export default async function PostDetailPage({ params }: Props) {
               {headings.length > 1 ? (
                 <aside className="hidden lg:block">
                   <div className="sticky top-28">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                       {t("onThisPage")}
                     </p>
-                    <nav className="mt-3 border-l border-border">
+                    <nav className="border-border mt-3 border-l">
                       {headings.map((h) => (
                         <a
                           key={h.id}
                           href={`#${h.id}`}
-                          className="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-sm leading-snug text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                          className="text-muted-foreground hover:border-primary hover:text-primary -ml-px block border-l-2 border-transparent py-1.5 pl-4 text-sm leading-snug transition-colors"
                         >
                           {h.text}
                         </a>
@@ -233,12 +258,12 @@ export default async function PostDetailPage({ params }: Props) {
                 <ArticleContent content={content} />
 
                 {post.tags.length > 0 ? (
-                  <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
+                  <div className="border-border mt-10 flex flex-wrap gap-2 border-t pt-6">
                     {post.tags.map((tag) => (
                       <Link
                         key={tag.slug}
                         href={`/blog/tag/${tag.slug}`}
-                        className="rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                        className="border-border text-muted-foreground hover:border-primary hover:text-primary rounded-full border px-3 py-1 text-xs font-medium transition-colors"
                       >
                         #{getLocalized(tag.name, locale)}
                       </Link>
@@ -266,7 +291,7 @@ export default async function PostDetailPage({ params }: Props) {
       </article>
 
       {related.length > 0 ? (
-        <Section className="border-t border-border bg-muted/40">
+        <Section className="border-border bg-muted/40 border-t">
           <Container>
             <SectionHeader title={t("relatedTitle")} />
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

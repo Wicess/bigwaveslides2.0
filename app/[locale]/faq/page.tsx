@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { FAQS, pickLocale } from "@/lib/legal-content";
+import { buildMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { PhotoHero } from "@/components/ui/photo-hero";
@@ -18,7 +19,30 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return { title: FAQS[pickLocale(locale)].title };
+  const fr = locale === "fr";
+  const data = FAQS[pickLocale(locale)];
+  return buildMetadata({
+    locale,
+    path: "/faq",
+    title: fr
+      ? "Questions fréquentes — location de glissades d'eau gonflables"
+      : "Water Slide Rental FAQ — Delivery, Setup, Pricing & Booking",
+    description: data.intro,
+    keywords: fr
+      ? [
+          "faq location glissade d'eau",
+          "questions location glissade gonflable",
+          "prix location glissade d'eau",
+          "livraison installation glissade d'eau",
+        ]
+      : [
+          "water slide rental FAQ",
+          "inflatable water slide questions",
+          "water slide rental cost",
+          "water slide delivery and setup",
+          "how to book a water slide rental",
+        ],
+  });
 }
 
 export default async function FaqPage({ params }: Props) {
@@ -36,12 +60,12 @@ export default async function FaqPage({ params }: Props) {
           <ul className="space-y-3">
             {data.items.map((item) => (
               <li key={item.q}>
-                <details className="group rounded-[var(--radius-lg)] border border-border bg-background">
+                <details className="group border-border bg-background rounded-[var(--radius-lg)] border">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-semibold">
                     {item.q}
-                    <ChevronDown className="size-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+                    <ChevronDown className="text-muted-foreground size-5 shrink-0 transition-transform group-open:rotate-180" />
                   </summary>
-                  <p className="px-5 pb-5 text-muted-foreground">{item.a}</p>
+                  <p className="text-muted-foreground px-5 pb-5">{item.a}</p>
                 </details>
               </li>
             ))}
