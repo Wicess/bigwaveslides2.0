@@ -31,7 +31,9 @@ const cardSelect = {
   },
 } satisfies Prisma.ProductSelect;
 
-function orderForSort(sort: ShopSort): Prisma.ProductOrderByWithRelationInput[] {
+function orderForSort(
+  sort: ShopSort,
+): Prisma.ProductOrderByWithRelationInput[] {
   switch (sort) {
     case "newest":
       return [{ createdAt: "desc" }];
@@ -86,6 +88,19 @@ export async function getRentalProducts(query: RentalQuery = {}) {
 
 export type RentalListing = Awaited<ReturnType<typeof getRentalProducts>>;
 
+// The state/city SEO landing pages all display the same 8 featured rentals.
+// Memoize a single fetch for the whole process so pre-rendering hundreds or
+// thousands of location pages hits the database once, not once per page.
+let landingRentalsPromise: Promise<RentalListing["items"]> | null = null;
+export function getLandingRentals(): Promise<RentalListing["items"]> {
+  if (!landingRentalsPromise) {
+    landingRentalsPromise = getRentalProducts({ sort: "featured", page: 1 })
+      .then((r) => r.items.slice(0, 8))
+      .catch(() => [] as RentalListing["items"]);
+  }
+  return landingRentalsPromise;
+}
+
 export async function getRentalBySlug(slug: string) {
   return withRetry(() =>
     prisma.product.findFirst({
@@ -99,7 +114,9 @@ export async function getRentalBySlug(slug: string) {
   ).catch(() => null);
 }
 
-export type RentalDetail = NonNullable<Awaited<ReturnType<typeof getRentalBySlug>>>;
+export type RentalDetail = NonNullable<
+  Awaited<ReturnType<typeof getRentalBySlug>>
+>;
 
 export async function getRelatedRentals(
   productId: string,

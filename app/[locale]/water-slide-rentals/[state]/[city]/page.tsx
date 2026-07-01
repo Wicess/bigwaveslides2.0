@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { getAllCities, getCity, citySlug } from "@/lib/locations";
-import { getRentalProducts } from "@/server/data/rentals";
+import { getLandingRentals } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
   localBusinessAreaLd,
@@ -92,12 +92,7 @@ export default async function CityRentalPage({ params }: Props) {
   if (!loc) notFound();
   const { name, state: st } = loc;
 
-  const listing = await getRentalProducts({ sort: "featured", page: 1 }).catch(
-    () => ({
-      items: [] as Awaited<ReturnType<typeof getRentalProducts>>["items"],
-    }),
-  );
-  const items = listing.items.slice(0, 8);
+  const items = await getLandingRentals();
 
   const path = `/water-slide-rentals/${st.slug}/${loc.slug}`;
   const canonical = absoluteUrl(locale, path);

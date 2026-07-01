@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ShieldCheck, Sparkles, Truck, MapPin } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
-import { getRentalProducts } from "@/server/data/rentals";
+import { getLandingRentals } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
   localBusinessAreaLd,
@@ -66,12 +66,7 @@ export default async function StateRentalPage({ params }: Props) {
   const loc = getStateBySlug(state);
   if (!loc) notFound();
 
-  const listing = await getRentalProducts({ sort: "featured", page: 1 }).catch(
-    () => ({
-      items: [] as Awaited<ReturnType<typeof getRentalProducts>>["items"],
-    }),
-  );
-  const items = listing.items.slice(0, 8);
+  const items = await getLandingRentals();
 
   const cityList = loc.cities.join(", ");
   const path = `/water-slide-rentals/${loc.slug}`;
