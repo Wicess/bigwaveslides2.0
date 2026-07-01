@@ -9,8 +9,8 @@
 import { writeFileSync } from "node:fs";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pkg from "@prisma/client";
-import { US_STATES, getAllCities } from "../lib/locations.ts";
-import { USE_CASES } from "../lib/use-cases.ts";
+import { US_STATES, getAllCities } from "../lib/locations";
+import { USE_CASES } from "../lib/use-cases";
 
 const { PrismaClient } = pkg;
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
