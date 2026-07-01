@@ -57,3 +57,8 @@ Thumbs.db
 *.mkv
 *.mp4
 *.mov
+
+# Agent skill tooling (installed via `npx skills`; also live globally in ~/.claude)
+.claude/skills/
+.agents/
+skills-lock.json
