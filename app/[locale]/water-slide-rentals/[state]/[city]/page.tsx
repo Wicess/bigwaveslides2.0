@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { getAllCities, getCity, citySlug } from "@/lib/locations";
+import { getCityContent } from "@/lib/city-content";
 import { getLandingRentals } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -37,9 +38,6 @@ import { JsonLd } from "@/components/seo/json-ld";
 type Props = {
   params: Promise<{ locale: string; state: string; city: string }>;
 };
-
-const HERO =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
 
 // Occasions woven into the copy + keywords (event-based long-tail).
 const OCCASIONS = [
@@ -101,24 +99,10 @@ export default async function CityRentalPage({ params }: Props) {
   // Sibling cities in the same state for internal linking.
   const siblings = st.cities.filter((c) => citySlug(c) !== loc.slug);
 
-  const faqs = [
-    {
-      q: `Do you deliver water slides in ${name}?`,
-      a: `Yes — Big Wave Slides delivers, sets up, and picks up water slides throughout ${name} and the surrounding ${st.name} area. Share your venue and date and we'll confirm delivery in your free quote.`,
-    },
-    {
-      q: `How much does a water slide rental cost in ${name}?`,
-      a: `Pricing in ${name} depends on the slide size and how long you rent it. Most backyard rentals start around $295/day with delivery, setup, and insurance included. Request a free, no-obligation quote for exact ${place} pricing.`,
-    },
-    {
-      q: `What events do you cover in ${name}?`,
-      a: `Everything — ${OCCASIONS.join(", ")}, church festivals, carnivals and more. If you're hosting it in ${name}, we can make it a splash.`,
-    },
-    {
-      q: `Are your ${name} rentals insured and sanitized?`,
-      a: `Every rental is fully insured and cleaned & sanitized before delivery, then installed by a trained crew with proper anchoring — so your ${name} event is safe from start to finish.`,
-    },
-  ];
+  // Deterministically-varied per-city content (hero image, opening copy,
+  // a region/season paragraph, and the FAQ set) — differentiates the 750+
+  // programmatic pages so they don't read as one identical template.
+  const { hero, heroDescription, intro, seasonal, faqs } = getCityContent(loc);
 
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
@@ -145,21 +129,22 @@ export default async function CityRentalPage({ params }: Props) {
       <JsonLd data={faqLd(faqs)} />
 
       <PhotoHero
-        image={HERO}
+        image={hero}
         title={`Water Slide Rentals in ${name}, ${st.abbr}`}
-        description={`Commercial-grade inflatable water slides delivered, set up, and picked up across ${name}. Perfect for birthdays, backyard bashes, schools, churches, and community events.`}
+        description={heroDescription}
       />
 
       <Section spacing="compact" className="pt-10">
         <Container className="max-w-[84rem]">
           <Reveal className="max-w-3xl">
             <p className="text-muted-foreground text-lg leading-relaxed">
-              Planning a party in {name}? Big Wave Slides brings the waterpark
-              to your {name} backyard, park, school, or church. We deliver
-              premium, freshly sanitized inflatable water slides across{" "}
-              {st.name}, set them up safely, and pick them up when the fun's
-              done — so all you do is enjoy the day.
+              {intro}
             </p>
+          </Reveal>
+
+          {/* Region/season-specific paragraph — genuinely unique per state. */}
+          <Reveal className="mt-4 max-w-3xl" delay={0.05}>
+            <p className="text-muted-foreground leading-relaxed">{seasonal}</p>
           </Reveal>
 
           {/* Occasions */}
