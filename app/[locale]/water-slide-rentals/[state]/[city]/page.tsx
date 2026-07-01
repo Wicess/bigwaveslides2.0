@@ -2,9 +2,15 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { ShieldCheck, Sparkles, Truck, MapPin } from "lucide-react";
+import {
+  ShieldCheck,
+  Sparkles,
+  Truck,
+  MapPin,
+  PartyPopper,
+} from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
+import { getAllCities, getCity, citySlug } from "@/lib/locations";
 import { getRentalProducts } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -28,43 +34,63 @@ import {
 import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
 
-type Props = { params: Promise<{ locale: string; state: string }> };
+type Props = {
+  params: Promise<{ locale: string; state: string; city: string }>;
+};
 
 const HERO =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
 
+// Occasions woven into the copy + keywords (event-based long-tail).
+const OCCASIONS = [
+  "backyard parties",
+  "birthday parties",
+  "church events",
+  "school events",
+  "corporate events",
+  "community events",
+  "family reunions",
+  "summer camps",
+];
+
 export function generateStaticParams() {
-  return US_STATES.map((s) => ({ state: s.slug }));
+  return getAllCities().map((c) => ({ state: c.state.slug, city: c.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, state } = await params;
-  const loc = getStateBySlug(state);
+  const { locale, state, city } = await params;
+  const loc = getCity(state, city);
   if (!loc) return {};
-  const cities3 = loc.cities.slice(0, 3).join(", ");
+  const { name, state: st } = loc;
   return buildMetadata({
     locale,
-    path: `/water-slide-rentals/${loc.slug}`,
-    title: `Water Slide Rentals in ${loc.name} — Delivered & Set Up`,
-    description: `Rent inflatable water slides in ${loc.name} — delivered, set up and fully insured for birthday parties, pool parties, school and church events in ${cities3} and nearby. Get a free water slide rental quote.`,
+    path: `/water-slide-rentals/${st.slug}/${loc.slug}`,
+    title: `Water Slide Rentals in ${name}, ${st.abbr} — Delivered & Set Up`,
+    description: `Rent premium inflatable water slides in ${name}, ${st.name}. Delivery, setup, pickup and insurance included — for birthday parties, backyard, church, school and community events. Get a free ${name} water slide rental quote today.`,
     keywords: [
-      `water slide rentals ${loc.name}`,
-      `inflatable water slide rental ${loc.name}`,
-      `water slide rental near me`,
-      `bounce house water slide rental ${loc.name}`,
-      `backyard water slide rental ${loc.name}`,
-      `party water slide rental ${loc.name}`,
-      ...loc.cities.map((c) => `water slide rental ${c}`),
+      `water slide rentals in ${name} ${st.abbr}`,
+      `water slide rental ${name}`,
+      `inflatable water slide rental ${name}`,
+      `water slides for rent ${name} ${st.abbr}`,
+      `water slide rentals ${name} ${st.name}`,
+      `bounce house and water slide rentals ${name}`,
+      `backyard water slide rental ${name}`,
+      `birthday party water slide rental ${name}`,
+      `church water slide rental ${name}`,
+      `party rentals ${name} ${st.abbr}`,
+      `water slide rentals near me`,
+      `inflatable rentals ${name}`,
     ],
   });
 }
 
-export default async function StateRentalPage({ params }: Props) {
-  const { locale, state } = await params;
+export default async function CityRentalPage({ params }: Props) {
+  const { locale, state, city } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  const loc = getStateBySlug(state);
+  const loc = getCity(state, city);
   if (!loc) notFound();
+  const { name, state: st } = loc;
 
   const listing = await getRentalProducts({ sort: "featured", page: 1 }).catch(
     () => ({
@@ -73,31 +99,29 @@ export default async function StateRentalPage({ params }: Props) {
   );
   const items = listing.items.slice(0, 8);
 
-  const cityList = loc.cities.join(", ");
-  const path = `/water-slide-rentals/${loc.slug}`;
+  const path = `/water-slide-rentals/${st.slug}/${loc.slug}`;
   const canonical = absoluteUrl(locale, path);
+  const place = `${name}, ${st.abbr}`;
 
-  // A few nearby states (same region) for internal linking.
-  const nearby = US_STATES.filter(
-    (s) => s.region === loc.region && s.slug !== loc.slug,
-  ).slice(0, 6);
+  // Sibling cities in the same state for internal linking.
+  const siblings = st.cities.filter((c) => citySlug(c) !== loc.slug);
 
   const faqs = [
     {
-      q: `Do you deliver water slides anywhere in ${loc.name}?`,
-      a: `Yes — Big Wave Slides delivers, sets up, and picks up across ${loc.name}, including ${cityList}. Tell us your venue and date and we'll confirm delivery in your free quote.`,
+      q: `Do you deliver water slides in ${name}?`,
+      a: `Yes — Big Wave Slides delivers, sets up, and picks up water slides throughout ${name} and the surrounding ${st.name} area. Share your venue and date and we'll confirm delivery in your free quote.`,
     },
     {
-      q: `How much does a water slide rental cost in ${loc.name}?`,
-      a: `Pricing depends on the slide size, rental length, and your location in ${loc.name}. Most backyard rentals start around $295/day with delivery and setup included. Request a free, no-obligation quote for exact pricing.`,
+      q: `How much does a water slide rental cost in ${name}?`,
+      a: `Pricing in ${name} depends on the slide size and how long you rent it. Most backyard rentals start around $295/day with delivery, setup, and insurance included. Request a free, no-obligation quote for exact ${place} pricing.`,
     },
     {
-      q: `How far in advance should I book in ${loc.name}?`,
-      a: `Summer weekends in ${loc.name} book up fast. We recommend reserving 2–4 weeks ahead, though we'll always try to accommodate last-minute requests.`,
+      q: `What events do you cover in ${name}?`,
+      a: `Everything — ${OCCASIONS.join(", ")}, church festivals, carnivals and more. If you're hosting it in ${name}, we can make it a splash.`,
     },
     {
-      q: `Are your slides insured and sanitized?`,
-      a: `Every rental is fully insured and cleaned & sanitized before delivery, and installed by a trained crew with proper anchoring — so your ${loc.name} event is safe from start to finish.`,
+      q: `Are your ${name} rentals insured and sanitized?`,
+      a: `Every rental is fully insured and cleaned & sanitized before delivery, then installed by a trained crew with proper anchoring — so your ${name} event is safe from start to finish.`,
     },
   ];
 
@@ -109,52 +133,54 @@ export default async function StateRentalPage({ params }: Props) {
 
   return (
     <main>
-      <JsonLd data={localBusinessAreaLd(loc.name, canonical)} />
+      <JsonLd data={localBusinessAreaLd(place, canonical)} />
       <JsonLd
         data={breadcrumbLd([
           {
             name: "Water Slide Rentals",
             url: absoluteUrl(locale, "/water-slide-rentals"),
           },
-          { name: loc.name, url: canonical },
+          {
+            name: st.name,
+            url: absoluteUrl(locale, `/water-slide-rentals/${st.slug}`),
+          },
+          { name, url: canonical },
         ])}
       />
       <JsonLd data={faqLd(faqs)} />
 
       <PhotoHero
         image={HERO}
-        title={`Water Slide Rentals in ${loc.name}`}
-        description={`Commercial-grade inflatable water slides delivered, set up, and picked up across ${loc.name}. Perfect for birthdays, pool parties, schools, churches, and festivals.`}
+        title={`Water Slide Rentals in ${name}, ${st.abbr}`}
+        description={`Commercial-grade inflatable water slides delivered, set up, and picked up across ${name}. Perfect for birthdays, backyard bashes, schools, churches, and community events.`}
       />
 
       <Section spacing="compact" className="pt-10">
         <Container className="max-w-[84rem]">
           <Reveal className="max-w-3xl">
             <p className="text-muted-foreground text-lg leading-relaxed">
-              Looking for a water slide rental in {loc.name}? Big Wave Slides
-              brings the waterpark to you — anywhere in the {loc.region}, from{" "}
-              {loc.cities[0]} to {loc.cities[loc.cities.length - 1]}. We deliver
-              premium, freshly sanitized inflatable slides, set them up safely,
-              and pick them up when the fun's done. You bring the guests; we
-              handle everything else.
+              Planning a party in {name}? Big Wave Slides brings the waterpark
+              to your {name} backyard, park, school, or church. We deliver
+              premium, freshly sanitized inflatable water slides across{" "}
+              {st.name}, set them up safely, and pick them up when the fun's
+              done — so all you do is enjoy the day.
             </p>
           </Reveal>
 
-          {/* Cities */}
+          {/* Occasions */}
           <Reveal className="mt-6" delay={0.05}>
             <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-              Cities we serve in {loc.name}
+              Water slides in {name} for every occasion
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {loc.cities.map((c) => (
-                <Link
-                  key={c}
-                  href={`/water-slide-rentals/${loc.slug}/${citySlug(c)}`}
-                  className="border-border bg-background hover:border-primary hover:text-primary inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors"
+              {OCCASIONS.map((o) => (
+                <span
+                  key={o}
+                  className="border-border bg-background inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm capitalize"
                 >
-                  <MapPin className="text-primary size-3.5" />
-                  {c}
-                </Link>
+                  <PartyPopper className="text-primary size-3.5" />
+                  {o}
+                </span>
               ))}
             </div>
           </Reveal>
@@ -181,9 +207,7 @@ export default async function StateRentalPage({ params }: Props) {
           className="border-border bg-muted/40 border-t"
         >
           <Container className="max-w-[84rem]">
-            <SectionHeader
-              title={`Popular water slides for ${loc.name} events`}
-            />
+            <SectionHeader title={`Popular water slides for ${name} events`} />
             <div className="mt-8 grid grid-cols-1 gap-x-4 gap-y-8 min-[440px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {items.map((p, i) => (
                 <Reveal key={p.slug} delay={(i % 4) * 0.05} scale>
@@ -209,7 +233,7 @@ export default async function StateRentalPage({ params }: Props) {
       <Section spacing="compact" className="border-border border-t">
         <Container className="max-w-3xl">
           <SectionHeader
-            title={`Water slide rentals in ${loc.name} — FAQ`}
+            title={`Water slide rentals in ${name} — FAQ`}
             align="center"
           />
           <Accordion
@@ -233,7 +257,7 @@ export default async function StateRentalPage({ params }: Props) {
         </Container>
       </Section>
 
-      {/* CTA + nearby states */}
+      {/* CTA + sibling cities */}
       <Section
         spacing="compact"
         className="border-border bg-muted/40 border-t pb-16"
@@ -241,11 +265,11 @@ export default async function StateRentalPage({ params }: Props) {
         <Container className="max-w-[84rem]">
           <div className="overflow-hidden rounded-3xl px-6 py-12 text-center text-white [background:linear-gradient(135deg,#0a1a2f_0%,#0e2742_100%)]">
             <h2 className="font-display text-2xl font-bold sm:text-3xl">
-              Make a splash in {loc.name}
+              Make a splash in {name}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-white/75">
-              Tell us your date and venue — we'll send a free, no-obligation
-              quote with delivery, setup, and insurance included.
+              Tell us your date and venue in {name} — we'll send a free,
+              no-obligation quote with delivery, setup, and insurance included.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" variant="gradient">
@@ -262,24 +286,23 @@ export default async function StateRentalPage({ params }: Props) {
             </div>
           </div>
 
-          {nearby.length > 0 ? (
-            <div className="mt-10">
-              <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-                We also serve nearby
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {nearby.map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/water-slide-rentals/${s.slug}`}
-                    className="border-border bg-background hover:border-primary hover:text-primary rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors"
-                  >
-                    {s.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ) : null}
+          <div className="mt-10 flex flex-wrap items-center gap-2">
+            <Link
+              href={`/water-slide-rentals/${st.slug}`}
+              className="border-primary bg-primary/5 text-primary hover:bg-primary inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors hover:text-white"
+            >
+              <MapPin className="size-3.5" /> All of {st.name}
+            </Link>
+            {siblings.map((c) => (
+              <Link
+                key={c}
+                href={`/water-slide-rentals/${st.slug}/${citySlug(c)}`}
+                className="border-border bg-background hover:border-primary hover:text-primary rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors"
+              >
+                {c}
+              </Link>
+            ))}
+          </div>
         </Container>
       </Section>
     </main>

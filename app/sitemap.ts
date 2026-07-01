@@ -9,7 +9,7 @@ import {
   getPopularTags,
 } from "@/server/data/blog";
 import { getProductCategories } from "@/server/data/products";
-import { US_STATES } from "@/lib/locations";
+import { US_STATES, getAllCities } from "@/lib/locations";
 import { USE_CASES } from "@/lib/use-cases";
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -30,8 +30,11 @@ const STATIC_PATHS = [
   "/terms-of-service",
 ];
 
-// Programmatic nationwide location pages.
+// Programmatic nationwide location pages (states + every city).
 const LOCATION_PATHS = US_STATES.map((s) => `/water-slide-rentals/${s.slug}`);
+const CITY_PATHS = getAllCities().map(
+  (c) => `/water-slide-rentals/${c.state.slug}/${c.slug}`,
+);
 
 // High-intent use-case landing pages.
 const USE_CASE_PATHS = USE_CASES.map((u) => `/water-slides-for/${u.slug}`);
@@ -59,6 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const allPaths = [
     ...STATIC_PATHS,
     ...LOCATION_PATHS,
+    ...CITY_PATHS,
     ...USE_CASE_PATHS,
     ...dynamicPaths,
   ];
