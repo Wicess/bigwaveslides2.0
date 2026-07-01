@@ -30,16 +30,20 @@ const WORDMARK = `${R2}/wordmark.png`;
 
 // The background slides shown behind the hero text: one looping video first,
 // then two high-res photos. Passed into <HeroCarousel> below.
+// The video poster doubles as the LCP element on the homepage, so it's served
+// as a right-sized WebP (not the full-res JPEG) and preloaded below.
+const POSTER = optimizedSrc(`${R2}/aquatube.jpg`, 1280);
+
 const SLIDES: HeroSlide[] = [
-  { type: "video", src: `${R2}/hero.mp4`, poster: `${R2}/aquatube.jpg` },
+  { type: "video", src: `${R2}/hero.mp4`, poster: POSTER },
   {
     type: "image",
-    src: `${R2}/aquatube.jpg`,
+    src: optimizedSrc(`${R2}/aquatube.jpg`, 1600),
     alt: "AquaTube pool slider and AquaPlay tower water-play structure",
   },
   {
     type: "image",
-    src: `${R2}/aquaforms.jpg`,
+    src: optimizedSrc(`${R2}/aquaforms.jpg`, 1600),
     alt: "AquaForms island waterpark splash play structure",
   },
 ];
@@ -60,6 +64,9 @@ export async function Hero({
     // makes it fill the visible screen height. overflow-hidden clips the
     // zooming carousel images. The sm: value is the wider phone/desktop variant.
     <section className="bg-ink relative -mt-[6.75rem] flex min-h-svh w-full items-center justify-center overflow-hidden sm:-mt-[7.25rem]">
+      {/* Preload the hero poster (the LCP element) at high priority so it paints
+          fast; the video streams in behind it. React hoists this into <head>. */}
+      <link rel="preload" as="image" href={POSTER} fetchPriority="high" />
       <HeroCarousel slides={SLIDES} />
 
       {/* z-10 lifts this text/buttons above the background carousel (z-index).
