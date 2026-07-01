@@ -66,23 +66,22 @@ export default function imageLoader({
 }
 
 /**
- * Build a wsrv.nl transform URL — resized + re-encoded to AVIF.
+ * Build a wsrv.nl transform URL — resized + re-encoded to WebP.
  *
- * AVIF is ~40–50% smaller than WebP at the same visual quality (and universally
- * supported by 2026 browsers), so we ship far fewer bytes WITHOUT the softening
- * that comes from lowering quality. `q` is floored high (82) to keep detailed
- * marketing photos crisp; `we` (without-enlargement) stops small display sizes
- * upscaling the source into blur.
+ * IMPORTANT: wsrv.nl does NOT support `output=avif` — it returns HTTP 400, which
+ * breaks every image on the site. WebP is the modern format it reliably serves,
+ * and at q82 it's already ~25-35% smaller than the source JPEG with no visible
+ * quality loss. Do not switch this to avif.
  */
 function wsrvUrl(absolute: string, width: number, q: number): string {
   return `https://wsrv.nl/?url=${encodeURIComponent(
     absolute,
-  )}&w=${width}&q=${q}&output=avif&we`;
+  )}&w=${width}&q=${q}&output=webp`;
 }
 
 /**
  * Optimize a plain `<img>` source for cases where `next/image` isn't used
- * (transparent logos, full-bleed decorative covers). Returns a resized AVIF URL
+ * (transparent logos, full-bleed decorative covers). Returns a resized WebP URL
  * for remote images; passes data URIs, SVGs and local/relative assets through
  * untouched. Respects NEXT_PUBLIC_IMAGE_CDN=off.
  */
