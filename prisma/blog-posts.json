@@ -23,10 +23,7 @@
     },
     "readingMinutes": 6,
     "category": "pricing",
-    "tags": [
-      "pricing",
-      "rentals"
-    ],
+    "tags": ["pricing", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg",
     "featured": true,
     "publishedDaysAgo": 3
@@ -55,10 +52,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "tips",
-      "rentals"
-    ],
+    "tags": ["tips", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 8
@@ -87,10 +81,7 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": [
-      "parties",
-      "tips"
-    ],
+    "tags": ["parties", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 13
@@ -119,10 +110,7 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": [
-      "tips",
-      "rentals"
-    ],
+    "tags": ["tips", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390938-cu27zd-overview-domaine-les-landes-de-gascogne-center-parcs-beauziac-france-photo01-768x575.jpg",
     "featured": false,
     "publishedDaysAgo": 18
@@ -151,9 +139,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "tips"
-    ],
+    "tags": ["tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 23
@@ -182,10 +168,7 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": [
-      "events",
-      "corporate"
-    ],
+    "tags": ["events", "corporate"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": false,
     "publishedDaysAgo": 28
@@ -214,9 +197,7 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": [
-      "safety"
-    ],
+    "tags": ["safety"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 33
@@ -245,10 +226,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "tips"
-    ],
+    "tags": ["rentals", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484404870-axgpl1-aquasplash-water-world-at-shanghai-lsnow-indoor-skiing-theme-resort-shanghai-china-photo28-1-2048x1534.jpg",
     "featured": false,
     "publishedDaysAgo": 38
@@ -277,10 +255,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips"
-    ],
+    "tags": ["rentals", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 43
@@ -309,10 +284,7 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": [
-      "tips",
-      "safety"
-    ],
+    "tags": ["tips", "safety"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484417138-3mz3g3-spinning-rapids-ride-wanda-ghuanghou-ghuanghou-china.jpg",
     "featured": false,
     "publishedDaysAgo": 48
@@ -320,10 +292,7 @@
   {
     "slug": "best-inflatable-water-slides-to-buy-2026",
     "category": "buying",
-    "tags": [
-      "buying",
-      "guides"
-    ],
+    "tags": ["buying", "guides"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708041891-ow1xnn-best-inflatable-water-slides-to-buy-2026.jpg",
     "featured": true,
     "publishedDaysAgo": 2,
@@ -352,10 +321,7 @@
   {
     "slug": "commercial-water-slide-buying-guide",
     "category": "buying",
-    "tags": [
-      "buying",
-      "commercial"
-    ],
+    "tags": ["buying", "commercial"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": false,
     "publishedDaysAgo": 5,
@@ -384,10 +350,7 @@
   {
     "slug": "residential-vs-commercial-water-slide",
     "category": "buying",
-    "tags": [
-      "buying",
-      "tips"
-    ],
+    "tags": ["buying", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708046034-bkhz5p-residential-vs-commercial-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 9,
@@ -416,10 +379,7 @@
   {
     "slug": "clean-dry-store-inflatable-water-slide",
     "category": "ownership",
-    "tags": [
-      "ownership",
-      "tips"
-    ],
+    "tags": ["ownership", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708052329-rosuet-clean-dry-store-inflatable-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 13,
@@ -448,10 +408,7 @@
   {
     "slug": "water-slide-rentals-churches-schools-hoas",
     "category": "events",
-    "tags": [
-      "events",
-      "community"
-    ],
+    "tags": ["events", "community"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708058232-5fv3my-water-slide-rentals-churches-schools-hoas.jpg",
     "featured": true,
     "publishedDaysAgo": 16,
@@ -480,10 +437,7 @@
   {
     "slug": "water-slide-season-state-by-state",
     "category": "planning",
-    "tags": [
-      "planning",
-      "seasonal"
-    ],
+    "tags": ["planning", "seasonal"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708067810-4ohw8z-water-slide-season-state-by-state.jpg",
     "featured": false,
     "publishedDaysAgo": 20,
@@ -508,5 +462,121 @@
       "en": "\"When can we rent a water slide?\" The honest answer is: it depends on where you live. Water slide season swings by weeks — even a couple of months — across the country. Time it right and you'll have your pick of dates; leave it late and the best weekends are gone.\n\n## Season by region\n\n### The South & Southwest\nStates like Texas, Florida, Arizona, and the Gulf Coast have the longest season — often **March through October**, and sometimes year-round in the warmest pockets. If you're here, your real constraint is availability, not weather.\n\n### The West Coast\nCalifornia's lowlands and the desert Southwest run a long, dependable season. Higher elevations and the Pacific Northwest start later and cool off sooner — roughly **May through September**.\n\n### The Midwest & Northeast\nSummer is the window. Plan on **late May through early September**, peaking in July. Memorial Day, Fourth of July, and Labor Day weekends book first and fill fastest.\n\n### The Mountain States & Far North\nThe shortest season — think **June through August**. When the warm weeks are few, booking early isn't optional.\n\nWherever you are, our [service-area pages](/water-slide-rentals) list local water slide rentals and delivery details for your state.\n\n> Key takeaway: The warmer your region, the longer your season — but the popular weekends (holidays, school's-out) sell out everywhere. Book by date, not by weather.\n\n## The dates that always go first\n\nNo matter the region, demand spikes around the same moments:\n\n- **Memorial Day and Labor Day** weekends\n- **The Fourth of July**\n- **The first few weekends after school lets out**\n- **End-of-school and graduation parties**\n\nIf your event lands on one of these, treat booking as urgent. Our guide on [when to book a summer water slide](/blog/when-to-book-summer-water-slide) goes deeper on lead times.\n\n## How to time your booking\n\n- **Off-peak date?** A few weeks ahead is usually fine.\n- **Holiday weekend or peak July?** Book **4–8 weeks out**, earlier in hot regions where the season is one long peak.\n- **Big community event?** Lock it in as soon as you have a date.\n\n## Ready when you are\n\nWe deliver nationwide and set everything up for you. Find your state on our [service-area pages](/water-slide-rentals), browse what's available to [rent](/rent), and [request your date](/contact) — the sooner you do, the more likely your first-choice weekend is still open.",
       "fr": "« Quand peut-on louer une glissade d'eau ? » La réponse honnête : ça dépend où vous vivez. La saison des glissades varie de plusieurs semaines — voire de quelques mois — à travers le pays. Bien programmée, vous aurez le choix des dates ; trop tard, et les meilleurs week-ends sont partis.\n\n## La saison par région\n\n### Le Sud et le Sud-Ouest\nDes États comme le Texas, la Floride, l'Arizona et la côte du Golfe ont la plus longue saison — souvent **de mars à octobre**, parfois toute l'année dans les zones les plus chaudes. Ici, votre vraie contrainte est la disponibilité, pas la météo.\n\n### La côte Ouest\nLes plaines de Californie et le désert du Sud-Ouest offrent une longue saison fiable. Les altitudes élevées et le Nord-Ouest Pacifique démarrent plus tard et se refroidissent plus tôt — environ **de mai à septembre**.\n\n### Le Midwest et le Nord-Est\nL'été est la fenêtre. Prévoyez **de fin mai à début septembre**, avec un pic en juillet. Les week-ends du Memorial Day, du 4 juillet et du Labor Day se réservent en premier.\n\n### Les États montagneux et le Grand Nord\nLa plus courte saison — pensez **de juin à août**. Quand les semaines chaudes sont rares, réserver tôt n'est pas optionnel.\n\nOù que vous soyez, nos [pages de zones de service](/water-slide-rentals) listent les locations locales et les détails de livraison pour votre État.\n\n> À retenir : plus votre région est chaude, plus la saison est longue — mais les week-ends populaires (fêtes, fin d'école) se remplissent partout. Réservez selon la date, pas la météo.\n\n## Les dates qui partent en premier\n\nQuelle que soit la région, la demande s'envole aux mêmes moments :\n\n- Les week-ends du **Memorial Day et du Labor Day**\n- Le **4 juillet**\n- Les **premiers week-ends après la fin de l'école**\n- Les **fêtes de fin d'année scolaire et de remise de diplômes**\n\nSi votre événement tombe sur l'une de ces dates, traitez la réservation comme urgente. Notre guide sur [quand réserver une glissade d'été](/blog/when-to-book-summer-water-slide) approfondit les délais.\n\n## Comment programmer votre réservation\n\n- **Date hors pointe ?** Quelques semaines à l'avance suffisent généralement.\n- **Week-end férié ou plein juillet ?** Réservez **4 à 8 semaines à l'avance**, plus tôt dans les régions chaudes où la saison est un long pic.\n- **Grand événement communautaire ?** Bloquez-le dès que vous avez une date.\n\n## Prêts quand vous l'êtes\n\nNous livrons partout au pays et installons tout pour vous. Trouvez votre État sur nos [pages de zones de service](/water-slide-rentals), parcourez les [locations](/rent) disponibles, et [demandez votre date](/contact) — plus tôt vous le faites, plus votre week-end préféré a de chances d'être libre."
     }
+  },
+  {
+    "slug": "are-inflatable-water-slides-safe",
+    "title": {
+      "en": "Are Inflatable Water Slides Safe? What Every Parent Should Know",
+      "fr": "Les glissades d'eau gonflables sont-elles sûres ? Ce que chaque parent doit savoir"
+    },
+    "excerpt": {
+      "en": "The honest answer: yes — when you rent commercial-grade equipment from an insured company and follow a few simple supervision rules. Here's exactly what keeps kids safe.",
+      "fr": "La réponse honnête : oui — avec du matériel de qualité commerciale, une entreprise assurée et quelques règles de surveillance simples. Voici ce qui protège les enfants."
+    },
+    "metaTitle": {
+      "en": "Are Inflatable Water Slides Safe? A Parent's Safety Guide",
+      "fr": "Les glissades d'eau gonflables sont-elles sûres ? Guide sécurité"
+    },
+    "metaDescription": {
+      "en": "Are inflatable water slides safe for kids? Learn what makes a rental safe — commercial materials, anchoring, insurance — plus the supervision rules for a worry-free party.",
+      "fr": "Les glissades d'eau gonflables sont-elles sûres pour les enfants ? Découvrez ce qui rend une location sûre et les règles de surveillance pour une fête sereine."
+    },
+    "content": {
+      "en": "Booking a water slide for the kids and wondering if it's actually safe? It's the right question to ask. The short answer: **yes — commercial inflatable water slides are very safe when they're professionally set up, properly supervised, and rented from an insured company.** The risk almost always comes from cutting corners, not from the slide itself.\n\nHere's what actually keeps everyone safe.\n\n## What makes a water slide safe\n\n- **Commercial-grade materials.** Rental slides are built from heavy-duty, lead-free, fire-retardant vinyl — far stronger than the thin big-box models. They're stress-tested for constant use.\n- **Professional anchoring.** A trained crew secures the unit with stakes or sandbags rated for the size and wind load, so it can't shift or lift.\n- **The right surface and setup.** Flat, clear ground with a safety margin around the slide, blowers sized correctly, and water managed so the landing stays cushioned.\n- **Full insurance and sanitizing.** Every reputable rental is insured and cleaned & sanitized before delivery.\n\n## The real risks — and how they're managed\n\nMost incidents trace back to a handful of avoidable causes:\n\n- **Overcrowding** → follow the posted rider limit; one or two at a time on the slide.\n- **Rough play** → no flips, no climbing the walls, no piling up at the bottom.\n- **Weather** → inflatables should never be used in sustained winds above 20 mph or during storms and lightning. Evacuate and unplug if the weather turns.\n- **Poor setup** → this is why you rent from professionals rather than borrowing an unbranded unit.\n\n## Safety rules for your event\n\n1. Keep a sober adult supervising at all times.\n2. Enforce the capacity, height, and age guidelines.\n3. No shoes, glasses, sharp objects, food, or drinks on the slide.\n4. Empty pockets and remove anything that could catch.\n5. Stop use and clear the slide in high wind or lightning.\n\n## How to choose a safe rental company\n\nAsk three questions: Are you fully **insured**? Do you **sanitize** between rentals? Who **sets it up and anchors it**? A professional answers all three without hesitation — and Big Wave Slides delivers, installs, and insures every rental as standard.\n\nWith the right equipment and a watchful adult, an inflatable water slide is one of the safest ways to give kids an unforgettable summer day. [Request a free quote](/contact) and we'll walk you through the details for your venue.",
+      "fr": "Vous réservez une glissade d'eau pour les enfants et vous vous demandez si c'est vraiment sûr ? C'est la bonne question. La réponse courte : **oui — les glissades d'eau gonflables commerciales sont très sûres lorsqu'elles sont installées par des professionnels, correctement surveillées et louées auprès d'une entreprise assurée.** Le risque vient presque toujours des raccourcis, pas de la glissade elle-même.\n\nVoici ce qui protège réellement tout le monde.\n\n## Ce qui rend une glissade sûre\n\n- **Matériaux de qualité commerciale.** Les glissades de location sont en vinyle robuste, sans plomb et ignifuge — bien plus solides que les modèles de grande surface.\n- **Ancrage professionnel.** Une équipe formée fixe l'unité avec des piquets ou des sacs de sable adaptés à la taille et au vent.\n- **La bonne surface et installation.** Un sol plat et dégagé, des souffleurs bien dimensionnés et une eau gérée pour amortir la réception.\n- **Assurance et désinfection complètes.** Toute location sérieuse est assurée, nettoyée et désinfectée avant la livraison.\n\n## Les vrais risques — et comment ils sont gérés\n\n- **Surcharge** → respectez la limite d'utilisateurs ; un ou deux à la fois.\n- **Jeu brutal** → pas de sauts périlleux ni d'escalade des parois.\n- **Météo** → n'utilisez jamais un gonflable par vents soutenus de plus de 30 km/h ni pendant les orages. Évacuez et débranchez si le temps change.\n- **Mauvaise installation** → d'où l'intérêt de louer auprès de professionnels.\n\n## Règles de sécurité pour votre événement\n\n1. Un adulte sobre surveille en permanence.\n2. Respectez les consignes de capacité, de taille et d'âge.\n3. Pas de chaussures, lunettes, objets pointus, nourriture ni boissons sur la glissade.\n4. Videz les poches.\n5. Arrêtez et dégagez la glissade en cas de vent fort ou d'éclairs.\n\n## Comment choisir une entreprise sûre\n\nPosez trois questions : Êtes-vous **assuré** ? **Désinfectez-vous** entre les locations ? Qui **l'installe et l'ancre** ? Un professionnel répond aux trois sans hésiter — et Big Wave Slides livre, installe et assure chaque location.\n\nAvec le bon matériel et un adulte attentif, une glissade d'eau gonflable est l'un des moyens les plus sûrs d'offrir aux enfants une journée d'été inoubliable. [Demandez un devis gratuit](/contact)."
+    },
+    "readingMinutes": 5,
+    "category": "safety",
+    "tags": ["safety", "tips"],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
+    "featured": false,
+    "publishedDaysAgo": 6
+  },
+  {
+    "slug": "water-slide-vs-bounce-house",
+    "title": {
+      "en": "Water Slide vs Bounce House: Which Should You Rent?",
+      "fr": "Glissade d'eau ou château gonflable : lequel louer ?"
+    },
+    "excerpt": {
+      "en": "Both are party gold — but the right pick depends on the weather, the ages, and your space. Here's a simple way to decide (and why plenty of hosts rent both).",
+      "fr": "Les deux font le bonheur des fêtes — mais le bon choix dépend de la météo, des âges et de l'espace. Voici comment décider (et pourquoi beaucoup louent les deux)."
+    },
+    "metaTitle": {
+      "en": "Water Slide vs Bounce House: How to Choose | Big Wave Slides",
+      "fr": "Glissade d'eau ou château gonflable : comment choisir"
+    },
+    "metaDescription": {
+      "en": "Water slide vs bounce house — which is better for your party? Compare by weather, age range, space, and budget, with a quick decision guide from Big Wave Slides.",
+      "fr": "Glissade d'eau ou château gonflable pour votre fête ? Comparez selon la météo, l'âge, l'espace et le budget avec le guide de Big Wave Slides."
+    },
+    "content": {
+      "en": "It's the classic party-planning question: **water slide or bounce house?** Both are guaranteed to keep kids happy for hours, so there's no wrong answer — but a few factors make one the clear winner for *your* event.\n\n## Choose a water slide if…\n\n- **It's hot out.** Nothing beats a water slide in summer heat — it doubles as a way to cool everyone down.\n- **The kids are a bit older.** Water slides shine for ages 5 and up, and even adults love a dual-lane racer.\n- **You want the \"wow.\"** A towering slide is the centerpiece photo of the whole party.\n- **You have a water source and a spot for splash.** You'll need a hose and a surface that drains.\n\n## Choose a bounce house if…\n\n- **It's cooler weather or an indoor event.** Bounce houses work year-round, rain or shine.\n- **You have younger kids.** Toddlers and preschoolers love the enclosed, low-stakes bounce.\n- **You want the simplest setup.** No water, no wet cleanup, no towels.\n- **Space or drainage is limited.** A dry unit is more flexible about placement.\n\n## Quick comparison\n\n| | Water slide | Bounce house |\n|---|---|---|\n| Best season | Summer | Year-round |\n| Best ages | 5+ | 2–10 |\n| Needs water | Yes | No |\n| Cool-down factor | High | None |\n| Setup | Water + drainage | Flat, dry space |\n\n## Why not both?\n\nFor bigger parties, many hosts rent a **combo unit** (a bounce house *with* a built-in water slide) or pair a dry bounce house with a separate slide so there's something for every age. Younger kids bounce, older kids race down the slide, and the party never has a dull moment.\n\nStill deciding? Tell us the ages, the date, and your space and we'll recommend the perfect setup. [Request a free quote](/contact) or [browse our rentals](/rent) to see what's available.",
+      "fr": "C'est la question classique de l'organisation d'une fête : **glissade d'eau ou château gonflable ?** Les deux garantissent des heures de bonheur, il n'y a donc pas de mauvaise réponse — mais quelques facteurs désignent un gagnant pour *votre* événement.\n\n## Choisissez une glissade d'eau si…\n\n- **Il fait chaud.** Rien ne vaut une glissade d'eau en été — elle rafraîchit tout le monde.\n- **Les enfants sont plus grands.** Les glissades brillent dès 5 ans, et même les adultes adorent une double piste.\n- **Vous voulez l'effet \"wow\".** Une grande glissade est la photo phare de la fête.\n- **Vous avez de l'eau et un espace pour les éclaboussures.** Il faut un tuyau et une surface qui draine.\n\n## Choisissez un château gonflable si…\n\n- **Il fait plus frais ou l'événement est en intérieur.** Le château fonctionne toute l'année.\n- **Vous avez de jeunes enfants.** Les tout-petits adorent le rebond fermé et sécurisant.\n- **Vous voulez l'installation la plus simple.** Pas d'eau, pas de nettoyage humide.\n- **L'espace ou le drainage est limité.** Une unité sèche se place plus facilement.\n\n## Comparaison rapide\n\n| | Glissade d'eau | Château gonflable |\n|---|---|---|\n| Meilleure saison | Été | Toute l'année |\n| Meilleurs âges | 5+ | 2–10 |\n| Besoin d'eau | Oui | Non |\n| Effet rafraîchissant | Élevé | Aucun |\n| Installation | Eau + drainage | Espace plat et sec |\n\n## Pourquoi pas les deux ?\n\nPour les grandes fêtes, beaucoup louent une **unité combo** (un château gonflable *avec* glissade d'eau intégrée) ou associent un château sec à une glissade séparée. Les petits rebondissent, les grands dévalent la glissade, et la fête ne connaît aucun temps mort.\n\nVous hésitez encore ? Indiquez-nous les âges, la date et votre espace et nous recommanderons la formule idéale. [Demandez un devis gratuit](/contact) ou [parcourez nos locations](/rent)."
+    },
+    "readingMinutes": 4,
+    "category": "guides",
+    "tags": ["guides", "tips"],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
+    "featured": false,
+    "publishedDaysAgo": 9
+  },
+  {
+    "slug": "water-slide-on-concrete",
+    "title": {
+      "en": "Can You Set Up an Inflatable Water Slide on Concrete?",
+      "fr": "Peut-on installer une glissade d'eau gonflable sur du béton ?"
+    },
+    "excerpt": {
+      "en": "Short answer: yes — with the right anchoring and a protective layer. Here's how it's done safely on concrete, asphalt, and other hard surfaces.",
+      "fr": "Réponse courte : oui — avec le bon ancrage et une couche de protection. Voici comment le faire en toute sécurité sur béton, asphalte et surfaces dures."
+    },
+    "metaTitle": {
+      "en": "Inflatable Water Slide on Concrete: Is It Safe? | Big Wave Slides",
+      "fr": "Glissade d'eau gonflable sur béton : est-ce sûr ?"
+    },
+    "metaDescription": {
+      "en": "Can inflatable water slides be used on concrete or asphalt? Yes — with sandbag anchoring and a tarp underlay. Learn how it's done safely and what to tell your rental company.",
+      "fr": "Peut-on utiliser une glissade d'eau gonflable sur béton ou asphalte ? Oui — avec sacs de sable et bâche. Découvrez comment le faire en toute sécurité."
+    },
+    "content": {
+      "en": "No grassy yard? No problem. **Inflatable water slides can absolutely be set up on concrete, asphalt, pavers, or a driveway** — it's done at schools, churches, parking lots, and city events all the time. The key is adapting the anchoring and protecting the unit. Here's how the pros handle it.\n\n## The two things that change on hard surfaces\n\n1. **Anchoring.** You can't drive stakes into concrete, so the crew switches to **heavy sandbags** (or water weights) rated for the slide's size and the day's wind. Every anchor point gets weighted — no exceptions.\n2. **A protective underlay.** A **tarp or ground sheet** goes under the slide to shield the vinyl from abrasion, grit, and heat, which extends its life and keeps the base clean.\n\n## Is it safe?\n\nYes — when it's set up correctly. A properly weighted slide on concrete is just as stable as a staked one on grass. The things to watch:\n\n- **Heat.** Dark asphalt gets hot in direct sun; the tarp underlay and the water itself keep surfaces comfortable, and shade helps.\n- **Runoff.** Hard surfaces don't absorb water, so plan for drainage away from the slide and any electrical.\n- **Trip edges.** Keep the surrounding area clear and mark any lips or curbs.\n\n## What to tell your rental company\n\nWhen you request your quote, just say **\"it's going on concrete\"** (or asphalt, pavers, etc.). That's all we need to bring the right sandbag anchors and underlay — no stakes required. It never costs extra, and it means your setup is safe and solid from the first bounce.\n\n## Bottom line\n\nA hard surface is not a dealbreaker. With sandbag anchoring and a tarp underlay, your driveway or parking lot becomes the perfect party spot. [Request a free quote](/contact) and mention your surface — we'll handle the rest.",
+      "fr": "Pas de pelouse ? Aucun problème. **Les glissades d'eau gonflables peuvent tout à fait être installées sur béton, asphalte, pavés ou une allée** — c'est courant dans les écoles, les églises et les événements municipaux. L'essentiel est d'adapter l'ancrage et de protéger l'unité. Voici comment les pros s'y prennent.\n\n## Les deux choses qui changent sur une surface dure\n\n1. **L'ancrage.** Impossible de planter des piquets dans le béton : l'équipe passe à de **lourds sacs de sable** (ou des poids à eau) adaptés à la taille de la glissade et au vent du jour. Chaque point d'ancrage est lesté — sans exception.\n2. **Une bâche de protection.** Une **bâche** est placée sous la glissade pour protéger le vinyle de l'abrasion, des graviers et de la chaleur.\n\n## Est-ce sûr ?\n\nOui — si l'installation est correcte. Une glissade bien lestée sur béton est aussi stable qu'une glissade ancrée sur gazon. À surveiller :\n\n- **La chaleur.** L'asphalte foncé chauffe au soleil ; la bâche et l'eau gardent les surfaces confortables, et l'ombre aide.\n- **L'écoulement.** Les surfaces dures n'absorbent pas l'eau : prévoyez un drainage loin de la glissade et de l'électricité.\n- **Les rebords.** Dégagez les alentours et signalez les bordures.\n\n## Ce qu'il faut dire à votre loueur\n\nAu moment du devis, précisez simplement **\"c'est sur du béton\"** (ou asphalte, pavés…). Cela nous suffit pour apporter les bons sacs de sable et la bâche — sans piquets. C'est sans supplément et cela garantit une installation sûre et solide.\n\n## En résumé\n\nUne surface dure n'est pas un obstacle. Avec des sacs de sable et une bâche, votre allée ou parking devient l'endroit parfait pour la fête. [Demandez un devis gratuit](/contact) en mentionnant votre surface."
+    },
+    "readingMinutes": 4,
+    "category": "guides",
+    "tags": ["safety", "tips"],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
+    "featured": false,
+    "publishedDaysAgo": 12
+  },
+  {
+    "slug": "best-age-for-inflatable-water-slides",
+    "title": {
+      "en": "What Age Are Inflatable Water Slides Best For?",
+      "fr": "Pour quel âge les glissades d'eau gonflables sont-elles idéales ?"
+    },
+    "excerpt": {
+      "en": "From toddlers to teens (and grown-ups), there's a water slide for every age. Here's how to match the slide to your crowd so everyone has a blast — safely.",
+      "fr": "Des tout-petits aux ados (et adultes), il existe une glissade pour chaque âge. Voici comment l'adapter à votre public pour que tout le monde s'amuse en sécurité."
+    },
+    "metaTitle": {
+      "en": "Best Age for Inflatable Water Slides: A Sizing Guide",
+      "fr": "Meilleur âge pour une glissade d'eau gonflable : guide"
+    },
+    "metaDescription": {
+      "en": "What age is best for an inflatable water slide? Match slide height and features to toddlers, kids, teens, and adults with this quick age-and-size guide.",
+      "fr": "Quel âge pour une glissade d'eau gonflable ? Adaptez la hauteur et les options aux tout-petits, enfants, ados et adultes avec ce guide."
+    },
+    "content": {
+      "en": "\"Is my kid old enough for a water slide?\" It's one of the most common questions we get — and the good news is there's a slide for practically **every age from about 2 to adult.** The trick is matching the size and style to your crowd.\n\n## Toddlers (2–4)\n\nStick to **small, low-height slides or a combo with a shallow splash pool.** Look for gentle slopes, low climb walls, and lots of enclosed space. Constant hands-on supervision is a must, and one child at a time keeps it calm.\n\n## Young kids (5–8)\n\nThis is the **sweet spot** for classic water slides. A **10–15 foot** slide is thrilling but not intimidating, and kids this age can climb and slide independently while an adult watches. Single-lane slides with a splash landing are perfect.\n\n## Big kids & tweens (9–12)\n\nGo bigger. **15–18 foot** slides and **dual-lane racers** bring the excitement without being too much. This age loves to race friends, so a two-lane unit keeps the line moving and the competition friendly.\n\n## Teens & adults\n\nYes, water slides aren't just for little ones. **18–20+ foot** slides and obstacle-course combos are a hit at teen parties, graduations, church youth events, and even corporate field days. Commercial units are rated for adult riders, so grown-ups can join the fun.\n\n## Mixed ages? Here's the move\n\nMost parties have a range of ages. Two easy solutions:\n\n- **A combo unit** with a bounce area, splash pool, and slide gives little ones and big kids their own zone.\n- **Rotate by age or height** and enforce the posted guidelines — a simple rule keeps everyone safe and the day flowing.\n\nNot sure which size fits your group? Tell us the ages and headcount and we'll recommend the right slide. [Request a free quote](/contact) or [browse our rentals](/rent).",
+      "fr": "« Mon enfant est-il assez grand pour une glissade d'eau ? » C'est l'une des questions les plus fréquentes — et la bonne nouvelle, c'est qu'il existe une glissade pour pratiquement **tous les âges, d'environ 2 ans jusqu'à l'âge adulte.** L'astuce est d'adapter la taille et le style à votre public.\n\n## Tout-petits (2–4 ans)\n\nOptez pour des **petites glissades basses ou un combo avec pataugeoire peu profonde.** Privilégiez les pentes douces, les parois basses et un espace fermé. Une surveillance constante est indispensable, un enfant à la fois.\n\n## Jeunes enfants (5–8 ans)\n\nC'est **l'âge idéal** pour les glissades classiques. Une glissade de **3 à 4,5 mètres** est palpitante sans être intimidante, et les enfants peuvent grimper et glisser seuls sous l'œil d'un adulte.\n\n## Grands enfants & préados (9–12 ans)\n\nVoyez plus grand. Les glissades de **4,5 à 5,5 mètres** et les **doubles pistes** apportent le frisson sans excès. Cet âge adore faire la course, donc une double piste garde la file active et la compétition amicale.\n\n## Ados & adultes\n\nOui, les glissades ne sont pas que pour les petits. Les glissades de **5,5 à 6 mètres et plus** et les parcours d'obstacles cartonnent aux fêtes d'ados, remises de diplômes et journées d'entreprise. Les unités commerciales sont homologuées pour les adultes.\n\n## Âges mélangés ? Voici la solution\n\nLa plupart des fêtes réunissent plusieurs âges. Deux solutions simples :\n\n- **Une unité combo** avec zone de rebond, pataugeoire et glissade offre à chacun son espace.\n- **Alternez par âge ou taille** et appliquez les consignes affichées.\n\nVous ne savez pas quelle taille convient ? Indiquez-nous les âges et le nombre d'invités. [Demandez un devis gratuit](/contact) ou [parcourez nos locations](/rent)."
+    },
+    "readingMinutes": 5,
+    "category": "planning",
+    "tags": ["planning", "tips"],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
+    "featured": false,
+    "publishedDaysAgo": 15
   }
 ]
