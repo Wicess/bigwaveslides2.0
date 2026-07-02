@@ -84,7 +84,11 @@ export async function SiteFooter({
       <Container className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr] lg:gap-12">
         {/* Column 1: logo, tagline, and the trust badge list. */}
         <div>
-          <Link href="/" aria-label="Big Wave Slides — home" className="inline-flex">
+          <Link
+            href="/"
+            aria-label="Big Wave Slides — home"
+            className="inline-flex"
+          >
             <span className="rounded-2xl bg-white/95 px-3 py-2 shadow-[var(--shadow-soft)]">
               <Image
                 src="/logo.png"
@@ -100,8 +104,11 @@ export async function SiteFooter({
           </p>
           <ul className="mt-6 space-y-2.5">
             {trust.map((item) => (
-              <li key={item.label} className="flex items-center gap-2.5 text-sm text-white/80">
-                <item.icon className="size-4 text-secondary" />
+              <li
+                key={item.label}
+                className="flex items-center gap-2.5 text-sm text-white/80"
+              >
+                <item.icon className="text-secondary size-4" />
                 {item.label}
               </li>
             ))}
@@ -110,7 +117,7 @@ export async function SiteFooter({
 
         {/* Column 2: the "Explore" link list (built from exploreLinks above). */}
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
+          <h3 className="text-xs font-bold tracking-[0.18em] text-white/50 uppercase">
             {t("footerExplore")}
           </h3>
           <ul className="mt-5 space-y-3">
@@ -129,7 +136,7 @@ export async function SiteFooter({
 
         {/* Column 3: the "Services" list, showing the first 6 services. */}
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
+          <h3 className="text-xs font-bold tracking-[0.18em] text-white/50 uppercase">
             {t("footerServices")}
           </h3>
           <ul className="mt-5 space-y-3">
@@ -149,21 +156,24 @@ export async function SiteFooter({
         {/* Column 4: contact details and social buttons. Each contact row is
             only rendered if that piece of info exists (the `? ... : null` guards). */}
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
+          <h3 className="text-xs font-bold tracking-[0.18em] text-white/50 uppercase">
             {t("footerContact")}
           </h3>
           <ul className="mt-5 space-y-3.5 text-sm text-white/80">
             {contact.email ? (
               <li className="flex items-center gap-2.5">
-                <Mail className="size-4 shrink-0 text-secondary" />
-                <a href={`mailto:${contact.email}`} className="hover:text-white">
+                <Mail className="text-secondary size-4 shrink-0" />
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="hover:text-white"
+                >
                   {contact.email}
                 </a>
               </li>
             ) : null}
             {contact.phone ? (
               <li className="flex items-center gap-2.5">
-                <Phone className="size-4 shrink-0 text-secondary" />
+                <Phone className="text-secondary size-4 shrink-0" />
                 <a
                   /* Strip everything but digits and "+" to form a valid tel: link. */
                   href={`tel:${contact.phone.replace(/[^0-9+]/g, "")}`}
@@ -179,7 +189,7 @@ export async function SiteFooter({
               link only when its URL is set in the admin panel; otherwise it
               renders inactive (dimmed, non-clickable) until a link is added. */}
           <div className="mt-7">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">
+            <p className="text-xs font-bold tracking-[0.18em] text-white/50 uppercase">
               {t("followUs")}
             </p>
             <div className="mt-3 flex gap-2.5">
@@ -214,6 +224,21 @@ export async function SiteFooter({
               {t("terms")}
             </Link>
           </div>
+
+          {/* Developer signature — W!CE is a mailto backlink; the wordmark wears
+              a slow metallic sheen. Left-aligned on mobile, right on desktop. */}
+          <a
+            href="mailto:kenj52974@gmail.com"
+            aria-label="Contact the developer, W!CE"
+            className="group inline-flex items-baseline gap-2 self-start sm:self-auto"
+          >
+            <span className="text-[10px] font-medium tracking-[0.4em] text-white/30 uppercase transition-opacity duration-300 group-hover:text-white/60">
+              Developed by
+            </span>
+            <span className="dev-sheen font-brand text-base leading-none font-bold">
+              W!CE
+            </span>
+          </a>
         </Container>
       </div>
     </footer>
@@ -254,7 +279,7 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="grid size-11 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/10 transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary hover:ring-primary"
+      className="hover:bg-primary hover:ring-primary grid size-11 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/10 transition-all duration-200 hover:-translate-y-0.5"
     >
       {children}
     </a>
