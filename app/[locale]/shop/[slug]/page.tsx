@@ -334,14 +334,6 @@ export default async function ProductDetailPage({ params }: Props) {
                 </div>
               ) : null}
 
-              {product.depositCents ? (
-                <p className="text-muted-foreground mt-1 text-sm">
-                  {t("deposit", {
-                    amount: formatPrice(product.depositCents, locale),
-                  })}
-                </p>
-              ) : null}
-
               {/* Specs */}
               {specs.length > 0 ? (
                 <ul className="mt-6 grid grid-cols-2 gap-3">

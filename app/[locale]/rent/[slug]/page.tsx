@@ -292,13 +292,6 @@ export default async function RentalDetailPage({ params }: Props) {
                   </div>
                 ) : null}
 
-                {product.depositCents ? (
-                  <p className="text-muted-foreground mt-1 text-sm">
-                    {t("refundableDeposit")}:{" "}
-                    {formatPrice(product.depositCents, locale)}
-                  </p>
-                ) : null}
-
                 {specs.length > 0 ? (
                   <ul className="mt-5 grid grid-cols-2 gap-3">
                     {specs.map((s) => {
