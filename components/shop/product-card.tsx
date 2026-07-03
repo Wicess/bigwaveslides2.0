@@ -104,10 +104,10 @@ export async function ProductCard({
         </span>
 
         {/* Price on its OWN line so it never truncates on narrow mobile cards —
-            struck-through compare-at price next to the real (lower) price. */}
+            hero price with a quiet struck-through compare-at beside it. */}
         {price ? (
           <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            <span className="font-display text-primary text-lg font-bold">
+            <span className="font-display text-primary text-xl font-extrabold tracking-tight tabular-nums">
               {price}
             </span>
             {isRental ? (
@@ -116,7 +116,7 @@ export async function ProductCard({
               </span>
             ) : null}
             {compareAt ? (
-              <span className="text-muted-foreground/70 text-sm line-through">
+              <span className="text-muted-foreground/55 text-sm tabular-nums line-through decoration-1">
                 {compareAt}
               </span>
             ) : null}

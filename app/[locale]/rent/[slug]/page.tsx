@@ -271,24 +271,28 @@ export default async function RentalDetailPage({ params }: Props) {
                 <p className="text-muted-foreground mt-4">{shortDescription}</p>
 
                 {product.dailyRateCents != null ? (
-                  <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <span className="font-display text-primary text-4xl font-bold">
-                      {formatPrice(product.dailyRateCents, locale)}
-                    </span>
-                    <span className="text-muted-foreground">
-                      {tp("perDay")}
-                    </span>
-                    <span className="text-muted-foreground/70 text-lg line-through">
-                      {formatPrice(
-                        compareAtCents(product.dailyRateCents),
-                        locale,
-                      )}
-                    </span>
-                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
-                      {locale === "fr"
-                        ? `-${savingsPercent(product.dailyRateCents)} %`
-                        : `Save ${savingsPercent(product.dailyRateCents)}%`}
-                    </span>
+                  <div className="mt-5">
+                    <div className="flex items-baseline gap-2.5">
+                      <span className="font-display text-primary text-[2.75rem] leading-none font-extrabold tracking-tight tabular-nums">
+                        {formatPrice(product.dailyRateCents, locale)}
+                      </span>
+                      <span className="text-muted-foreground text-sm font-medium">
+                        {tp("perDay")}
+                      </span>
+                    </div>
+                    <div className="mt-2.5 flex items-center gap-2.5 text-sm">
+                      <span className="text-muted-foreground/60 tabular-nums line-through decoration-1">
+                        {formatPrice(
+                          compareAtCents(product.dailyRateCents),
+                          locale,
+                        )}
+                      </span>
+                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-emerald-700 uppercase ring-1 ring-emerald-600/20 ring-inset">
+                        {locale === "fr"
+                          ? `Économisez ${savingsPercent(product.dailyRateCents)} %`
+                          : `Save ${savingsPercent(product.dailyRateCents)}%`}
+                      </span>
+                    </div>
                   </div>
                 ) : null}
 

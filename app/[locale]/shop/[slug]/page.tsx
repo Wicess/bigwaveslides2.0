@@ -314,23 +314,27 @@ export default async function ProductDetailPage({ params }: Props) {
               </p>
 
               {priceCents != null ? (
-                <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span className="font-display text-primary text-4xl font-bold">
-                    {formatPrice(priceCents, locale)}
-                  </span>
-                  {isRental ? (
-                    <span className="text-muted-foreground">
-                      {tp("perDay")}
+                <div className="mt-5">
+                  <div className="flex items-baseline gap-2.5">
+                    <span className="font-display text-primary text-[2.75rem] leading-none font-extrabold tracking-tight tabular-nums">
+                      {formatPrice(priceCents, locale)}
                     </span>
-                  ) : null}
-                  <span className="text-muted-foreground/70 text-lg line-through">
-                    {formatPrice(compareAtCents(priceCents), locale)}
-                  </span>
-                  <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
-                    {locale === "fr"
-                      ? `-${savingsPercent(priceCents)} %`
-                      : `Save ${savingsPercent(priceCents)}%`}
-                  </span>
+                    {isRental ? (
+                      <span className="text-muted-foreground text-sm font-medium">
+                        {tp("perDay")}
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="mt-2.5 flex items-center gap-2.5 text-sm">
+                    <span className="text-muted-foreground/60 tabular-nums line-through decoration-1">
+                      {formatPrice(compareAtCents(priceCents), locale)}
+                    </span>
+                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-emerald-700 uppercase ring-1 ring-emerald-600/20 ring-inset">
+                      {locale === "fr"
+                        ? `Économisez ${savingsPercent(priceCents)} %`
+                        : `Save ${savingsPercent(priceCents)}%`}
+                    </span>
+                  </div>
                 </div>
               ) : null}
 
