@@ -63,8 +63,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: `/water-slide-rentals/${st.slug}/${loc.slug}`,
-    title: `Water Slide Rentals in ${name}, ${st.abbr} — Delivered & Set Up`,
-    description: `Rent premium inflatable water slides in ${name}, ${st.name}. Delivery, setup, pickup and insurance included — for birthday parties, backyard, church, school and community events. Get a free ${name} water slide rental quote today.`,
+    title: `Water Slide Rentals in ${name}, ${st.abbr} — Delivered, Set Up & Insured`,
+    description: `Rent inflatable water slides & bounce houses in ${name}, ${st.abbr} from $199/day — delivered, set up, sanitized & fully insured for birthdays, pool parties & events. Free ${name} quote, book your date today.`,
     keywords: [
       `water slide rentals in ${name} ${st.abbr}`,
       `water slide rental ${name}`,

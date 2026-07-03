@@ -23,13 +23,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/water-slide-rentals",
-    title: "Water Slide Rentals Near You — Nationwide Delivery",
+    title: "Water Slide Rentals Near You — Delivered in All 50 States",
     description:
-      "Big Wave Slides delivers premium inflatable water slide rentals across all 50 U.S. states. Find water slide rentals in your state — fully insured, delivered & set up.",
+      "Rent premium inflatable water slides & bounce houses from $199/day — delivered, set up, sanitized & fully insured across all 50 U.S. states. Find water slide rentals in your city and get a free quote today.",
     keywords: [
       "water slide rentals",
       "water slide rental near me",
       "inflatable water slide rental USA",
+      "bounce house and water slide rentals",
+      "party water slide rental near me",
+      "backyard water slide rental",
     ],
   });
 }
@@ -50,18 +53,18 @@ export default async function LocationsHubPage({ params }: Props) {
       <Section spacing="compact" className="pt-10">
         <Container className="max-w-[84rem]">
           <Reveal className="max-w-3xl">
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              Big Wave Slides delivers across all 50 states. Pick your state to see
-              local water slide rentals, delivery details, and answers to the
-              questions renters ask most.
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              Big Wave Slides delivers across all 50 states. Pick your state to
+              see local water slide rentals, delivery details, and answers to
+              the questions renters ask most.
             </p>
           </Reveal>
 
           <div className="mt-10 space-y-10">
             {REGIONS.map((region) => (
               <Reveal key={region} className="space-y-4">
-                <h2 className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">
-                  <span className="h-px w-8 bg-primary/40" />
+                <h2 className="text-primary flex items-center gap-3 text-sm font-semibold tracking-[0.18em] uppercase">
+                  <span className="bg-primary/40 h-px w-8" />
                   {region}
                 </h2>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -69,7 +72,7 @@ export default async function LocationsHubPage({ params }: Props) {
                     <Link
                       key={s.slug}
                       href={`/water-slide-rentals/${s.slug}`}
-                      className="rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary hover:shadow-[var(--shadow-soft)]"
+                      className="border-border bg-background hover:border-primary/40 hover:text-primary rounded-xl border px-4 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)]"
                     >
                       {s.name}
                     </Link>

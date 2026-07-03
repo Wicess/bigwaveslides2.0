@@ -19,7 +19,10 @@ import { Reveal } from "@/components/motion/reveal";
 import { buildMetadata } from "@/lib/seo";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams };
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: SearchParams;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -28,11 +31,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     path: "/rent",
     title: fr
-      ? "Location de glissades d'eau — gonflables livrées & installées"
-      : "Water Slide Rentals — Inflatable Slides Delivered & Set Up",
+      ? "Location de glissades d'eau dès 199 $/jour — livrées & installées"
+      : "Water Slide Rentals from $199/day — Delivered, Set Up & Insured",
     description: fr
-      ? "Louez des glissades d'eau gonflables près de chez vous — livraison, installation et assurance comprises pour anniversaires, fêtes de piscine, écoles et églises. Devis gratuit."
-      : "Rent inflatable water slides near you — delivered, set up and fully insured for birthday parties, pool parties, and school & church events. Get a free rental quote.",
+      ? "Louez des glissades d'eau gonflables et châteaux gonflables près de chez vous dès 199 $/jour — livraison, installation et assurance comprises pour anniversaires, fêtes de piscine, écoles et églises. Devis gratuit."
+      : "Rent inflatable water slides & bounce houses near you from $199/day — delivered, set up & fully insured for birthday parties, pool parties, school & church events. Get a free rental quote.",
     keywords: [
       "water slide rentals",
       "inflatable water slide rentals",
@@ -68,20 +71,27 @@ export default async function RentPage({ params, searchParams }: Props) {
 
   return (
     <main>
-      <PhotoHero image={RENT_HERO_IMAGE} eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
+      <PhotoHero
+        image={RENT_HERO_IMAGE}
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("desc")}
+      />
       <Section spacing="compact" className="pb-16">
         <Container>
           {dateParam ? (
-            <p className="mb-6 rounded-[var(--radius-lg)] bg-primary-50 px-4 py-3 text-sm text-primary">
+            <p className="bg-primary-50 text-primary mb-6 rounded-[var(--radius-lg)] px-4 py-3 text-sm">
               {t("dateBanner", { date: toISODate(dateParam) })}
             </p>
           ) : null}
 
           {listing.items.length === 0 ? (
             <div className="mt-12 flex flex-col items-center gap-4 text-center">
-              <PackageOpen className="size-12 text-muted-foreground" />
+              <PackageOpen className="text-muted-foreground size-12" />
               <p className="text-lg font-semibold">{t("emptyTitle")}</p>
-              <p className="max-w-sm text-sm text-muted-foreground">{t("emptyDesc")}</p>
+              <p className="text-muted-foreground max-w-sm text-sm">
+                {t("emptyDesc")}
+              </p>
             </div>
           ) : (
             <div className="mt-8 grid grid-cols-1 gap-x-4 gap-y-8 min-[440px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
