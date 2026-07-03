@@ -24,6 +24,22 @@ export function formatPrice(
   }).format(cents / 100);
 }
 
+/**
+ * The struck-through "compare-at" price shown next to the real price — set 20%
+ * above it so the actual price reads as a deal. Rounded to a whole dollar for a
+ * clean figure. Used on product cards and detail pages (rent + shop).
+ */
+export function compareAtCents(priceCents: number): number {
+  return Math.round((priceCents * 1.2) / 100) * 100;
+}
+
+/** Whole-percent discount from the compare-at price down to the real price (~17%). */
+export function savingsPercent(priceCents: number): number {
+  const compare = compareAtCents(priceCents);
+  if (compare <= 0) return 0;
+  return Math.round((1 - priceCents / compare) * 100);
+}
+
 /** Format a date for display in the active locale. */
 export function formatDate(
   date: Date | string,
@@ -38,5 +54,8 @@ export function formatDate(
   const d = typeof date === "string" ? new Date(date) : date;
   // Intl.DateTimeFormat renders the date per locale (e.g. "Jun 25, 2026" in
   // English vs "25 juin 2026" in French). `options` controls which parts show.
-  return new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : "en-US", options).format(d);
+  return new Intl.DateTimeFormat(
+    locale === "fr" ? "fr-FR" : "en-US",
+    options,
+  ).format(d);
 }

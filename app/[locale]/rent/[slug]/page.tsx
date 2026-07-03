@@ -22,7 +22,7 @@ import {
 import { getLocalized } from "@/lib/localized";
 import { buildMetadata, rentProductSeo, productKindLabel } from "@/lib/seo";
 import { rentalFaqs } from "@/lib/product-faq";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
@@ -190,13 +190,16 @@ export default async function RentalDetailPage({ params }: Props) {
 
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
             {/* A — Gallery */}
-            <Reveal className="lg:col-start-1 lg:row-start-1">
+            <Reveal className="order-1 lg:order-none lg:col-start-1 lg:row-start-1">
               <ProductGallery items={gallery} title={name} />
             </Reveal>
 
-            {/* C — Details accordion: under the gallery on desktop, but BELOW
-                the buy box on mobile (DOM order A → B → C). */}
-            <Reveal delay={0.05} className="lg:col-start-1 lg:row-start-2">
+            {/* C — Details accordion: under the gallery on desktop; on mobile it
+                sits BELOW the buy box (specs/power) via order-3. */}
+            <Reveal
+              delay={0.05}
+              className="order-3 lg:order-none lg:col-start-1 lg:row-start-2"
+            >
               <Accordion
                 type="multiple"
                 defaultValue={["about"]}
@@ -241,7 +244,7 @@ export default async function RentalDetailPage({ params }: Props) {
                 desktop; on mobile it sits directly under the images. */}
             <Reveal
               delay={0.1}
-              className="lg:col-start-2 lg:row-span-2 lg:row-start-1"
+              className="order-2 lg:order-none lg:col-start-2 lg:row-span-2 lg:row-start-1"
             >
               <div className="flex flex-col lg:sticky lg:top-28">
                 <div className="flex items-center gap-3">
@@ -268,12 +271,23 @@ export default async function RentalDetailPage({ params }: Props) {
                 <p className="text-muted-foreground mt-4">{shortDescription}</p>
 
                 {product.dailyRateCents != null ? (
-                  <div className="mt-5 flex items-baseline gap-2">
+                  <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <span className="font-display text-primary text-4xl font-bold">
                       {formatPrice(product.dailyRateCents, locale)}
                     </span>
                     <span className="text-muted-foreground">
                       {tp("perDay")}
+                    </span>
+                    <span className="text-muted-foreground/70 text-lg line-through">
+                      {formatPrice(
+                        compareAtCents(product.dailyRateCents),
+                        locale,
+                      )}
+                    </span>
+                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
+                      {locale === "fr"
+                        ? `-${savingsPercent(product.dailyRateCents)} %`
+                        : `Save ${savingsPercent(product.dailyRateCents)}%`}
                     </span>
                   </div>
                 ) : null}
@@ -286,7 +300,7 @@ export default async function RentalDetailPage({ params }: Props) {
                 ) : null}
 
                 {specs.length > 0 ? (
-                  <ul className="order-1 mt-5 grid grid-cols-2 gap-3 lg:order-none">
+                  <ul className="mt-5 grid grid-cols-2 gap-3">
                     {specs.map((s) => {
                       const Icon = s.icon;
                       return (

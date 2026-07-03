@@ -23,7 +23,7 @@ import {
 import { getLocalized } from "@/lib/localized";
 import { buildMetadata, saleProductSeo, productKindLabel } from "@/lib/seo";
 import { saleFaqs } from "@/lib/product-faq";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
@@ -218,12 +218,16 @@ export default async function ProductDetailPage({ params }: Props) {
 
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
             {/* A — Gallery */}
-            <Reveal className="lg:col-start-1 lg:row-start-1">
+            <Reveal className="order-1 lg:order-none lg:col-start-1 lg:row-start-1">
               <ProductGallery items={gallery} title={name} />
             </Reveal>
 
-            {/* C — Details: under the gallery on desktop, below the buy box on mobile. */}
-            <Reveal delay={0.05} className="lg:col-start-1 lg:row-start-2">
+            {/* C — Details: under the gallery on desktop; on mobile it sits BELOW
+                the buy box (specs) via order-3. */}
+            <Reveal
+              delay={0.05}
+              className="order-3 lg:order-none lg:col-start-1 lg:row-start-2"
+            >
               <Accordion
                 type="multiple"
                 defaultValue={["about"]}
@@ -280,7 +284,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 desktop, directly under the images on mobile. */}
             <Reveal
               delay={0.08}
-              className="flex flex-col lg:col-start-2 lg:row-span-2 lg:row-start-1"
+              className="order-2 flex flex-col lg:order-none lg:col-start-2 lg:row-span-2 lg:row-start-1"
             >
               <div className="flex items-center gap-3">
                 <Badge variant={isRental ? "primary" : "accent"}>
@@ -310,7 +314,7 @@ export default async function ProductDetailPage({ params }: Props) {
               </p>
 
               {priceCents != null ? (
-                <div className="mt-5 flex items-baseline gap-2">
+                <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   <span className="font-display text-primary text-4xl font-bold">
                     {formatPrice(priceCents, locale)}
                   </span>
@@ -319,6 +323,14 @@ export default async function ProductDetailPage({ params }: Props) {
                       {tp("perDay")}
                     </span>
                   ) : null}
+                  <span className="text-muted-foreground/70 text-lg line-through">
+                    {formatPrice(compareAtCents(priceCents), locale)}
+                  </span>
+                  <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
+                    {locale === "fr"
+                      ? `-${savingsPercent(priceCents)} %`
+                      : `Save ${savingsPercent(priceCents)}%`}
+                  </span>
                 </div>
               ) : null}
 
@@ -332,7 +344,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
               {/* Specs */}
               {specs.length > 0 ? (
-                <ul className="order-1 mt-6 grid grid-cols-2 gap-3 lg:order-none">
+                <ul className="mt-6 grid grid-cols-2 gap-3">
                   {specs.map((s) => {
                     const Icon = s.icon;
                     return (

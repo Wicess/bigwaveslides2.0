@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getLocalized } from "@/lib/localized";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, compareAtCents } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { MediaImage } from "@/components/ui/media-image";
 import { Stars } from "@/components/ui/stars";
@@ -54,6 +54,8 @@ export async function ProductCard({
 
   const priceCents = isRental ? product.dailyRateCents : product.salePriceCents;
   const price = priceCents != null ? formatPrice(priceCents, locale) : null;
+  const compareAt =
+    priceCents != null ? formatPrice(compareAtCents(priceCents), locale) : null;
 
   return (
     // The whole card lifts on hover; the photo + text link to the detail page,
@@ -93,24 +95,33 @@ export async function ProductCard({
           </h3>
         </Link>
 
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <span className="flex items-center gap-1.5">
-            <Stars rating={product.ratingAvg} size="size-3.5" />
-            <span className="text-muted-foreground text-xs">
-              ({product.ratingCount})
-            </span>
+        {/* Rating on its own line. */}
+        <span className="mt-2 flex items-center gap-1.5">
+          <Stars rating={product.ratingAvg} size="size-3.5" />
+          <span className="text-muted-foreground text-xs">
+            ({product.ratingCount})
           </span>
-          {price ? (
-            <span className="font-display text-primary font-bold">
+        </span>
+
+        {/* Price on its OWN line so it never truncates on narrow mobile cards —
+            struck-through compare-at price next to the real (lower) price. */}
+        {price ? (
+          <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+            <span className="font-display text-primary text-lg font-bold">
               {price}
-              {isRental ? (
-                <span className="text-muted-foreground text-xs font-medium">
-                  {t("perDay")}
-                </span>
-              ) : null}
             </span>
-          ) : null}
-        </div>
+            {isRental ? (
+              <span className="text-muted-foreground text-xs font-medium">
+                {t("perDay")}
+              </span>
+            ) : null}
+            {compareAt ? (
+              <span className="text-muted-foreground/70 text-sm line-through">
+                {compareAt}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
 
         {/* `mt-auto` pins the actions to the bottom so ragged titles still align. */}
         <div className="mt-auto pt-1">
