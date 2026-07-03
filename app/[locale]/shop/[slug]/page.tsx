@@ -21,7 +21,8 @@ import {
   getProductSlugs,
 } from "@/server/data/products";
 import { getLocalized } from "@/lib/localized";
-import { buildMetadata, saleProductSeo } from "@/lib/seo";
+import { buildMetadata, saleProductSeo, productKindLabel } from "@/lib/seo";
+import { saleFaqs } from "@/lib/product-faq";
 import { formatPrice } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
@@ -35,12 +36,20 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { ProductCard } from "@/components/shop/product-card";
-import { ProductGallery, type GalleryItem } from "@/components/shop/product-gallery";
+import {
+  ProductGallery,
+  type GalleryItem,
+} from "@/components/shop/product-gallery";
 import { ProductCardActions } from "@/components/shop/product-card-actions";
 import { ReviewsSection } from "@/components/shop/reviews-section";
 import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
-import { productLd, breadcrumbLd, absoluteUrl } from "@/lib/structured-data";
+import {
+  productLd,
+  breadcrumbLd,
+  faqLd,
+  absoluteUrl,
+} from "@/lib/structured-data";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -54,9 +63,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(slug);
   if (!product) return {};
   const name = getLocalized(product.name, locale);
-  const seo = saleProductSeo(name, locale);
-  const customTitle = product.metaTitle ? getLocalized(product.metaTitle, locale) : "";
-  const customDesc = product.metaDescription ? getLocalized(product.metaDescription, locale) : "";
+  const seo = saleProductSeo(name, locale, {
+    price:
+      product.salePriceCents != null
+        ? formatPrice(product.salePriceCents, locale)
+        : undefined,
+    kind: productKindLabel(product.category?.slug, locale),
+  });
+  const customTitle = product.metaTitle
+    ? getLocalized(product.metaTitle, locale)
+    : "";
+  const customDesc = product.metaDescription
+    ? getLocalized(product.metaDescription, locale)
+    : "";
   return buildMetadata({
     locale,
     path: `/shop/${slug}`,
@@ -85,7 +104,8 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const name = getLocalized(product.name, locale);
   const shortDescription = getLocalized(product.shortDescription, locale);
-  const description = getLocalized(product.description, locale) || shortDescription;
+  const description =
+    getLocalized(product.description, locale) || shortDescription;
   const features = asList(product.features, locale);
 
   const gallery: GalleryItem[] = product.media.map((m) => ({
@@ -98,7 +118,8 @@ export default async function ProductDetailPage({ params }: Props) {
     product.type === "SALE" ? product.salePriceCents : product.dailyRateCents;
   const isRental = product.type !== "SALE";
 
-  const dims = (product.dimensions as { size?: string; weight?: string } | null) ?? null;
+  const dims =
+    (product.dimensions as { size?: string; weight?: string } | null) ?? null;
   const space = (product.spaceRequired as { value?: string } | null) ?? null;
   // Back-compat: older rows store dimensions as loose values, not { size }.
   const dimText =
@@ -111,17 +132,25 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const specs = [
     product.capacity != null
-      ? { icon: Users, label: t("capacity"), value: t("people", { count: product.capacity }) }
+      ? {
+          icon: Users,
+          label: t("capacity"),
+          value: t("people", { count: product.capacity }),
+        }
       : null,
     product.ageRange
       ? { icon: Baby, label: t("ageRange"), value: product.ageRange }
       : null,
     dimText ? { icon: Ruler, label: t("dimensions"), value: dimText } : null,
-    dims?.weight ? { icon: Weight, label: t("weight"), value: dims.weight } : null,
+    dims?.weight
+      ? { icon: Weight, label: t("weight"), value: dims.weight }
+      : null,
     product.powerRequired
       ? { icon: Zap, label: t("power"), value: product.powerRequired }
       : null,
-    space?.value ? { icon: Maximize2, label: t("spaceNeeded"), value: space.value } : null,
+    space?.value
+      ? { icon: Maximize2, label: t("spaceNeeded"), value: space.value }
+      : null,
   ].filter(Boolean) as { icon: typeof Users; label: string; value: string }[];
 
   const related = await getRelatedProducts(product.id, product.categoryId);
@@ -133,6 +162,16 @@ export default async function ProductDetailPage({ params }: Props) {
   ];
 
   const canonical = absoluteUrl(locale, `/shop/${product.slug}`);
+
+  const faqs = saleFaqs({
+    name,
+    locale,
+    price:
+      product.salePriceCents != null
+        ? formatPrice(product.salePriceCents, locale)
+        : undefined,
+    kind: productKindLabel(product.category?.slug, locale),
+  });
 
   return (
     <main>
@@ -154,10 +193,11 @@ export default async function ProductDetailPage({ params }: Props) {
           { name, url: canonical },
         ])}
       />
+      <JsonLd data={faqLd(faqs)} />
       <Section spacing="compact" className="pt-6 sm:pt-10">
         <Container>
           {/* Breadcrumb */}
-          <nav className="mb-6 text-sm text-muted-foreground">
+          <nav className="text-muted-foreground mb-6 text-sm">
             <Link href="/shop" className="hover:text-primary">
               {t("breadcrumbShop")}
             </Link>
@@ -184,94 +224,109 @@ export default async function ProductDetailPage({ params }: Props) {
 
             {/* C — Details: under the gallery on desktop, below the buy box on mobile. */}
             <Reveal delay={0.05} className="lg:col-start-1 lg:row-start-2">
-                <Accordion
-                  type="multiple"
-                  defaultValue={["about"]}
-                  className="rounded-[var(--radius-lg)] border border-border"
-                >
-                  <AccordionItem value="about" className="px-4 last:border-b-0">
-                    <AccordionTrigger>{t("tabDescription")}</AccordionTrigger>
+              <Accordion
+                type="multiple"
+                defaultValue={["about"]}
+                className="border-border rounded-[var(--radius-lg)] border"
+              >
+                <AccordionItem value="about" className="px-4 last:border-b-0">
+                  <AccordionTrigger>{t("tabDescription")}</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-[0.95rem] leading-relaxed whitespace-pre-line">
+                      {description}
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                {features.length > 0 ? (
+                  <AccordionItem
+                    value="features"
+                    className="px-4 last:border-b-0"
+                  >
+                    <AccordionTrigger>{t("tabFeatures")}</AccordionTrigger>
                     <AccordionContent>
-                      <p className="whitespace-pre-line text-[0.95rem] leading-relaxed">
-                        {description}
-                      </p>
+                      <ul className="grid gap-2.5 sm:grid-cols-2">
+                        {features.map((f) => (
+                          <li
+                            key={f}
+                            className="text-foreground/80 flex items-start gap-2.5"
+                          >
+                            <Check className="text-primary mt-0.5 size-5 shrink-0" />
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </AccordionContent>
                   </AccordionItem>
+                ) : null}
 
-                  {features.length > 0 ? (
-                    <AccordionItem value="features" className="px-4 last:border-b-0">
-                      <AccordionTrigger>{t("tabFeatures")}</AccordionTrigger>
-                      <AccordionContent>
-                        <ul className="grid gap-2.5 sm:grid-cols-2">
-                          {features.map((f) => (
-                            <li key={f} className="flex items-start gap-2.5 text-foreground/80">
-                              <Check className="mt-0.5 size-5 shrink-0 text-primary" />
-                              <span>{f}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ) : null}
-
-                  <AccordionItem value="reviews" className="px-4 last:border-b-0">
-                    <AccordionTrigger>
-                      {t("tabReviews")} ({product.ratingCount})
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <ReviewsSection
-                        productId={product.id}
-                        ratingAvg={product.ratingAvg}
-                        ratingCount={product.ratingCount}
-                        locale={locale}
-                      />
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
+                <AccordionItem value="reviews" className="px-4 last:border-b-0">
+                  <AccordionTrigger>
+                    {t("tabReviews")} ({product.ratingCount})
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <ReviewsSection
+                      productId={product.id}
+                      ratingAvg={product.ratingAvg}
+                      ratingCount={product.ratingCount}
+                      locale={locale}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </Reveal>
 
             {/* B — Buy box (price + add to cart / buy now): right column on
                 desktop, directly under the images on mobile. */}
-            <Reveal delay={0.08} className="flex flex-col lg:col-start-2 lg:row-start-1 lg:row-span-2">
+            <Reveal
+              delay={0.08}
+              className="flex flex-col lg:col-start-2 lg:row-span-2 lg:row-start-1"
+            >
               <div className="flex items-center gap-3">
                 <Badge variant={isRental ? "primary" : "accent"}>
                   {isRental ? tp("rentBadge") : tp("saleBadge")}
                 </Badge>
                 {product.sku ? (
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     {t("sku")}: {product.sku}
                   </span>
                 ) : null}
               </div>
 
-              <h1 className="mt-3 text-3xl font-bold leading-tight sm:text-4xl">
+              <h1 className="mt-3 text-3xl leading-tight font-bold sm:text-4xl">
                 {name}
               </h1>
 
               <div className="mt-3 flex items-center gap-2">
                 <Stars rating={product.ratingAvg} />
-                <span className="text-sm text-muted-foreground">
+                <span className="text-muted-foreground text-sm">
                   {product.ratingAvg.toFixed(1)} · {product.ratingCount}{" "}
                   {tp("reviews")}
                 </span>
               </div>
 
-              <p className="mt-4 text-lg text-muted-foreground">{shortDescription}</p>
+              <p className="text-muted-foreground mt-4 text-lg">
+                {shortDescription}
+              </p>
 
               {priceCents != null ? (
                 <div className="mt-5 flex items-baseline gap-2">
-                  <span className="font-display text-4xl font-bold text-primary">
+                  <span className="font-display text-primary text-4xl font-bold">
                     {formatPrice(priceCents, locale)}
                   </span>
                   {isRental ? (
-                    <span className="text-muted-foreground">{tp("perDay")}</span>
+                    <span className="text-muted-foreground">
+                      {tp("perDay")}
+                    </span>
                   ) : null}
                 </div>
               ) : null}
 
               {product.depositCents ? (
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {t("deposit", { amount: formatPrice(product.depositCents, locale) })}
+                <p className="text-muted-foreground mt-1 text-sm">
+                  {t("deposit", {
+                    amount: formatPrice(product.depositCents, locale),
+                  })}
                 </p>
               ) : null}
 
@@ -283,11 +338,11 @@ export default async function ProductDetailPage({ params }: Props) {
                     return (
                       <li
                         key={s.label}
-                        className="flex items-center gap-3 rounded-xl border border-border bg-muted/40 p-3 transition-colors hover:border-primary/40 hover:bg-primary-50/60"
+                        className="border-border bg-muted/40 hover:border-primary/40 hover:bg-primary-50/60 flex items-center gap-3 rounded-xl border p-3 transition-colors"
                       >
-                        <Icon className="size-5 shrink-0 text-primary" />
+                        <Icon className="text-primary size-5 shrink-0" />
                         <span className="min-w-0">
-                          <span className="block text-xs text-muted-foreground">
+                          <span className="text-muted-foreground block text-xs">
                             {s.label}
                           </span>
                           <span className="block truncate text-sm font-semibold">
@@ -304,17 +359,21 @@ export default async function ProductDetailPage({ params }: Props) {
               <div className="mt-7">
                 <ProductCardActions
                   productId={product.id}
-                  labels={{ add: tp("addToCart"), added: tp("added"), primary: tp("buyNow") }}
+                  labels={{
+                    add: tp("addToCart"),
+                    added: tp("added"),
+                    primary: tp("buyNow"),
+                  }}
                 />
               </div>
 
               {/* Trust */}
-              <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-border pt-5 text-sm">
+              <ul className="border-border mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t pt-5 text-sm">
                 {trust.map((item) => {
                   const Icon = item.icon;
                   return (
                     <li key={item.label} className="flex items-center gap-2">
-                      <Icon className="size-4 text-primary" />
+                      <Icon className="text-primary size-4" />
                       {item.label}
                     </li>
                   );
@@ -325,10 +384,41 @@ export default async function ProductDetailPage({ params }: Props) {
         </Container>
       </Section>
 
+      {/* FAQ — buying-intent content + FAQPage schema (rich-result eligible). */}
+      <Section spacing="compact" className="border-border border-t">
+        <Container className="max-w-3xl">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">
+            {locale === "fr"
+              ? `Questions fréquentes — ${name}`
+              : `${name} — Frequently Asked Questions`}
+          </h2>
+          <Accordion
+            type="multiple"
+            defaultValue={["faq-0"]}
+            className="border-border mt-6 rounded-[var(--radius-lg)] border"
+          >
+            {faqs.map((f, i) => (
+              <AccordionItem
+                key={f.q}
+                value={`faq-${i}`}
+                className="px-4 last:border-b-0"
+              >
+                <AccordionTrigger>{f.q}</AccordionTrigger>
+                <AccordionContent>
+                  <p className="leading-relaxed">{f.a}</p>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </Container>
+      </Section>
 
       {/* Related */}
       {related.length > 0 ? (
-        <Section spacing="compact" className="border-t border-foreground/10 bg-muted/70">
+        <Section
+          spacing="compact"
+          className="border-foreground/10 bg-muted/70 border-t"
+        >
           <Container>
             <SectionHeader title={t("relatedTitle")} />
             <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">

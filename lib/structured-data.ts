@@ -5,11 +5,16 @@ const NAME = "Big Wave Slides";
 
 type Json = Record<string, unknown>;
 
-export function organizationLd(contact?: {
-  email?: string;
-  phone?: string;
-  address?: string;
-}): Json {
+export function organizationLd(
+  contact?: {
+    email?: string;
+    phone?: string;
+    address?: string;
+  },
+  /** Social profile URLs → `sameAs`, which helps Google build the brand entity. */
+  sameAs?: (string | undefined)[],
+): Json {
+  const links = (sameAs ?? []).filter(Boolean) as string[];
   return {
     "@context": "https://schema.org",
     // LocalBusiness (rental) is far stronger than Organization for local rank.
@@ -25,8 +30,11 @@ export function organizationLd(contact?: {
     ...(contact?.email ? { email: contact.email } : {}),
     ...(contact?.phone ? { telephone: contact.phone } : {}),
     ...(contact?.address
-      ? { address: { "@type": "PostalAddress", streetAddress: contact.address } }
+      ? {
+          address: { "@type": "PostalAddress", streetAddress: contact.address },
+        }
       : {}),
+    ...(links.length ? { sameAs: links } : {}),
   };
 }
 
@@ -45,7 +53,11 @@ export function localBusinessAreaLd(area: string, url: string): Json {
 }
 
 /** Service schema for the use-case landing pages (birthday parties, etc.). */
-export function serviceLd(s: { name: string; description: string; url: string }): Json {
+export function serviceLd(s: {
+  name: string;
+  description: string;
+  url: string;
+}): Json {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -135,7 +147,10 @@ export function articleLd(a: {
     ...(a.image ? { image: a.image } : {}),
     url: a.url,
     ...(a.datePublished ? { datePublished: a.datePublished } : {}),
-    author: { "@type": a.author ? "Person" : "Organization", name: a.author ?? NAME },
+    author: {
+      "@type": a.author ? "Person" : "Organization",
+      name: a.author ?? NAME,
+    },
     publisher: { "@type": "Organization", name: NAME },
   };
 }

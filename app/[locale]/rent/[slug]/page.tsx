@@ -20,7 +20,8 @@ import {
   getRentalSlugs,
 } from "@/server/data/rentals";
 import { getLocalized } from "@/lib/localized";
-import { buildMetadata, rentProductSeo } from "@/lib/seo";
+import { buildMetadata, rentProductSeo, productKindLabel } from "@/lib/seo";
+import { rentalFaqs } from "@/lib/product-faq";
 import { formatPrice } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
@@ -57,7 +58,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getRentalBySlug(slug);
   if (!product) return {};
   const name = getLocalized(product.name, locale);
-  const seo = rentProductSeo(name, locale);
+  const seo = rentProductSeo(name, locale, {
+    price:
+      product.dailyRateCents != null
+        ? formatPrice(product.dailyRateCents, locale)
+        : undefined,
+    kind: productKindLabel(product.category?.slug, locale),
+  });
   const customTitle = product.metaTitle
     ? getLocalized(product.metaTitle, locale)
     : "";
@@ -77,91 +84,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function asList(value: unknown, locale: string): string[] {
   if (!Array.isArray(value)) return [];
   return value.map((v) => getLocalized(v, locale, String(v))).filter(Boolean);
-}
-
-/**
- * Build a per-product FAQ from the unit's own attributes. Rendered on the page
- * AND emitted as FAQPage JSON-LD so each rental is eligible for FAQ rich
- * results — and answers the exact questions renters search before booking.
- */
-function productFaqs(opts: {
-  name: string;
-  locale: string;
-  price: string;
-  dims: string;
-  age: string | null;
-}): { q: string; a: string }[] {
-  const { name, locale, price, dims, age } = opts;
-  const fr = locale === "fr";
-  const faqs: { q: string; a: string }[] = [];
-
-  faqs.push(
-    fr
-      ? {
-          q: `Livrez-vous et installez-vous le ${name} ?`,
-          a: `Oui — nous livrons, installons, ancrons et récupérons le ${name} pour vous. La livraison, l'installation et le ramassage sont inclus ; vous n'avez qu'à profiter de la journée.`,
-        }
-      : {
-          q: `Do you deliver and set up the ${name}?`,
-          a: `Yes — we deliver, professionally set up, anchor and pick up the ${name} for you. Delivery, setup and pickup are all included, so all you do is enjoy the day.`,
-        },
-  );
-
-  if (price) {
-    faqs.push(
-      fr
-        ? {
-            q: `Combien coûte la location du ${name} ?`,
-            a: `La location du ${name} commence à ${price} par jour, livraison, installation et assurance comprises. Demandez un devis gratuit pour votre date et votre lieu.`,
-          }
-        : {
-            q: `How much does it cost to rent the ${name}?`,
-            a: `The ${name} rents from ${price} per day with delivery, setup and insurance included. Request a free, no-obligation quote for your date and venue.`,
-          },
-    );
-  }
-
-  if (dims) {
-    faqs.push(
-      fr
-        ? {
-            q: `Quel espace faut-il pour le ${name} ?`,
-            a: `Prévoyez une surface plane d'environ ${dims}, avec un peu de dégagement autour, plus un accès à l'eau et à l'électricité. Nous confirmons que tout rentre avant la livraison.`,
-          }
-        : {
-            q: `How much space does the ${name} need?`,
-            a: `Plan for a flat area of about ${dims}, with a little clearance around it, plus access to water and power. We confirm the fit before delivery.`,
-          },
-    );
-  }
-
-  if (age) {
-    faqs.push(
-      fr
-        ? {
-            q: `Le ${name} convient à partir de quel âge ?`,
-            a: `Le ${name} est recommandé pour les ${age}. Une supervision adulte est toujours conseillée.`,
-          }
-        : {
-            q: `What ages is the ${name} for?`,
-            a: `The ${name} is recommended for ages ${age}. Adult supervision is always recommended.`,
-          },
-    );
-  }
-
-  faqs.push(
-    fr
-      ? {
-          q: `Le ${name} est-il nettoyé et assuré ?`,
-          a: `Absolument. Chaque location est nettoyée et désinfectée avant la livraison et entièrement assurée, installée par une équipe formée avec un ancrage adéquat.`,
-        }
-      : {
-          q: `Is the ${name} cleaned and insured?`,
-          a: `Absolutely. Every rental is cleaned and sanitized before delivery and fully insured, installed by a trained crew with proper anchoring.`,
-        },
-  );
-
-  return faqs;
 }
 
 export default async function RentalDetailPage({ params }: Props) {
@@ -230,13 +152,13 @@ export default async function RentalDetailPage({ params }: Props) {
     { icon: Truck, label: t("trustDelivery") },
   ];
 
-  const faqs = productFaqs({
+  const faqs = rentalFaqs({
     name,
     locale,
     price:
       product.dailyRateCents != null
         ? formatPrice(product.dailyRateCents, locale)
-        : "",
+        : undefined,
     dims: dimText,
     age: product.ageRange,
   });
