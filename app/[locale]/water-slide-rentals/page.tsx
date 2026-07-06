@@ -3,7 +3,7 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { US_STATES } from "@/lib/locations";
+import { US_STATES, getPriorityCities } from "@/lib/locations";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
@@ -58,6 +58,27 @@ export default async function LocationsHubPage({ params }: Props) {
               see local water slide rentals, delivery details, and answers to
               the questions renters ask most.
             </p>
+          </Reveal>
+
+          {/* Popular cities — direct internal links to the priority metro
+              pages so they're crawlable within one click of the hub (not
+              orphaned behind sibling-city chips). */}
+          <Reveal className="mt-10 space-y-4">
+            <h2 className="text-primary flex items-center gap-3 text-sm font-semibold tracking-[0.18em] uppercase">
+              <span className="bg-primary/40 h-px w-8" />
+              Popular cities
+            </h2>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              {getPriorityCities().map((c) => (
+                <Link
+                  key={`${c.state.slug}/${c.slug}`}
+                  href={`/water-slide-rentals/${c.state.slug}/${c.slug}`}
+                  className="border-border bg-background hover:border-primary/40 hover:text-primary rounded-xl border px-4 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)]"
+                >
+                  {c.name}, {c.state.abbr}
+                </Link>
+              ))}
+            </div>
           </Reveal>
 
           <div className="mt-10 space-y-10">

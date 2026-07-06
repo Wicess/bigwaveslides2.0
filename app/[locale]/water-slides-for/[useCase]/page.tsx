@@ -40,6 +40,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!uc) return {};
   return buildMetadata({
     locale,
+    // Use-case pages render English copy; keep the French duplicates unindexed.
+    noindex: locale !== routing.defaultLocale,
     path: `/water-slides-for/${uc.slug}`,
     title: uc.heroTitle,
     description: uc.heroDescription,
@@ -56,7 +58,9 @@ export default async function UseCasePage({ params }: Props) {
   if (!uc) notFound();
 
   const listing = await getRentalProducts({ sort: "featured", page: 1 }).catch(
-    () => ({ items: [] as Awaited<ReturnType<typeof getRentalProducts>>["items"] }),
+    () => ({
+      items: [] as Awaited<ReturnType<typeof getRentalProducts>>["items"],
+    }),
   );
   const items = listing.items.slice(0, 8);
 
@@ -74,43 +78,62 @@ export default async function UseCasePage({ params }: Props) {
 
   return (
     <main>
-      <JsonLd data={serviceLd({ name: uc.heroTitle, description: uc.heroDescription, url: canonical })} />
+      <JsonLd
+        data={serviceLd({
+          name: uc.heroTitle,
+          description: uc.heroDescription,
+          url: canonical,
+        })}
+      />
       <JsonLd
         data={breadcrumbLd([
-          { name: "Water Slide Rentals", url: absoluteUrl(locale, "/water-slide-rentals") },
+          {
+            name: "Water Slide Rentals",
+            url: absoluteUrl(locale, "/water-slide-rentals"),
+          },
           { name: uc.name, url: canonical },
         ])}
       />
       <JsonLd data={faqLd(uc.faqs)} />
 
-      <PhotoHero image={uc.hero} title={uc.heroTitle} description={uc.heroDescription} />
+      <PhotoHero
+        image={uc.hero}
+        title={uc.heroTitle}
+        description={uc.heroDescription}
+      />
 
       <Section spacing="compact" className="pt-10">
         <Container className="max-w-[84rem]">
           <Reveal className="max-w-3xl">
-            <p className="text-lg leading-relaxed text-muted-foreground">{uc.intro}</p>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              {uc.intro}
+            </p>
           </Reveal>
 
           {/* Benefits */}
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {uc.benefits.map((b, i) => (
               <Reveal key={b.title} delay={(i % 3) * 0.05}>
-                <div className="h-full rounded-2xl border border-border bg-background p-5">
-                  <Check className="size-5 text-primary" />
-                  <h3 className="mt-3 font-display text-lg font-semibold">{b.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
+                <div className="border-border bg-background h-full rounded-2xl border p-5">
+                  <Check className="text-primary size-5" />
+                  <h3 className="font-display mt-3 text-lg font-semibold">
+                    {b.title}
+                  </h3>
+                  <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+                    {b.body}
+                  </p>
                 </div>
               </Reveal>
             ))}
           </div>
 
           {/* Trust */}
-          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-y border-border py-4 text-sm">
+          <ul className="border-border mt-8 flex flex-wrap gap-x-6 gap-y-2 border-y py-4 text-sm">
             {trust.map((it) => {
               const Icon = it.icon;
               return (
                 <li key={it.label} className="flex items-center gap-2">
-                  <Icon className="size-4 text-primary" />
+                  <Icon className="text-primary size-4" />
                   {it.label}
                 </li>
               );
@@ -121,13 +144,23 @@ export default async function UseCasePage({ params }: Props) {
 
       {/* Catalog */}
       {items.length > 0 ? (
-        <Section spacing="compact" className="border-t border-border bg-muted/40">
+        <Section
+          spacing="compact"
+          className="border-border bg-muted/40 border-t"
+        >
           <Container className="max-w-[84rem]">
-            <SectionHeader title={`Popular slides for ${uc.name.toLowerCase()}`} />
+            <SectionHeader
+              title={`Popular slides for ${uc.name.toLowerCase()}`}
+            />
             <div className="mt-8 grid grid-cols-1 gap-x-4 gap-y-8 min-[440px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {items.map((p, i) => (
                 <Reveal key={p.slug} delay={(i % 4) * 0.05} scale>
-                  <ProductCard product={p} locale={locale} context="rent" priority={i < 2} />
+                  <ProductCard
+                    product={p}
+                    locale={locale}
+                    context="rent"
+                    priority={i < 2}
+                  />
                 </Reveal>
               ))}
             </div>
@@ -141,16 +174,23 @@ export default async function UseCasePage({ params }: Props) {
       ) : null}
 
       {/* FAQ */}
-      <Section spacing="compact" className="border-t border-border">
+      <Section spacing="compact" className="border-border border-t">
         <Container className="max-w-3xl">
-          <SectionHeader title={`${uc.name} — frequently asked questions`} align="center" />
+          <SectionHeader
+            title={`${uc.name} — frequently asked questions`}
+            align="center"
+          />
           <Accordion
             type="multiple"
             defaultValue={["q0"]}
-            className="mt-8 rounded-[var(--radius-lg)] border border-border"
+            className="border-border mt-8 rounded-[var(--radius-lg)] border"
           >
             {uc.faqs.map((f, i) => (
-              <AccordionItem key={i} value={`q${i}`} className="px-4 last:border-b-0">
+              <AccordionItem
+                key={i}
+                value={`q${i}`}
+                className="px-4 last:border-b-0"
+              >
                 <AccordionTrigger>{f.q}</AccordionTrigger>
                 <AccordionContent>
                   <p className="leading-relaxed">{f.a}</p>
@@ -162,15 +202,18 @@ export default async function UseCasePage({ params }: Props) {
       </Section>
 
       {/* CTA + other use cases */}
-      <Section spacing="compact" className="border-t border-border bg-muted/40 pb-16">
+      <Section
+        spacing="compact"
+        className="border-border bg-muted/40 border-t pb-16"
+      >
         <Container className="max-w-[84rem]">
           <div className="overflow-hidden rounded-3xl px-6 py-12 text-center text-white [background:linear-gradient(135deg,#0a1a2f_0%,#0e2742_100%)]">
             <h2 className="font-display text-2xl font-bold sm:text-3xl">
               Planning a {uc.phrase}?
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-white/75">
-              Tell us your date and venue — we'll send a free, no-obligation quote with
-              delivery, setup, and insurance included.
+              Tell us your date and venue — we'll send a free, no-obligation
+              quote with delivery, setup, and insurance included.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" variant="gradient">
@@ -188,7 +231,7 @@ export default async function UseCasePage({ params }: Props) {
           </div>
 
           <div className="mt-10">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
               Water slides for every occasion
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -196,7 +239,7 @@ export default async function UseCasePage({ params }: Props) {
                 <Link
                   key={u.slug}
                   href={`/water-slides-for/${u.slug}`}
-                  className="rounded-full border border-border bg-background px-3.5 py-1.5 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+                  className="border-border bg-background hover:border-primary hover:text-primary rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors"
                 >
                   {u.name}
                 </Link>

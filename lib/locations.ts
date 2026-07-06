@@ -1206,3 +1206,91 @@ export function getCity(
   const name = state.cities.find((c) => citySlug(c) === cSlug);
   return name ? { name, slug: cSlug, state } : undefined;
 }
+
+/**
+ * Wave-1 priority metros — the highest-demand US cities we concentrate crawl
+ * budget and deepened, genuinely-local content on. On a young, low-authority
+ * domain Google won't index 750+ near-templated city pages, so only these are
+ * indexed + sitemapped; every other city page is `noindex` until the domain
+ * earns authority and we widen the net in waves.
+ *
+ * Keyed as "stateSlug/citySlug". Safe to edit freely — a key whose city isn't
+ * in US_STATES simply never matches (see `isPriorityCity`).
+ */
+export const PRIORITY_CITY_KEYS: readonly string[] = [
+  // Texas
+  "texas/houston",
+  "texas/san-antonio",
+  "texas/dallas",
+  "texas/austin",
+  "texas/fort-worth",
+  "texas/el-paso",
+  // California
+  "california/los-angeles",
+  "california/san-diego",
+  "california/san-jose",
+  "california/san-francisco",
+  "california/fresno",
+  "california/sacramento",
+  "california/long-beach",
+  // Florida
+  "florida/jacksonville",
+  "florida/miami",
+  "florida/tampa",
+  "florida/orlando",
+  // New York
+  "new-york/new-york-city",
+  "new-york/buffalo",
+  // Illinois / Arizona
+  "illinois/chicago",
+  "arizona/phoenix",
+  "arizona/tucson",
+  "arizona/mesa",
+  // Pennsylvania / Ohio
+  "pennsylvania/philadelphia",
+  "pennsylvania/pittsburgh",
+  "ohio/columbus",
+  "ohio/cleveland",
+  "ohio/cincinnati",
+  // North Carolina / Georgia / Michigan
+  "north-carolina/charlotte",
+  "north-carolina/raleigh",
+  "georgia/atlanta",
+  "michigan/detroit",
+  // West / Mountain
+  "washington/seattle",
+  "colorado/denver",
+  "nevada/las-vegas",
+  "oregon/portland",
+  "new-mexico/albuquerque",
+  // Northeast / Mid-Atlantic
+  "washington-dc/washington",
+  "massachusetts/boston",
+  "maryland/baltimore",
+  "virginia/virginia-beach",
+  // Tennessee / Oklahoma / Kentucky / Louisiana
+  "tennessee/nashville",
+  "tennessee/memphis",
+  "oklahoma/oklahoma-city",
+  "oklahoma/tulsa",
+  "kentucky/louisville",
+  "louisiana/new-orleans",
+  // Midwest
+  "missouri/kansas-city",
+  "missouri/st-louis",
+  "indiana/indianapolis",
+  "wisconsin/milwaukee",
+  "minnesota/minneapolis",
+];
+
+const PRIORITY_SET = new Set(PRIORITY_CITY_KEYS);
+
+/** True if a city is in the wave-1 indexed set (state + city slug). */
+export function isPriorityCity(stateSlug: string, cSlug: string): boolean {
+  return PRIORITY_SET.has(`${stateSlug}/${cSlug}`);
+}
+
+/** The wave-1 priority cities, resolved to real CityLocation records. */
+export function getPriorityCities(): CityLocation[] {
+  return getAllCities().filter((c) => isPriorityCity(c.state.slug, c.slug));
+}

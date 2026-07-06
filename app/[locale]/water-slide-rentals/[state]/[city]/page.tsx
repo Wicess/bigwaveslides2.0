@@ -10,8 +10,14 @@ import {
   PartyPopper,
 } from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { getAllCities, getCity, citySlug } from "@/lib/locations";
+import {
+  getAllCities,
+  getCity,
+  citySlug,
+  isPriorityCity,
+} from "@/lib/locations";
 import { getCityContent } from "@/lib/city-content";
+import { getCityLocal } from "@/lib/city-local";
 import { getLandingRentals } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -60,8 +66,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const loc = getCity(state, city);
   if (!loc) return {};
   const { name, state: st } = loc;
+  // Only wave-1 priority metros (in the default locale) are indexable; every
+  // other city page — and all French location pages (English duplicates) — is
+  // noindexed so Google spends its crawl budget on the pages that can rank.
+  const noindex =
+    locale !== routing.defaultLocale || !isPriorityCity(st.slug, loc.slug);
   return buildMetadata({
     locale,
+    noindex,
     path: `/water-slide-rentals/${st.slug}/${loc.slug}`,
     title: `Water Slide Rentals in ${name}, ${st.abbr} — Delivered, Set Up & Insured`,
     description: `Rent inflatable water slides & bounce houses in ${name}, ${st.abbr} from $199/day — delivered, set up, sanitized & fully insured for birthdays, pool parties & events. Free ${name} quote, book your date today.`,
@@ -103,6 +115,10 @@ export default async function CityRentalPage({ params }: Props) {
   // a region/season paragraph, and the FAQ set) — differentiates the 750+
   // programmatic pages so they don't read as one identical template.
   const { hero, heroDescription, intro, seasonal, faqs } = getCityContent(loc);
+
+  // Real, verifiable delivery suburbs/neighborhoods for this metro (priority
+  // cities only) — the strongest "genuinely about this city" signal.
+  const local = getCityLocal(st.slug, loc.slug);
 
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
@@ -146,6 +162,39 @@ export default async function CityRentalPage({ params }: Props) {
           <Reveal className="mt-4 max-w-3xl" delay={0.05}>
             <p className="text-muted-foreground leading-relaxed">{seasonal}</p>
           </Reveal>
+
+          {/* Real local delivery area — unique, verifiable per-metro content. */}
+          {local ? (
+            <Reveal className="mt-4 max-w-3xl" delay={0.05}>
+              <p className="text-muted-foreground leading-relaxed">
+                We cover the greater {name} area — including{" "}
+                {local.areas.slice(0, -1).join(", ")}, and{" "}
+                {local.areas[local.areas.length - 1]} — with the same delivery,
+                professional setup, sanitizing, and full insurance on every
+                booking, wherever your {name} event takes place.
+              </p>
+            </Reveal>
+          ) : null}
+
+          {/* Neighborhoods & nearby areas we serve (local trust signal). */}
+          {local ? (
+            <Reveal className="mt-6" delay={0.05}>
+              <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                Neighborhoods & nearby areas we serve
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {local.areas.map((a) => (
+                  <span
+                    key={a}
+                    className="border-border bg-background inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm"
+                  >
+                    <MapPin className="text-primary size-3.5" />
+                    {a}
+                  </span>
+                ))}
+              </div>
+            </Reveal>
+          ) : null}
 
           {/* Occasions */}
           <Reveal className="mt-6" delay={0.05}>
