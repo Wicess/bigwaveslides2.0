@@ -125,29 +125,13 @@ export function ProductForm({
         </Field>
       </section>
 
-      <section className="grid items-end gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Field label="Daily rate ($)">
           <Input type="number" step="0.01" min="0" {...register("dailyRate")} />
         </Field>
         <Field label="Sale price ($)">
           <Input type="number" step="0.01" min="0" {...register("salePrice")} />
         </Field>
-        <Field label="Status">
-          <Select {...register("status")}>
-            <option value="ACTIVE">Active</option>
-            <option value="DRAFT">Draft</option>
-            <option value="ARCHIVED">Archived</option>
-            <option value="OUT_OF_STOCK">Out of stock</option>
-          </Select>
-        </Field>
-        <label className="flex h-9 items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            className="border-border size-4 rounded"
-            {...register("featured")}
-          />
-          Featured
-        </label>
       </section>
 
       <section className="grid gap-3 sm:grid-cols-2">

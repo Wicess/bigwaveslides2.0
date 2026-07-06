@@ -25,6 +25,18 @@ const slugify = (s: string) =>
     .replace(/^-+|-+$/g, "")
     .slice(0, 60) || "product";
 
+/** Auto-generate a slug guaranteed unique (appends -2, -3, … if taken). */
+async function uniqueSlug(base: string): Promise<string> {
+  for (let n = 1; ; n++) {
+    const slug = n === 1 ? base : `${base}-${n}`;
+    const existing = await prisma.product.findUnique({
+      where: { slug },
+      select: { id: true },
+    });
+    if (!existing) return slug;
+  }
+}
+
 const productSchema = z.object({
   id: z.string().optional(),
   nameEn: z.string().min(2).max(160),
@@ -33,7 +45,9 @@ const productSchema = z.object({
   slug: z.string().max(160).optional().or(z.literal("")),
   sku: z.string().max(60).optional().or(z.literal("")),
   type: z.enum(["SALE", "RENTAL", "BOTH"]),
-  status: z.enum(["DRAFT", "ACTIVE", "ARCHIVED", "OUT_OF_STOCK"]),
+  // Status & featured are set on the backend (new products default to ACTIVE)
+  // and preserved on edit — they're no longer form fields.
+  status: z.enum(["DRAFT", "ACTIVE", "ARCHIVED", "OUT_OF_STOCK"]).optional(),
   salePrice: z.string().optional(),
   dailyRate: z.string().optional(),
   deposit: z.string().optional(),
@@ -88,12 +102,10 @@ export async function saveProduct(
   const data = {
     name: { en: d.nameEn, fr: d.nameFr?.trim() || d.nameEn },
     type: d.type,
-    status: d.status,
     salePriceCents: dollarsToCents(d.salePrice),
     dailyRateCents: dollarsToCents(d.dailyRate),
     depositCents: dollarsToCents(d.deposit),
     categoryId: d.categoryId || null,
-    featured: d.featured ?? false,
     shortDescription: {
       en: d.shortEn ?? "",
       fr: d.shortFr?.trim() || d.shortEn || "",
@@ -122,18 +134,27 @@ export async function saveProduct(
   try {
     let id = d.id;
     // Slug stays stable: derived once on create, never changed on edit (URLs).
-    let slug = d.slug?.trim() || "";
+    // Status is auto-set to ACTIVE on create and preserved on edit.
+    let slug = "";
+    let status = "ACTIVE";
     if (id) {
       const row = await prisma.product.update({
         where: { id },
         data,
-        select: { slug: true },
+        select: { slug: true, status: true },
       });
       slug = row.slug;
+      status = row.status;
     } else {
-      slug = slugify(d.nameEn);
+      slug = await uniqueSlug(slugify(d.nameEn));
       const created = await prisma.product.create({
-        data: { ...data, slug, sku: `BWS-${slug.toUpperCase()}` },
+        data: {
+          ...data,
+          slug,
+          sku: `BWS-${slug.toUpperCase()}`,
+          status: "ACTIVE",
+          featured: d.featured ?? false,
+        },
         select: { id: true },
       });
       id = created.id;
@@ -163,12 +184,12 @@ export async function saveProduct(
     revalidateTag("products");
     revalidatePath("/admin/products");
     // Notify search engines instantly when an active product changes.
-    if (d.status === "ACTIVE") {
+    if (status === "ACTIVE") {
       const paths: string[] = [];
       if (d.type === "RENTAL" || d.type === "BOTH")
-        paths.push(`/rent/${d.slug}`, "/rent");
+        paths.push(`/rent/${slug}`, "/rent");
       if (d.type === "SALE" || d.type === "BOTH")
-        paths.push(`/shop/${d.slug}`, "/shop");
+        paths.push(`/shop/${slug}`, "/shop");
       void submitToIndexNow(paths.flatMap((p) => localizedUrls(p)));
     }
     return { ok: true, id };
