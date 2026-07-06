@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Big Wave Slides — Off-Site SEO Playbook</title>
+<style>
+  :root {
+    --navy: #0a1a2f; --navy-2: #0e2742; --wave: #1a9fe0; --wave-deep: #0e6fb0;
+    --emerald: #0f9d6b; --amber: #d9932b; --ink: #16212e; --muted: #5b6b7a;
+    --line: #e3e9ef; --paper: #ffffff; --soft: #f5f8fb;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink); font-size: 10.5pt; line-height: 1.55; background: var(--paper); }
+  @page { size: A4; margin: 15mm 14mm; }
+  .page + .page { page-break-before: always; }
+  h1,h2,h3 { line-height: 1.15; letter-spacing: -0.01em; margin: 0; }
+  p { margin: 0 0 8px; }
+  strong { color: var(--navy); font-weight: 650; }
+  code { background: #eef4f9; color: var(--wave-deep); padding: 1px 5px; border-radius: 5px; font-size: 9pt; }
+  .eyebrow { font-size: 8pt; letter-spacing: 0.28em; text-transform: uppercase; color: var(--wave-deep); font-weight: 700; }
+  .muted { color: var(--muted); }
+
+  /* COVER */
+  .cover { background: linear-gradient(150deg, var(--navy) 0%, var(--navy-2) 60%, #123a5e 100%);
+    color: #fff; border-radius: 18px; padding: 46px 40px 40px; position: relative; overflow: hidden;
+    min-height: 250mm; display: flex; flex-direction: column; }
+  .cover::after { content: ""; position: absolute; inset: auto -60px -80px auto; width: 420px; height: 420px;
+    background: radial-gradient(circle at center, rgba(26,159,224,0.55), transparent 62%); filter: blur(4px); }
+  .cover .wave-line { height: 4px; width: 64px; background: var(--wave); border-radius: 4px; margin: 14px 0 0; }
+  .cover-brand { font-size: 11pt; font-weight: 700; display: flex; align-items: center; gap: 9px; }
+  .cover-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--wave); box-shadow: 0 0 0 4px rgba(26,159,224,0.25); }
+  .cover h1 { font-size: 38pt; font-weight: 800; margin-top: auto; letter-spacing: -0.025em; }
+  .cover h1 span { color: var(--wave); }
+  .cover .sub { font-size: 12.5pt; color: #cfe1f0; max-width: 66%; margin-top: 14px; line-height: 1.5; }
+  .cover-meta { display: flex; gap: 26px; margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.16); font-size: 9pt; color: #a9c2d6; flex-wrap: wrap; }
+  .cover-meta b { display: block; color: #fff; font-size: 10pt; font-weight: 650; margin-bottom: 2px; }
+  .cover-tag { position: absolute; top: 40px; right: 40px; font-size: 8pt; letter-spacing: 0.24em; text-transform: uppercase; color: #9fc0d8; }
+
+  /* SECTION HEADS */
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin: 0 0 4px; }
+  .sec-num { font-size: 10pt; font-weight: 800; color: #fff; background: var(--wave-deep); width: 24px; height: 24px;
+    border-radius: 7px; display: inline-grid; place-items: center; flex: 0 0 auto; }
+  .sec-head h2 { font-size: 18pt; font-weight: 800; color: var(--navy); }
+  .sec-intro { color: var(--muted); margin: 4px 0 14px; max-width: 94%; }
+
+  /* PLATFORM CARD */
+  .platform { border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin-bottom: 13px; break-inside: avoid; }
+  .platform.hero { border-color: #cfe2f1; background: linear-gradient(180deg,#f7fbfe,#ffffff); }
+  .p-top { display: flex; align-items: center; gap: 11px; margin-bottom: 4px; }
+  .p-badge { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 15pt; flex: 0 0 auto;
+    background: #e7f1fb; }
+  .p-title { font-size: 13pt; font-weight: 800; color: var(--navy); }
+  .p-why { font-size: 8pt; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
+  .p-why.high { color: var(--emerald); }
+  .p-why.med { color: var(--amber); }
+  .p-sub { color: var(--muted); font-size: 9.4pt; margin: 2px 0 10px; }
+
+  ol.steps { margin: 4px 0 0; padding-left: 0; counter-reset: s; list-style: none; }
+  ol.steps li { position: relative; padding-left: 26px; margin-bottom: 6px; font-size: 9.5pt; break-inside: avoid; }
+  ol.steps li::before { counter-increment: s; content: counter(s); position: absolute; left: 0; top: 0;
+    width: 17px; height: 17px; background: var(--wave-deep); color: #fff; border-radius: 50%; font-size: 8pt; font-weight: 700;
+    display: grid; place-items: center; }
+  li b { color: var(--navy); }
+
+  .tip { margin-top: 9px; font-size: 8.8pt; color: var(--muted); border-left: 3px solid var(--wave); padding: 3px 0 3px 10px; }
+  .tip b { color: var(--emerald); }
+  .warn { border-left-color: var(--amber); }
+  .warn b { color: var(--amber); }
+
+  /* NAP BOX */
+  .nap { background: var(--navy); color: #eaf3fa; border-radius: 12px; padding: 16px 18px; break-inside: avoid; }
+  .nap .eyebrow { color: var(--wave); }
+  .nap table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .nap td { padding: 4px 0; font-size: 10pt; vertical-align: top; }
+  .nap td.k { color: #9fc0d8; width: 130px; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 6px; }
+  .nap td.v { color: #fff; font-weight: 600; }
+
+  /* TEMPLATE BOX */
+  .tmpl { background: var(--soft); border: 1px dashed #c9d8e5; border-radius: 10px; padding: 12px 14px; margin: 8px 0; font-size: 9.3pt; break-inside: avoid; }
+  .tmpl .lbl { font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--wave-deep); font-weight: 700; margin-bottom: 5px; }
+  .tmpl p { margin: 0 0 6px; color: var(--ink); }
+  .tmpl em { color: var(--muted); font-style: italic; }
+
+  .grid { display: grid; gap: 11px; }
+  .g2 { grid-template-columns: 1fr 1fr; }
+  .card { border: 1px solid var(--line); border-radius: 11px; padding: 12px 14px; background: var(--paper); break-inside: avoid; }
+  .card.soft { background: var(--soft); }
+  .card h3 { font-size: 10pt; color: var(--navy); margin-bottom: 4px; }
+  .card p { font-size: 9pt; color: var(--muted); margin: 0; }
+
+  table.dir { width: 100%; border-collapse: collapse; font-size: 9.2pt; margin-top: 6px; }
+  table.dir th, table.dir td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--line); }
+  table.dir th { background: var(--soft); color: var(--navy); font-size: 7.6pt; text-transform: uppercase; letter-spacing: 0.05em; }
+  table.dir td.n { font-weight: 700; color: var(--navy); }
+  .chk { color: var(--wave-deep); font-weight: 800; }
+
+  ul.check { list-style: none; padding: 0; margin: 6px 0; }
+  ul.check li { position: relative; padding-left: 24px; margin-bottom: 6px; font-size: 9.6pt; break-inside: avoid; }
+  ul.check li::before { content: ""; position: absolute; left: 0; top: 1px; width: 15px; height: 15px;
+    border: 1.5px solid var(--wave-deep); border-radius: 4px; }
+
+  .callout { border-radius: 12px; padding: 14px 16px; margin: 4px 0 14px; background: linear-gradient(135deg,var(--navy),var(--navy-2)); color: #eaf3fa; break-inside: avoid; }
+  .callout .eyebrow { color: var(--wave); }
+  .callout p { color: #c7dbea; font-size: 9.6pt; margin: 6px 0 0; }
+  .callout .big { color: var(--wave); font-weight: 800; font-size: 14pt; }
+
+  .foot { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 8pt; color: var(--muted); display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="page">
+  <div class="cover">
+    <div class="cover-tag">Founder Action Guide</div>
+    <div class="cover-brand"><span class="cover-dot"></span> Big Wave Slides</div>
+    <div class="wave-line"></div>
+    <h1>Off-Site SEO<br><span>Playbook</span></h1>
+    <p class="sub">Step-by-step to get Big Wave Slides listed, reviewed, and cited across Google, The Bash, Yelp, Reddit, Quora &amp; the directories that actually drive bookings.</p>
+    <div class="cover-meta">
+      <div><b>Who does this</b> You (the founder)</div>
+      <div><b>Time</b> ~1 hr/week</div>
+      <div><b>Cost</b> Mostly free</div>
+      <div><b>Goal</b> Authority + direct bookings</div>
+    </div>
+  </div>
+</section>
+
+<!-- START HERE: NAP + RULES -->
+<section class="page">
+  <div class="eyebrow">Start here</div>
+  <div class="sec-head" style="margin-top:6px;"><span class="sec-num">0</span><h2>Before you list anywhere</h2></div>
+  <p class="sec-intro">Copy your business details <strong>exactly the same</strong> on every platform. Identical Name-Address-Phone ("NAP") is the #1 thing that makes local SEO work — one mismatched suite number or phone format quietly weakens every listing.</p>
+
+  <div class="nap">
+    <div class="eyebrow">Your master details — paste these everywhere</div>
+    <table>
+      <tr><td class="k">Business name</td><td class="v">Big Wave Slides</td></tr>
+      <tr><td class="k">Address</td><td class="v">1717 Main Street, Suite 3300, Dallas, TX 75201</td></tr>
+      <tr><td class="k">Phone</td><td class="v">Use your current published number, identically everywhere</td></tr>
+      <tr><td class="k">Email</td><td class="v">contact@bigwaveslides.com</td></tr>
+      <tr><td class="k">Website</td><td class="v">https://www.bigwaveslides.com</td></tr>
+      <tr><td class="k">Categories</td><td class="v">Party Equipment Rental Service · Bounce House Rental Service</td></tr>
+    </table>
+  </div>
+
+  <div class="tmpl">
+    <div class="lbl">Reusable business description (paste on GBP, Yelp, directories)</div>
+    <p>Big Wave Slides rents and installs premium inflatable water slides, bounce houses, and combo units for birthdays, pool parties, school &amp; church events, and community festivals. Every rental is delivered, professionally set up, sanitized, and fully insured — you bring the guests, we handle everything else. Serving Dallas and metros nationwide. Request a free quote at bigwaveslides.com.</p>
+  </div>
+
+  <div class="grid g2" style="margin-top:12px;">
+    <div class="card soft"><h3>✅ Always</h3><p>Use the exact NAP above · real photos of your own setups · be genuinely helpful · reply to every review &amp; question · pick the narrowest correct category.</p></div>
+    <div class="card soft"><h3>🚫 Never</h3><p>Invent reviews or fake addresses · spam links · copy-paste the same comment everywhere · list a number you don't answer · keyword-stuff your business name.</p></div>
+  </div>
+</section>
+
+<!-- 1. GOOGLE BUSINESS PROFILE -->
+<section class="page">
+  <div class="eyebrow">Priority #1</div>
+  <div class="sec-head" style="margin-top:6px;"><span class="sec-num">1</span><h2>Google Business Profile</h2></div>
+  <p class="sec-intro">The single highest-impact task. It puts you in Google Maps + the local "map pack," and its reviews feed both Google and AI answers. Do this first and do it fully.</p>
+
+  <div class="platform hero">
+    <div class="p-top"><span class="p-badge">🗺️</span><div><div class="p-title">Set up &amp; verify</div><div class="p-why high">Impact: very high · Free</div></div></div>
+    <ol class="steps">
+      <li>Go to <b>google.com/business</b> → "Manage now" → search "Big Wave Slides" (create it if it doesn't exist).</li>
+      <li>Enter the exact <b>NAP</b>. Since you deliver, set it as a <b>service-area business</b> — list Dallas + the metros you serve, and you can hide the street address if you prefer.</li>
+      <li>Choose primary category <b>Party Equipment Rental Service</b>; add <b>Bounce House Rental Service</b> as secondary.</li>
+      <li>Add website <code>https://www.bigwaveslides.com</code>, your phone, hours, and the description above.</li>
+      <li><b>Verify</b> the profile (video/postcard/phone — Google will pick). This unlocks the listing.</li>
+    </ol>
+  </div>
+
+  <div class="platform">
+    <div class="p-top"><span class="p-badge">📸</span><div><div class="p-title">Fill it out &amp; keep it alive</div><div class="p-why high">Ongoing · 10 min/week</div></div></div>
+    <ol class="steps">
+      <li>Upload <b>10+ real photos</b> — slides set up at real parties, your team, kids playing (with permission). Real photos beat stock every time.</li>
+      <li>Add <b>products/services</b> (each slide type) with prices linking to the matching page on your site.</li>
+      <li>Post a weekly <b>"Update"</b> (a booked event, a new slide, a seasonal offer) — active profiles rank better.</li>
+      <li>Turn on <b>messaging</b> and the <b>quote/booking</b> button pointing to your contact page.</li>
+    </ol>
+    <div class="tip"><b>Do:</b> answer the "Questions &amp; Answers" on your own listing — you can ask &amp; answer common ones yourself (e.g. "Do you deliver and set up?").</div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Reviews are the engine</div>
+    <p>After every event, text the customer a <b>direct review link</b> (get it from your GBP dashboard → "Ask for reviews"). Aim for a steady trickle — <span class="big">1–3 new reviews/week</span> beats 20 at once. Reply to every single one.</p>
+  </div>
+</section>
+
+<!-- 2. EVENT MARKETPLACES (The Bash) -->
+<section class="page">
+  <div class="eyebrow">Priority #2 — these can book you directly</div>
+  <div class="sec-head" style="margin-top:6px;"><span class="sec-num">2</span><h2>Event &amp; party marketplaces</h2></div>
+  <p class="sec-intro">Unlike a plain directory, these send you paying leads <strong>and</strong> give you a strong backlink + a citable third-party profile. Highest ROI after Google.</p>
+
+  <div class="platform hero">
+    <div class="p-top"><span class="p-badge">🎉</span><div><div class="p-title">The Bash <span class="muted" style="font-weight:500;font-size:9pt;">(thebash.com)</span></div><div class="p-why high">Impact: high · Free listing + paid tiers</div></div></div>
+    <ol class="steps">
+      <li>Sign up as a <b>vendor</b> → category "Party Rentals / Inflatables / Water Slides."</li>
+      <li>Complete the profile 100%: NAP, description, price range, service area (Dallas + metros), and 10+ real photos.</li>
+      <li>Respond to every lead <b>fast</b> — response time affects your ranking inside the platform.</li>
+      <li>Ask satisfied clients to leave a review <b>on The Bash</b> too (builds your vendor rating).</li>
+    </ol>
+  </div>
+
+  <div class="grid g2">
+    <div class="platform" style="margin-bottom:0;">
+      <div class="p-top"><span class="p-badge">🎪</span><div><div class="p-title">GigSalad</div><div class="p-why high">Sister to The Bash</div></div></div>
+      <p class="p-sub">Same play: vendor profile under party rentals/inflatables, full NAP, photos, fast lead replies.</p>
+    </div>
+    <div class="platform" style="margin-bottom:0;">
+      <div class="p-top"><span class="p-badge">🔨</span><div><div class="p-title">Thumbtack</div><div class="p-why high">Local service leads</div></div></div>
+      <p class="p-sub">Create a pro profile, set your service area &amp; travel radius, enable "party &amp; event rentals." Pay per lead you choose to quote.</p>
+    </div>
+  </div>
+
+  <div class="tip"><b>Do:</b> keep price ranges &amp; slide names consistent with your website so the listings reinforce (not contradict) your pages.</div>
+</section>
+
+<!-- 3. YELP + LOCAL DIRECTORIES -->
+<section class="page">
+  <div class="eyebrow">Priority #3</div>
+  <div class="sec-head" style="margin-top:6px;"><span class="sec-num">3</span><h2>Yelp &amp; local citations</h2></div>
+  <p class="sec-intro">These are "citations" — every consistent listing tells Google your business is real and where it operates. Set once, keep NAP identical, done.</p>
+
+  <div class="platform">
+    <div class="p-top"><span class="p-badge">⭐</span><div><div class="p-title">Yelp for Business</div><div class="p-why high">Impact: high · Free</div></div></div>
+    <ol class="steps">
+      <li>Claim/create at <b>biz.yelp.com</b> → category <b>Party Equipment Rentals</b> + <b>Bounce House Rentals</b>.</li>
+      <li>Add exact NAP, hours, website, service area, and 10+ real photos.</li>
+      <li>Add the business description. <b>Don't</b> ask for reviews directly (against Yelp policy) — instead add the "Find us on Yelp" badge to your site &amp; let reviews come naturally.</li>
+      <li>Reply politely to every review, positive or negative.</li>
+    </ol>
+  </div>
+
+  <p style="font-weight:700;color:var(--navy);margin:14px 0 4px;">Then submit to these citation sources — same NAP each time:</p>
+  <table class="dir">
+    <thead><tr><th>Platform</th><th>Why it matters</th><th>Cost</th></tr></thead>
+    <tbody>
+      <tr><td class="n">Facebook Page</td><td>Big citation + where customers check you're real; links to <code>sameAs</code>.</td><td>Free</td></tr>
+      <tr><td class="n">Nextdoor</td><td>Hyper-local — neighbors booking party rentals. Claim a Business page.</td><td>Free</td></tr>
+      <tr><td class="n">Bing Places</td><td>Powers Bing + some AI answers (Copilot). Import from Google.</td><td>Free</td></tr>
+      <tr><td class="n">Apple Business Connect</td><td>Apple Maps + Siri results.</td><td>Free</td></tr>
+      <tr><td class="n">Yellow Pages (YP.com)</td><td>Classic high-authority citation.</td><td>Free</td></tr>
+      <tr><td class="n">Better Business Bureau</td><td>Trust signal + backlink.</td><td>Free tier</td></tr>
+      <tr><td class="n">Dallas Chamber / local .gov &amp; .org</td><td>Local relevance — strong for "Dallas" queries.</td><td>Varies</td></tr>
+      <tr><td class="n">Party-rental directories</td><td>Niche relevance (search "add my party rental business").</td><td>Free</td></tr>
+    </tbody>
+  </table>
+  <div class="tip warn"><b>Tip:</b> keep a simple spreadsheet — Platform · URL · Login · Date listed — so you never duplicate or lose a listing.</div>
+</section>
+
+<!-- 4. REDDIT + QUORA -->
+<section class="page">
+  <div class="eyebrow">Priority #4 — where AI answers get their citations</div>
+  <div class="sec-head" style="margin-top:6px;"><span class="sec-num">4</span><h2>Reddit &amp; Quora</h2></div>
+  <p class="sec-intro">ChatGPT, Perplexity &amp; Google's AI lean heavily on Reddit and Quora. Be <strong>genuinely helpful</strong> here and you earn both citations and referral clicks. Be spammy and you get banned — so play the long game.</p>
+
+  <div class="grid g2">
+    <div class="platform" style="margin-bottom:0;">
+      <div class="p-top"><span class="p-badge">👽</span><div><div class="p-title">Reddit</div><div class="p-why med">Value account first</div></div></div>
+      <ol class="steps">
+        <li>Use a real account; comment helpfully for a while before ever linking (build karma/trust).</li>
+        <li>Watch subs like <b>r/Dallas</b>, local city subs, <b>r/Mommit</b>, <b>r/party</b>, <b>r/EventPlanning</b>.</li>
+        <li>When someone asks about slide/party rentals, give a real, useful answer; mention your site only if it truly helps.</li>
+        <li>Post occasional value: "What a backyard water-slide party actually costs in 2026," with real numbers.</li>
+      </ol>
+    </div>
+    <div class="platform" style="margin-bottom:0;">
+      <div class="p-top"><span class="p-badge">🅆</span><div><div class="p-title">Quora</div><div class="p-why med">Answers rank for years</div></div></div>
+      <ol class="steps">
+        <li>Complete your profile with a credible bio ("Founder, Big Wave Slides — party rentals").</li>
+        <li>Search &amp; answer questions: "How much is a water slide rental?", "Best party rentals in Dallas?", "Are inflatable water slides safe?".</li>
+        <li>Write the <b>best</b> answer on the page — specific numbers, safety facts, a clear takeaway.</li>
+        <li>Link naturally once per answer where relevant. Quality answers keep earning citations.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="tmpl">
+    <div class="lbl">Answer template (adapt every time — never paste identically)</div>
+    <p>Great question! For a backyard water-slide party you're usually looking at <em>[real price range]</em>/day, and a good rental company delivers, sets up, sanitizes, and picks it up — all included. A few things I'd check before booking: <em>[insurance, anchoring/safety, blower power, setup space]</em>. We run Big Wave Slides out of Dallas and do this daily, so happy to answer specifics. Hope that helps!</p>
+  </div>
+  <div class="tip warn"><b>Golden rule:</b> if your comment reads like an ad, delete it. If it reads like advice from someone who clearly knows the trade, it works — and that's exactly what LLMs quote.</div>
+</section>
+
+<!-- 5. REVIEWS + VIDEO + CADENCE -->
+<section class="page">
+  <div class="eyebrow">Keep it compounding</div>
+  <div class="sec-head" style="margin-top:6px;"><span class="sec-num">5</span><h2>Reviews, video &amp; weekly cadence</h2></div>
+  <p class="sec-intro">Listings get you found once; reviews, fresh posts, and video keep you climbing. Small and steady wins.</p>
+
+  <div class="grid g2">
+    <div class="platform" style="margin-bottom:0;">
+      <div class="p-top"><span class="p-badge">💬</span><div><div class="p-title">Review request</div><div class="p-why high">After every event</div></div></div>
+      <div class="tmpl" style="margin:6px 0 0;">
+        <div class="lbl">Text to send the customer</div>
+        <p>Hi <em>[name]</em>! So glad the party was a splash 🌊 If you have 30 seconds, a quick Google review really helps our small business: <em>[your GBP review link]</em>. Thank you — the Big Wave Slides team.</p>
+      </div>
+    </div>
+    <div class="platform" style="margin-bottom:0;">
+      <div class="p-top"><span class="p-badge">🎥</span><div><div class="p-title">YouTube / TikTok</div><div class="p-why med">Another citable surface</div></div></div>
+      <p class="p-sub">Post short clips: "18ft water slide setup in a Dallas backyard," "How we sanitize between rentals." Put your website in the description. Video ranks and gets embedded elsewhere.</p>
+    </div>
+  </div>
+
+  <p style="font-weight:700;color:var(--navy);margin:14px 0 4px;">Your weekly rhythm (≈1 hour):</p>
+  <ul class="check">
+    <li>Post <b>1 Google Business update</b> + reply to any new reviews/questions.</li>
+    <li>Send <b>review requests</b> to the week's completed events.</li>
+    <li>Do <b>one</b> of: submit a new directory · answer 2 Reddit/Quora questions · post 1 video.</li>
+    <li>Reply to every marketplace lead (The Bash / GigSalad / Thumbtack) same-day.</li>
+    <li>Once a month: check Google Search Console for rising queries &amp; cities, then tell your developer which city wave to release next.</li>
+  </ul>
+
+  <div class="callout" style="margin-top:14px;">
+    <div class="eyebrow">Why this matters more than any on-site tweak</div>
+    <p>The website is already built to rank. About <span class="big">6.5×</span> of AI citations — and most local trust — come from these <b>off-site</b> sources. This playbook is the real growth lever. Work it a little every week and it compounds.</p>
+  </div>
+
+  <div class="foot">
+    <span>Big Wave Slides — Off-Site SEO Playbook · July 2026</span>
+    <span>bigwaveslides.com</span>
+  </div>
+</section>
+
+</body>
+</html>
