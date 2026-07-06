@@ -2,7 +2,10 @@ import { requirePermission } from "@/lib/admin-auth";
 import { getAllSettings } from "@/server/data/admin-cms";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminCard, Reveal } from "@/components/admin/admin-ui";
-import { SettingsForm, type SettingsValues } from "@/components/admin/settings-form";
+import {
+  SettingsForm,
+  type SettingsValues,
+} from "@/components/admin/settings-form";
 
 export default async function AdminSettingsPage() {
   await requirePermission("settings.write");
@@ -18,14 +21,19 @@ export default async function AdminSettingsPage() {
     contactEmail: contact.email ?? "",
     contactPhone: contact.phone ?? "",
     contactWhatsapp: contact.whatsapp ?? "",
-    contactAddress: contact.address ?? "",
+    contactStreet: contact.streetAddress ?? "",
+    contactCity: contact.addressLocality ?? "",
+    contactState: contact.addressRegion ?? "",
+    contactZip: contact.postalCode ?? "",
+    contactCountry: contact.addressCountry ?? "US",
     hoursMonFri: hours.mon_fri ?? "",
     hoursSat: hours.sat ?? "",
     hoursSun: hours.sun ?? "",
     deliveryBase: money(fees.deliveryBaseCents),
     pickup: money(fees.pickupCents),
     perMile: money(fees.perMileCents),
-    freeRadius: fees.freeRadiusMiles != null ? String(fees.freeRadiusMiles) : "",
+    freeRadius:
+      fees.freeRadiusMiles != null ? String(fees.freeRadiusMiles) : "",
     instagram: social.instagram ?? "",
     facebook: social.facebook ?? "",
     tiktok: social.tiktok ?? "",

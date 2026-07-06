@@ -15,7 +15,12 @@ const settingsSchema = z.object({
   contactEmail: z.string().email().optional().or(z.literal("")),
   contactPhone: z.string().max(40).optional().or(z.literal("")),
   contactWhatsapp: z.string().max(40).optional().or(z.literal("")),
-  contactAddress: z.string().max(300).optional().or(z.literal("")),
+  // Structured HQ address — drives the PostalAddress in Organization schema.
+  contactStreet: z.string().max(200).optional().or(z.literal("")),
+  contactCity: z.string().max(100).optional().or(z.literal("")),
+  contactState: z.string().max(2).optional().or(z.literal("")),
+  contactZip: z.string().max(12).optional().or(z.literal("")),
+  contactCountry: z.string().max(2).optional().or(z.literal("")),
   hoursMonFri: z.string().max(60).optional().or(z.literal("")),
   hoursSat: z.string().max(60).optional().or(z.literal("")),
   hoursSun: z.string().max(60).optional().or(z.literal("")),
@@ -28,7 +33,8 @@ const settingsSchema = z.object({
   tiktok: z.string().max(200).optional().or(z.literal("")),
 });
 
-const cents = (v?: string) => (v && v.trim() !== "" ? Math.round(Number(v) * 100) : undefined);
+const cents = (v?: string) =>
+  v && v.trim() !== "" ? Math.round(Number(v) * 100) : undefined;
 const int = (v?: string) => (v && v.trim() !== "" ? Number(v) : undefined);
 
 export async function saveSettings(
@@ -47,13 +53,32 @@ export async function saveSettings(
         email: d.contactEmail || "",
         phone: d.contactPhone || "",
         whatsapp: d.contactWhatsapp || "",
-        address: d.contactAddress || "",
+        // Display string is composed from the structured parts so the footer
+        // and the PostalAddress schema never drift apart.
+        address: [
+          d.contactStreet?.trim(),
+          d.contactCity?.trim(),
+          [d.contactState?.trim().toUpperCase(), d.contactZip?.trim()]
+            .filter(Boolean)
+            .join(" "),
+        ]
+          .filter(Boolean)
+          .join(", "),
+        streetAddress: d.contactStreet?.trim() || "",
+        addressLocality: d.contactCity?.trim() || "",
+        addressRegion: d.contactState?.trim().toUpperCase() || "",
+        postalCode: d.contactZip?.trim() || "",
+        addressCountry: d.contactCountry?.trim().toUpperCase() || "US",
       },
     },
     {
       key: "hours",
       group: "general",
-      value: { mon_fri: d.hoursMonFri || "", sat: d.hoursSat || "", sun: d.hoursSun || "" },
+      value: {
+        mon_fri: d.hoursMonFri || "",
+        sat: d.hoursSat || "",
+        sun: d.hoursSun || "",
+      },
     },
     {
       key: "fees",
@@ -68,7 +93,11 @@ export async function saveSettings(
     {
       key: "social",
       group: "general",
-      value: { instagram: d.instagram || "", facebook: d.facebook || "", tiktok: d.tiktok || "" },
+      value: {
+        instagram: d.instagram || "",
+        facebook: d.facebook || "",
+        tiktok: d.tiktok || "",
+      },
     },
   ];
 
@@ -80,7 +109,9 @@ export async function saveSettings(
         create: { key: g.key, value: g.value as object, group: g.group },
       });
     }
-    await logActivity(session.id, "settings.write", { summary: "Updated site settings" });
+    await logActivity(session.id, "settings.write", {
+      summary: "Updated site settings",
+    });
     revalidateTag("settings");
     revalidatePath("/admin/settings");
     return { ok: true };
@@ -102,7 +133,10 @@ export async function deleteMedia(id: string): Promise<AdminActionResult> {
       await r2DeleteObject(asset.r2Key).catch(() => {});
     }
     await prisma.mediaAsset.delete({ where: { id } });
-    await logActivity(session.id, "media.delete", { entityType: "MediaAsset", entityId: id });
+    await logActivity(session.id, "media.delete", {
+      entityType: "MediaAsset",
+      entityId: id,
+    });
     revalidatePath("/admin/media");
     return { ok: true };
   } catch {
@@ -125,7 +159,10 @@ export async function createAdminUser(
   const session = await requirePermission("users.manage");
   const parsed = userSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid data." };
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Invalid data.",
+    };
   }
   const { name, email, password, roleId } = parsed.data;
   try {
@@ -137,9 +174,16 @@ export async function createAdminUser(
 
     const passwordHash = await bcrypt.hash(password, 12);
     await prisma.adminUser.create({
-      data: { name, email: email.toLowerCase(), passwordHash, roleId: roleId || null },
+      data: {
+        name,
+        email: email.toLowerCase(),
+        passwordHash,
+        roleId: roleId || null,
+      },
     });
-    await logActivity(session.id, "users.create", { summary: `Created admin ${email}` });
+    await logActivity(session.id, "users.create", {
+      summary: `Created admin ${email}`,
+    });
     revalidatePath("/admin/users");
     return { ok: true };
   } catch {
@@ -151,7 +195,11 @@ const userUpdateSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(2).max(120),
   email: z.string().email(),
-  password: z.string().min(8, "Use at least 8 characters").optional().or(z.literal("")),
+  password: z
+    .string()
+    .min(8, "Use at least 8 characters")
+    .optional()
+    .or(z.literal("")),
   roleId: z.string().optional(),
 });
 
@@ -161,7 +209,10 @@ export async function updateAdminUser(
   const session = await requirePermission("users.manage");
   const parsed = userUpdateSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid data." };
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Invalid data.",
+    };
   }
   const { id, name, email, password, roleId } = parsed.data;
   try {
@@ -194,12 +245,22 @@ export async function updateAdminUser(
 
 export async function toggleAdminUser(id: string): Promise<AdminActionResult> {
   const session = await requirePermission("users.manage");
-  if (id === session.id) return { ok: false, error: "You can't deactivate yourself." };
+  if (id === session.id)
+    return { ok: false, error: "You can't deactivate yourself." };
   try {
-    const user = await prisma.adminUser.findUnique({ where: { id }, select: { isActive: true } });
+    const user = await prisma.adminUser.findUnique({
+      where: { id },
+      select: { isActive: true },
+    });
     if (!user) return { ok: false, error: "Not found." };
-    await prisma.adminUser.update({ where: { id }, data: { isActive: !user.isActive } });
-    await logActivity(session.id, "users.toggle", { entityType: "AdminUser", entityId: id });
+    await prisma.adminUser.update({
+      where: { id },
+      data: { isActive: !user.isActive },
+    });
+    await logActivity(session.id, "users.toggle", {
+      entityType: "AdminUser",
+      entityId: id,
+    });
     revalidatePath("/admin/users");
     return { ok: true };
   } catch {
