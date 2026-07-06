@@ -37,6 +37,11 @@ export const getNavData = unstable_cache(
         phone?: string;
         whatsapp?: string;
         address?: string;
+        streetAddress?: string;
+        addressLocality?: string;
+        addressRegion?: string;
+        postalCode?: string;
+        addressCountry?: string;
       };
       social?: { instagram?: string; facebook?: string; tiktok?: string };
     };

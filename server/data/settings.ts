@@ -8,7 +8,14 @@ export type SiteSettings = {
     email?: string;
     phone?: string;
     whatsapp?: string;
+    /** Full, human-readable address (used for display). */
     address?: string;
+    /** Structured parts (used for PostalAddress schema). */
+    streetAddress?: string;
+    addressLocality?: string;
+    addressRegion?: string;
+    postalCode?: string;
+    addressCountry?: string;
   };
   social?: { instagram?: string; facebook?: string; tiktok?: string };
   hours?: { mon_fri?: string; sat?: string; sun?: string };

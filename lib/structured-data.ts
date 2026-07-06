@@ -10,11 +10,33 @@ export function organizationLd(
     email?: string;
     phone?: string;
     address?: string;
+    streetAddress?: string;
+    addressLocality?: string;
+    addressRegion?: string;
+    postalCode?: string;
+    addressCountry?: string;
   },
   /** Social profile URLs → `sameAs`, which helps Google build the brand entity. */
   sameAs?: (string | undefined)[],
 ): Json {
   const links = (sameAs ?? []).filter(Boolean) as string[];
+  // Prefer a fully structured PostalAddress (city/state/ZIP); fall back to the
+  // display string only if the structured parts aren't set.
+  const address =
+    contact?.addressLocality && contact?.addressRegion
+      ? {
+          "@type": "PostalAddress",
+          ...(contact.streetAddress
+            ? { streetAddress: contact.streetAddress }
+            : {}),
+          addressLocality: contact.addressLocality,
+          addressRegion: contact.addressRegion,
+          ...(contact.postalCode ? { postalCode: contact.postalCode } : {}),
+          addressCountry: contact.addressCountry ?? "US",
+        }
+      : contact?.address
+        ? { "@type": "PostalAddress", streetAddress: contact.address }
+        : undefined;
   return {
     "@context": "https://schema.org",
     // LocalBusiness (rental) is far stronger than Organization for local rank.
@@ -29,11 +51,7 @@ export function organizationLd(
     areaServed: { "@type": "Country", name: "United States" },
     ...(contact?.email ? { email: contact.email } : {}),
     ...(contact?.phone ? { telephone: contact.phone } : {}),
-    ...(contact?.address
-      ? {
-          address: { "@type": "PostalAddress", streetAddress: contact.address },
-        }
-      : {}),
+    ...(address ? { address } : {}),
     ...(links.length ? { sameAs: links } : {}),
   };
 }
