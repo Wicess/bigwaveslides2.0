@@ -38,7 +38,7 @@ const BILINGUAL_STATIC = [
 // English-only programmatic pages. Their French variants render English copy
 // (duplicates) and are `noindex`, so we keep them out of the sitemap entirely
 // and concentrate crawl budget on the pages that can actually rank.
-const EN_ONLY_STATIC = ["/water-slide-rentals", "/water-slides-for"];
+const EN_ONLY_STATIC = ["/water-slide-rentals", "/water-slides-for", "/answers"];
 
 // All 51 state hubs stay indexed (few, and genuine internal hubs). City pages
 // are trimmed to the wave-1 priority metros only — the rest are noindex until

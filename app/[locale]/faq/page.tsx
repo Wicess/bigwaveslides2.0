@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ArrowRight } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { FAQS, pickLocale } from "@/lib/legal-content";
 import { buildMetadata } from "@/lib/seo";
+import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { PhotoHero } from "@/components/ui/photo-hero";
@@ -70,6 +71,16 @@ export default async function FaqPage({ params }: Props) {
               </li>
             ))}
           </ul>
+
+          {locale !== "fr" ? (
+            <Link
+              href="/answers"
+              className="border-border bg-background hover:border-primary/40 hover:text-primary mt-6 flex items-center justify-between gap-4 rounded-[var(--radius-lg)] border p-5 font-semibold transition-colors"
+            >
+              More questions answered — cost, space, setup, safety & weather
+              <ArrowRight className="text-primary size-5 shrink-0" />
+            </Link>
+          ) : null}
         </Container>
       </Section>
     </main>
