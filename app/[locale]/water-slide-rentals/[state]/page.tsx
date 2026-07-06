@@ -75,6 +75,11 @@ export default async function StateRentalPage({ params }: Props) {
   const path = `/water-slide-rentals/${loc.slug}`;
   const canonical = absoluteUrl(locale, path);
 
+  // Strategic anchor = the state's largest-demand metro (the location's
+  // strategic position within the state). Cities are population-ordered.
+  const anchor = loc.cities[0]!;
+  const anchorNearby = loc.cities.slice(1, 4).join(", ");
+
   // A few nearby states (same region) for internal linking.
   const nearby = US_STATES.filter(
     (s) => s.region === loc.region && s.slug !== loc.slug,
@@ -107,7 +112,12 @@ export default async function StateRentalPage({ params }: Props) {
 
   return (
     <main>
-      <JsonLd data={localBusinessAreaLd(loc.name, canonical)} />
+      <JsonLd
+        data={localBusinessAreaLd(loc.name, canonical, {
+          city: anchor,
+          region: loc.abbr,
+        })}
+      />
       <JsonLd
         data={breadcrumbLd([
           {
@@ -135,6 +145,17 @@ export default async function StateRentalPage({ params }: Props) {
               premium, freshly sanitized inflatable slides, set them up safely,
               and pick them up when the fun's done. You bring the guests; we
               handle everything else.
+            </p>
+          </Reveal>
+
+          {/* Strategic anchor — the state's primary metro. */}
+          <Reveal className="mt-4 max-w-3xl" delay={0.05}>
+            <p className="text-muted-foreground leading-relaxed">
+              Our {loc.name} coverage is anchored in {anchor}, the state's
+              largest metro{anchorNearby ? `, and reaches ${anchorNearby}` : ""}{" "}
+              and communities statewide. Wherever your event is in {loc.name},
+              we bring the slide, set it up, and pick it up — all from one
+              insured, sanitized fleet.
             </p>
           </Reveal>
 

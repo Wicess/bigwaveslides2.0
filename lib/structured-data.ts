@@ -38,8 +38,23 @@ export function organizationLd(
   };
 }
 
-/** Per-state LocalBusiness for the programmatic location landing pages. */
-export function localBusinessAreaLd(area: string, url: string): Json {
+/**
+ * LocalBusiness for the programmatic location landing pages. Optionally pins a
+ * strategic anchor city (the state's largest-demand metro) so each state reads
+ * as a location strategically positioned within it — without inventing a
+ * physical street address (the real HQ stays the only postal address, set on
+ * the site-wide Organization schema).
+ */
+export function localBusinessAreaLd(
+  area: string,
+  url: string,
+  anchor?: { city: string; region: string },
+): Json {
+  const areaServed: Json[] = [];
+  if (anchor) {
+    areaServed.push({ "@type": "City", name: `${anchor.city}, ${anchor.region}` });
+  }
+  areaServed.push({ "@type": "State", name: area });
   return {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
@@ -48,7 +63,9 @@ export function localBusinessAreaLd(area: string, url: string): Json {
     logo: `${SITE}/icon.png`,
     image: `${SITE}/icon.png`,
     priceRange: "$$",
-    areaServed: { "@type": "State", name: area },
+    // Ties every location page back to the one real business entity / HQ.
+    provider: { "@type": "LocalBusiness", "@id": `${SITE}/#business` },
+    areaServed: areaServed.length === 1 ? areaServed[0]! : areaServed,
   };
 }
 
