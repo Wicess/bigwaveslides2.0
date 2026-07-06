@@ -17,12 +17,21 @@ const dollarsToCents = (v?: string) => {
 
 /* ───────────────── Products ───────────────── */
 
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60) || "product";
+
 const productSchema = z.object({
   id: z.string().optional(),
   nameEn: z.string().min(2).max(160),
-  nameFr: z.string().min(2).max(160),
-  slug: z.string().min(2).max(160).regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers, hyphens"),
-  sku: z.string().min(1).max(60),
+  // The following are optional in the form now — auto-derived / auto-filled.
+  nameFr: z.string().max(160).optional().or(z.literal("")),
+  slug: z.string().max(160).optional().or(z.literal("")),
+  sku: z.string().max(60).optional().or(z.literal("")),
   type: z.enum(["SALE", "RENTAL", "BOTH"]),
   status: z.enum(["DRAFT", "ACTIVE", "ARCHIVED", "OUT_OF_STOCK"]),
   salePrice: z.string().optional(),
@@ -49,8 +58,14 @@ const productSchema = z.object({
 
 /** Zip EN/FR feature lines into [{ en, fr }] (FR falls back to EN per line). */
 function buildFeatures(en?: string, fr?: string) {
-  const enLines = (en ?? "").split("\n").map((s) => s.trim()).filter(Boolean);
-  const frLines = (fr ?? "").split("\n").map((s) => s.trim()).filter(Boolean);
+  const enLines = (en ?? "")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const frLines = (fr ?? "")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
   if (enLines.length === 0) return null;
   return enLines.map((line, i) => ({ en: line, fr: frLines[i] ?? line }));
 }
@@ -61,14 +76,17 @@ export async function saveProduct(
   const session = await requirePermission("product.write");
   const parsed = productSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid data." };
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Invalid data.",
+    };
   }
   const d = parsed.data;
 
+  // French fields are optional in the form now — fall back to English so the
+  // bilingual site still renders. Slug/SKU are auto-derived on create.
   const data = {
-    name: { en: d.nameEn, fr: d.nameFr },
-    slug: d.slug,
-    sku: d.sku,
+    name: { en: d.nameEn, fr: d.nameFr?.trim() || d.nameEn },
     type: d.type,
     status: d.status,
     salePriceCents: dollarsToCents(d.salePrice),
@@ -76,31 +94,48 @@ export async function saveProduct(
     depositCents: dollarsToCents(d.deposit),
     categoryId: d.categoryId || null,
     featured: d.featured ?? false,
-    shortDescription: { en: d.shortEn ?? "", fr: d.shortFr ?? "" },
-    description: { en: d.descEn ?? "", fr: d.descFr ?? "" },
+    shortDescription: {
+      en: d.shortEn ?? "",
+      fr: d.shortFr?.trim() || d.shortEn || "",
+    },
+    description: { en: d.descEn ?? "", fr: d.descFr?.trim() || d.descEn || "" },
     capacity:
       d.capacity && d.capacity.trim() !== ""
         ? Number.parseInt(d.capacity, 10) || null
         : null,
     ageRange: d.ageRange?.trim() || null,
     powerRequired: d.powerRequired?.trim() || null,
-    // dimensions Json holds the printable size + weight; spaceRequired the
-    // setup footprint. Null when both empty so the detail page hides the row.
     dimensions:
       d.dimensions?.trim() || d.weight?.trim()
-        ? { size: d.dimensions?.trim() || undefined, weight: d.weight?.trim() || undefined }
+        ? {
+            size: d.dimensions?.trim() || undefined,
+            weight: d.weight?.trim() || undefined,
+          }
         : Prisma.JsonNull,
-    spaceRequired: d.setupArea?.trim() ? { value: d.setupArea.trim() } : Prisma.JsonNull,
+    spaceRequired: d.setupArea?.trim()
+      ? { value: d.setupArea.trim() }
+      : Prisma.JsonNull,
     features: buildFeatures(d.featuresEn, d.featuresFr) ?? Prisma.JsonNull,
-    searchText: `${d.nameEn} ${d.shortEn ?? ""} ${d.sku}`,
+    searchText: `${d.nameEn} ${d.shortEn ?? ""}`,
   };
 
   try {
     let id = d.id;
+    // Slug stays stable: derived once on create, never changed on edit (URLs).
+    let slug = d.slug?.trim() || "";
     if (id) {
-      await prisma.product.update({ where: { id }, data });
+      const row = await prisma.product.update({
+        where: { id },
+        data,
+        select: { slug: true },
+      });
+      slug = row.slug;
     } else {
-      const created = await prisma.product.create({ data, select: { id: true } });
+      slug = slugify(d.nameEn);
+      const created = await prisma.product.create({
+        data: { ...data, slug, sku: `BWS-${slug.toUpperCase()}` },
+        select: { id: true },
+      });
       id = created.id;
     }
 
@@ -130,8 +165,10 @@ export async function saveProduct(
     // Notify search engines instantly when an active product changes.
     if (d.status === "ACTIVE") {
       const paths: string[] = [];
-      if (d.type === "RENTAL" || d.type === "BOTH") paths.push(`/rent/${d.slug}`, "/rent");
-      if (d.type === "SALE" || d.type === "BOTH") paths.push(`/shop/${d.slug}`, "/shop");
+      if (d.type === "RENTAL" || d.type === "BOTH")
+        paths.push(`/rent/${d.slug}`, "/rent");
+      if (d.type === "SALE" || d.type === "BOTH")
+        paths.push(`/shop/${d.slug}`, "/shop");
       void submitToIndexNow(paths.flatMap((p) => localizedUrls(p)));
     }
     return { ok: true, id };
@@ -148,12 +185,18 @@ export async function deleteProduct(id: string): Promise<AdminActionResult> {
   const session = await requirePermission("product.delete");
   try {
     await prisma.product.delete({ where: { id } });
-    await logActivity(session.id, "product.delete", { entityType: "Product", entityId: id });
+    await logActivity(session.id, "product.delete", {
+      entityType: "Product",
+      entityId: id,
+    });
     revalidateTag("products");
     revalidatePath("/admin/products");
     return { ok: true };
   } catch {
-    return { ok: false, error: "Couldn't delete (it may be referenced by orders)." };
+    return {
+      ok: false,
+      error: "Couldn't delete (it may be referenced by orders).",
+    };
   }
 }
 
@@ -163,7 +206,11 @@ const categorySchema = z.object({
   id: z.string().optional(),
   nameEn: z.string().min(2).max(120),
   nameFr: z.string().min(2).max(120),
-  slug: z.string().min(2).max(120).regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers, hyphens"),
+  slug: z
+    .string()
+    .min(2)
+    .max(120)
+    .regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers, hyphens"),
   order: z.string().optional(),
 });
 
@@ -173,7 +220,10 @@ export async function saveCategory(
   const session = await requirePermission("category.write");
   const parsed = categorySchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid data." };
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Invalid data.",
+    };
   }
   const d = parsed.data;
   const data = {
@@ -182,7 +232,8 @@ export async function saveCategory(
     order: d.order ? Number(d.order) || 0 : 0,
   };
   try {
-    if (d.id) await prisma.productCategory.update({ where: { id: d.id }, data });
+    if (d.id)
+      await prisma.productCategory.update({ where: { id: d.id }, data });
     else await prisma.productCategory.create({ data });
     await logActivity(session.id, "category.write", {
       entityType: "ProductCategory",
@@ -230,8 +281,13 @@ export async function addRentalUnit(
     return { ok: false, error: "Enter a unit label." };
   }
   try {
-    await prisma.rentalUnit.create({ data: { productId, unitLabel: unitLabel.trim() } });
-    await logActivity(session.id, "inventory.write", { entityType: "RentalUnit", entityId: productId });
+    await prisma.rentalUnit.create({
+      data: { productId, unitLabel: unitLabel.trim() },
+    });
+    await logActivity(session.id, "inventory.write", {
+      entityType: "RentalUnit",
+      entityId: productId,
+    });
     revalidatePath("/admin/inventory");
     return { ok: true };
   } catch {
@@ -242,9 +298,15 @@ export async function addRentalUnit(
 export async function toggleRentalUnit(id: string): Promise<AdminActionResult> {
   await requirePermission("inventory.write");
   try {
-    const unit = await prisma.rentalUnit.findUnique({ where: { id }, select: { isActive: true } });
+    const unit = await prisma.rentalUnit.findUnique({
+      where: { id },
+      select: { isActive: true },
+    });
     if (!unit) return { ok: false, error: "Unit not found." };
-    await prisma.rentalUnit.update({ where: { id }, data: { isActive: !unit.isActive } });
+    await prisma.rentalUnit.update({
+      where: { id },
+      data: { isActive: !unit.isActive },
+    });
     revalidatePath("/admin/inventory");
     return { ok: true };
   } catch {
