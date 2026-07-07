@@ -47,7 +47,7 @@ export default async function AdminSettingsPage() {
         description="Contact info, hours, fees, and social links."
       />
       <Reveal delay={0.05}>
-        <AdminCard className="p-6 sm:p-8">
+        <AdminCard className="p-5 sm:p-6">
           <SettingsForm defaults={defaults} />
         </AdminCard>
       </Reveal>

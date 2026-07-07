@@ -7,6 +7,7 @@ import { saveSettings } from "@/server/actions/admin-governance";
 import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export type SettingsValues = {
   contactEmail: string;
@@ -31,16 +32,42 @@ export type SettingsValues = {
 
 function Field({
   label,
+  className,
   children,
 }: {
   label: string;
+  className?: string;
   children: React.ReactNode;
 }) {
   return (
-    <label className="block space-y-1.5">
-      <span className="text-sm font-medium">{label}</span>
+    <label className={cn("block space-y-1", className)}>
+      <span className="text-xs font-medium">{label}</span>
       {children}
     </label>
+  );
+}
+
+function Group({
+  title,
+  hint,
+  children,
+}: {
+  title: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="space-y-3">
+      <div className="border-border flex items-baseline justify-between gap-3 border-b pb-1.5">
+        <h2 className="text-sm font-semibold">{title}</h2>
+        {hint ? (
+          <span className="text-muted-foreground text-right text-[11px] leading-tight">
+            {hint}
+          </span>
+        ) : null}
+      </div>
+      {children}
+    </section>
   );
 }
 
@@ -62,109 +89,125 @@ export function SettingsForm({ defaults }: { defaults: SettingsValues }) {
           } else toast.error(res.error ?? "Save failed");
         }),
       )}
-      className="space-y-8"
+      className="space-y-6"
     >
-      <section>
-        <h2 className="mb-3 font-semibold">Contact</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Email">
-            <Input type="email" {...register("contactEmail")} />
-          </Field>
-          <Field label="Phone">
-            <Input {...register("contactPhone")} />
-          </Field>
-          <Field label="WhatsApp (digits)">
-            <Input {...register("contactWhatsapp")} />
-          </Field>
-        </div>
-      </section>
+      <div className="grid gap-x-8 gap-y-6 lg:grid-cols-2">
+        {/* Left column */}
+        <div className="space-y-6">
+          <Group title="Contact">
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Email" className="col-span-2">
+                <Input type="email" {...register("contactEmail")} />
+              </Field>
+              <Field label="Phone">
+                <Input {...register("contactPhone")} />
+              </Field>
+              <Field label="WhatsApp (digits)">
+                <Input {...register("contactWhatsapp")} />
+              </Field>
+            </div>
+          </Group>
 
-      <section>
-        <h2 className="mb-1 font-semibold">Business address</h2>
-        <p className="text-muted-foreground mb-3 text-sm">
-          Shown in the footer and used for your Google/AI structured address.
-        </p>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Street + Suite">
-            <Input
-              placeholder="1717 Main Street, Suite 3300"
-              {...register("contactStreet")}
-            />
-          </Field>
-          <Field label="City">
-            <Input placeholder="Dallas" {...register("contactCity")} />
-          </Field>
-          <Field label="State (2-letter)">
-            <Input
-              placeholder="TX"
-              maxLength={2}
-              {...register("contactState")}
-            />
-          </Field>
-          <Field label="ZIP">
-            <Input placeholder="75201" {...register("contactZip")} />
-          </Field>
-          <Field label="Country (2-letter)">
-            <Input
-              placeholder="US"
-              maxLength={2}
-              {...register("contactCountry")}
-            />
-          </Field>
+          <Group
+            title="Business address"
+            hint="Shown in the footer + your Google/AI structured address"
+          >
+            <div className="space-y-3">
+              <Field label="Street + Suite">
+                <Input
+                  placeholder="1717 Main Street, Suite 3300"
+                  {...register("contactStreet")}
+                />
+              </Field>
+              <div className="grid grid-cols-6 gap-3">
+                <Field label="City" className="col-span-3">
+                  <Input placeholder="Dallas" {...register("contactCity")} />
+                </Field>
+                <Field label="State" className="col-span-1">
+                  <Input
+                    placeholder="TX"
+                    maxLength={2}
+                    {...register("contactState")}
+                  />
+                </Field>
+                <Field label="ZIP" className="col-span-2">
+                  <Input placeholder="75201" {...register("contactZip")} />
+                </Field>
+              </div>
+              <Field label="Country (2-letter)" className="w-24">
+                <Input
+                  placeholder="US"
+                  maxLength={2}
+                  {...register("contactCountry")}
+                />
+              </Field>
+            </div>
+          </Group>
         </div>
-      </section>
 
-      <section>
-        <h2 className="mb-3 font-semibold">Opening hours</h2>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Field label="Mon–Fri">
-            <Input {...register("hoursMonFri")} />
-          </Field>
-          <Field label="Saturday">
-            <Input {...register("hoursSat")} />
-          </Field>
-          <Field label="Sunday">
-            <Input {...register("hoursSun")} />
-          </Field>
+        {/* Right column */}
+        <div className="space-y-6">
+          <Group title="Opening hours">
+            <div className="grid grid-cols-3 gap-3">
+              <Field label="Mon–Fri">
+                <Input {...register("hoursMonFri")} />
+              </Field>
+              <Field label="Saturday">
+                <Input {...register("hoursSat")} />
+              </Field>
+              <Field label="Sunday">
+                <Input {...register("hoursSun")} />
+              </Field>
+            </div>
+          </Group>
+
+          <Group title="Fees">
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Delivery base ($)">
+                <Input type="number" step="0.01" {...register("deliveryBase")} />
+              </Field>
+              <Field label="Pickup ($)">
+                <Input type="number" step="0.01" {...register("pickup")} />
+              </Field>
+              <Field label="Per mile ($)">
+                <Input type="number" step="0.01" {...register("perMile")} />
+              </Field>
+              <Field label="Free radius (mi)">
+                <Input type="number" {...register("freeRadius")} />
+              </Field>
+            </div>
+          </Group>
+
+          <Group title="Social">
+            <div className="space-y-3">
+              <Field label="Instagram">
+                <Input
+                  placeholder="https://instagram.com/…"
+                  {...register("instagram")}
+                />
+              </Field>
+              <Field label="Facebook">
+                <Input
+                  placeholder="https://facebook.com/…"
+                  {...register("facebook")}
+                />
+              </Field>
+              <Field label="TikTok">
+                <Input
+                  placeholder="https://tiktok.com/@…"
+                  {...register("tiktok")}
+                />
+              </Field>
+            </div>
+          </Group>
         </div>
-      </section>
+      </div>
 
-      <section>
-        <h2 className="mb-3 font-semibold">Fees</h2>
-        <div className="grid gap-4 sm:grid-cols-4">
-          <Field label="Delivery base ($)">
-            <Input type="number" step="0.01" {...register("deliveryBase")} />
-          </Field>
-          <Field label="Pickup ($)">
-            <Input type="number" step="0.01" {...register("pickup")} />
-          </Field>
-          <Field label="Per mile ($)">
-            <Input type="number" step="0.01" {...register("perMile")} />
-          </Field>
-          <Field label="Free radius (mi)">
-            <Input type="number" {...register("freeRadius")} />
-          </Field>
-        </div>
-      </section>
-
-      <section>
-        <h2 className="mb-3 font-semibold">Social</h2>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Field label="Instagram">
-            <Input {...register("instagram")} />
-          </Field>
-          <Field label="Facebook">
-            <Input {...register("facebook")} />
-          </Field>
-          <Field label="TikTok">
-            <Input {...register("tiktok")} />
-          </Field>
-        </div>
-      </section>
-
-      <Button type="submit" variant="gradient" loading={pending}>
-        {pending ? "Saving…" : "Save settings"}
-      </Button>
+      <div className="border-border flex items-center justify-end border-t pt-4">
+        <Button type="submit" variant="gradient" loading={pending}>
+          {pending ? "Saving…" : "Save settings"}
+        </Button>
+      </div>
     </form>
   );
 }
