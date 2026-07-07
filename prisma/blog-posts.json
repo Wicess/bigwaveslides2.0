@@ -23,7 +23,10 @@
     },
     "readingMinutes": 6,
     "category": "pricing",
-    "tags": ["pricing", "rentals"],
+    "tags": [
+      "pricing",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg",
     "featured": true,
     "publishedDaysAgo": 3
@@ -52,7 +55,10 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["tips", "rentals"],
+    "tags": [
+      "tips",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 8
@@ -81,7 +87,10 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": ["parties", "tips"],
+    "tags": [
+      "parties",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 13
@@ -110,7 +119,10 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": ["tips", "rentals"],
+    "tags": [
+      "tips",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390938-cu27zd-overview-domaine-les-landes-de-gascogne-center-parcs-beauziac-france-photo01-768x575.jpg",
     "featured": false,
     "publishedDaysAgo": 18
@@ -139,7 +151,9 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["tips"],
+    "tags": [
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 23
@@ -168,7 +182,10 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": ["events", "corporate"],
+    "tags": [
+      "events",
+      "corporate"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": false,
     "publishedDaysAgo": 28
@@ -197,7 +214,9 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": ["safety"],
+    "tags": [
+      "safety"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 33
@@ -226,7 +245,10 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["rentals", "tips"],
+    "tags": [
+      "rentals",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484404870-axgpl1-aquasplash-water-world-at-shanghai-lsnow-indoor-skiing-theme-resort-shanghai-china-photo28-1-2048x1534.jpg",
     "featured": false,
     "publishedDaysAgo": 38
@@ -255,7 +277,10 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips"],
+    "tags": [
+      "rentals",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 43
@@ -284,7 +309,10 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": ["tips", "safety"],
+    "tags": [
+      "tips",
+      "safety"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484417138-3mz3g3-spinning-rapids-ride-wanda-ghuanghou-ghuanghou-china.jpg",
     "featured": false,
     "publishedDaysAgo": 48
@@ -292,7 +320,10 @@
   {
     "slug": "best-inflatable-water-slides-to-buy-2026",
     "category": "buying",
-    "tags": ["buying", "guides"],
+    "tags": [
+      "buying",
+      "guides"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708041891-ow1xnn-best-inflatable-water-slides-to-buy-2026.jpg",
     "featured": true,
     "publishedDaysAgo": 2,
@@ -321,7 +352,10 @@
   {
     "slug": "commercial-water-slide-buying-guide",
     "category": "buying",
-    "tags": ["buying", "commercial"],
+    "tags": [
+      "buying",
+      "commercial"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": false,
     "publishedDaysAgo": 5,
@@ -350,7 +384,10 @@
   {
     "slug": "residential-vs-commercial-water-slide",
     "category": "buying",
-    "tags": ["buying", "tips"],
+    "tags": [
+      "buying",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708046034-bkhz5p-residential-vs-commercial-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 9,
@@ -379,7 +416,10 @@
   {
     "slug": "clean-dry-store-inflatable-water-slide",
     "category": "ownership",
-    "tags": ["ownership", "tips"],
+    "tags": [
+      "ownership",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708052329-rosuet-clean-dry-store-inflatable-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 13,
@@ -408,7 +448,10 @@
   {
     "slug": "water-slide-rentals-churches-schools-hoas",
     "category": "events",
-    "tags": ["events", "community"],
+    "tags": [
+      "events",
+      "community"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708058232-5fv3my-water-slide-rentals-churches-schools-hoas.jpg",
     "featured": true,
     "publishedDaysAgo": 16,
@@ -437,7 +480,10 @@
   {
     "slug": "water-slide-season-state-by-state",
     "category": "planning",
-    "tags": ["planning", "seasonal"],
+    "tags": [
+      "planning",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708067810-4ohw8z-water-slide-season-state-by-state.jpg",
     "featured": false,
     "publishedDaysAgo": 20,
@@ -487,7 +533,10 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": ["safety", "tips"],
+    "tags": [
+      "safety",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 6
@@ -516,7 +565,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["guides", "tips"],
+    "tags": [
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 9
@@ -545,7 +597,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["safety", "tips"],
+    "tags": [
+      "safety",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 12
@@ -574,7 +629,10 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["planning", "tips"],
+    "tags": [
+      "planning",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 15
@@ -603,7 +661,11 @@
     },
     "readingMinutes": 6,
     "category": "buying",
-    "tags": ["buying", "commercial", "ownership"],
+    "tags": [
+      "buying",
+      "commercial",
+      "ownership"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -632,7 +694,11 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": ["events", "parties", "seasonal"],
+    "tags": [
+      "events",
+      "parties",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": true,
     "publishedDaysAgo": 2
@@ -661,7 +727,11 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": ["events", "community", "planning"],
+    "tags": [
+      "events",
+      "community",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 1
@@ -690,7 +760,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["guides", "tips"],
+    "tags": [
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -719,7 +792,11 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": ["events", "parties", "seasonal"],
+    "tags": [
+      "events",
+      "parties",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -748,7 +825,11 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["guides", "rentals", "parties"],
+    "tags": [
+      "guides",
+      "rentals",
+      "parties"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342059973-iolc7o-best-water-slide-rentals-birthday-party.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -777,9 +858,79 @@
     },
     "readingMinutes": 4,
     "category": "planning",
-    "tags": ["planning", "rentals", "guides"],
+    "tags": [
+      "planning",
+      "rentals",
+      "guides"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342061961-etbkur-how-to-rent-a-water-slide.jpg",
     "featured": true,
+    "publishedDaysAgo": 0
+  },
+  {
+    "slug": "do-water-slide-rentals-need-electricity",
+    "title": {
+      "en": "Do Water Slide Rentals Need Electricity? What You'll Need to Plug In",
+      "fr": "Les glissades d'eau ont-elles besoin d'électricité ? Ce qu'il faut prévoir"
+    },
+    "excerpt": {
+      "en": "Yes — an inflatable water slide runs on a blower that needs a standard outlet within ~100 ft. Here's the power you need, and what to do if there's none nearby.",
+      "fr": "Oui — une glissade gonflable fonctionne avec un souffleur qui a besoin d'une prise standard à ~30 m. Voici l'électricité nécessaire, et quoi faire s'il n'y en a pas."
+    },
+    "metaTitle": {
+      "en": "Do Water Slide Rentals Need Electricity? (What You'll Need)",
+      "fr": "Les glissades d'eau ont-elles besoin d'électricité ?"
+    },
+    "metaDescription": {
+      "en": "Yes — inflatable water slides run on a continuous blower that needs a standard outlet within ~100 ft. See exactly what power you need, or ask about a generator.",
+      "fr": "Oui — les glissades d'eau gonflables utilisent un souffleur continu qui nécessite une prise standard à ~30 m. Voyez l'électricité nécessaire ou demandez un générateur."
+    },
+    "content": {
+      "en": "Yes — every inflatable water slide runs on an electric blower that must stay on the entire time the slide is in use, so you'll need a standard grounded outlet within about 100 feet of the setup spot. No outlet nearby? A generator solves it. Here's exactly what to plan for.\n\n## Why do inflatable water slides need power?\n\nAn inflatable water slide isn't pumped up once and sealed — it stays firm because a blower pushes air into it **continuously** while guests are sliding. Cut the power and it deflates slowly and safely within a minute. That constant airflow is what keeps the walls rigid and the landing safe, so a reliable power source is the one thing you can't skip — whether you rent a compact [Lil' Splash Junior](/rent/lil-splash-junior) for toddlers or a towering [Mega Monsoon 28](/rent/mega-monsoon-28) for a block party.\n\n## What kind of outlet do you need?\n\nA **standard 110–120V household outlet** — the ordinary three-prong kind on the side of your house or in the garage. Smaller single-lane slides like the [Fiesta Splash 16](/rent/fiesta-splash-16) or [Aqua Wave 15](/rent/aqua-wave-15) use one blower and one outlet. Bigger dual-lane racers and giant slides — think [Double Drop Racer 22](/rent/double-drop-racer-22), [Cyclone Curve 24](/rent/cyclone-curve-24), or [Tidal Tower 27](/rent/tidal-tower-27) — often run two blowers, which means **two outlets on separate circuits**.\n\nA blower draws roughly **7–11 amps** (about 1–1.5 horsepower), so it should sit on its **own circuit**. Share it with a fridge, AC, or a second blower and you'll likely trip the breaker mid-party.\n\n## How far can the slide be from the outlet?\n\nPlan for the slide to be **within about 100 feet** of the outlet. Our crew brings proper commercial-grade cords, so you don't need to supply anything. Beyond ~100 feet the voltage drops enough to strain the motor — that's when a generator becomes the smarter option.\n\n## What if there's no power where you want the slide?\n\nTotally normal for parks, fields, and large properties. A **quiet portable generator** powers the blower with no outlet required. Just mention there's no power at your setup spot when you [request your free quote](/contact) and we'll build a generator into the plan. This is common for combos like the [Castle Splash Combo](/rent/castle-splash-combo) or the all-day [Mega Waterpark Combo](/rent/mega-waterpark-combo) set up at community venues.\n\n## Will it trip my breaker or spike my electric bill?\n\n- **Breaker:** Give each blower its own outlet/circuit and you're fine. Trips only happen on overloaded circuits.\n- **Bill:** Barely a blip. A blower sips about the same power as a window AC unit — pennies per hour. A full day of sliding won't noticeably change your electric bill.\n\n## What we handle vs. what you provide\n\nEvery Big Wave Slides rental is delivered, professionally set up and anchored, sanitized, fully insured, and picked up. From your side, you just supply:\n\n- A standard outlet within ~100 ft (or ask us to bring a generator)\n- A garden-hose water spigot\n- A flat setup area and adult supervision\n\nNot sure which slide fits your power and space? [Browse the full rental lineup](/rent) or check our [water slide answers hub](/answers) for more setup details.\n\n## FAQ\n\n**Can I use a regular household extension cord?**\nPlease don't — thin indoor cords can overheat or starve the blower. Our crew brings the correct commercial cords.\n\n**How many outlets does a double-lane slide need?**\nUsually two, on separate circuits, since large slides like the [Fire & Ice Racer 18](/rent/fire-and-ice-racer-18) run two blowers. We confirm the exact setup in your quote.\n\n**Does the blower run the whole time?**\nYes — continuously while the slide is in use. That's normal and keeps it safely inflated.\n\n**What happens if the power cuts out mid-party?**\nThe slide deflates slowly and safely — no sudden drop. Restore power or switch to a generator and it's back up in about a minute.\n\nReady to book? Tell us your date, venue, and whether you have power on site, and we'll send a free, no-obligation quote with delivery, setup, and insurance included. [Browse our water slides](/rent) or [request your free quote](/contact) — Big Wave Slides delivers nationwide, from $199/day, including right here in [Dallas](/water-slide-rentals/texas/dallas).",
+      "fr": "Oui — chaque glissade d'eau gonflable fonctionne avec un souffleur électrique qui doit rester allumé pendant toute la durée d'utilisation. Il vous faut donc une prise standard mise à la terre à environ 30 mètres (100 pieds) de l'emplacement. Pas de prise à proximité ? Un générateur règle le problème. Voici exactement ce qu'il faut prévoir.\n\n## Pourquoi les glissades d'eau gonflables ont-elles besoin d'électricité ?\n\nUne glissade gonflable n'est pas gonflée une seule fois puis scellée — elle reste ferme parce qu'un souffleur y insuffle de l'air **en continu** pendant que les invités glissent. Coupez le courant et elle se dégonfle lentement et en toute sécurité en une minute. Ce flux d'air constant maintient les parois rigides et la réception sûre : une source d'alimentation fiable est donc l'unique élément incontournable — que vous louiez une petite [Lil' Splash Junior](/rent/lil-splash-junior) pour les tout-petits ou une immense [Mega Monsoon 28](/rent/mega-monsoon-28) pour une fête de quartier.\n\n## Quel type de prise faut-il ?\n\nUne **prise domestique standard de 110–120 V** — la prise ordinaire à trois broches sur le côté de la maison ou dans le garage. Les petites glissades à une voie comme la [Fiesta Splash 16](/rent/fiesta-splash-16) ou l'[Aqua Wave 15](/rent/aqua-wave-15) utilisent un souffleur et une prise. Les grandes glissades à double voie — comme la [Double Drop Racer 22](/rent/double-drop-racer-22), la [Cyclone Curve 24](/rent/cyclone-curve-24) ou la [Tidal Tower 27](/rent/tidal-tower-27) — utilisent souvent deux souffleurs, donc **deux prises sur des circuits séparés**.\n\nUn souffleur consomme environ **7 à 11 ampères** (1 à 1,5 CV) : il doit être sur son **propre circuit**. Partagez-le avec un frigo, une climatisation ou un second souffleur et vous ferez probablement sauter le disjoncteur en pleine fête.\n\n## À quelle distance la glissade peut-elle être de la prise ?\n\nPrévoyez la glissade **à environ 30 mètres (100 pieds)** de la prise. Notre équipe apporte des rallonges de qualité commerciale — vous n'avez rien à fournir. Au-delà, la tension chute assez pour forcer le moteur : c'est là qu'un générateur devient la meilleure option.\n\n## Et s'il n'y a pas d'électricité là où vous voulez la glissade ?\n\nTout à fait normal pour les parcs, les terrains et les grandes propriétés. Un **générateur portable silencieux** alimente le souffleur sans aucune prise. Signalez simplement l'absence d'électricité lorsque vous [demandez votre devis gratuit](/contact) et nous intégrerons un générateur au plan. C'est fréquent pour les combos comme le [Castle Splash Combo](/rent/castle-splash-combo) ou le [Mega Waterpark Combo](/rent/mega-waterpark-combo) installés sur des sites communautaires.\n\n## Cela fera-t-il sauter mon disjoncteur ou grimper ma facture ?\n\n- **Disjoncteur :** donnez à chaque souffleur sa propre prise/circuit et tout ira bien. Les coupures n'arrivent que sur des circuits surchargés.\n- **Facture :** à peine perceptible. Un souffleur consomme environ autant qu'un climatiseur de fenêtre — quelques centimes de l'heure.\n\n## Ce dont nous nous occupons vs. ce que vous fournissez\n\nChaque location Big Wave Slides est livrée, installée et ancrée par des professionnels, désinfectée, entièrement assurée et récupérée. De votre côté, il suffit de fournir :\n\n- Une prise standard à ~30 m (ou demandez-nous un générateur)\n- Un robinet pour tuyau d'arrosage\n- Une surface plane et une surveillance par un adulte\n\nPas sûr de la glissade adaptée à votre électricité et votre espace ? [Parcourez toute la gamme de location](/rent) ou consultez notre [centre de réponses](/answers).\n\n## FAQ\n\n**Puis-je utiliser une rallonge domestique ordinaire ?**\nÉvitez-le — les rallonges intérieures fines peuvent surchauffer. Notre équipe apporte les bonnes rallonges commerciales.\n\n**Combien de prises pour une glissade à double voie ?**\nGénéralement deux, sur des circuits séparés, car les grandes glissades comme la [Fire & Ice Racer 18](/rent/fire-and-ice-racer-18) utilisent deux souffleurs.\n\n**Le souffleur fonctionne-t-il tout le temps ?**\nOui — en continu pendant l'utilisation. C'est normal et cela la maintient gonflée en toute sécurité.\n\n**Que se passe-t-il si le courant est coupé en pleine fête ?**\nLa glissade se dégonfle lentement et en toute sécurité. Rétablissez le courant ou passez au générateur et elle est de nouveau prête en une minute.\n\nPrêt à réserver ? Indiquez-nous votre date, votre lieu et si vous avez l'électricité sur place, et nous vous enverrons un devis gratuit et sans engagement, livraison, installation et assurance comprises. [Parcourez nos glissades d'eau](/rent) ou [demandez votre devis gratuit](/contact) — Big Wave Slides livre partout aux États-Unis, dès 199 $/jour, y compris à [Dallas](/water-slide-rentals/texas/dallas)."
+    },
+    "readingMinutes": 5,
+    "category": "planning",
+    "tags": [
+      "rentals",
+      "tips",
+      "planning"
+    ],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
+    "featured": false,
+    "publishedDaysAgo": 0
+  },
+  {
+    "slug": "what-is-included-in-a-water-slide-rental",
+    "title": {
+      "en": "What's Included in a Water Slide Rental? The Full Breakdown",
+      "fr": "Qu'est-ce qui est inclus dans une location de glissade d'eau ?"
+    },
+    "excerpt": {
+      "en": "Delivery, professional setup, anchoring, sanitizing, full insurance and pickup are all included. Here's exactly what you get — and the few things you provide.",
+      "fr": "Livraison, installation, ancrage, désinfection, assurance complète et récupération sont inclus. Voici exactement ce que vous obtenez — et les quelques éléments à fournir."
+    },
+    "metaTitle": {
+      "en": "What's Included in a Water Slide Rental? (Full Breakdown)",
+      "fr": "Qu'est-ce qui est inclus dans une location de glissade ?"
+    },
+    "metaDescription": {
+      "en": "A Big Wave Slides rental includes delivery, setup, anchoring, sanitizing, full insurance and pickup. See what's included — and the few things you provide.",
+      "fr": "Une location Big Wave Slides comprend livraison, installation, ancrage, désinfection, assurance et récupération. Voyez ce qui est inclus — et ce que vous fournissez."
+    },
+    "content": {
+      "en": "A water slide rental from Big Wave Slides includes everything but the guests: delivery, professional setup and anchoring, sanitizing before drop-off, full insurance, and end-of-event pickup. You just provide a flat space, water, and power. Here's the full breakdown — and the few things you supply.\n\n## What's included in every rental\n\n- **Delivery** — we bring the slide to your home, park, church, or venue, whether it's a compact [Sunset Splash 16](/rent/sunset-splash-16) or a giant [Great White Shark 18](/rent/great-white-shark-18).\n- **Professional setup & anchoring** — our trained crew installs it, anchors it (stakes on grass, sandbags on hard surfaces), and safety-checks it before anyone climbs on.\n- **Sanitizing** — every slide is cleaned and sanitized before delivery, so it arrives fresh.\n- **Full insurance** — every rental is covered, with a certificate available for schools, churches, and HOAs.\n- **Pickup & teardown** — we come back, take it down, and haul it away.\n\nYou don't transport, install, clean, or store anything — the whole point of renting a showpiece like the [Tidal Tower 27](/rent/tidal-tower-27) or [Mega Monsoon 28](/rent/mega-monsoon-28).\n\n## What you provide\n\n1. **A flat area** — grass is ideal; concrete, asphalt, or turf work too.\n2. **A water spigot** — a standard garden-hose connection.\n3. **Power** — a grounded outlet within ~100 ft (or ask for a generator).\n4. **Adult supervision** — an adult should watch riders during use.\n\n## What's NOT automatically included (ask in your quote)\n\n- A **generator**, if there's no power on site.\n- A **staffed attendant**, if you'd like one.\n- **Extra hours or overnight.**\n- **Long-distance delivery** — delivery starts with a base fee, the first 15 miles included, then $2.50/mile plus a small pickup fee.\n\n## How pricing works\n\nRentals start at **$199/day**, and most backyard slides and combos run **$250–$550/day** — all-inclusive of delivery, setup, sanitizing, insurance, and pickup. A budget-friendly [Fiesta Splash 16](/rent/fiesta-splash-16) sits at the low end; a full [Mega Waterpark Combo](/rent/mega-waterpark-combo) at the top. There's **no online payment** — you [request a free quote](/contact), we confirm your date and exact price, and you pay offline once it's locked in.\n\n## Why \"all-inclusive\" matters\n\nThe most common surprise renters hit elsewhere is a low sticker price that doesn't include delivery, setup, or insurance — so the final bill balloons. Before booking with anyone, ask: **\"Is delivery, setup, and insurance included?\"** With us, it always is. Whether you're planning a [birthday party](/water-slides-for/birthday-parties) with a themed [Cosmic Galaxy 18](/rent/cosmic-galaxy-18) or [Mermaid Lagoon 18](/rent/mermaid-lagoon-slide), or a big backyard bash with the [Castle Splash Combo](/rent/castle-splash-combo), you'll know the real number up front. [Browse all rentals](/rent) or [see what's available in Dallas](/water-slide-rentals/texas/dallas).\n\n## FAQ\n\n**Is delivery included in the price?**\nThere's a base delivery fee with the first 15 miles included and a small per-mile rate beyond that — always shown in your quote.\n\n**Do I need to set the slide up myself?**\nNo. Our crew delivers, sets up, anchors, and safety-checks it, then returns to take it down.\n\n**Is insurance really included?**\nYes — every rental is fully insured, with a certificate for any venue that asks.\n\n**What do I actually need to provide?**\nA flat space, a garden-hose spigot, a power outlet (or generator), and adult supervision.\n\nReady to make a splash? Tell us your date, venue, and city and we'll send a free, no-obligation quote with everything included. [Request your free quote](/contact) or [browse every water slide](/rent). Prefer to own one? [Shop slides for sale](/shop). Big Wave Slides — delivered, set up, and fully insured, nationwide.",
+      "fr": "Une location de glissade d'eau chez Big Wave Slides comprend tout, sauf les invités : livraison, installation et ancrage professionnels, désinfection avant la livraison, assurance complète et récupération en fin d'événement. Vous fournissez seulement une surface plane, l'eau et l'électricité. Voici le détail complet — et les quelques éléments à votre charge.\n\n## Ce qui est inclus dans chaque location\n\n- **Livraison** — nous apportons la glissade à votre domicile, parc, église ou lieu, qu'il s'agisse d'une compacte [Sunset Splash 16](/rent/sunset-splash-16) ou d'une géante [Great White Shark 18](/rent/great-white-shark-18).\n- **Installation et ancrage professionnels** — notre équipe formée l'installe, l'ancre (piquets sur gazon, sacs de sable sur surface dure) et effectue une vérification de sécurité.\n- **Désinfection** — chaque glissade est nettoyée et désinfectée avant la livraison.\n- **Assurance complète** — chaque location est couverte, avec un certificat disponible pour les écoles, églises et associations de quartier.\n- **Récupération et démontage** — nous revenons tout démonter et emporter.\n\nVous ne transportez, n'installez, ne nettoyez ni ne rangez rien — tout l'intérêt de louer une pièce maîtresse comme la [Tidal Tower 27](/rent/tidal-tower-27) ou la [Mega Monsoon 28](/rent/mega-monsoon-28).\n\n## Ce que vous fournissez\n\n1. **Une surface plane** — le gazon est idéal ; béton, asphalte ou gazon synthétique conviennent aussi.\n2. **Un robinet d'eau** — un raccord standard pour tuyau d'arrosage.\n3. **L'électricité** — une prise à ~30 m (ou demandez un générateur).\n4. **Une surveillance par un adulte** pendant l'utilisation.\n\n## Ce qui n'est PAS automatiquement inclus (à demander dans votre devis)\n\n- Un **générateur**, s'il n'y a pas d'électricité sur place.\n- Un **préposé**, si vous en souhaitez un.\n- Des **heures supplémentaires ou une nuit.**\n- La **livraison longue distance** — la livraison débute par des frais de base, les 24 premiers kilomètres (15 miles) inclus, puis 2,50 $/mile plus de petits frais de récupération.\n\n## Comment fonctionne la tarification\n\nLes locations débutent à **199 $/jour**, et la plupart des glissades et combos coûtent **250 à 550 $/jour** — tout compris : livraison, installation, désinfection, assurance et récupération. Une [Fiesta Splash 16](/rent/fiesta-splash-16) économique se situe en bas de gamme ; un [Mega Waterpark Combo](/rent/mega-waterpark-combo) complet en haut. **Aucun paiement en ligne** — vous [demandez un devis gratuit](/contact), nous confirmons votre date et le prix exact, et vous payez hors ligne.\n\n## Pourquoi le « tout compris » est important\n\nLa mauvaise surprise la plus courante ailleurs : un prix affiché bas qui n'inclut ni livraison, ni installation, ni assurance — et la facture finale explose. Avant de réserver, posez la question : **« La livraison, l'installation et l'assurance sont-elles comprises ? »** Chez nous, toujours. Que vous planifiiez un [anniversaire](/water-slides-for/birthday-parties) avec une [Cosmic Galaxy 18](/rent/cosmic-galaxy-18) ou une [Mermaid Lagoon 18](/rent/mermaid-lagoon-slide) à thème, ou une grande fête avec le [Castle Splash Combo](/rent/castle-splash-combo), vous connaîtrez le vrai montant d'avance. [Parcourez toutes les locations](/rent) ou [voyez ce qui est disponible à Dallas](/water-slide-rentals/texas/dallas).\n\n## FAQ\n\n**La livraison est-elle incluse dans le prix ?**\nDes frais de livraison de base avec les 24 premiers kilomètres inclus, puis un petit tarif au mile — toujours indiqué dans votre devis.\n\n**Dois-je installer la glissade moi-même ?**\nNon. Notre équipe livre, installe, ancre et vérifie, puis revient tout démonter.\n\n**L'assurance est-elle vraiment incluse ?**\nOui — chaque location est entièrement assurée, avec un certificat pour tout lieu qui le demande.\n\n**Que dois-je réellement fournir ?**\nUne surface plane, un robinet, une prise (ou un générateur) et une surveillance adulte.\n\nPrêt à faire des vagues ? Indiquez votre date, votre lieu et votre ville et nous vous enverrons un devis gratuit et sans engagement, tout compris. [Demandez votre devis gratuit](/contact) ou [parcourez toutes les glissades](/rent). Vous préférez en acheter une ? [Achetez des glissades](/shop). Big Wave Slides — livrée, installée et entièrement assurée, partout aux États-Unis."
+    },
+    "readingMinutes": 5,
+    "category": "guides",
+    "tags": [
+      "rentals",
+      "guides",
+      "pricing"
+    ],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
+    "featured": false,
     "publishedDaysAgo": 0
   }
 ]
