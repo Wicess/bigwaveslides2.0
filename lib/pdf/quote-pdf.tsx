@@ -145,6 +145,24 @@ const s = StyleSheet.create({
     fontSize: 9,
     color: C.body,
   },
+  payBox: {
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: C.line,
+    borderRadius: 8,
+    padding: 11,
+  },
+  payHint: { fontSize: 8.5, color: C.muted, marginTop: 2, marginBottom: 8 },
+  payRow: { flexDirection: "row", gap: 10 },
+  payOpt: { flex: 1, flexDirection: "row", alignItems: "center", gap: 6 },
+  checkbox: {
+    width: 12,
+    height: 12,
+    borderWidth: 1.2,
+    borderColor: C.accent,
+    borderRadius: 2,
+  },
+  payLabel: { fontSize: 9.5, color: C.ink, fontFamily: "Helvetica-Bold" },
   sectionTitle: {
     fontSize: 11.5,
     fontFamily: "Helvetica-Bold",
@@ -435,6 +453,23 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
             {isBooking ? "confirm your dates" : "process your order"}. Final
             pricing, including delivery, is confirmed on your invoice.
           </Text>
+        </View>
+
+        {/* Payment method — client ticks their preferred option */}
+        <View style={s.payBox} wrap={false}>
+          <Text style={s.label}>Preferred payment method</Text>
+          <Text style={s.payHint}>
+            Tick the option you&apos;d like to use. Once you accept, we&apos;ll
+            send the exact payment details for your choice with your invoice.
+          </Text>
+          <View style={s.payRow}>
+            {["Zelle", "Apple Pay", "Chime", "Cash App"].map((m) => (
+              <View style={s.payOpt} key={m}>
+                <View style={s.checkbox} />
+                <Text style={s.payLabel}>{m}</Text>
+              </View>
+            ))}
+          </View>
         </View>
 
         {/* Terms */}
