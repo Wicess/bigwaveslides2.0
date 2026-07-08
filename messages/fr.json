@@ -308,6 +308,8 @@
     "removed": "Retiré du panier",
     "updateError": "Impossible de mettre à jour le panier.",
     "perDay": "/jour",
+    "days": "Jours",
+    "qty": "Qté",
     "summary": "Récapitulatif",
     "subtotal": "Sous-total",
     "itemCount": "{count, plural, one {# article} other {# articles}}",

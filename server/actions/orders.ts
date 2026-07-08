@@ -89,8 +89,11 @@ export async function createOrderRequest(
       return { ok: false, error: "Your cart is empty." };
     }
 
-    const items = cart.items.map((item) => {
-      // Price each line by its mode: BUY → sale price, RENT → daily rate.
+    // Price each line by its mode: BUY → sale price, RENT → daily rate. For
+    // RENT, quantity is the number of rental days, so the line total is
+    // dailyRate × days. `mode` is kept for the quote PDF (days vs qty) but is
+    // not persisted on OrderItem (which has no mode column).
+    const lines = cart.items.map((item) => {
       const mode = item.mode === "RENT" ? "RENT" : "BUY";
       const unit = cartUnitPrice(item.product, mode);
       const baseName =
@@ -106,8 +109,16 @@ export async function createOrderRequest(
         unitPriceCents: unit,
         quantity: item.quantity,
         lineTotalCents: unit * item.quantity,
+        mode: mode as "BUY" | "RENT",
       };
     });
+    const items = lines.map((l) => ({
+      productId: l.productId,
+      name: l.name,
+      unitPriceCents: l.unitPriceCents,
+      quantity: l.quantity,
+      lineTotalCents: l.lineTotalCents,
+    }));
 
     const subtotalCents = items.reduce((n, i) => n + i.lineTotalCents, 0);
 
@@ -168,11 +179,12 @@ export async function createOrderRequest(
       address:
         [data.address, data.city].filter(Boolean).join(", ") || undefined,
       heroImageUrl: cart.items[0]?.product.media[0]?.url,
-      items: items.map((i) => ({
+      items: lines.map((i) => ({
         name: i.name,
         quantity: i.quantity,
         unitPriceCents: i.unitPriceCents,
         lineTotalCents: i.lineTotalCents,
+        mode: i.mode,
       })),
       subtotalCents,
       totalCents: subtotalCents,

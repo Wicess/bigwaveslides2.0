@@ -60,6 +60,8 @@ export type OrderEmailInput = {
     quantity: number;
     unitPriceCents: number;
     lineTotalCents: number;
+    /** RENT lines price per day: quantity is the number of rental days. */
+    mode?: "BUY" | "RENT";
   }[];
   subtotalCents: number;
   totalCents: number;
@@ -78,22 +80,27 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
       phone: o.phone,
       address: o.address,
     },
-    items: o.items.map((i) => ({
-      name: i.name,
-      qtyLabel: String(i.quantity),
-      rateLabel: formatPrice(i.unitPriceCents, o.locale),
-      amountCents: i.lineTotalCents,
-    })),
+    items: o.items.map((i) => {
+      const rent = i.mode === "RENT";
+      return {
+        name: i.name,
+        // For rentals, quantity = number of days, priced per day.
+        qtyLabel: rent
+          ? `${i.quantity} ${i.quantity === 1 ? "day" : "days"}`
+          : String(i.quantity),
+        rateLabel: rent
+          ? `${formatPrice(i.unitPriceCents, o.locale)}/day`
+          : formatPrice(i.unitPriceCents, o.locale),
+        amountCents: i.lineTotalCents,
+      };
+    }),
     totals: { subtotalCents: o.subtotalCents, totalCents: o.totalCents },
     locale: o.locale,
   });
 
   const rows: EmailRow[] = [
     { label: "Reference", value: o.orderNumber },
-    {
-      label: "Items",
-      value: String(o.items.reduce((n, i) => n + i.quantity, 0)),
-    },
+    { label: "Items", value: String(o.items.length) },
     { label: "Estimated total", value: formatPrice(o.totalCents, o.locale) },
   ];
 

@@ -308,6 +308,8 @@
     "removed": "Removed from cart",
     "updateError": "Couldn’t update the cart.",
     "perDay": "/day",
+    "days": "Days",
+    "qty": "Qty",
     "summary": "Order summary",
     "subtotal": "Subtotal",
     "itemCount": "{count, plural, one {# item} other {# items}}",

@@ -305,31 +305,44 @@ export function CartClient({
                         {line.mode === "RENT" ? t("perDay") : ""}
                       </span>
 
-                      <div className="mt-auto flex items-center justify-between pt-3">
-                        <div className="border-border inline-flex items-center rounded-full border">
-                          <button
-                            type="button"
-                            onClick={() => changeQty(line, line.quantity - 1)}
-                            aria-label={t("decrease")}
-                            className="hover:bg-muted grid size-9 place-items-center rounded-l-full"
-                          >
-                            <Minus className="size-3.5" />
-                          </button>
-                          <span className="w-9 text-center text-sm font-semibold">
-                            {line.quantity}
+                      <div className="mt-auto flex items-end justify-between pt-3">
+                        <div>
+                          <span className="text-muted-foreground mb-1 block text-xs font-medium">
+                            {line.mode === "RENT" ? t("days") : t("qty")}
                           </span>
-                          <button
-                            type="button"
-                            onClick={() => changeQty(line, line.quantity + 1)}
-                            aria-label={t("increase")}
-                            className="hover:bg-muted grid size-9 place-items-center rounded-r-full"
-                          >
-                            <Plus className="size-3.5" />
-                          </button>
+                          <div className="border-border inline-flex items-center rounded-full border">
+                            <button
+                              type="button"
+                              onClick={() => changeQty(line, line.quantity - 1)}
+                              aria-label={t("decrease")}
+                              className="hover:bg-muted grid size-9 place-items-center rounded-l-full"
+                            >
+                              <Minus className="size-3.5" />
+                            </button>
+                            <span className="w-9 text-center text-sm font-semibold">
+                              {line.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => changeQty(line, line.quantity + 1)}
+                              aria-label={t("increase")}
+                              className="hover:bg-muted grid size-9 place-items-center rounded-r-full"
+                            >
+                              <Plus className="size-3.5" />
+                            </button>
+                          </div>
                         </div>
-                        <span className="font-semibold">
-                          {formatPrice(line.lineTotalCents, locale)}
-                        </span>
+                        <div className="text-right">
+                          {line.mode === "RENT" ? (
+                            <span className="text-muted-foreground block text-xs">
+                              {formatPrice(line.unitPriceCents, locale)}
+                              {t("perDay")} × {line.quantity}
+                            </span>
+                          ) : null}
+                          <span className="font-semibold">
+                            {formatPrice(line.lineTotalCents, locale)}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </motion.li>
