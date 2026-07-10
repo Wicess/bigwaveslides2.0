@@ -279,18 +279,18 @@ export async function SiteFooter({
             </Link>
           </div>
 
-          {/* Developer signature — W!CE is a mailto backlink; the wordmark wears
-              a slow metallic sheen. Left-aligned on mobile, right on desktop. */}
+          {/* Developer signature — Wun GATA is a mailto backlink; the wordmark
+              wears a slow metallic sheen. Left on mobile, right on desktop. */}
           <a
             href="mailto:kenj52974@gmail.com"
-            aria-label="Contact the developer, W!CE"
+            aria-label="Contact the developer, Wun GATA"
             className="group inline-flex items-baseline gap-2 self-start sm:self-auto"
           >
             <span className="text-[10px] font-medium tracking-[0.4em] text-white/30 uppercase transition-opacity duration-300 group-hover:text-white/60">
-              Developed by
+              Crafted by
             </span>
             <span className="dev-sheen font-brand text-base leading-none font-bold">
-              W!CE
+              Wun GATA
             </span>
           </a>
         </Container>
