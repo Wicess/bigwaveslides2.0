@@ -41,11 +41,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     path: "/",
     title: fr
-      ? "Location de glissades d'eau près de chez vous — livrées & assurées"
-      : "Water Slide Rentals Near You — Delivered, Set Up & Insured",
+      ? "Location de glissades d'eau dès 199 $/jour — livrées & assurées"
+      : "Water Slide Rentals Near You from $199/Day — Delivered & Insured",
     description: fr
-      ? "Louez ou achetez des glissades d'eau gonflables partout aux États-Unis — livraison, installation et assurance comprises. Parfait pour anniversaires, fêtes de piscine et événements. Obtenez un devis gratuit en quelques minutes — réservez aujourd'hui !"
-      : "Rent or buy inflatable water slides anywhere in the USA — delivery, setup & full insurance all included. Perfect for birthday parties, pool parties & events. Get a free quote in minutes — book today!",
+      ? "Louez ou achetez des glissades d'eau gonflables partout aux États-Unis dès 199 $/jour — livraison, installation et assurance comprises. Devis gratuit en quelques minutes — les week-ends d'été partent vite !"
+      : "Rent or buy inflatable water slides anywhere in the USA from $199/day — delivery, setup & full insurance all included. Free quote in minutes. Summer weekends book fast — check your date today!",
     keywords: fr
       ? [
           "location glissade d'eau",

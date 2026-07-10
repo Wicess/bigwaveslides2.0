@@ -11,6 +11,7 @@ import {
   localBusinessAreaLd,
   breadcrumbLd,
   faqLd,
+  rentalItemListLd,
   absoluteUrl,
 } from "@/lib/structured-data";
 import { Link } from "@/i18n/navigation";
@@ -48,8 +49,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // of the index; English state hubs stay indexable.
     noindex: locale !== routing.defaultLocale,
     path: `/water-slide-rentals/${loc.slug}`,
-    title: `Water Slide Rentals in ${loc.name} — Delivered, Set Up & Insured`,
-    description: `Rent inflatable water slides & bounce houses across ${loc.name} from $199/day — delivered, set up & fully insured for birthdays, parties, schools & churches in ${cities3} & nearby. Free quote today.`,
+    title: `Water Slide Rentals in ${loc.name} from $199/Day — Delivered & Insured`,
+    description: `Rent inflatable water slides & bounce houses across ${loc.name} from $199/day — delivered, set up & fully insured in ${cities3} & statewide. Check your date free — summer weekends book fast.`,
     keywords: [
       `water slide rentals ${loc.name}`,
       `inflatable water slide rental ${loc.name}`,
@@ -128,6 +129,9 @@ export default async function StateRentalPage({ params }: Props) {
         ])}
       />
       <JsonLd data={faqLd(faqs)} />
+      {items.length > 0 ? (
+        <JsonLd data={rentalItemListLd(locale, items)} />
+      ) : null}
 
       <PhotoHero
         image={HERO}

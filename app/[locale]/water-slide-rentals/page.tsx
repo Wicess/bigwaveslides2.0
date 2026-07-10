@@ -23,9 +23,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/water-slide-rentals",
-    title: "Water Slide Rentals Near You — Delivered in All 50 States",
+    title: "Water Slide Rentals Near You from $199/Day — All 50 States",
     description:
-      "Rent premium inflatable water slides & bounce houses from $199/day — delivered, set up, sanitized & fully insured across all 50 U.S. states. Find water slide rentals in your city and get a free quote today.",
+      "Rent premium inflatable water slides & bounce houses from $199/day — delivered, set up, sanitized & fully insured across all 50 U.S. states. Find your city, check your date free, and book before summer weekends fill.",
     keywords: [
       "water slide rentals",
       "water slide rental near me",

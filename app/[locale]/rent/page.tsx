@@ -17,6 +17,8 @@ const RENT_HERO_IMAGE =
 import { Pagination } from "@/components/shop/pagination";
 import { Reveal } from "@/components/motion/reveal";
 import { buildMetadata } from "@/lib/seo";
+import { rentalItemListLd } from "@/lib/structured-data";
+import { JsonLd } from "@/components/seo/json-ld";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Props = {
@@ -71,6 +73,9 @@ export default async function RentPage({ params, searchParams }: Props) {
 
   return (
     <main>
+      {listing.items.length > 0 ? (
+        <JsonLd data={rentalItemListLd(locale, listing.items)} />
+      ) : null}
       <PhotoHero
         image={RENT_HERO_IMAGE}
         eyebrow={t("eyebrow")}

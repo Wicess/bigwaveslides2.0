@@ -2,6 +2,11 @@ import { env } from "@/lib/env";
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const NAME = "Big Wave Slides";
+// Real business facts (match lib/email.ts + site settings) — shown in rich
+// results, so keep them in lockstep with the NAP used everywhere else.
+const PHONE = "+1 (614) 302-5899";
+const EMAIL = "contact@bigwaveslides.com";
+const PRICE_RANGE = "$199 - $550";
 
 type Json = Record<string, unknown>;
 
@@ -46,7 +51,7 @@ export function organizationLd(
     url: SITE,
     logo: `${SITE}/icon.png`,
     image: `${SITE}/icon.png`,
-    priceRange: "$$",
+    priceRange: PRICE_RANGE,
     // Nationwide delivery across the United States.
     areaServed: { "@type": "Country", name: "United States" },
     ...(contact?.email ? { email: contact.email } : {}),
@@ -80,10 +85,71 @@ export function localBusinessAreaLd(
     url,
     logo: `${SITE}/icon.png`,
     image: `${SITE}/icon.png`,
-    priceRange: "$$",
+    priceRange: PRICE_RANGE,
+    telephone: PHONE,
+    email: EMAIL,
     // Ties every location page back to the one real business entity / HQ.
     provider: { "@type": "LocalBusiness", "@id": `${SITE}/#business` },
     areaServed: areaServed.length === 1 ? areaServed[0]! : areaServed,
+  };
+}
+
+/**
+ * ItemList of rentable products for location/hub pages — Product + Offer (real
+ * daily price) + AggregateRating (real review data). Gives Google structured
+ * price/rating context for the catalog each landing page displays.
+ */
+export function rentalItemListLd(
+  locale: string,
+  items: readonly {
+    slug: string;
+    name: unknown;
+    dailyRateCents: number | null;
+    ratingAvg: unknown;
+    ratingCount: number;
+    media?: { url: string }[];
+  }[],
+): Json {
+  const name = (v: unknown) =>
+    typeof v === "object" && v !== null
+      ? ((v as Record<string, string>)[locale] ??
+        (v as Record<string, string>).en ??
+        "")
+      : String(v ?? "");
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Product",
+        name: name(p.name),
+        url: `${SITE}/${locale}/rent/${p.slug}`,
+        ...(p.media?.[0]?.url ? { image: p.media[0].url } : {}),
+        brand: { "@type": "Brand", name: NAME },
+        ...(p.dailyRateCents != null
+          ? {
+              offers: {
+                "@type": "Offer",
+                price: (p.dailyRateCents / 100).toFixed(2),
+                priceCurrency: "USD",
+                availability: "https://schema.org/InStock",
+                url: `${SITE}/${locale}/rent/${p.slug}`,
+              },
+            }
+          : {}),
+        ...(Number(p.ratingAvg) > 0 && p.ratingCount > 0
+          ? {
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: Number(p.ratingAvg).toFixed(1),
+                reviewCount: p.ratingCount,
+              },
+            }
+          : {}),
+      },
+    })),
   };
 }
 

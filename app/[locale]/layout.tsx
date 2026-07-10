@@ -51,11 +51,12 @@ export const metadata: Metadata = {
     // Keyword-first, brand-free: an unknown brand in every title wastes the
     // most valuable SEO space. Pages set their own complete titles, so the
     // template is a pass-through (no automatic brand suffix).
-    default: "Water Slide Rentals & Inflatable Water Slides for Sale | USA",
+    default:
+      "Water Slide Rentals from $199/Day & Inflatable Water Slides for Sale | USA",
     template: "%s",
   },
   description:
-    "Rent or buy inflatable water slides across the USA — delivered, set up, and fully insured for birthday parties, pool parties, and events. Get a free water slide rental quote.",
+    "Rent or buy inflatable water slides across the USA from $199/day — delivered, set up, and fully insured for birthday parties, pool parties, and events. Get a free water slide rental quote.",
   openGraph: {
     type: "website",
     siteName: "Big Wave Slides",

@@ -18,7 +18,7 @@ const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 // build — telling Google all ~500 URLs "changed today" on every deploy is a
 // low-trust signal. Bump this when location/static content is meaningfully
 // revised; dynamic entries (products/posts) can carry their own dates later.
-const CONTENT_UPDATED = new Date("2026-07-06T00:00:00Z");
+const CONTENT_UPDATED = new Date("2026-07-10T00:00:00Z");
 
 // Fully-translated pages — indexed in BOTH locales (en + fr), with hreflang.
 const BILINGUAL_STATIC = [

@@ -22,9 +22,29 @@ import {
   TiktokIcon,
 } from "@/components/icons/brand";
 import { getLocalized } from "@/lib/localized";
+import { getCity } from "@/lib/locations";
 import { Container } from "@/components/ui/container";
 import { NewsletterForm } from "./newsletter-form";
 import type { NavData } from "@/server/data/navigation";
+
+// Top rental metros linked from every page — pushes internal link equity at
+// the highest-demand city landing pages (the site's proven converters) and
+// keeps them one click from anywhere. Keys are "stateSlug/citySlug" from the
+// priority set in lib/locations.
+const FOOTER_CITY_KEYS = [
+  "texas/dallas",
+  "texas/houston",
+  "texas/austin",
+  "california/los-angeles",
+  "florida/orlando",
+  "florida/miami",
+  "arizona/phoenix",
+  "georgia/atlanta",
+  "illinois/chicago",
+  "north-carolina/charlotte",
+  "tennessee/nashville",
+  "missouri/kansas-city",
+];
 
 export async function SiteFooter({
   locale,
@@ -206,6 +226,40 @@ export async function SiteFooter({
           </div>
         </div>
       </Container>
+
+      {/* Top rental cities — internal links to the highest-demand city pages. */}
+      <div className="border-t border-white/10">
+        <Container className="py-6">
+          <p className="text-xs font-bold tracking-[0.18em] text-white/50 uppercase">
+            Top rental cities
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+            {FOOTER_CITY_KEYS.map((key) => {
+              const [stateSlug, citySlug] = key.split("/") as [string, string];
+              const c = getCity(stateSlug, citySlug);
+              if (!c) return null;
+              return (
+                <li key={key}>
+                  <Link
+                    href={`/water-slide-rentals/${stateSlug}/${citySlug}`}
+                    className="text-sm text-white/60 transition-colors hover:text-white"
+                  >
+                    {c.name}, {c.state.abbr}
+                  </Link>
+                </li>
+              );
+            })}
+            <li>
+              <Link
+                href="/water-slide-rentals"
+                className="text-secondary text-sm font-semibold hover:text-white"
+              >
+                All cities →
+              </Link>
+            </li>
+          </ul>
+        </Container>
+      </div>
 
       {/* Bottom bar — copyright on one side, legal links on the other. */}
       <div className="border-t border-white/10">
