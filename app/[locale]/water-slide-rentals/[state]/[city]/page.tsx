@@ -18,6 +18,7 @@ import {
 } from "@/lib/locations";
 import { getCityContent } from "@/lib/city-content";
 import { getCityLocal } from "@/lib/city-local";
+import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -121,6 +122,17 @@ export default async function CityRentalPage({ params }: Props) {
   // cities only) — the strongest "genuinely about this city" signal.
   const local = getCityLocal(st.slug, loc.slug);
 
+  // Three featured slides woven into the write-up, picked deterministically
+  // per city so the 750+ pages don't all name the same products.
+  const seed = [...`${st.slug}/${loc.slug}`].reduce(
+    (a, c) => (a * 31 + c.charCodeAt(0)) >>> 0,
+    7,
+  );
+  const picks =
+    items.length >= 3
+      ? [0, 1, 2].map((i) => items[(seed + i * 3) % items.length]!)
+      : [];
+
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
     { icon: Sparkles, label: "Sanitized before delivery" },
@@ -156,67 +168,111 @@ export default async function CityRentalPage({ params }: Props) {
 
       <Section spacing="compact" className="pt-10">
         <Container className="max-w-[84rem]">
-          <Reveal className="max-w-3xl">
-            <p className="text-muted-foreground text-lg leading-relaxed">
-              {intro}
-            </p>
-          </Reveal>
+          {/* Two-column spread on large screens: the written copy on the
+              left, the local-area + occasion chips on the right — so the
+              write-up uses the full width instead of pooling in the center. */}
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <Reveal>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  {intro}
+                </p>
+              </Reveal>
 
-          {/* Region/season-specific paragraph — genuinely unique per state. */}
-          <Reveal className="mt-4 max-w-3xl" delay={0.05}>
-            <p className="text-muted-foreground leading-relaxed">{seasonal}</p>
-          </Reveal>
+              {/* Region/season-specific paragraph — genuinely unique per state. */}
+              <Reveal className="mt-4" delay={0.05}>
+                <p className="text-muted-foreground leading-relaxed">
+                  {seasonal}
+                </p>
+              </Reveal>
 
-          {/* Real local delivery area — unique, verifiable per-metro content. */}
-          {local ? (
-            <Reveal className="mt-4 max-w-3xl" delay={0.05}>
-              <p className="text-muted-foreground leading-relaxed">
-                We cover the greater {name} area — including{" "}
-                {local.areas.slice(0, -1).join(", ")}, and{" "}
-                {local.areas[local.areas.length - 1]} — with the same delivery,
-                professional setup, sanitizing, and full insurance on every
-                booking, wherever your {name} event takes place.
-              </p>
-            </Reveal>
-          ) : null}
+              {/* Real local delivery area — unique, verifiable per-metro content. */}
+              {local ? (
+                <Reveal className="mt-4" delay={0.05}>
+                  <p className="text-muted-foreground leading-relaxed">
+                    We cover the greater {name} area — including{" "}
+                    {local.areas.slice(0, -1).join(", ")}, and{" "}
+                    {local.areas[local.areas.length - 1]} — with the same
+                    delivery, professional setup, sanitizing, and full insurance
+                    on every booking, wherever your {name} event takes place.
+                  </p>
+                </Reveal>
+              ) : null}
 
-          {/* Neighborhoods & nearby areas we serve (local trust signal). */}
-          {local ? (
-            <Reveal className="mt-6" delay={0.05}>
-              <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-                Neighborhoods & nearby areas we serve
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {local.areas.map((a) => (
-                  <span
-                    key={a}
-                    className="border-border bg-background inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm"
-                  >
-                    <MapPin className="text-primary size-3.5" />
-                    {a}
-                  </span>
-                ))}
-              </div>
-            </Reveal>
-          ) : null}
-
-          {/* Occasions */}
-          <Reveal className="mt-6" delay={0.05}>
-            <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-              Water slides in {name} for every occasion
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {OCCASIONS.map((o) => (
-                <span
-                  key={o}
-                  className="border-border bg-background inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm capitalize"
-                >
-                  <PartyPopper className="text-primary size-3.5" />
-                  {o}
-                </span>
-              ))}
+              {/* Three concrete slides from the fleet, linked inline. */}
+              {picks.length === 3 ? (
+                <Reveal className="mt-4" delay={0.05}>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Not sure where to start? Three of the most-booked slides for{" "}
+                    {name} events right now are the{" "}
+                    <Link
+                      href={`/rent/${picks[0]!.slug}`}
+                      className="text-primary font-medium underline underline-offset-4 hover:no-underline"
+                    >
+                      {getLocalized(picks[0]!.name, locale)}
+                    </Link>
+                    , the{" "}
+                    <Link
+                      href={`/rent/${picks[1]!.slug}`}
+                      className="text-primary font-medium underline underline-offset-4 hover:no-underline"
+                    >
+                      {getLocalized(picks[1]!.name, locale)}
+                    </Link>
+                    , and the{" "}
+                    <Link
+                      href={`/rent/${picks[2]!.slug}`}
+                      className="text-primary font-medium underline underline-offset-4 hover:no-underline"
+                    >
+                      {getLocalized(picks[2]!.name, locale)}
+                    </Link>
+                    . Each product page lists sizing, space requirements, and
+                    the daily rate, so you can match a slide to your {name}{" "}
+                    backyard or venue before you request a quote.
+                  </p>
+                </Reveal>
+              ) : null}
             </div>
-          </Reveal>
+
+            <div className="lg:col-span-5">
+              {/* Neighborhoods & nearby areas we serve (local trust signal). */}
+              {local ? (
+                <Reveal delay={0.05}>
+                  <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                    Neighborhoods & nearby areas we serve
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {local.areas.map((a) => (
+                      <span
+                        key={a}
+                        className="border-border bg-background inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm"
+                      >
+                        <MapPin className="text-primary size-3.5" />
+                        {a}
+                      </span>
+                    ))}
+                  </div>
+                </Reveal>
+              ) : null}
+
+              {/* Occasions */}
+              <Reveal className={local ? "mt-8" : ""} delay={0.05}>
+                <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                  Water slides in {name} for every occasion
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {OCCASIONS.map((o) => (
+                    <span
+                      key={o}
+                      className="border-border bg-background inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm capitalize"
+                    >
+                      <PartyPopper className="text-primary size-3.5" />
+                      {o}
+                    </span>
+                  ))}
+                </div>
+              </Reveal>
+            </div>
+          </div>
 
           {/* Trust */}
           <ul className="border-border mt-8 flex flex-wrap gap-x-6 gap-y-2 border-y py-4 text-sm">
@@ -262,31 +318,39 @@ export default async function CityRentalPage({ params }: Props) {
         </Section>
       ) : null}
 
-      {/* FAQ */}
+      {/* FAQ — full-width on large screens, questions split across two
+          columns so the section spreads instead of centering in a strip. */}
       <Section spacing="compact" className="border-border border-t">
-        <Container className="max-w-3xl">
-          <SectionHeader
-            title={`Water slide rentals in ${name} — FAQ`}
-            align="center"
-          />
-          <Accordion
-            type="multiple"
-            defaultValue={["q0"]}
-            className="border-border mt-8 rounded-[var(--radius-lg)] border"
-          >
-            {faqs.map((f, i) => (
-              <AccordionItem
-                key={i}
-                value={`q${i}`}
-                className="px-4 last:border-b-0"
-              >
-                <AccordionTrigger>{f.q}</AccordionTrigger>
-                <AccordionContent>
-                  <p className="leading-relaxed">{f.a}</p>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+        <Container className="max-w-[84rem]">
+          <SectionHeader title={`Water slide rentals in ${name} — FAQ`} />
+          <div className="mt-8 grid gap-6 lg:grid-cols-2 lg:items-start">
+            {[
+              faqs.slice(0, Math.ceil(faqs.length / 2)),
+              faqs.slice(Math.ceil(faqs.length / 2)),
+            ].map((col, ci) =>
+              col.length > 0 ? (
+                <Accordion
+                  key={ci}
+                  type="multiple"
+                  defaultValue={ci === 0 ? ["q0"] : []}
+                  className="border-border rounded-[var(--radius-lg)] border"
+                >
+                  {col.map((f, i) => (
+                    <AccordionItem
+                      key={i}
+                      value={`q${i}`}
+                      className="px-4 last:border-b-0"
+                    >
+                      <AccordionTrigger>{f.q}</AccordionTrigger>
+                      <AccordionContent>
+                        <p className="leading-relaxed">{f.a}</p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              ) : null,
+            )}
+          </div>
         </Container>
       </Section>
 
