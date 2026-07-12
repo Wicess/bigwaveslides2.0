@@ -23,7 +23,10 @@
     },
     "readingMinutes": 6,
     "category": "pricing",
-    "tags": ["pricing", "rentals"],
+    "tags": [
+      "pricing",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg",
     "featured": true,
     "publishedDaysAgo": 3
@@ -52,7 +55,10 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["tips", "rentals"],
+    "tags": [
+      "tips",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 8
@@ -81,7 +87,10 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": ["parties", "tips"],
+    "tags": [
+      "parties",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 13
@@ -110,7 +119,10 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": ["tips", "rentals"],
+    "tags": [
+      "tips",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390938-cu27zd-overview-domaine-les-landes-de-gascogne-center-parcs-beauziac-france-photo01-768x575.jpg",
     "featured": false,
     "publishedDaysAgo": 18
@@ -139,7 +151,9 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["tips"],
+    "tags": [
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 23
@@ -168,7 +182,10 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": ["events", "corporate"],
+    "tags": [
+      "events",
+      "corporate"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": false,
     "publishedDaysAgo": 28
@@ -197,7 +214,9 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": ["safety"],
+    "tags": [
+      "safety"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 33
@@ -226,7 +245,10 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["rentals", "tips"],
+    "tags": [
+      "rentals",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484404870-axgpl1-aquasplash-water-world-at-shanghai-lsnow-indoor-skiing-theme-resort-shanghai-china-photo28-1-2048x1534.jpg",
     "featured": false,
     "publishedDaysAgo": 38
@@ -255,7 +277,10 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips"],
+    "tags": [
+      "rentals",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 43
@@ -284,7 +309,10 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": ["tips", "safety"],
+    "tags": [
+      "tips",
+      "safety"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484417138-3mz3g3-spinning-rapids-ride-wanda-ghuanghou-ghuanghou-china.jpg",
     "featured": false,
     "publishedDaysAgo": 48
@@ -292,7 +320,10 @@
   {
     "slug": "best-inflatable-water-slides-to-buy-2026",
     "category": "buying",
-    "tags": ["buying", "guides"],
+    "tags": [
+      "buying",
+      "guides"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708041891-ow1xnn-best-inflatable-water-slides-to-buy-2026.jpg",
     "featured": true,
     "publishedDaysAgo": 2,
@@ -321,7 +352,10 @@
   {
     "slug": "commercial-water-slide-buying-guide",
     "category": "buying",
-    "tags": ["buying", "commercial"],
+    "tags": [
+      "buying",
+      "commercial"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": false,
     "publishedDaysAgo": 5,
@@ -350,7 +384,10 @@
   {
     "slug": "residential-vs-commercial-water-slide",
     "category": "buying",
-    "tags": ["buying", "tips"],
+    "tags": [
+      "buying",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708046034-bkhz5p-residential-vs-commercial-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 9,
@@ -379,7 +416,10 @@
   {
     "slug": "clean-dry-store-inflatable-water-slide",
     "category": "ownership",
-    "tags": ["ownership", "tips"],
+    "tags": [
+      "ownership",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708052329-rosuet-clean-dry-store-inflatable-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 13,
@@ -408,7 +448,10 @@
   {
     "slug": "water-slide-rentals-churches-schools-hoas",
     "category": "events",
-    "tags": ["events", "community"],
+    "tags": [
+      "events",
+      "community"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708058232-5fv3my-water-slide-rentals-churches-schools-hoas.jpg",
     "featured": true,
     "publishedDaysAgo": 16,
@@ -437,7 +480,10 @@
   {
     "slug": "water-slide-season-state-by-state",
     "category": "planning",
-    "tags": ["planning", "seasonal"],
+    "tags": [
+      "planning",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708067810-4ohw8z-water-slide-season-state-by-state.jpg",
     "featured": false,
     "publishedDaysAgo": 20,
@@ -487,7 +533,10 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": ["safety", "tips"],
+    "tags": [
+      "safety",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 6
@@ -516,7 +565,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["guides", "tips"],
+    "tags": [
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 9
@@ -545,7 +597,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["safety", "tips"],
+    "tags": [
+      "safety",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 12
@@ -574,7 +629,10 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["planning", "tips"],
+    "tags": [
+      "planning",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 15
@@ -603,7 +661,11 @@
     },
     "readingMinutes": 6,
     "category": "buying",
-    "tags": ["buying", "commercial", "ownership"],
+    "tags": [
+      "buying",
+      "commercial",
+      "ownership"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -632,7 +694,11 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": ["events", "parties", "seasonal"],
+    "tags": [
+      "events",
+      "parties",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": true,
     "publishedDaysAgo": 2
@@ -661,7 +727,11 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": ["events", "community", "planning"],
+    "tags": [
+      "events",
+      "community",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 1
@@ -690,7 +760,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["guides", "tips"],
+    "tags": [
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -719,7 +792,11 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": ["events", "parties", "seasonal"],
+    "tags": [
+      "events",
+      "parties",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -748,7 +825,11 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["guides", "rentals", "parties"],
+    "tags": [
+      "guides",
+      "rentals",
+      "parties"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342059973-iolc7o-best-water-slide-rentals-birthday-party.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -777,7 +858,11 @@
     },
     "readingMinutes": 4,
     "category": "planning",
-    "tags": ["planning", "rentals", "guides"],
+    "tags": [
+      "planning",
+      "rentals",
+      "guides"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342061961-etbkur-how-to-rent-a-water-slide.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -806,7 +891,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips", "planning"],
+    "tags": [
+      "rentals",
+      "tips",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783427613668-f4nok9-water-slide-electricity-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -835,7 +924,11 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": ["rentals", "guides", "pricing"],
+    "tags": [
+      "rentals",
+      "guides",
+      "pricing"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783427618298-n71rqo-water-slide-included-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -864,7 +957,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips", "planning"],
+    "tags": [
+      "rentals",
+      "tips",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783666387979-7n8i3m-water-slide-generator-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -893,7 +990,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips", "planning"],
+    "tags": [
+      "rentals",
+      "tips",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783666390283-ftxlc1-water-slide-prep-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -922,7 +1023,11 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": ["tips", "rentals", "planning"],
+    "tags": [
+      "tips",
+      "rentals",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781076730-i4xag2-water-slide-yard-prep-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -951,8 +1056,78 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["rentals", "guides", "tips"],
+    "tags": [
+      "rentals",
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781079726-gq62ud-water-slide-questions-hero.jpg",
+    "featured": false,
+    "publishedDaysAgo": 0
+  },
+  {
+    "slug": "water-slide-delivery-and-pickup-times",
+    "title": {
+      "en": "What Time Are Water Slides Delivered and Picked Up?",
+      "fr": "À quelle heure les glissades d'eau sont-elles livrées et récupérées ?"
+    },
+    "excerpt": {
+      "en": "Delivered and set up before your event starts, picked up after the fun wraps — with your exact window confirmed in writing. How delivery scheduling really works, including overnight and weekend rentals.",
+      "fr": "Livrée et installée avant le début de votre événement, récupérée après la fête — avec votre fenêtre exacte confirmée par écrit. Le fonctionnement réel, y compris nuits et week-ends."
+    },
+    "metaTitle": {
+      "en": "Water Slide Delivery & Pickup Times, Explained",
+      "fr": "Heures de livraison et récupération des glissades d'eau"
+    },
+    "metaDescription": {
+      "en": "When your water slide rental arrives, how the delivery window is set, same-day vs overnight pickup, and what venues need — with your exact window confirmed in your free quote.",
+      "fr": "Quand votre glissade arrive, comment la fenêtre est fixée, récupération le jour même ou le lendemain, et exigences des lieux — fenêtre exacte confirmée dans votre devis gratuit."
+    },
+    "content": {
+      "en": "Water slides are delivered and fully set up before your event's start time — typically in a morning window on party day — and picked up after the fun wraps, in the evening or the next morning for overnight rentals. Your exact delivery and pickup window is confirmed in your quote, so there's no guesswork on the day.\n\n## When does the slide arrive?\n\nEarly enough that it's inflated, anchored, safety-checked, and ready before your first guest shows up. Setup takes about 30–60 minutes depending on the unit — a compact [Sunset Splash 16](/rent/sunset-splash-16) goes up faster than a giant like the [Blue Vortex 26](/rent/blue-vortex-26) — and we build that buffer into the schedule. When you [request your quote](/contact), tell us your party's start time and we plan the drop-off around it.\n\n## How is the delivery window set?\n\nThree things shape it: your event start time, your location on that day's delivery route, and the size of the setup. Multi-piece bookings — say a [Rainbow Fun Combo](/rent/rainbow-fun-combo) plus a [Candy Land Bouncer](/rent/candy-land-bouncer) for a double-header party — get a longer setup allowance. You'll have the confirmed window in writing before the day, and the crew coordinates directly with you on arrival.\n\n## When is the slide picked up?\n\nStandard rentals are picked up the same day, after your agreed end time — the crew handles the teardown, so you don't touch a thing. Hosting into the evening? Ask about extended hours or an overnight option so the party doesn't end at pickup time. More on that in [how long you can rent a water slide](/answers).\n\n## Do overnight and weekend rentals change the schedule?\n\nYes, in your favor. With an overnight rental the crew returns the next morning, and weekend bookings can run delivery Friday/Saturday with pickup Sunday — popular for big setups like the [Tsunami Crush 20](/rent/tsunami-crush-20) or a themed showpiece like the [Fire Dragon 18](/rent/fire-dragon-18) that anchors a whole weekend of fun. Weekend slots are the first to fill, so [book 2–4 weeks ahead](/answers) in summer.\n\n## Do I need to be home for delivery and pickup?\n\nFor delivery, yes — someone should walk the crew to the setup spot and confirm placement (here's [how to prep your yard](/blog/how-to-prepare-your-yard-for-a-water-slide-rental) beforehand). For pickup, it helps but isn't always required if the equipment is accessible; we'll agree on the plan in advance.\n\n## What about parks, schools, and venues?\n\nPublic venues often have their own access hours and permit rules, so tell us the venue when booking — we schedule around gate times and can provide the insurance certificate most venues ask for. School and church events with units like the [Jungle Safari Combo](/rent/jungle-safari-combo) or [Princess Palace Combo](/rent/princess-palace-combo) are our bread and butter; see [water slides for school events](/water-slides-for/school-events).\n\n## FAQ\n\n**Can you deliver the day before my event?**\nOften, yes — especially for weekend bookings and large setups. Ask when you request your quote and we'll confirm what's possible for your date.\n\n**What if my party runs long?**\nTell the crew or call us — where the schedule allows, we'd rather extend your window than cut the fun short. Extended hours are easiest to lock in when booked in advance.\n\n**How precise is the delivery window?**\nYou get a confirmed window in your quote, and the crew communicates on the day. We aim for ready-before-start, every time.\n\n**Is delivery really included in the price?**\nThe delivery fee structure is simple: a base fee with the first 15 miles included, then a small per-mile rate plus a pickup fee — itemized on your quote. Details in [what's included in a water slide rental](/blog/what-is-included-in-a-water-slide-rental).\n\nPlanning your timeline? Tell us your date, venue, and start time — we'll confirm your delivery window in a free, no-obligation quote. [Browse the slides](/rent) or [get your quote](/contact). Nationwide, from $199/day, [including Dallas](/water-slide-rentals/texas/dallas).",
+      "fr": "Les glissades d'eau sont livrées et entièrement installées avant le début de votre événement — généralement dans une fenêtre matinale le jour de la fête — et récupérées après la fin, en soirée ou le lendemain matin pour les locations de nuit. Votre fenêtre exacte de livraison et de récupération est confirmée dans votre devis : aucune surprise le jour J.\n\n## Quand la glissade arrive-t-elle ?\n\nAssez tôt pour être gonflée, ancrée, vérifiée et prête avant l'arrivée du premier invité. L'installation prend 30 à 60 minutes selon l'unité — une compacte [Sunset Splash 16](/rent/sunset-splash-16) se monte plus vite qu'une géante comme la [Blue Vortex 26](/rent/blue-vortex-26) — et nous intégrons cette marge à l'horaire. Lors de votre [demande de devis](/contact), indiquez l'heure de début et nous planifions la livraison en conséquence.\n\n## Comment la fenêtre de livraison est-elle fixée ?\n\nTrois facteurs : l'heure de début de votre événement, votre position sur la tournée du jour et l'ampleur de l'installation. Les réservations multi-unités — par exemple un [Rainbow Fun Combo](/rent/rainbow-fun-combo) plus un [Candy Land Bouncer](/rent/candy-land-bouncer) — reçoivent plus de temps d'installation. Vous recevez la fenêtre confirmée par écrit avant le jour J.\n\n## Quand la glissade est-elle récupérée ?\n\nLes locations standard sont récupérées le jour même, après l'heure de fin convenue — l'équipe démonte tout, vous ne touchez à rien. La fête se prolonge en soirée ? Demandez les heures prolongées ou l'option de nuit. Plus de détails dans notre [centre de réponses](/answers).\n\n## Les locations de nuit et de week-end changent-elles l'horaire ?\n\nOui, à votre avantage. Avec une location de nuit, l'équipe revient le lendemain matin ; un week-end peut aller de la livraison vendredi/samedi à la récupération dimanche — populaire pour les grandes installations comme la [Tsunami Crush 20](/rent/tsunami-crush-20) ou une pièce à thème comme la [Fire Dragon 18](/rent/fire-dragon-18). Les créneaux de week-end partent en premier : [réservez 2 à 4 semaines d'avance](/answers) l'été.\n\n## Dois-je être présent pour la livraison et la récupération ?\n\nPour la livraison, oui — quelqu'un doit montrer l'emplacement à l'équipe ([comment préparer votre terrain](/blog/how-to-prepare-your-yard-for-a-water-slide-rental)). Pour la récupération, c'est utile mais pas toujours requis si l'équipement est accessible.\n\n## Et pour les parcs, écoles et salles ?\n\nLes lieux publics ont leurs heures d'accès et leurs règles de permis : indiquez le lieu à la réservation — nous planifions autour des horaires et fournissons le certificat d'assurance souvent exigé. Les événements scolaires avec des unités comme le [Jungle Safari Combo](/rent/jungle-safari-combo) ou le [Princess Palace Combo](/rent/princess-palace-combo) sont notre spécialité ; voyez [les glissades pour événements scolaires](/water-slides-for/school-events).\n\n## FAQ\n\n**Pouvez-vous livrer la veille ?**\nSouvent, oui — surtout pour les week-ends et les grandes installations. Demandez lors du devis.\n\n**Et si ma fête se prolonge ?**\nPrévenez l'équipe ou appelez-nous — quand l'horaire le permet, nous préférons prolonger votre fenêtre que d'écourter le plaisir.\n\n**La fenêtre de livraison est-elle précise ?**\nVous recevez une fenêtre confirmée dans votre devis, et l'équipe communique le jour même. Objectif : prêt avant le début, chaque fois.\n\n**La livraison est-elle vraiment incluse ?**\nStructure simple : frais de base avec les 24 premiers kilomètres inclus, puis un petit tarif au mile et des frais de récupération — détaillés sur votre devis. Voir [ce qui est inclus](/blog/what-is-included-in-a-water-slide-rental).\n\nVous planifiez votre horaire ? Donnez-nous votre date, votre lieu et votre heure de début — fenêtre confirmée dans un devis gratuit et sans engagement. [Parcourez les glissades](/rent) ou [obtenez votre devis](/contact). Partout aux États-Unis, dès 199 $/jour, [y compris à Dallas](/water-slide-rentals/texas/dallas)."
+    },
+    "readingMinutes": 5,
+    "category": "planning",
+    "tags": [
+      "rentals",
+      "planning",
+      "tips"
+    ],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
+    "featured": false,
+    "publishedDaysAgo": 0
+  },
+  {
+    "slug": "are-water-slide-rentals-insured",
+    "title": {
+      "en": "Are Water Slide Rentals Insured? What to Ask Before You Book",
+      "fr": "Les locations de glissades d'eau sont-elles assurées ? Quoi demander"
+    },
+    "excerpt": {
+      "en": "Every Big Wave Slides rental is fully insured with a COI available on request — but not every company can say that. What liability coverage really means, who needs a certificate, and the risk of uninsured rentals.",
+      "fr": "Chaque location Big Wave Slides est entièrement assurée, certificat sur demande — mais toutes les entreprises ne peuvent pas en dire autant. Ce que couvre l'assurance et le risque des locations non assurées."
+    },
+    "metaTitle": {
+      "en": "Are Water Slide Rentals Insured? (COI & What to Ask)",
+      "fr": "Les locations de glissades d'eau sont-elles assurées ?"
+    },
+    "metaDescription": {
+      "en": "What water slide rental insurance covers, when schools and venues require a certificate of insurance, and why an uninsured rental puts the liability on you.",
+      "fr": "Ce que couvre l'assurance d'une location de glissade, quand les écoles exigent un certificat, et pourquoi une location non assurée met la responsabilité sur vous."
+    },
+    "content": {
+      "en": "Reputable water slide rental companies carry liability insurance — and every Big Wave Slides rental is fully insured, with a certificate of insurance (COI) available on request. If a company can't show proof of insurance, don't rent from them: you could be left holding the liability at your own party. Here's what insured really means and what to ask.\n\n## What does \"fully insured\" actually cover?\n\nA rental company's liability insurance protects against claims arising from the equipment and its installation — the things under the company's control. That's why professional setup matters as much as the paperwork: an insured company anchors the slide properly (stakes on grass, sandbags on hard surfaces) and safety-checks it before anyone rides, whether it's a compact [Whale Splash 16](/rent/whale-splash-16) or a two-story [Cosmic Rocket 18](/rent/cosmic-rocket-18).\n\n## What is a COI — and who needs one?\n\nA certificate of insurance is the one-page proof of the company's coverage. Schools, churches, HOAs, parks, and municipalities usually **require** one before an inflatable touches their property — often naming the venue as additional insured. If you're planning a [church event](/water-slides-for/church-events) or school fair with something like the [Superhero City Combo](/rent/superhero-city-combo), request the COI when you book; we provide it as standard.\n\n## Why uninsured rentals are a real risk\n\nCraigslist-special rentals with no insurance put everything on you. If a guest is hurt on an uninsured, badly anchored slide in your yard, the claim can land on your homeowner's policy — or on you personally. The $50 you saved is not worth it. This is question #2 in our [10 questions to ask before renting](/blog/questions-to-ask-before-renting-a-water-slide) for a reason.\n\n## Insurance is one layer — here's the rest\n\nCoverage matters most when it never gets used. The full safety stack on every Big Wave Slides rental:\n\n- **Commercial-grade units** built for public use — from the [Unicorn Dreamland Bouncer](/rent/unicorn-dreamland-bouncer) to the [Rodeo Bull Rider](/rent/rodeo-bull-rider).\n- **Professional anchoring and a safety check** at setup, every time.\n- **Sanitizing before every delivery**, not \"regularly.\"\n- **Weather rules** — inflatables shut down in sustained high winds or storms; see [how windy is too windy](/answers).\n- **Clear rider rules** — capacity, height, and age guidance per unit, plus adult supervision.\n\n## Does my own event need extra insurance?\n\nUsually not for a backyard party — the company's coverage plus adult supervision is the standard setup. Larger public events sometimes buy separate special-event insurance; if your venue asks for it, we're happy to coordinate paperwork alongside our COI. Corporate planners booking an [Emerald Palm 18](/rent/emerald-palm-18) or [Tropical Paradise 18](/rent/tropical-paradise-18) for a company day: send us the venue's requirements and we'll sort it.\n\n## FAQ\n\n**Can I see proof of insurance before booking?**\nYes — ask and we'll provide the certificate. Any company that stalls on this question is telling you everything you need to know.\n\n**Does insurance cover misuse of the slide?**\nNo policy covers reckless misuse — that's why rider rules and adult supervision are part of every rental, and why the crew reviews them at setup.\n\n**My venue wants to be named as additional insured. Possible?**\nThat's a routine request for schools, parks, and municipalities — mention it in your [quote request](/contact) and we'll handle it.\n\n**Are cheap uninsured rentals ever okay?**\nFor your own party, with your own guests, on your own property? No. The downside is unbounded; the saving is pocket change.\n\nBook with the paperwork done right: every rental delivered, professionally set up, sanitized, and fully insured — from $199/day, nationwide. [Browse the slides](/rent) or [request your free quote](/contact) and ask us for the COI while you're at it.",
+      "fr": "Les entreprises sérieuses de location de glissades d'eau détiennent une assurance responsabilité — et chaque location Big Wave Slides est entièrement assurée, avec certificat d'assurance disponible sur demande. Si une entreprise ne peut pas prouver son assurance, ne louez pas chez elle : vous pourriez porter seul la responsabilité lors de votre propre fête. Voici ce que « assuré » veut vraiment dire.\n\n## Que couvre « entièrement assuré » ?\n\nL'assurance responsabilité d'un loueur protège contre les réclamations liées à l'équipement et à son installation — ce qui relève de l'entreprise. C'est pourquoi l'installation professionnelle compte autant que les papiers : une entreprise assurée ancre correctement la glissade (piquets sur gazon, sacs de sable sur surface dure) et fait une vérification de sécurité, qu'il s'agisse d'une compacte [Whale Splash 16](/rent/whale-splash-16) ou d'une [Cosmic Rocket 18](/rent/cosmic-rocket-18) de deux étages.\n\n## Qu'est-ce qu'un certificat d'assurance — et qui en a besoin ?\n\nC'est la preuve d'une page de la couverture de l'entreprise. Écoles, églises, associations, parcs et municipalités l'**exigent** généralement avant qu'un gonflable touche leur terrain. Pour un [événement d'église](/water-slides-for/church-events) ou une kermesse avec un [Superhero City Combo](/rent/superhero-city-combo), demandez le certificat à la réservation ; nous le fournissons d'office.\n\n## Pourquoi les locations non assurées sont un vrai risque\n\nLes locations à rabais sans assurance mettent tout sur vos épaules. Si un invité se blesse sur une glissade non assurée et mal ancrée dans votre cour, la réclamation peut atterrir sur votre assurance habitation — ou sur vous. Les 50 $ économisés n'en valent pas la peine. C'est la question n° 2 de nos [10 questions à poser avant de louer](/blog/questions-to-ask-before-renting-a-water-slide).\n\n## L'assurance est une couche — voici le reste\n\n- **Unités de qualité commerciale** — du [Unicorn Dreamland Bouncer](/rent/unicorn-dreamland-bouncer) au [Rodeo Bull Rider](/rent/rodeo-bull-rider).\n- **Ancrage professionnel et vérification de sécurité** à chaque installation.\n- **Désinfection avant chaque livraison**, pas « régulièrement ».\n- **Règles météo** — arrêt en cas de vents soutenus ou d'orage ; voir notre [centre de réponses](/answers).\n- **Règles d'utilisation claires** — capacité, taille et âge par unité, plus surveillance adulte.\n\n## Mon événement a-t-il besoin d'une assurance supplémentaire ?\n\nRarement pour une fête à la maison. Les grands événements publics prennent parfois une assurance événementielle distincte ; si votre lieu l'exige, nous coordonnons volontiers les documents avec notre certificat. Planificateurs corporatifs réservant une [Emerald Palm 18](/rent/emerald-palm-18) ou une [Tropical Paradise 18](/rent/tropical-paradise-18) : envoyez-nous les exigences du lieu.\n\n## FAQ\n\n**Puis-je voir la preuve d'assurance avant de réserver ?**\nOui — demandez et nous fournissons le certificat. Une entreprise qui hésite vous dit tout.\n\n**L'assurance couvre-t-elle la mauvaise utilisation ?**\nAucune police ne couvre l'imprudence — d'où les règles d'utilisation et la surveillance adulte, revues par l'équipe à l'installation.\n\n**Mon lieu veut être désigné assuré additionnel. Possible ?**\nDemande routinière pour écoles, parcs et municipalités — mentionnez-le dans votre [demande de devis](/contact).\n\n**Les locations non assurées pas chères, jamais acceptables ?**\nPour votre fête, vos invités, votre propriété ? Non. Le risque est illimité ; l'économie, dérisoire.\n\nRéservez avec les papiers en règle : chaque location livrée, installée, désinfectée et entièrement assurée — dès 199 $/jour, partout aux États-Unis. [Parcourez les glissades](/rent) ou [demandez votre devis gratuit](/contact) — et demandez le certificat par la même occasion."
+    },
+    "readingMinutes": 5,
+    "category": "safety",
+    "tags": [
+      "safety",
+      "rentals",
+      "guides"
+    ],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg",
     "featured": false,
     "publishedDaysAgo": 0
   }
