@@ -36,11 +36,17 @@ const GROUPS = [
   {
     label: "Commerce",
     items: [
-      { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+      {
+        href: "/admin",
+        label: "Dashboard",
+        icon: LayoutDashboard,
+        exact: true,
+      },
       { href: "/admin/products", label: "Products", icon: Package },
       { href: "/admin/inventory", label: "Inventory", icon: Boxes },
       { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
       { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+      { href: "/admin/analytics/visitors", label: "Visitors", icon: Users },
       { href: "/admin/quotes", label: "Quotes", icon: FileText },
     ],
   },
@@ -49,7 +55,11 @@ const GROUPS = [
     items: [
       { href: "/admin/customers", label: "Customers", icon: Users },
       { href: "/admin/reviews", label: "Reviews", icon: Star },
-      { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
+      {
+        href: "/admin/testimonials",
+        label: "Testimonials",
+        icon: MessageSquareQuote,
+      },
       { href: "/admin/contacts", label: "Contacts", icon: Inbox },
       { href: "/admin/newsletter", label: "Newsletter", icon: Mail },
     ],
@@ -64,8 +74,12 @@ const GROUPS = [
   {
     label: "Insights",
     items: [
-      { href: "/admin/analytics", label: "Analytics", icon: BarChart3, exact: true },
-      { href: "/admin/analytics/visitors", label: "Visitors", icon: Users },
+      {
+        href: "/admin/analytics",
+        label: "Analytics",
+        icon: BarChart3,
+        exact: true,
+      },
     ],
   },
   {
@@ -93,13 +107,15 @@ function NavBody({
   const [pending, startTransition] = useTransition();
 
   const active = (href: string, exact?: boolean) =>
-    exact ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
+    exact
+      ? pathname === href
+      : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <div className="flex h-full flex-col bg-[var(--admin-sidebar)]">
       {/* Brand */}
-      <div className="flex items-center gap-2.5 px-6 pb-2 pt-6">
-        <span className="grid size-9 place-items-center rounded-xl bg-[var(--gradient-wave,#e8741b)] [background:var(--gradient-wave)] shadow-[var(--shadow-glow)]">
+      <div className="flex items-center gap-2.5 px-6 pt-6 pb-2">
+        <span className="grid size-9 place-items-center rounded-xl bg-[var(--gradient-wave,#e8741b)] shadow-[var(--shadow-glow)] [background:var(--gradient-wave)]">
           <NextImage
             src="/logo.png"
             alt="Big Wave Slides"
@@ -108,9 +124,9 @@ function NavBody({
             className="h-6 w-auto brightness-0 invert"
           />
         </span>
-        <span className="font-display text-base font-bold tracking-tight text-foreground">
+        <span className="font-display text-foreground text-base font-bold tracking-tight">
           Big Wave
-          <span className="ml-1 rounded-md bg-primary-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+          <span className="bg-primary-50 text-primary ml-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase">
             Admin
           </span>
         </span>
@@ -119,13 +135,16 @@ function NavBody({
       <nav className="admin-noscrollbar flex-1 space-y-6 overflow-y-auto px-4 py-5">
         {GROUPS.map((group) => (
           <div key={group.label}>
-            <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70">
+            <p className="text-muted-foreground/70 px-3 pb-2 text-[10px] font-bold tracking-[0.14em] uppercase">
               {group.label}
             </p>
             <div className="space-y-1">
               {group.items.map((item) => {
                 const Icon = item.icon;
-                const isActive = active(item.href, "exact" in item ? item.exact : false);
+                const isActive = active(
+                  item.href,
+                  "exact" in item ? item.exact : false,
+                );
                 return (
                   <Link
                     key={item.href}
@@ -143,14 +162,16 @@ function NavBody({
                     <span
                       aria-hidden
                       className={cn(
-                        "absolute -left-1 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-white transition-all duration-300",
+                        "absolute top-1/2 -left-1 h-5 w-1 -translate-y-1/2 rounded-full bg-white transition-all duration-300",
                         isActive ? "opacity-90" : "opacity-0",
                       )}
                     />
                     <Icon
                       className={cn(
                         "size-[18px] shrink-0 transition-transform duration-300 group-hover:scale-110",
-                        isActive ? "text-white" : "text-muted-foreground group-hover:text-primary",
+                        isActive
+                          ? "text-white"
+                          : "text-muted-foreground group-hover:text-primary",
                       )}
                     />
                     {item.label}
@@ -168,36 +189,43 @@ function NavBody({
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="admin-lift block overflow-hidden rounded-2xl bg-primary-50 p-4"
+          className="admin-lift bg-primary-50 block overflow-hidden rounded-2xl p-4"
         >
-          <p className="text-sm font-bold text-primary-800">View storefront</p>
-          <p className="mt-0.5 text-xs leading-relaxed text-primary-700/80">
+          <p className="text-primary-800 text-sm font-bold">View storefront</p>
+          <p className="text-primary-700/80 mt-0.5 text-xs leading-relaxed">
             Open the live Big Wave Slides site in a new tab.
           </p>
-          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-primary shadow-sm">
+          <span className="text-primary mt-3 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-bold shadow-sm">
             Open site <ArrowUpRight className="size-3.5" />
           </span>
         </Link>
       </div>
 
       {/* User + sign out */}
-      <div className="border-t border-border/70 p-3">
-        <div className="flex items-center gap-3 rounded-2xl bg-muted/60 px-3 py-2.5">
+      <div className="border-border/70 border-t p-3">
+        <div className="bg-muted/60 flex items-center gap-3 rounded-2xl px-3 py-2.5">
           <div className="grid size-9 shrink-0 place-items-center rounded-full text-sm font-bold text-white [background:var(--gradient-wave)]">
             {name.slice(0, 1).toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold leading-tight text-foreground">{name}</p>
-            <p className="truncate text-xs text-muted-foreground">{role}</p>
+            <p className="text-foreground truncate text-sm leading-tight font-semibold">
+              {name}
+            </p>
+            <p className="text-muted-foreground truncate text-xs">{role}</p>
           </div>
           <button
             type="button"
             disabled={pending}
             aria-label="Sign out"
             onClick={() =>
-              startTransition(() => void adminLogout().then(() => location.assign("/admin/login")))
+              startTransition(
+                () =>
+                  void adminLogout().then(() =>
+                    location.assign("/admin/login"),
+                  ),
+              )
             }
-            className="grid size-8 shrink-0 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-white hover:text-red-600 disabled:opacity-50"
+            className="text-muted-foreground grid size-8 shrink-0 place-items-center rounded-lg transition-colors hover:bg-white hover:text-red-600 disabled:opacity-50"
           >
             <LogOut className="size-4" />
           </button>
@@ -212,7 +240,9 @@ function useGreeting() {
   const [greeting, setGreeting] = useState("Welcome back");
   useEffect(() => {
     const h = new Date().getHours();
-    setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
+    setGreeting(
+      h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening",
+    );
   }, []);
   return greeting;
 }
@@ -230,30 +260,34 @@ function TopBar({
 
   return (
     <header className="admin-rise sticky top-0 z-30 flex items-center gap-3 px-4 pt-4 sm:px-6 lg:px-8">
-      <div className="flex w-full items-center gap-3 rounded-[var(--radius-lg)] border border-border/70 bg-[var(--admin-card)]/80 px-3 py-2.5 shadow-[var(--shadow-soft)] backdrop-blur-md sm:px-4">
+      <div className="border-border/70 flex w-full items-center gap-3 rounded-[var(--radius-lg)] border bg-[var(--admin-card)]/80 px-3 py-2.5 shadow-[var(--shadow-soft)] backdrop-blur-md sm:px-4">
         {/* Mobile menu */}
         <button
           type="button"
           onClick={onOpenMenu}
           aria-label="Open menu"
-          className="grid size-9 shrink-0 place-items-center rounded-xl border border-border text-foreground transition-colors hover:bg-muted lg:hidden"
+          className="border-border text-foreground hover:bg-muted grid size-9 shrink-0 place-items-center rounded-xl border transition-colors lg:hidden"
         >
           <Menu className="size-5" />
         </button>
 
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-medium text-muted-foreground">{greeting},</p>
-          <p className="truncate text-sm font-bold text-foreground">{first} 👋</p>
+          <p className="text-muted-foreground text-[11px] font-medium">
+            {greeting},
+          </p>
+          <p className="text-foreground truncate text-sm font-bold">
+            {first} 👋
+          </p>
         </div>
 
         {/* Search (desktop) */}
         <div className="relative hidden items-center md:flex">
-          <Search className="pointer-events-none absolute left-3 size-4 text-muted-foreground" />
+          <Search className="text-muted-foreground pointer-events-none absolute left-3 size-4" />
           <input
             type="search"
             aria-label="Search"
             placeholder="Search…"
-            className="h-10 w-48 rounded-full border border-border bg-muted/50 pl-9 pr-4 text-sm text-foreground outline-none transition-all duration-300 placeholder:text-muted-foreground focus:w-64 focus:border-primary/40 focus:bg-white focus:ring-2 focus:ring-primary/15 lg:w-56"
+            className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:border-primary/40 focus:ring-primary/15 h-10 w-48 rounded-full border pr-4 pl-9 text-sm transition-all duration-300 outline-none focus:w-64 focus:bg-white focus:ring-2 lg:w-56"
           />
         </div>
 
@@ -261,10 +295,10 @@ function TopBar({
         <Link
           href="/admin/activity"
           aria-label="Activity & notifications"
-          className="relative grid size-10 shrink-0 place-items-center rounded-full border border-border bg-white text-foreground/70 transition-all duration-300 hover:border-primary/40 hover:text-primary"
+          className="border-border text-foreground/70 hover:border-primary/40 hover:text-primary relative grid size-10 shrink-0 place-items-center rounded-full border bg-white transition-all duration-300"
         >
           <Bell className="size-[18px]" />
-          <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-primary ring-2 ring-white" />
+          <span className="bg-primary absolute top-2.5 right-2.5 size-2 rounded-full ring-2 ring-white" />
         </Link>
 
         {/* Avatar */}
@@ -312,7 +346,7 @@ export function AdminShell({
     <div className="h-dvh overflow-hidden bg-[var(--admin-canvas)] lg:p-4">
       <div className="flex h-full overflow-hidden bg-[var(--admin-panel)] lg:rounded-[2rem] lg:shadow-[0_40px_90px_-40px_rgba(0,0,0,0.65)]">
         {/* Desktop nav rail — fixed full-height; only the content column scrolls. */}
-        <aside className="hidden h-full w-[268px] shrink-0 border-r border-border/70 lg:block">
+        <aside className="border-border/70 hidden h-full w-[268px] shrink-0 border-r lg:block">
           <NavBody name={name} role={role} />
         </aside>
 
@@ -341,19 +375,25 @@ export function AdminShell({
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="absolute right-3 top-5 z-10 grid size-9 place-items-center rounded-lg text-muted-foreground hover:bg-muted"
+              className="text-muted-foreground hover:bg-muted absolute top-5 right-3 z-10 grid size-9 place-items-center rounded-lg"
             >
               <X className="size-5" />
             </button>
-            <NavBody name={name} role={role} onNavigate={() => setOpen(false)} />
+            <NavBody
+              name={name}
+              role={role}
+              onNavigate={() => setOpen(false)}
+            />
           </div>
         </div>
 
         {/* Content column — the only scroll container, fills the full width */}
         <div className="flex h-full min-w-0 flex-1 flex-col">
           <TopBar name={name} onOpenMenu={() => setOpen(true)} />
-          <main className="admin-scroll w-full flex-1 overflow-y-auto px-4 pb-6 pt-4 sm:px-6 lg:px-8 xl:px-10">
-            <div className="mx-auto h-full w-full max-w-[1700px]">{children}</div>
+          <main className="admin-scroll w-full flex-1 overflow-y-auto px-4 pt-4 pb-6 sm:px-6 lg:px-8 xl:px-10">
+            <div className="mx-auto h-full w-full max-w-[1700px]">
+              {children}
+            </div>
           </main>
         </div>
       </div>
