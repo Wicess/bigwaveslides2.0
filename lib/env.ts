@@ -72,6 +72,13 @@ const EnvSchema = z.object({
   WHATSAPP_PHONE_NUMBER_ID: z.string().optional(),
   WHATSAPP_VERIFY_TOKEN: z.string().optional(),
 
+  // ntfy push notifications (admin order alerts to the owner's phone).
+  // NTFY_TOPIC must be long & unguessable — ntfy.sh topics are public to
+  // anyone who knows the name. SERVER/TOKEN only for self-hosted servers.
+  NTFY_TOPIC: z.string().optional(),
+  NTFY_SERVER: z.string().url().optional(),
+  NTFY_TOKEN: z.string().optional(),
+
   // Embeddings for AI search (Phase 9)
   EMBEDDINGS_API_KEY: z.string().optional(),
 

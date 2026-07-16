@@ -161,7 +161,7 @@ export async function createOrderRequest(
         locale: data.locale,
         items: { create: items },
       },
-      select: { orderNumber: true },
+      select: { id: true, orderNumber: true },
     });
 
     // Mark cart converted and drop the session cookie.
@@ -173,6 +173,7 @@ export async function createOrderRequest(
 
     await notifyOrderRequest({
       orderNumber: order.orderNumber,
+      orderId: order.id,
       name: data.name,
       email: data.email,
       phone: data.phone,

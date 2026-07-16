@@ -9,6 +9,7 @@ import {
 import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { formatPrice, formatDate } from "@/lib/format";
 import { notifyAdminWhatsApp } from "@/lib/whatsapp";
+import { notifyAdminNtfy } from "@/lib/ntfy";
 import { generateQuotePdf, type QuotePdfInput } from "@/lib/pdf/quote-pdf";
 import { env } from "@/lib/env";
 
@@ -50,6 +51,8 @@ async function buildQuoteAttachment(
 
 export type OrderEmailInput = {
   orderNumber: string;
+  /** DB id — used to deep-link the admin push notification to this order. */
+  orderId?: string;
   name: string;
   email: string;
   phone?: string;
@@ -143,12 +146,32 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
   await notifyAdminWhatsApp(
     `🛒 New order ${o.orderNumber} from ${o.name} — ${formatPrice(o.totalCents, o.locale)}`,
   );
+  // Push to the owner's phone; tapping opens this order in the admin panel.
+  await notifyAdminNtfy({
+    title: `New order ${o.orderNumber} — ${formatPrice(o.totalCents, o.locale)}`,
+    message: [
+      `${o.name} · ${o.phone || o.email}`,
+      ...o.items.map((i) =>
+        i.mode === "RENT"
+          ? `${i.name} — ${i.quantity} ${i.quantity === 1 ? "day" : "days"}`
+          : `${i.quantity}× ${i.name}`,
+      ),
+      "Tap to open the order in admin.",
+    ].join("\n"),
+    clickUrl: siteUrl(
+      o.orderId ? `/admin/orders/${o.orderId}` : "/admin/orders",
+    ),
+    tags: ["shopping_cart", "ocean"],
+    priority: 4,
+  });
 }
 
 /* ───────────────── Bookings ───────────────── */
 
 export type BookingEmailInput = {
   bookingNumber: string;
+  /** DB id — used to deep-link the admin push notification to this booking. */
+  bookingId?: string;
   contractNumber?: string;
   name: string;
   email: string;
@@ -267,6 +290,23 @@ export async function notifyBookingRequest(
   await notifyAdminWhatsApp(
     `📅 New booking ${b.bookingNumber} from ${b.name} — ${datesLabel}`,
   );
+  // Push to the owner's phone; tapping opens this booking in the admin panel.
+  await notifyAdminNtfy({
+    title: `New booking ${b.bookingNumber} — ${formatPrice(b.totalCents, b.locale)}`,
+    message: [
+      `${b.name} · ${b.phone || b.email}`,
+      datesLabel,
+      ...b.items.map(
+        (i) => `${i.name} — ${i.days} ${i.days === 1 ? "day" : "days"}`,
+      ),
+      "Tap to open the booking in admin.",
+    ].join("\n"),
+    clickUrl: siteUrl(
+      b.bookingId ? `/admin/bookings/${b.bookingId}` : "/admin/bookings",
+    ),
+    tags: ["calendar", "ocean"],
+    priority: 4,
+  });
 }
 
 /* ───────────────── Quotes ───────────────── */

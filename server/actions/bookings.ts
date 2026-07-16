@@ -129,6 +129,7 @@ export async function createBookingRequest(
         },
       },
       select: {
+        id: true,
         bookingNumber: true,
         contract: { select: { contractNumber: true } },
       },
@@ -136,6 +137,7 @@ export async function createBookingRequest(
 
     await notifyBookingRequest({
       bookingNumber: created.bookingNumber,
+      bookingId: created.id,
       contractNumber: created.contract?.contractNumber,
       name: d.name,
       email: d.email,
