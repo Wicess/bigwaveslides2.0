@@ -174,6 +174,7 @@ export async function createOrderRequest(
     await notifyOrderRequest({
       orderNumber: order.orderNumber,
       orderId: order.id,
+      geo: orderGeo,
       name: data.name,
       email: data.email,
       phone: data.phone,

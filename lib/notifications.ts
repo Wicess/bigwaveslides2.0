@@ -53,6 +53,12 @@ export type OrderEmailInput = {
   orderNumber: string;
   /** DB id — used to deep-link the admin push notification to this order. */
   orderId?: string;
+  /** Geo the order was placed from (IP-resolved at checkout). */
+  geo?: {
+    city?: string | null;
+    region?: string | null;
+    country?: string | null;
+  };
   name: string;
   email: string;
   phone?: string;
@@ -147,10 +153,15 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     `🛒 New order ${o.orderNumber} from ${o.name} — ${formatPrice(o.totalCents, o.locale)}`,
   );
   // Push to the owner's phone; tapping opens this order in the admin panel.
+  const placedFrom = [o.geo?.city, o.geo?.region, o.geo?.country]
+    .filter(Boolean)
+    .join(", ");
   await notifyAdminNtfy({
     title: `New order ${o.orderNumber} — ${formatPrice(o.totalCents, o.locale)}`,
     message: [
-      `${o.name} · ${o.phone || o.email}`,
+      o.name,
+      `📞 ${o.phone || "no phone"} · ✉️ ${o.email}`,
+      ...(placedFrom ? [`📍 Placed from ${placedFrom}`] : []),
       ...o.items.map((i) =>
         i.mode === "RENT"
           ? `${i.name} — ${i.quantity} ${i.quantity === 1 ? "day" : "days"}`
@@ -294,7 +305,9 @@ export async function notifyBookingRequest(
   await notifyAdminNtfy({
     title: `New booking ${b.bookingNumber} — ${formatPrice(b.totalCents, b.locale)}`,
     message: [
-      `${b.name} · ${b.phone || b.email}`,
+      b.name,
+      `📞 ${b.phone || "no phone"} · ✉️ ${b.email}`,
+      ...(b.address ? [`📍 ${b.address}`] : []),
       datesLabel,
       ...b.items.map(
         (i) => `${i.name} — ${i.days} ${i.days === 1 ? "day" : "days"}`,
