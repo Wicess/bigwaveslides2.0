@@ -59,6 +59,7 @@ export async function submitContact(
     await notifyContact({
       name,
       email,
+      phone: phone || undefined,
       subject: subject || undefined,
       message,
     });

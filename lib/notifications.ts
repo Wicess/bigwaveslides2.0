@@ -360,6 +360,18 @@ export async function notifyQuoteRequest(q: {
       }),
     });
   }
+  // Push to the owner's phone; tapping opens the quotes list in admin.
+  await notifyAdminNtfy({
+    title: `New quote request ${q.quoteNumber}`,
+    message: [
+      q.name,
+      `✉️ ${q.email}`,
+      "Tap to open quotes in admin.",
+    ].join("\n"),
+    clickUrl: siteUrl("/admin/quotes"),
+    tags: ["memo", "ocean"],
+    priority: 4,
+  });
 }
 
 /* ───────────────── Contact ───────────────── */
@@ -367,6 +379,7 @@ export async function notifyQuoteRequest(q: {
 export async function notifyContact(c: {
   name: string;
   email: string;
+  phone?: string;
   subject?: string;
   message: string;
 }): Promise<void> {
@@ -414,6 +427,18 @@ export async function notifyContact(c: {
       }),
     });
   }
+  // Push to the owner's phone; tapping opens the inquiries list in admin.
+  await notifyAdminNtfy({
+    title: `New message — ${c.name}${c.subject ? `: ${c.subject}` : ""}`,
+    message: [
+      `📞 ${c.phone || "no phone"} · ✉️ ${c.email}`,
+      c.message.length > 300 ? `${c.message.slice(0, 300)}…` : c.message,
+      "Tap to open messages in admin.",
+    ].join("\n"),
+    clickUrl: siteUrl("/admin/contacts"),
+    tags: ["envelope", "ocean"],
+    priority: 4,
+  });
 }
 
 /* ───────────────── Status updates (admin-triggered) ───────────────── */
