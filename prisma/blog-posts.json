@@ -23,10 +23,7 @@
     },
     "readingMinutes": 6,
     "category": "pricing",
-    "tags": [
-      "pricing",
-      "rentals"
-    ],
+    "tags": ["pricing", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg",
     "featured": true,
     "publishedDaysAgo": 3
@@ -55,10 +52,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "tips",
-      "rentals"
-    ],
+    "tags": ["tips", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 8
@@ -87,10 +81,7 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": [
-      "parties",
-      "tips"
-    ],
+    "tags": ["parties", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 13
@@ -119,10 +110,7 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": [
-      "tips",
-      "rentals"
-    ],
+    "tags": ["tips", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390938-cu27zd-overview-domaine-les-landes-de-gascogne-center-parcs-beauziac-france-photo01-768x575.jpg",
     "featured": false,
     "publishedDaysAgo": 18
@@ -151,9 +139,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "tips"
-    ],
+    "tags": ["tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 23
@@ -182,10 +168,7 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": [
-      "events",
-      "corporate"
-    ],
+    "tags": ["events", "corporate"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": false,
     "publishedDaysAgo": 28
@@ -214,9 +197,7 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": [
-      "safety"
-    ],
+    "tags": ["safety"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 33
@@ -245,10 +226,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "tips"
-    ],
+    "tags": ["rentals", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484404870-axgpl1-aquasplash-water-world-at-shanghai-lsnow-indoor-skiing-theme-resort-shanghai-china-photo28-1-2048x1534.jpg",
     "featured": false,
     "publishedDaysAgo": 38
@@ -277,10 +255,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips"
-    ],
+    "tags": ["rentals", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 43
@@ -309,10 +284,7 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": [
-      "tips",
-      "safety"
-    ],
+    "tags": ["tips", "safety"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484417138-3mz3g3-spinning-rapids-ride-wanda-ghuanghou-ghuanghou-china.jpg",
     "featured": false,
     "publishedDaysAgo": 48
@@ -320,10 +292,7 @@
   {
     "slug": "best-inflatable-water-slides-to-buy-2026",
     "category": "buying",
-    "tags": [
-      "buying",
-      "guides"
-    ],
+    "tags": ["buying", "guides"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708041891-ow1xnn-best-inflatable-water-slides-to-buy-2026.jpg",
     "featured": true,
     "publishedDaysAgo": 2,
@@ -352,10 +321,7 @@
   {
     "slug": "commercial-water-slide-buying-guide",
     "category": "buying",
-    "tags": [
-      "buying",
-      "commercial"
-    ],
+    "tags": ["buying", "commercial"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": false,
     "publishedDaysAgo": 5,
@@ -384,10 +350,7 @@
   {
     "slug": "residential-vs-commercial-water-slide",
     "category": "buying",
-    "tags": [
-      "buying",
-      "tips"
-    ],
+    "tags": ["buying", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708046034-bkhz5p-residential-vs-commercial-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 9,
@@ -416,10 +379,7 @@
   {
     "slug": "clean-dry-store-inflatable-water-slide",
     "category": "ownership",
-    "tags": [
-      "ownership",
-      "tips"
-    ],
+    "tags": ["ownership", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708052329-rosuet-clean-dry-store-inflatable-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 13,
@@ -448,10 +408,7 @@
   {
     "slug": "water-slide-rentals-churches-schools-hoas",
     "category": "events",
-    "tags": [
-      "events",
-      "community"
-    ],
+    "tags": ["events", "community"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708058232-5fv3my-water-slide-rentals-churches-schools-hoas.jpg",
     "featured": true,
     "publishedDaysAgo": 16,
@@ -480,10 +437,7 @@
   {
     "slug": "water-slide-season-state-by-state",
     "category": "planning",
-    "tags": [
-      "planning",
-      "seasonal"
-    ],
+    "tags": ["planning", "seasonal"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708067810-4ohw8z-water-slide-season-state-by-state.jpg",
     "featured": false,
     "publishedDaysAgo": 20,
@@ -533,10 +487,7 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": [
-      "safety",
-      "tips"
-    ],
+    "tags": ["safety", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 6
@@ -565,10 +516,7 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": [
-      "guides",
-      "tips"
-    ],
+    "tags": ["guides", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 9
@@ -597,10 +545,7 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": [
-      "safety",
-      "tips"
-    ],
+    "tags": ["safety", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 12
@@ -629,10 +574,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "planning",
-      "tips"
-    ],
+    "tags": ["planning", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 15
@@ -661,11 +603,7 @@
     },
     "readingMinutes": 6,
     "category": "buying",
-    "tags": [
-      "buying",
-      "commercial",
-      "ownership"
-    ],
+    "tags": ["buying", "commercial", "ownership"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -694,11 +632,7 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": [
-      "events",
-      "parties",
-      "seasonal"
-    ],
+    "tags": ["events", "parties", "seasonal"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": true,
     "publishedDaysAgo": 2
@@ -727,11 +661,7 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": [
-      "events",
-      "community",
-      "planning"
-    ],
+    "tags": ["events", "community", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 1
@@ -760,10 +690,7 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": [
-      "guides",
-      "tips"
-    ],
+    "tags": ["guides", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -792,11 +719,7 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": [
-      "events",
-      "parties",
-      "seasonal"
-    ],
+    "tags": ["events", "parties", "seasonal"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -825,11 +748,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "guides",
-      "rentals",
-      "parties"
-    ],
+    "tags": ["guides", "rentals", "parties"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342059973-iolc7o-best-water-slide-rentals-birthday-party.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -858,11 +777,7 @@
     },
     "readingMinutes": 4,
     "category": "planning",
-    "tags": [
-      "planning",
-      "rentals",
-      "guides"
-    ],
+    "tags": ["planning", "rentals", "guides"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342061961-etbkur-how-to-rent-a-water-slide.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -891,11 +806,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips",
-      "planning"
-    ],
+    "tags": ["rentals", "tips", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783427613668-f4nok9-water-slide-electricity-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -924,11 +835,7 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "guides",
-      "pricing"
-    ],
+    "tags": ["rentals", "guides", "pricing"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783427618298-n71rqo-water-slide-included-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -957,11 +864,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips",
-      "planning"
-    ],
+    "tags": ["rentals", "tips", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783666387979-7n8i3m-water-slide-generator-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -990,11 +893,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips",
-      "planning"
-    ],
+    "tags": ["rentals", "tips", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783666390283-ftxlc1-water-slide-prep-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1023,11 +922,7 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": [
-      "tips",
-      "rentals",
-      "planning"
-    ],
+    "tags": ["tips", "rentals", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781076730-i4xag2-water-slide-yard-prep-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1056,11 +951,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "guides",
-      "tips"
-    ],
+    "tags": ["rentals", "guides", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781079726-gq62ud-water-slide-questions-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1089,11 +980,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "planning",
-      "tips"
-    ],
+    "tags": ["rentals", "planning", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783881001848-cbqsjh-water-slide-delivery-times-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1122,11 +1009,7 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": [
-      "safety",
-      "rentals",
-      "guides"
-    ],
+    "tags": ["safety", "rentals", "guides"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783881003752-xn2tdw-water-slide-insured-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1155,11 +1038,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "tips",
-      "planning",
-      "rentals"
-    ],
+    "tags": ["tips", "planning", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783967006135-py0t6k-water-slide-small-backyard-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1188,12 +1067,66 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "guides",
-      "tips"
-    ],
+    "tags": ["rentals", "guides", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783967008143-pqve0f-water-slide-setup-time-hero.jpg",
+    "featured": false,
+    "publishedDaysAgo": 0
+  },
+  {
+    "slug": "what-size-water-slide-should-you-rent",
+    "title": {
+      "en": "What Size Water Slide Should You Rent for Your Guest Count?",
+      "fr": "Quelle taille de toboggan aquatique louer selon le nombre d'invités ?"
+    },
+    "excerpt": {
+      "en": "Compact, 18 ft, racer, or giant? Match your water slide rental to your guest count and ages with our size chart — plus the exact space each size needs in your yard.",
+      "fr": "Compact, 18 pi, double voie ou géant ? Associez votre toboggan au nombre d'invités et aux âges grâce à notre guide des tailles — avec l'espace requis pour chaque format."
+    },
+    "metaTitle": {
+      "en": "What Size Water Slide Should You Rent? (Guest Count Guide)",
+      "fr": "Quelle taille de toboggan aquatique louer ? (Guide par invités)"
+    },
+    "metaDescription": {
+      "en": "Up to 10 kids: compact 13–16 ft. 10–20 guests: 18 ft. 20–40: two-lane racer. 40+: go giant or add a combo. Size your water slide rental right — from $199/day, delivered & insured.",
+      "fr": "Jusqu'à 10 enfants : compact. 10–20 invités : 18 pi. 20–40 : double voie. 40+ : géant ou combo. Choisissez la bonne taille de toboggan — dès 199 $/jour, livré et assuré."
+    },
+    "content": {
+      "en": "Match the slide to your headcount: for up to 10 kids a compact 13–16 ft slide is plenty, 10–20 guests fit an 18 ft slide comfortably, 20–40 guests need a two-lane racer or a 20 ft+ slide, and for 40+ guests go giant (22–28 ft) or add a combo unit. Rentals start at $199/day, delivered and set up.\n\n## How do you match slide size to your guest count?\n\nThink in terms of *throughput*, not just capacity. Riders go down one or two at a time, so what matters is how fast the line moves and how many kids can hang around the unit safely. A bigger slide moves a longer line faster — and a second unit often beats one giant slide once you pass 40 guests.\n\nHere's the quick math we use with parents every week: one rider every 15–20 seconds per lane keeps a line of 10–12 kids moving without meltdowns. Double lanes double that.\n\n## What size works for 10 kids or fewer?\n\nA compact backyard slide is the sweet spot — easier on space, gentler for mixed ages, and the most affordable tier. The [Aqua Wave 15](/rent/aqua-wave-15) and [Fiesta Splash 16](/rent/fiesta-splash-16) both handle small crowds beautifully, and the [Whale Splash 16](/rent/whale-splash-16) is a favorite when the group skews younger (ages 3+). For toddler-only parties, the [Lil' Splash Junior](/rent/lil-splash-junior) is built for ages 2–6 and rents from just $149/day.\n\n## What about 10–20 guests?\n\nStep up to the 18 ft class — tall enough to thrill grade-schoolers, small enough for a normal backyard. Crowd-pleasers here include the [Tropical Wave 18](/rent/tropical-wave-18), [Blue Crush 18](/rent/blue-crush-18), and [Coral Reef 18](/rent/coral-reef-18). If your guest list mixes swimmers and non-swimmers, an 18 ft slide with a shallow splash landing keeps everyone in the fun.\n\n## What size handles 20–40 guests?\n\nNow the line is your enemy — solve it with lanes or height. A two-lane racer like the [Double Drop Racer 22](/rent/double-drop-racer-22) or [Palm Paradise 24](/rent/palm-paradise-24) literally doubles throughput, and racing turns the wait into part of the game. Prefer a single showpiece? The [Tsunami Crush 20](/rent/tsunami-crush-20) and [Cyclone Curve 24](/rent/cyclone-curve-24) keep big groups cycling fast.\n\n## What should you rent for 40+ guests?\n\nGo giant, go double, or both. The [Mega Monsoon 28](/rent/mega-monsoon-28) and [Blue Vortex 26](/rent/blue-vortex-26) are the slides people photograph from the street, and the [Tidal Tower 27](/rent/tidal-tower-27) is built for school-size crowds. For mixed ages, pair a big slide with a combo like the [Mega Waterpark Combo](/rent/mega-waterpark-combo) or [Castle Splash Combo](/rent/castle-splash-combo) so little ones have their own station — a setup we deliver constantly for [school events](/water-slides-for/school-events) and [HOA parties](/water-slides-for/hoa-neighborhood-events).\n\n## Does age matter more than guest count?\n\nSometimes, yes. Twenty kindergartners need a gentler slide than eight middle-schoolers. Check the age guidance on each product page: 15–16 ft slides generally suit ages 4–5+, 18 ft slides ages 5–6+, and the tallest units (22 ft+) are best for 8+. When in doubt, a combo such as the [Rainbow Splash Combo](/rent/rainbow-splash-combo) covers ages 3+ while still entertaining older kids.\n\n## How much yard space does each size need?\n\nRoughly: compact slides need about 25 × 15 ft of flat grass, 18 ft slides about 30 × 15 ft, and giants 40 × 20 ft or more, plus 3–4 ft of clearance on every side and overhead power-line clearance. Our guide on [how much space a water slide needs](/blog/how-much-space-water-slide) breaks it down, and delivery, setup, anchoring, sanitizing, and insurance are included with every booking, whether you're in [Dallas](/water-slide-rentals/texas/dallas) or anywhere else we serve nationwide.\n\n## FAQ\n\n### What size water slide do most families rent?\nThe 18 ft class is our most-booked size — big enough to wow ages 5–12, small enough for most backyards, typically in the $250–$350/day range.\n\n### Is one big slide better than two small ones?\nPast 40 guests, two stations usually beat one giant: shorter lines, age separation, and a rain-out backup. Ask for a package price in your [free quote](/contact).\n\n### Can adults ride too?\nOn our larger units, absolutely — slides like the [Mega Monsoon 28](/rent/mega-monsoon-28) are commercial-grade and rated for teens and adults.\n\n### How do I get exact sizing help?\nTell us your guest count, ages, and yard size at [our contact page](/contact) or +1 (614) 302-5899 — we'll recommend the right fit, free and no-obligation. More quick answers live on our [answers page](/answers).",
+      "fr": "Adaptez le toboggan au nombre d'invités : jusqu'à 10 enfants, un modèle compact de 4 à 5 m suffit ; de 10 à 20 invités, un toboggan de 5,5 m (18 pi) est idéal ; de 20 à 40 invités, optez pour une double voie ou plus de hauteur ; au-delà de 40, choisissez un géant (22–28 pi) ou ajoutez un combo. Location dès 199 $/jour, livraison et installation comprises.\n\n## Comment associer la taille du toboggan au nombre d'invités ?\n\nRaisonnez en *débit*, pas seulement en capacité. Les enfants glissent un par un (ou deux par deux), donc ce qui compte, c'est la vitesse à laquelle la file avance. Un toboggan plus grand fait avancer une longue file plus vite — et deux unités valent souvent mieux qu'un seul géant au-delà de 40 invités.\n\nNotre règle simple : un passage toutes les 15 à 20 secondes par voie garde une file de 10 à 12 enfants sans frustration. Une double voie double ce débit.\n\n## Quelle taille pour 10 enfants ou moins ?\n\nUn toboggan compact est parfait : moins d'espace requis, plus doux pour les âges variés, et le palier le plus abordable. L'[Aqua Wave 15](/rent/aqua-wave-15) et le [Fiesta Splash 16](/rent/fiesta-splash-16) gèrent très bien les petits groupes, et le [Whale Splash 16](/rent/whale-splash-16) est un favori des plus jeunes (3 ans et +). Pour une fête de tout-petits, le [Lil' Splash Junior](/rent/lil-splash-junior) est conçu pour les 2–6 ans dès 149 $/jour.\n\n## Et pour 10 à 20 invités ?\n\nPassez à la catégorie 18 pi (5,5 m) — assez haute pour émerveiller les écoliers, assez compacte pour un jardin normal. Les valeurs sûres : [Tropical Wave 18](/rent/tropical-wave-18), [Blue Crush 18](/rent/blue-crush-18) et [Coral Reef 18](/rent/coral-reef-18). Si votre liste mélange nageurs et non-nageurs, une arrivée peu profonde garde tout le monde dans le jeu.\n\n## Quelle taille pour 20 à 40 invités ?\n\nIci, la file d'attente est votre ennemie — réglez le problème avec des voies ou de la hauteur. Une double voie comme le [Double Drop Racer 22](/rent/double-drop-racer-22) ou le [Palm Paradise 24](/rent/palm-paradise-24) double littéralement le débit, et la course devient un jeu en soi. Vous préférez une pièce maîtresse unique ? Le [Tsunami Crush 20](/rent/tsunami-crush-20) et le [Cyclone Curve 24](/rent/cyclone-curve-24) font tourner les grands groupes rapidement.\n\n## Que louer pour plus de 40 invités ?\n\nVoyez grand, voyez double — ou les deux. Le [Mega Monsoon 28](/rent/mega-monsoon-28) et le [Blue Vortex 26](/rent/blue-vortex-26) sont les toboggans qu'on photographie depuis la rue, et le [Tidal Tower 27](/rent/tidal-tower-27) est taillé pour les foules d'école. Pour des âges variés, associez un grand toboggan à un combo comme le [Mega Waterpark Combo](/rent/mega-waterpark-combo) ou le [Castle Splash Combo](/rent/castle-splash-combo) : les petits ont leur propre station — une configuration que nous livrons sans cesse pour les [événements scolaires](/water-slides-for/school-events) et les [fêtes de quartier](/water-slides-for/hoa-neighborhood-events).\n\n## L'âge compte-t-il plus que le nombre d'invités ?\n\nParfois, oui. Vingt enfants de maternelle ont besoin d'un toboggan plus doux que huit collégiens. Vérifiez l'âge conseillé sur chaque fiche produit : 15–16 pi pour 4–5 ans et +, 18 pi pour 5–6 ans et +, et les plus hauts (22 pi et +) pour 8 ans et +. En cas de doute, un combo comme le [Rainbow Splash Combo](/rent/rainbow-splash-combo) couvre dès 3 ans tout en amusant les plus grands.\n\n## Quel espace faut-il dans le jardin ?\n\nEn gros : environ 7,5 × 4,5 m de pelouse plane pour un compact, 9 × 4,5 m pour un 18 pi, et 12 × 6 m ou plus pour un géant, avec 1 m de dégagement de chaque côté et aucune ligne électrique au-dessus. Notre guide sur [l'espace nécessaire](/blog/how-much-space-water-slide) détaille tout — livraison, installation, ancrage, désinfection et assurance sont compris, à [Dallas](/water-slide-rentals/texas/dallas) comme partout aux États-Unis.\n\n## FAQ\n\n### Quelle taille les familles louent-elles le plus ?\nLa catégorie 18 pi est notre plus demandée — assez grande pour les 5–12 ans, assez compacte pour la plupart des jardins, généralement entre 250 $ et 350 $/jour.\n\n### Un grand toboggan ou deux petits ?\nAu-delà de 40 invités, deux stations gagnent souvent : files plus courtes, séparation par âge, et solution de repli. Demandez un prix groupé dans votre [devis gratuit](/contact).\n\n### Les adultes peuvent-ils glisser ?\nSur nos grands modèles, absolument — le [Mega Monsoon 28](/rent/mega-monsoon-28) est de qualité commerciale, conçu pour ados et adultes.\n\n### Comment obtenir une recommandation exacte ?\nDonnez-nous le nombre d'invités, les âges et la taille du jardin via [notre page contact](/contact) ou au +1 (614) 302-5899 — conseil gratuit et sans engagement. Plus de réponses rapides sur notre [page réponses](/answers)."
+    },
+    "readingMinutes": 5,
+    "category": "guides",
+    "tags": ["guides", "rentals", "tips"],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781079726-gq62ud-water-slide-questions-hero.jpg",
+    "featured": false,
+    "publishedDaysAgo": 0
+  },
+  {
+    "slug": "can-you-book-a-water-slide-rental-last-minute",
+    "title": {
+      "en": "Can You Book a Water Slide Rental Last-Minute?",
+      "fr": "Peut-on louer un toboggan aquatique à la dernière minute ?"
+    },
+    "excerpt": {
+      "en": "Party tomorrow? Same-day and next-day water slide rentals are often possible — here's how late you can book, which slides are usually still free, and how to lock one in fast.",
+      "fr": "Fête demain ? La location le jour même ou le lendemain est souvent possible — jusqu'à quand réserver, quels toboggans restent disponibles et comment confirmer vite."
+    },
+    "metaTitle": {
+      "en": "Last-Minute Water Slide Rentals: Same-Day & Next-Day Guide",
+      "fr": "Location de toboggan de dernière minute : guide jour même"
+    },
+    "metaDescription": {
+      "en": "Yes — last-minute water slide rentals are often possible, even same-day on weekdays. No rush fees: same $199+/day pricing with delivery, setup & insurance included. Here's how.",
+      "fr": "Oui — la location de dernière minute est souvent possible, même le jour même en semaine. Sans supplément : dès 199 $/jour, livraison, installation et assurance comprises."
+    },
+    "content": {
+      "en": "Yes — last-minute water slide rentals are often possible, even same-day or next-day, especially on weekdays and outside peak summer Saturdays. Availability depends on your date and area, so the fastest route is a quick quote request with your date, ZIP code, and guest count; we confirm what's on the truck right away. Rentals start at $199/day.\n\n## Can you really get a water slide the same day?\n\nOften, yes. Our fleet is large and delivery routes run all week, so a slide that came back from a Thursday event can absolutely be sanitized and on your lawn Saturday morning. The honest caveat: summer Saturday mornings are the tightest window in the industry. If your party is tomorrow, [send your date and ZIP now](/contact) or call +1 (614) 302-5899 — phone is fastest for true same-day requests.\n\n## How late can you book?\n\nAs a rule of thumb: weekday parties can usually be confirmed 24–48 hours out, Sunday parties a few days out, and peak-season Saturdays 1–2 weeks out. Booking earlier is always safer — our guide on [when to book a summer water slide](/blog/when-to-book-summer-water-slide) shows how the calendar fills — but \"late\" is not \"impossible.\" We fit last-minute events in every week of the season.\n\n## Which slides are most likely to be available last-minute?\n\nThe deepest part of the fleet. We stock many units in the popular 18 ft class — slides like the [Purple Crush 18](/rent/purple-crush-18), [Lava Rock Red 18](/rent/lava-rock-red-18), [Bali Breeze 18](/rent/bali-breeze-18), and [Sunset Marble 18](/rent/sunset-marble-18) — so even on a busy weekend one of them is often free. Compact slides such as the [Fiesta Splash 16](/rent/fiesta-splash-16) and [Sunset Splash 16](/rent/sunset-splash-16) are another strong last-minute bet.\n\nOne-of-a-kind showpieces move first: giants like the [Mega Monsoon 28](/rent/mega-monsoon-28) and [Blue Vortex 26](/rent/blue-vortex-26) are usually reserved well ahead. If your heart is set on a specific unit, book it early; if your heart is set on a *great party tomorrow*, stay flexible on the theme.\n\n## How do you boost your chances of a last-minute yes?\n\n- **Be flexible on the unit.** \"Any 18 ft slide\" is far easier to say yes to than one exact theme.\n- **Be flexible on time.** An early-morning or midday delivery slot opens more routes than a 9 a.m. sharp request.\n- **Consider a combo or bouncer.** Units like the [Jungle Safari Combo](/rent/jungle-safari-combo), [Neon Glow Combo](/rent/neon-glow-combo), or a dry [Royal Castle Bouncer](/rent/royal-castle-bouncer) often have availability when the marquee slides don't.\n- **Have your details ready** — see below.\n\n## What information should you have ready?\n\nFive things let us confirm in one exchange: your date, event address or ZIP, guest count and ages, surface type (grass is ideal), and a photo of the space if the yard is tight. That's everything we need to match you to what's available — the same info we use for [pool parties](/water-slides-for/pool-parties) and [birthday parties](/water-slides-for/birthday-parties) all season, in [Dallas](/water-slide-rentals/texas/dallas) and nationwide.\n\n## Does booking last-minute cost more?\n\nNo rush premium from us — pricing is the same quote-based range (typically $250–$550/day, from $199) whether you book two months or two days ahead, and delivery, setup, anchoring, sanitizing, and insurance are always included. The only \"cost\" of waiting is selection: fewer units to choose from.\n\n## FAQ\n\n### Can I book a water slide for tomorrow?\nFrequently, yes — weekdays especially. Call +1 (614) 302-5899 or [request a quote](/contact) with your date and ZIP; we'll answer with live availability.\n\n### Do you charge extra for last-minute delivery?\nNo. Same pricing, same included delivery, setup, sanitizing, and insurance as any other booking.\n\n### What if every water slide is taken?\nWe'll offer the closest alternative — a different size, a combo like the [Superhero City Combo](/rent/superhero-city-combo), or a dry bouncer — so the party still happens.\n\n### Is it cheaper to wait for a last-minute deal?\nNo — prices don't drop for late bookings, and selection shrinks. If you know your date, book it. More quick answers on our [answers page](/answers).",
+      "fr": "Oui — louer un toboggan aquatique à la dernière minute est souvent possible, même le jour même ou le lendemain, surtout en semaine et hors des samedis d'été. Tout dépend de la date et du secteur : le plus rapide est une demande de devis avec votre date, code postal et nombre d'invités ; nous confirmons aussitôt ce qui est disponible. Dès 199 $/jour.\n\n## Peut-on vraiment avoir un toboggan le jour même ?\n\nSouvent, oui. Notre flotte est vaste et nos tournées de livraison roulent toute la semaine : un toboggan revenu d'un événement le jeudi peut être désinfecté et installé sur votre pelouse le samedi matin. La vraie contrainte : les samedis matin d'été sont le créneau le plus disputé du secteur. Si votre fête est demain, [envoyez votre date et code postal](/contact) ou appelez le +1 (614) 302-5899 — le téléphone est le plus rapide pour un vrai jour même.\n\n## Jusqu'à quand peut-on réserver ?\n\nEn règle générale : une fête en semaine se confirme à 24–48 h, un dimanche à quelques jours, et un samedi de haute saison à 1–2 semaines. Réserver tôt reste plus sûr — notre guide sur [quand réserver pour l'été](/blog/when-to-book-summer-water-slide) montre comment le calendrier se remplit — mais « tard » ne veut pas dire « impossible ». Nous casons des événements de dernière minute chaque semaine de la saison.\n\n## Quels toboggans sont les plus disponibles à la dernière minute ?\n\nLe cœur de la flotte. Nous stockons de nombreuses unités dans la populaire catégorie 18 pi — comme le [Purple Crush 18](/rent/purple-crush-18), le [Lava Rock Red 18](/rent/lava-rock-red-18), le [Bali Breeze 18](/rent/bali-breeze-18) et le [Sunset Marble 18](/rent/sunset-marble-18) — même un week-end chargé, l'un d'eux est souvent libre. Les compacts comme le [Fiesta Splash 16](/rent/fiesta-splash-16) et le [Sunset Splash 16](/rent/sunset-splash-16) sont une autre valeur sûre de dernière minute.\n\nLes pièces uniques partent en premier : les géants comme le [Mega Monsoon 28](/rent/mega-monsoon-28) et le [Blue Vortex 26](/rent/blue-vortex-26) se réservent longtemps à l'avance. Si vous tenez à un modèle précis, réservez tôt ; si vous tenez surtout à une *belle fête demain*, restez flexible sur le thème.\n\n## Comment maximiser vos chances d'un oui ?\n\n- **Soyez flexible sur le modèle.** « N'importe quel 18 pi » est bien plus facile à accepter qu'un thème exact.\n- **Soyez flexible sur l'horaire.** Une livraison tôt le matin ou en milieu de journée ouvre plus de tournées qu'une exigence de 9 h pile.\n- **Pensez combo ou château gonflable.** Le [Jungle Safari Combo](/rent/jungle-safari-combo), le [Neon Glow Combo](/rent/neon-glow-combo) ou un [Royal Castle Bouncer](/rent/royal-castle-bouncer) sec ont souvent des disponibilités quand les vedettes n'en ont plus.\n- **Préparez vos informations** — voir ci-dessous.\n\n## Quelles informations préparer ?\n\nCinq éléments suffisent pour confirmer en un seul échange : la date, l'adresse ou le code postal, le nombre d'invités et leurs âges, le type de surface (la pelouse est idéale) et une photo de l'espace si le jardin est étroit. C'est tout ce qu'il nous faut — les mêmes informations que pour les [fêtes de piscine](/water-slides-for/pool-parties) et les [anniversaires](/water-slides-for/birthday-parties), à [Dallas](/water-slide-rentals/texas/dallas) comme partout au pays.\n\n## Réserver tard coûte-t-il plus cher ?\n\nAucun supplément d'urgence chez nous : la tarification reste la même fourchette sur devis (généralement 250 $–550 $/jour, dès 199 $), que vous réserviez deux mois ou deux jours à l'avance — livraison, installation, ancrage, désinfection et assurance toujours compris. Le seul « coût » d'attendre, c'est le choix : moins de modèles disponibles.\n\n## FAQ\n\n### Puis-je réserver un toboggan pour demain ?\nSouvent, oui — surtout en semaine. Appelez le +1 (614) 302-5899 ou [demandez un devis](/contact) avec votre date et code postal ; nous répondons avec la disponibilité en direct.\n\n### Facturez-vous un supplément pour la dernière minute ?\nNon. Même prix, mêmes prestations comprises (livraison, installation, désinfection, assurance) que pour toute réservation.\n\n### Et si tous les toboggans sont pris ?\nNous proposons l'alternative la plus proche — une autre taille, un combo comme le [Superhero City Combo](/rent/superhero-city-combo) ou un château sec — pour que la fête ait lieu quand même.\n\n### Attendre permet-il d'avoir une réduction ?\nNon — les prix ne baissent pas en réservant tard, et le choix diminue. Si vous connaissez votre date, réservez. Plus de réponses sur notre [page réponses](/answers)."
+    },
+    "readingMinutes": 5,
+    "category": "planning",
+    "tags": ["rentals", "planning", "tips"],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783881001848-cbqsjh-water-slide-delivery-times-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
   }
