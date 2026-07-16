@@ -161,12 +161,18 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     message: [
       o.name,
       `📞 ${o.phone || "no phone"} · ✉️ ${o.email}`,
+      // Delivery/shipping address the customer entered at checkout. Always
+      // shown — "no address given" tells the owner to ask for it on follow-up.
+      `🚚 Delivery: ${o.address || "no address given"}`,
       ...(placedFrom ? [`📍 Placed from ${placedFrom}`] : []),
-      ...o.items.map((i) =>
-        i.mode === "RENT"
-          ? `${i.name} — ${i.quantity} ${i.quantity === 1 ? "day" : "days"}`
-          : `${i.quantity}× ${i.name}`,
-      ),
+      ...o.items.map((i) => {
+        const line =
+          i.mode === "RENT"
+            ? `${i.name} — ${i.quantity} ${i.quantity === 1 ? "day" : "days"}`
+            : `${i.quantity}× ${i.name}`;
+        return `${line} · ${formatPrice(i.lineTotalCents, o.locale)}`;
+      }),
+      `💰 Total: ${formatPrice(o.totalCents, o.locale)}`,
       "Tap to open the order in admin.",
     ].join("\n"),
     clickUrl: siteUrl(
@@ -307,11 +313,13 @@ export async function notifyBookingRequest(
     message: [
       b.name,
       `📞 ${b.phone || "no phone"} · ✉️ ${b.email}`,
-      ...(b.address ? [`📍 ${b.address}`] : []),
+      `🚚 Event address: ${b.address || "no address given"}`,
       datesLabel,
       ...b.items.map(
-        (i) => `${i.name} — ${i.days} ${i.days === 1 ? "day" : "days"}`,
+        (i) =>
+          `${i.name} — ${i.days} ${i.days === 1 ? "day" : "days"} · ${formatPrice(i.lineTotalCents, b.locale)}`,
       ),
+      `💰 Total: ${formatPrice(b.totalCents, b.locale)}`,
       "Tap to open the booking in admin.",
     ].join("\n"),
     clickUrl: siteUrl(
