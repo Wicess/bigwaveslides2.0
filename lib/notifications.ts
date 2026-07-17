@@ -237,6 +237,7 @@ export async function notifyBookingRequest(
     kind: "booking",
     number: b.bookingNumber,
     dateLabel: formatDate(new Date(), b.locale),
+    eventDateLabel: formatDate(b.startAt, b.locale),
     heroImageUrl: b.heroImageUrl,
     customer: {
       name: b.name,
