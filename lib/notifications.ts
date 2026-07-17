@@ -506,6 +506,19 @@ export async function notifyNewsletterSignup(s: {
       }),
     });
   }
+  // Push to the owner's phone; tapping opens the subscriber list in admin.
+  await notifyAdminNtfy({
+    title: "New newsletter subscriber",
+    message: [
+      `✉️ ${s.email}`,
+      ...(s.locale ? [`Language: ${s.locale === "fr" ? "French" : "English"}`] : []),
+      "Tap to open subscribers in admin.",
+    ].join("\n"),
+    clickUrl: siteUrl("/admin/newsletter"),
+    tags: ["mailbox_with_mail", "ocean"],
+    // Lower priority than orders — a subscribe is nice, not urgent.
+    priority: 3,
+  });
 }
 
 /* ───────────────── Abandoned cart ───────────────── */
