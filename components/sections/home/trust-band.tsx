@@ -54,7 +54,7 @@ export async function TrustBand() {
             // <img> react to THIS box being hovered (see group-hover/logo below).
             <span
               key={src}
-              className="group/logo grid h-16 w-32 shrink-0 place-items-center sm:h-20 sm:w-40"
+              className="group/logo grid h-12 w-24 shrink-0 place-items-center sm:h-20 sm:w-40"
             >
               {}
               {/*
@@ -69,11 +69,14 @@ export async function TrustBand() {
                 scale-105 gently zooms it. `transition-all duration-300`
                 animates that change smoothly over 0.3s.
               */}
+              {/* Phones have no hover to restore the color, so the muted
+                  grayscale treatment only applies from md up — on mobile the
+                  logos show at full color and full opacity. */}
               <img
                 src={optimizedSrc(src, 320)}
                 alt={`Partner ${i + 1}`}
                 loading="lazy"
-                className="max-h-full max-w-full object-contain opacity-60 [mix-blend-mode:multiply] grayscale transition-all duration-300 group-hover/logo:scale-105 group-hover/logo:opacity-100 group-hover/logo:grayscale-0"
+                className="max-h-full max-w-full object-contain [mix-blend-mode:multiply] transition-all duration-300 md:opacity-60 md:grayscale md:group-hover/logo:scale-105 md:group-hover/logo:opacity-100 md:group-hover/logo:grayscale-0"
               />
             </span>
           ))}

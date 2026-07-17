@@ -126,7 +126,15 @@ export async function Hero({
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             {/* asChild makes the Button render the inner <Link>, so it's a real
                 navigation link styled as a button. */}
-            <Button asChild variant="gradient" size="lg">
+            {/* cta-wave = drifting water band inside the button;
+                animate-cta-bob = gentle float (second button offset so they
+                bob out of phase, like two things on the same water). */}
+            <Button
+              asChild
+              variant="gradient"
+              size="lg"
+              className="cta-wave animate-cta-bob"
+            >
               <Link href="/rent">
                 {t("ctaRentNow")} <ArrowRight className="size-4" />
               </Link>
@@ -134,7 +142,7 @@ export async function Hero({
             <Button
               asChild
               size="lg"
-              className="border border-white/40 bg-white/10 text-white backdrop-blur-sm hover:border-white/70 hover:bg-white/20"
+              className="cta-wave animate-cta-bob border border-white/40 bg-white/10 text-white backdrop-blur-sm [animation-delay:1.4s] hover:border-white/70 hover:bg-white/20"
             >
               <Link href="/shop">
                 <ShoppingBag className="size-4" /> {t("ctaBuyNow")}

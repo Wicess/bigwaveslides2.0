@@ -204,6 +204,57 @@
   }
 }
 
+/* Wavelike CTA — a soft water band drifting along the bottom of the button,
+   like the surface of a pool. Pure CSS: a repeating SVG wave tile slides one
+   tile-width for a seamless loop. */
+@utility cta-wave {
+  position: relative;
+  overflow: hidden;
+}
+.cta-wave::after {
+  content: "";
+  position: absolute;
+  left: -120px;
+  right: -120px;
+  bottom: -1px;
+  height: 46%;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 24' preserveAspectRatio='none'%3E%3Cpath d='M0 14 Q15 6 30 14 T60 14 V24 H0 Z' fill='%23ffffff' fill-opacity='0.22'/%3E%3C/svg%3E")
+    repeat-x bottom / 60px 100%;
+  animation: bws-cta-wave 5.5s linear infinite;
+}
+
+/* Gentle floating bob — the button rides the wave. */
+@utility animate-cta-bob {
+  animation: bws-cta-bob 4.2s ease-in-out infinite;
+}
+
+@keyframes bws-cta-wave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-60px);
+  }
+}
+
+@keyframes bws-cta-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-wave::after,
+  .animate-cta-bob {
+    animation: none;
+  }
+}
+
 /* Accordion (Radix height-based reveal) */
 @utility animate-accordion-down {
   animation: bws-accordion-down 0.3s ease-out;
