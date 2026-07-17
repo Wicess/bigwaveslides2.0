@@ -71,6 +71,12 @@ export const metadata: Metadata = {
     google: "EiaEaBxPwPlkg1Q-kchHGk0G47tnHzV55VN85wQAf1I",
     other: { "msvalidate.01": "A8C9495020F192A25CD68B7F02D73D38" },
   },
+  // iOS home-screen app behavior (Add to Home Screen).
+  appleWebApp: {
+    capable: true,
+    title: "Big Wave Slides",
+    statusBarStyle: "default",
+  },
 };
 
 export const viewport: Viewport = {

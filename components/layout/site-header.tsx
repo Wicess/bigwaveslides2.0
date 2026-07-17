@@ -35,7 +35,7 @@ import { Button } from "@/components/ui/button";
 import { CartBadge } from "@/components/cart/cart-badge";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { OPEN_CART_EVENT } from "@/lib/cart-event";
-import { LocaleSwitcher } from "./locale-switcher";
+import { InstallApp } from "./install-app";
 import type { NavData } from "@/server/data/navigation";
 
 type Props = { locale: string; data: NavData };
@@ -204,7 +204,9 @@ export function SiteHeader({ locale, data }: Props) {
           {/* Right: action buttons (language toggle, call, cart, quote, contact,
               and the hamburger that opens the mobile menu). */}
           <div className="flex items-center gap-2">
+            {/* Desktop: language toggle. Mobile: install-the-app button. */}
             <HeaderLocale />
+            <InstallApp variant="chip" />
 
             {/* Phone link uses `external` so IconChip renders a plain <a> for the
                 tel: URL instead of the locale-aware <Link>. */}
@@ -647,7 +649,7 @@ function MobileMenu({
           ) : null}
 
           <div className="mt-4 flex items-center justify-between">
-            <LocaleSwitcher />
+            <InstallApp variant="drawer" />
             <button
               type="button"
               aria-label={t("cart")}
