@@ -27,7 +27,9 @@ type UpdateQuoteInput = {
   staffNotes?: string;
 };
 
-export async function updateQuote(input: UpdateQuoteInput): Promise<AdminActionResult> {
+export async function updateQuote(
+  input: UpdateQuoteInput,
+): Promise<AdminActionResult> {
   const session = await requirePermission("quote.update");
   const parsed = schema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Invalid data." };
@@ -98,10 +100,16 @@ export async function createAdminQuote(
   const session = await requirePermission("quote.update");
   const parsed = createSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid data." };
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Invalid data.",
+    };
   }
   const d = parsed.data;
-  const subtotalCents = d.items.reduce((n, i) => n + i.quantity * i.unitCents, 0);
+  const subtotalCents = d.items.reduce(
+    (n, i) => n + i.quantity * i.unitCents,
+    0,
+  );
   const number = quoteNumber();
 
   try {
@@ -131,7 +139,19 @@ export async function createAdminQuote(
     const pdfInput: QuotePdfInput = {
       kind: "order",
       number,
-      dateLabel: now.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
+      dateLabel: now.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      eventDateLabel: d.eventDate
+        ? new Date(`${d.eventDate}T12:00:00`).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        : undefined,
+      party: "Renter",
       customer: { name: d.name, email: d.email, phone: d.phone || undefined },
       items: d.items.map((i) => ({
         name: i.label,
@@ -148,18 +168,21 @@ export async function createAdminQuote(
     if (d.emailClient) {
       const res = await sendEmail({
         to: d.email,
-        subject: `Your quote ${number} — Big Wave Slides`,
+        subject: `Your invoice ${number} — Big Wave Slides`,
         html: renderEmail({
-          heading: "Your quote is ready",
-          intro: `Hi ${d.name}, thanks for reaching out! Your personalized quote ${number} is attached as a PDF.`,
+          heading: "Your invoice is ready",
+          intro: `Hi ${d.name}, thanks for reaching out! Your invoice ${number} is attached as a PDF — this is the only invoice you'll receive. Sign it, tick your preferred payment method, and reply to this email to confirm.`,
           rows: [
-            { label: "Quote", value: number },
-            { label: "Estimate", value: formatPrice(subtotalCents, "en") },
+            { label: "Invoice no", value: number },
+            { label: "Total due", value: formatPrice(subtotalCents, "en") },
           ],
           cta: { label: "Talk to us", url: siteUrl("/contact") },
-          outro: "This quote is valid for 14 days. Reply to this email with any questions.",
+          outro:
+            "Reply to this email with any questions — we're happy to help.",
         }),
-        attachments: [{ filename: `Quote-${number}.pdf`, content: pdf }],
+        attachments: [
+          { filename: `Big-Wave-Slides-Invoice-${number}.pdf`, content: pdf },
+        ],
       }).catch(() => ({ ok: false }));
       emailed = !!res.ok;
     }
@@ -170,7 +193,12 @@ export async function createAdminQuote(
       summary: `Created quote ${number} for ${d.name}`,
     });
     revalidatePath("/admin/quotes");
-    return { ok: true, quoteNumber: number, pdfBase64: pdf.toString("base64"), emailed };
+    return {
+      ok: true,
+      quoteNumber: number,
+      pdfBase64: pdf.toString("base64"),
+      emailed,
+    };
   } catch {
     return { ok: false, error: "Couldn't create the quote." };
   }

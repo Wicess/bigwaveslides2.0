@@ -197,6 +197,12 @@ const s = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
+  signName: {
+    fontSize: 10.5,
+    fontFamily: "Helvetica-Bold",
+    color: C.ink,
+    marginBottom: 6,
+  },
   returnNote: {
     marginTop: 16,
     backgroundColor: "#fff7ed",
@@ -232,6 +238,10 @@ export type QuotePdfInput = {
   kind: "order" | "booking";
   number: string;
   dateLabel: string;
+  /** Date of the event, printed on the invoice (orders; bookings use rental.arrival). */
+  eventDateLabel?: string;
+  /** "Renter" for rental orders, "Buyer" for purchases. Bookings are always Renter. */
+  party?: "Renter" | "Buyer";
   heroImageUrl?: string;
   customer: { name: string; email: string; phone?: string; address?: string };
   rental?: {
@@ -259,7 +269,7 @@ type Clause = { t: string; b: string };
 const RENTAL_TERMS: Clause[] = [
   {
     t: "Agreement & validity.",
-    b: 'This Rental Quote & Agreement becomes binding once signed by the Renter and accepted by Big Wave Slides (the "Company"). This quote is valid for 14 days; an invoice with payment instructions follows acceptance. Equipment is supplied for the stated rental period only and may not be extended without written approval.',
+    b: 'This Rental Invoice & Agreement becomes binding once signed by the Renter and accepted by Big Wave Slides (the "Company"). This document is the final invoice for the rental — no separate invoice will be issued. Equipment is supplied for the stated rental period only and may not be extended without written approval.',
   },
   {
     t: "Fees & refundable deposit.",
@@ -283,26 +293,26 @@ const RENTAL_TERMS: Clause[] = [
   },
   {
     t: "Cancellation, liability & governing law.",
-    b: `Cancellation and rescheduling terms are confirmed on the invoice. To the maximum extent permitted by law, the Company's total liability shall not exceed the amount paid, and it is not liable for indirect or consequential damages. This Agreement is governed by the laws of the State of ${GOVERNING_STATE}.`,
+    b: `To cancel or reschedule, contact the Company as early as possible — we will always try to accommodate a date change. To the maximum extent permitted by law, the Company's total liability shall not exceed the amount paid, and it is not liable for indirect or consequential damages. This Agreement is governed by the laws of the State of ${GOVERNING_STATE}.`,
   },
 ];
 
-const ORDER_TERMS: Clause[] = [
+const orderTerms = (party: string): Clause[] => [
   {
     t: "Agreement & validity.",
-    b: "This Order Quote becomes a binding order once accepted by Big Wave Slides and an invoice is issued. It is valid for 14 days; prices are subject to availability at confirmation, and applicable taxes/delivery are confirmed on the invoice.",
+    b: `This Invoice becomes a binding order once signed by the ${party} and accepted by Big Wave Slides. This document is the final invoice for the order — no separate invoice will be issued. Applicable taxes and delivery, where relevant, are itemized above.`,
   },
   {
     t: "Payment.",
-    b: "No charge is processed from this quote. Upon acceptance, the Company issues an invoice with payment instructions; the order is confirmed once payment is arranged.",
+    b: `No charge is processed automatically. Once the signed invoice is returned, the Company sends payment details for the ${party}'s preferred method; the order is confirmed once payment is arranged.`,
   },
   {
     t: "Delivery, inspection & warranty.",
-    b: "Title and risk of loss pass to the Buyer on delivery or collection; timelines are estimates. The Buyer must inspect goods on receipt and report defects within the stated window. Any manufacturer's warranty accompanies the product; returns follow the Company's standard policy.",
+    b: `Title and risk of loss pass to the ${party} on delivery or collection; timelines are estimates. The ${party} must inspect goods on receipt and report defects within the stated window. Any manufacturer's warranty accompanies the product; returns follow the Company's standard policy.`,
   },
   {
     t: "Safe use, liability & governing law.",
-    b: `Commercial-grade equipment must be installed and operated per the provided guidelines and applicable safety standards. To the maximum extent permitted by law, the Company's liability is limited to the purchase price, and the Buyer assumes responsibility for safe installation, supervision, and use after delivery. Governed by the laws of the State of ${GOVERNING_STATE}.`,
+    b: `Commercial-grade equipment must be installed and operated per the provided guidelines and applicable safety standards. To the maximum extent permitted by law, the Company's liability is limited to the purchase price, and the ${party} assumes responsibility for safe installation, supervision, and use after delivery. Governed by the laws of the State of ${GOVERNING_STATE}.`,
   },
 ];
 
@@ -320,16 +330,16 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
   const locale = input.locale ?? "en";
   const money = (c: number) => formatPrice(c, locale);
   const isBooking = input.kind === "booking";
-  const terms = isBooking ? RENTAL_TERMS : ORDER_TERMS;
+  const partyWord = input.party ?? (isBooking ? "Renter" : "Buyer");
+  const terms = isBooking ? RENTAL_TERMS : orderTerms(partyWord);
   const t = input.totals;
   const r = input.rental ?? {};
-  const partyWord = isBooking ? "Renter" : "Buyer";
 
   return (
     <Document
-      title={`Big Wave Slides Quote ${input.number}`}
+      title={`Big Wave Slides Invoice ${input.number}`}
       author="Big Wave Slides"
-      subject={isBooking ? "Rental Quote & Agreement" : "Order Quote"}
+      subject={isBooking ? "Rental Invoice & Agreement" : "Invoice"}
     >
       <Page size="A4" style={s.page}>
         {/* Header */}
@@ -346,12 +356,20 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
 
         <View style={s.titleBar}>
           <Text style={s.title}>
-            {isBooking ? "RENTAL QUOTE & AGREEMENT" : "ORDER QUOTE"}
+            {isBooking
+              ? "RENTAL INVOICE & AGREEMENT"
+              : partyWord === "Renter"
+                ? "RENTAL INVOICE"
+                : "INVOICE"}
           </Text>
           <View>
-            <Text style={s.titleMeta}>Reference: {input.number}</Text>
-            <Text style={s.titleMeta}>Date: {input.dateLabel}</Text>
-            <Text style={s.titleMeta}>Valid for 14 days</Text>
+            <Text style={s.titleMeta}>Invoice no: {input.number}</Text>
+            <Text style={s.titleMeta}>Issued: {input.dateLabel}</Text>
+            {input.eventDateLabel ? (
+              <Text style={s.titleMeta}>
+                Event date: {input.eventDateLabel}
+              </Text>
+            ) : null}
           </View>
         </View>
 
@@ -362,7 +380,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         {/* Parties / logistics */}
         <View style={s.cols}>
           <View style={s.col}>
-            <Text style={s.label}>{isBooking ? "Renter" : "Buyer"}</Text>
+            <Text style={s.label}>{partyWord}</Text>
             <Text style={[s.value, { fontFamily: "Helvetica-Bold" }]}>
               {input.customer.name}
             </Text>
@@ -390,7 +408,8 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
               </>
             ) : (
               <>
-                <KV k="Reference" v={input.number} />
+                <KV k="Invoice no" v={input.number} />
+                <KV k="Event date" v={input.eventDateLabel} />
                 <KV k="Items" v={String(input.items.length)} />
                 <KV k="Issued" v={input.dateLabel} />
               </>
@@ -441,26 +460,19 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
             </View>
           ) : null}
           <View style={s.grandRow}>
-            <Text style={s.grandLabel}>Estimated total</Text>
+            <Text style={s.grandLabel}>Total due</Text>
             <Text style={s.grandValue}>{money(t.totalCents)}</Text>
           </View>
-        </View>
-
-        <View style={s.note}>
-          <Text>
-            This quote is valid for 14 days. Upon acceptance, we will issue an
-            invoice with payment instructions and{" "}
-            {isBooking ? "confirm your dates" : "process your order"}. Final
-            pricing, including delivery, is confirmed on your invoice.
-          </Text>
         </View>
 
         {/* Payment method — client ticks their preferred option */}
         <View style={s.payBox} wrap={false}>
           <Text style={s.label}>Preferred payment method</Text>
           <Text style={s.payHint}>
-            Tick the option you&apos;d like to use. Once you accept, we&apos;ll
-            send the exact payment details for your choice with your invoice.
+            This is your official invoice — no separate invoice will follow.
+            Tick the option you&apos;d like to use and return the signed
+            invoice; we&apos;ll reply with the exact payment details for your
+            choice.
           </Text>
           <View style={s.payRow}>
             {["Zelle", "Apple Pay", "Chime", "Cash App"].map((m) => (
@@ -493,8 +505,8 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         </Text>
         <Text style={s.ack}>
           By signing below, the {partyWord} confirms they have read, understood,
-          and agree to this Agreement in full, including the Terms &amp;
-          Conditions
+          and agree to this Invoice{isBooking ? " & Agreement" : ""} in full,
+          including the Terms &amp; Conditions
           {isBooking
             ? ", Company Policies, assumption of risk, and indemnification"
             : ""}{" "}
@@ -502,7 +514,8 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         </Text>
         <View style={s.signRow} wrap={false}>
           <View style={s.signCol}>
-            <Text style={[s.label, { marginBottom: 8 }]}>{partyWord}</Text>
+            <Text style={[s.label, { marginBottom: 4 }]}>{partyWord}</Text>
+            <Text style={s.signName}>{input.customer.name}</Text>
             <View style={s.signLineRow}>
               <View style={s.signLineWide} />
               <View style={s.signLineDate} />
@@ -511,13 +524,12 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
               <Text style={[s.signLabel, { flex: 2 }]}>Signature</Text>
               <Text style={[s.signLabel, { flex: 1 }]}>Date</Text>
             </View>
-            <View style={[s.signLineWide, { marginTop: 12, height: 22 }]} />
-            <Text style={s.signLabel}>Printed name</Text>
           </View>
           <View style={s.signCol}>
-            <Text style={[s.label, { marginBottom: 8 }]}>
+            <Text style={[s.label, { marginBottom: 4 }]}>
               For Big Wave Slides
             </Text>
+            <Text style={s.signName}>Big Wave Slides</Text>
             <View style={s.signLineRow}>
               <View style={s.signLineWide} />
               <View style={s.signLineDate} />
@@ -528,15 +540,13 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
               </Text>
               <Text style={[s.signLabel, { flex: 1 }]}>Date</Text>
             </View>
-            <View style={[s.signLineWide, { marginTop: 12, height: 22 }]} />
-            <Text style={s.signLabel}>Printed name</Text>
           </View>
         </View>
 
         <Text style={s.returnNote}>
-          Whenever you&apos;re ready to go ahead, simply sign this{" "}
-          {isBooking ? "agreement" : "quote"} and send it back to us at{" "}
-          {CONTACT_EMAIL}, and we&apos;ll take care of the rest.{" "}
+          Whenever you&apos;re ready to go ahead, simply sign this invoice and
+          send it back to us at {CONTACT_EMAIL}, and we&apos;ll take care of the
+          rest.{" "}
           {isBooking
             ? "You can also sign online using the link in your email. "
             : ""}
@@ -558,7 +568,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
   );
 }
 
-/** Render a branded, multi-page quote/agreement PDF to a Buffer. */
+/** Render a branded, multi-page invoice/agreement PDF to a Buffer. */
 export async function generateQuotePdf(input: QuotePdfInput): Promise<Buffer> {
   return renderToBuffer(<QuoteDoc input={input} />);
 }

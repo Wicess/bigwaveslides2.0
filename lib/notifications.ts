@@ -34,13 +34,15 @@ async function adminRecipients(): Promise<string[]> {
   return Array.from(new Set(all.map((e) => e.toLowerCase())));
 }
 
-/** Best-effort PDF quote generation — never blocks the email if it fails. */
+/** Best-effort PDF invoice generation — never blocks the email if it fails. */
 async function buildQuoteAttachment(
   input: QuotePdfInput,
 ): Promise<EmailAttachment[]> {
   try {
     const content = await generateQuotePdf(input);
-    return [{ filename: `Big-Wave-Slides-Quote-${input.number}.pdf`, content }];
+    return [
+      { filename: `Big-Wave-Slides-Invoice-${input.number}.pdf`, content },
+    ];
   } catch (error) {
     console.error("[pdf error]", error);
     return [];
@@ -74,14 +76,24 @@ export type OrderEmailInput = {
   }[];
   subtotalCents: number;
   totalCents: number;
+  /** Event date entered at checkout (yyyy-mm-dd) — printed on the invoice. */
+  eventDate?: string;
   locale: string;
 };
 
 export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
+  const isRentalOrder = o.items.some((i) => i.mode === "RENT");
+  const eventDay = o.eventDate ? new Date(`${o.eventDate}T12:00:00`) : null;
+  const eventDateLabel =
+    eventDay && !Number.isNaN(eventDay.getTime())
+      ? formatDate(eventDay, o.locale)
+      : undefined;
   const attachments = await buildQuoteAttachment({
     kind: "order",
     number: o.orderNumber,
     dateLabel: formatDate(new Date(), o.locale),
+    eventDateLabel,
+    party: isRentalOrder ? "Renter" : "Buyer",
     heroImageUrl: o.heroImageUrl,
     customer: {
       name: o.name,
@@ -108,26 +120,27 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
   });
 
   const rows: EmailRow[] = [
-    { label: "Reference", value: o.orderNumber },
+    { label: "Invoice no", value: o.orderNumber },
+    ...(eventDateLabel ? [{ label: "Event date", value: eventDateLabel }] : []),
     { label: "Items", value: String(o.items.length) },
-    { label: "Estimated total", value: formatPrice(o.totalCents, o.locale) },
+    { label: "Total due", value: formatPrice(o.totalCents, o.locale) },
   ];
 
   await sendEmail({
     to: o.email,
     replyTo: CONTACT_EMAIL,
-    subject: `Your Big Wave Slides quote — ${o.orderNumber}`,
+    subject: `Your Big Wave Slides invoice — ${o.orderNumber}`,
     attachments,
     html: renderEmail({
-      heading: `Thanks, ${o.name.split(" ")[0] || o.name}! Your quote is attached`,
+      heading: `Thanks, ${o.name.split(" ")[0] || o.name}! Your invoice is attached`,
       preheader:
-        "Your personalized quote is attached as a PDF. Sign it and reply to confirm your order.",
+        "Your invoice is attached as a PDF. Sign it and reply to confirm your order — no further invoice will follow.",
       intro:
-        "Thanks for your order request with Big Wave Slides. Your personalized quote is attached as a PDF. To confirm your order, please review and sign the attached quote, then return it by replying to this email. We'll follow up with an invoice and next steps.",
+        "Thanks for your order request with Big Wave Slides. Your official invoice is attached as a PDF — this is the only invoice you'll receive. To confirm your order, please review and sign it, tick your preferred payment method, and return it by replying to this email. We'll reply with the payment details and take care of the rest.",
       rows,
       cta: {
         label: "Reply to confirm",
-        url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${o.orderNumber}`,
+        url: `mailto:${CONTACT_EMAIL}?subject=Accept%20invoice%20${o.orderNumber}`,
       },
       outro:
         "Have a question first? Just reply to this email and a real person will help.",
@@ -143,7 +156,7 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
       attachments,
       html: renderEmail({
         heading: "New order request",
-        intro: `${o.name} (${o.email}${o.phone ? `, ${o.phone}` : ""}) submitted an order request. The generated quote PDF is attached.`,
+        intro: `${o.name} (${o.email}${o.phone ? `, ${o.phone}` : ""}) submitted an order request. The generated invoice PDF is attached.`,
         rows,
         cta: { label: "Open in admin", url: siteUrl("/admin/orders") },
       }),
@@ -259,22 +272,22 @@ export async function notifyBookingRequest(
   });
 
   const rows: EmailRow[] = [
-    { label: "Reference", value: b.bookingNumber },
+    { label: "Invoice no", value: b.bookingNumber },
     { label: "Event dates", value: datesLabel },
-    { label: "Estimated total", value: formatPrice(b.totalCents, b.locale) },
+    { label: "Total due", value: formatPrice(b.totalCents, b.locale) },
   ];
 
   await sendEmail({
     to: b.email,
     replyTo: CONTACT_EMAIL,
-    subject: `Your Big Wave Slides rental quote — ${b.bookingNumber}`,
+    subject: `Your Big Wave Slides rental invoice — ${b.bookingNumber}`,
     attachments,
     html: renderEmail({
-      heading: `Thanks, ${b.name.split(" ")[0] || b.name}! Your rental quote is attached`,
+      heading: `Thanks, ${b.name.split(" ")[0] || b.name}! Your rental invoice is attached`,
       preheader:
-        "Your rental agreement is attached. Sign and return it to confirm your dates.",
+        "Your rental invoice & agreement is attached. Sign and return it to confirm your dates — no further invoice will follow.",
       intro:
-        "Thanks for your booking request — we've tentatively held your dates. Your rental quote & agreement is attached as a PDF. To confirm your booking, you'll need to sign the attached agreement and return it to us (reply to this email, or sign online). Once received, we'll send your invoice and lock in your dates.",
+        "Thanks for your booking request — we've tentatively held your dates. Your rental invoice & agreement is attached as a PDF — this is the only invoice you'll receive. To confirm your booking, sign it, tick your preferred payment method, and return it to us (reply to this email, or sign online). We'll reply with the payment details and lock in your dates.",
       rows,
       cta: b.contractNumber
         ? {
@@ -283,9 +296,9 @@ export async function notifyBookingRequest(
           }
         : {
             label: "Reply to confirm",
-            url: `mailto:${CONTACT_EMAIL}?subject=Accept%20quote%20${b.bookingNumber}`,
+            url: `mailto:${CONTACT_EMAIL}?subject=Accept%20invoice%20${b.bookingNumber}`,
           },
-      outro: `Please sign the attached agreement and return it to ${CONTACT_EMAIL}. Questions? Just reply and we'll help.`,
+      outro: `Please sign the attached invoice & agreement and return it to ${CONTACT_EMAIL}. Questions? Just reply and we'll help.`,
     }),
   });
 
@@ -298,7 +311,7 @@ export async function notifyBookingRequest(
       attachments,
       html: renderEmail({
         heading: "New booking request",
-        intro: `${b.name} (${b.email}${b.phone ? `, ${b.phone}` : ""}) requested a booking for ${datesLabel}. Confirm it in admin to lock the dates. The quote PDF is attached.`,
+        intro: `${b.name} (${b.email}${b.phone ? `, ${b.phone}` : ""}) requested a booking for ${datesLabel}. Confirm it in admin to lock the dates. The invoice PDF is attached.`,
         rows,
         cta: { label: "Open in admin", url: siteUrl("/admin/bookings") },
       }),
@@ -363,11 +376,9 @@ export async function notifyQuoteRequest(q: {
   // Push to the owner's phone; tapping opens the quotes list in admin.
   await notifyAdminNtfy({
     title: `New quote request ${q.quoteNumber}`,
-    message: [
-      q.name,
-      `✉️ ${q.email}`,
-      "Tap to open quotes in admin.",
-    ].join("\n"),
+    message: [q.name, `✉️ ${q.email}`, "Tap to open quotes in admin."].join(
+      "\n",
+    ),
     clickUrl: siteUrl("/admin/quotes"),
     tags: ["memo", "ocean"],
     priority: 4,
@@ -511,7 +522,9 @@ export async function notifyNewsletterSignup(s: {
     title: "New newsletter subscriber",
     message: [
       `✉️ ${s.email}`,
-      ...(s.locale ? [`Language: ${s.locale === "fr" ? "French" : "English"}`] : []),
+      ...(s.locale
+        ? [`Language: ${s.locale === "fr" ? "French" : "English"}`]
+        : []),
       "Tap to open subscribers in admin.",
     ].join("\n"),
     clickUrl: siteUrl("/admin/newsletter"),

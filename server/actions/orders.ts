@@ -190,6 +190,7 @@ export async function createOrderRequest(
       })),
       subtotalCents,
       totalCents: subtotalCents,
+      eventDate: data.eventDate || undefined,
       locale: data.locale,
     });
 
