@@ -89,7 +89,7 @@ export function SiteHeader({ locale, data }: Props) {
                 width={56}
                 height={56}
                 priority
-                className="h-12 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+                className="h-10 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] sm:h-12"
               />
               <span
                 aria-hidden
@@ -203,7 +203,7 @@ export function SiteHeader({ locale, data }: Props) {
 
           {/* Right: action buttons (language toggle, call, cart, quote, contact,
               and the hamburger that opens the mobile menu). */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Desktop: language toggle. Mobile: install-the-app button. */}
             <HeaderLocale />
             <InstallApp variant="chip" />
@@ -211,7 +211,7 @@ export function SiteHeader({ locale, data }: Props) {
             {/* Phone link uses `external` so IconChip renders a plain <a> for the
                 tel: URL instead of the locale-aware <Link>. */}
             <IconChip href={telHref} label={t("call")} external>
-              <Phone className="size-[18px]" />
+              <Phone className="size-4 sm:size-[18px]" />
             </IconChip>
 
             <button
@@ -220,9 +220,9 @@ export function SiteHeader({ locale, data }: Props) {
                 window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT))
               }
               aria-label={t("cart")}
-              className="relative grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10"
+              className="relative grid size-9 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 sm:size-11"
             >
-              <ShoppingBag className="size-[18px]" />
+              <ShoppingBag className="size-4 sm:size-[18px]" />
               <CartBadge />
             </button>
 
@@ -246,9 +246,9 @@ export function SiteHeader({ locale, data }: Props) {
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label={t("openMenu")}
-              className="grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 lg:hidden"
+              className="grid size-9 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 sm:size-11 lg:hidden"
             >
-              <Menu className="size-5" />
+              <Menu className="size-[18px] sm:size-5" />
             </button>
           </div>
         </div>
@@ -437,7 +437,7 @@ function IconChip({
   // Shared styling for the chip; `className` lets the caller add extras
   // (e.g. `relative` so the cart badge can position over it).
   const cls = cn(
-    "grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10",
+    "grid size-9 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 sm:size-11",
     className,
   );
   if (external) {

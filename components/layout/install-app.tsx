@@ -161,18 +161,28 @@ export function InstallApp({
           type="button"
           onClick={onClick}
           aria-label={t.install}
-          className="grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 md:hidden"
+          className="relative grid size-9 place-items-center rounded-md border border-[#a3e635]/40 bg-white/5 text-white transition-colors hover:bg-white/10 sm:size-11 md:hidden"
         >
-          <Download className="size-[18px]" />
+          {/* Gentle bounce draws the eye; static under reduced-motion. */}
+          <Download className="size-4 motion-safe:animate-bounce sm:size-[18px]" />
+          {/* Blinking lime signal dot — "tap me". */}
+          <span aria-hidden className="absolute -top-1 -right-1 flex size-2.5">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#a3e635] opacity-75 motion-safe:animate-ping" />
+            <span className="relative inline-flex size-2.5 rounded-full bg-[#a3e635]" />
+          </span>
         </button>
       ) : (
         <button
           type="button"
           onClick={onClick}
-          className="border-border text-foreground hover:bg-muted hover:text-primary inline-flex h-10 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors"
+          className="border-border text-foreground hover:bg-muted hover:text-primary relative inline-flex h-10 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors"
         >
-          <Download className="size-4" />
+          <Download className="size-4 motion-safe:animate-bounce" />
           {t.install}
+          <span aria-hidden className="absolute -top-1 -right-1 flex size-2.5">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#a3e635] opacity-75 motion-safe:animate-ping" />
+            <span className="relative inline-flex size-2.5 rounded-full bg-[#a3e635]" />
+          </span>
         </button>
       )}
 
