@@ -23,7 +23,10 @@
     },
     "readingMinutes": 6,
     "category": "pricing",
-    "tags": ["pricing", "rentals"],
+    "tags": [
+      "pricing",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg",
     "featured": true,
     "publishedDaysAgo": 3
@@ -52,7 +55,10 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["tips", "rentals"],
+    "tags": [
+      "tips",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 8
@@ -81,7 +87,10 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": ["parties", "tips"],
+    "tags": [
+      "parties",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 13
@@ -110,7 +119,10 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": ["tips", "rentals"],
+    "tags": [
+      "tips",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390938-cu27zd-overview-domaine-les-landes-de-gascogne-center-parcs-beauziac-france-photo01-768x575.jpg",
     "featured": false,
     "publishedDaysAgo": 18
@@ -139,7 +151,9 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["tips"],
+    "tags": [
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 23
@@ -168,7 +182,10 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": ["events", "corporate"],
+    "tags": [
+      "events",
+      "corporate"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": false,
     "publishedDaysAgo": 28
@@ -197,7 +214,9 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": ["safety"],
+    "tags": [
+      "safety"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 33
@@ -226,7 +245,10 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["rentals", "tips"],
+    "tags": [
+      "rentals",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484404870-axgpl1-aquasplash-water-world-at-shanghai-lsnow-indoor-skiing-theme-resort-shanghai-china-photo28-1-2048x1534.jpg",
     "featured": false,
     "publishedDaysAgo": 38
@@ -255,7 +277,10 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips"],
+    "tags": [
+      "rentals",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 43
@@ -284,7 +309,10 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": ["tips", "safety"],
+    "tags": [
+      "tips",
+      "safety"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484417138-3mz3g3-spinning-rapids-ride-wanda-ghuanghou-ghuanghou-china.jpg",
     "featured": false,
     "publishedDaysAgo": 48
@@ -292,7 +320,10 @@
   {
     "slug": "best-inflatable-water-slides-to-buy-2026",
     "category": "buying",
-    "tags": ["buying", "guides"],
+    "tags": [
+      "buying",
+      "guides"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708041891-ow1xnn-best-inflatable-water-slides-to-buy-2026.jpg",
     "featured": true,
     "publishedDaysAgo": 2,
@@ -321,7 +352,10 @@
   {
     "slug": "commercial-water-slide-buying-guide",
     "category": "buying",
-    "tags": ["buying", "commercial"],
+    "tags": [
+      "buying",
+      "commercial"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": false,
     "publishedDaysAgo": 5,
@@ -350,7 +384,10 @@
   {
     "slug": "residential-vs-commercial-water-slide",
     "category": "buying",
-    "tags": ["buying", "tips"],
+    "tags": [
+      "buying",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708046034-bkhz5p-residential-vs-commercial-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 9,
@@ -372,14 +409,17 @@
       "fr": "Les glissades gonflables résidentielles et commerciales diffèrent par le vinyle, la soufflerie, la garantie et le prix. Découvrez laquelle vous convient."
     },
     "content": {
-      "en": "From a distance, a residential and a commercial water slide can look identical. Up close — and after a season of use — they're completely different products. Buying the wrong grade is one of the most expensive mistakes a first-time owner makes. Here's how to tell them apart.\n\n## Residential-grade slides\n\nThese are built for a family that'll use the slide on weekends and holidays.\n\n- **Lighter vinyl**, lower price, easier for two people to move and store.\n- **Smaller blower** and lower power draw — usually a standard outlet.\n- Designed for **intermittent use**, not all-day operation.\n\nIf that's your reality — a backyard, a few parties a summer — a residential slide is the smart, cost-effective choice. Pair it with our [backyard party guide](/blog/perfect-backyard-water-slide-party) and you're set.\n\n## Commercial-grade slides\n\nCommercial units are built to survive constant setup, teardown, sun, and crowds.\n\n- **Heavy 18–22 oz UV-treated vinyl** and reinforced, welded seams.\n- **Larger blowers**, often more than one, for continuous rigidity.\n- Rated for **daily, high-traffic operation** and built with anchoring and inspection in mind.\n\nIf you'll [rent the slide out](/rent), run it at a venue, or use it weekly — the duty a unit like the [Cyclone Curve 24](/shop/cyclone-curve-24) is engineered for — residential vinyl simply won't last — and a failure mid-event costs you far more than the price difference.\n\n> Key takeaway: Buy residential for a backyard you enjoy a few times a year. Buy commercial the moment the slide needs to earn money or run often.\n\n## The honest cost comparison\n\nCommercial slides cost more up front, but the math flips with use. A residential slide pushed into commercial duty fails early, and replacement plus lost bookings dwarf what you \"saved.\" A commercial slide booked regularly — even a mid-size unit like the [Jungle Marble 19](/shop/jungle-marble-19) — pays for itself and keeps going for years. Our [rent-or-buy breakdown](/blog/rent-or-buy-water-slide) has the full reasoning.\n\n## Still on the fence?\n\nThe deciding question is rarely budget — it's **how often and how hard** the slide will work. Tell us your plan and we'll steer you to the right grade. Browse [our shop](/shop) for current models — from the backyard-friendly [Whale Splash 16](/shop/whale-splash-16) to themed commercial towers like the [Volcano Blast 18](/shop/volcano-blast-18) — or [send us your use case](/contact) and we'll recommend exactly what you need — nothing more.",
-      "fr": "De loin, une glissade résidentielle et une commerciale peuvent sembler identiques. De près — et après une saison d'usage — ce sont des produits totalement différents. Acheter la mauvaise qualité est l'une des erreurs les plus coûteuses du premier acheteur. Voici comment les distinguer.\n\n## Glissades de qualité résidentielle\n\nConçues pour une famille qui les utilise les week-ends et les jours fériés.\n\n- **Vinyle plus léger**, prix plus bas, faciles à déplacer et ranger à deux.\n- **Soufflerie plus petite** et faible consommation — souvent une prise standard.\n- Conçues pour un **usage intermittent**, pas un fonctionnement toute la journée.\n\nSi c'est votre réalité — un jardin, quelques fêtes par été — une glissade résidentielle est le choix malin et économique. Associez-la à notre [guide de fête au jardin](/blog/perfect-backyard-water-slide-party) et le tour est joué.\n\n## Glissades de qualité commerciale\n\nLes unités commerciales sont faites pour survivre aux installations, démontages, soleil et foules constants.\n\n- **Vinyle lourd de 18 à 22 oz traité anti-UV** et coutures soudées renforcées.\n- **Souffleries plus grandes**, souvent plusieurs, pour une rigidité continue.\n- Conçues pour un **usage quotidien intensif**, avec ancrage et inspection en tête.\n\nSi vous comptez [louer la glissade](/rent), l'exploiter sur un site ou l'utiliser chaque semaine — le rythme pour lequel une unité comme la [Cyclone Curve 24](/shop/cyclone-curve-24) est conçue — le vinyle résidentiel ne tiendra pas — et une panne en plein événement coûte bien plus que la différence de prix.\n\n> À retenir : achetez résidentiel pour un jardin dont vous profitez quelques fois par an. Achetez commercial dès que la glissade doit rapporter ou fonctionner souvent.\n\n## La comparaison de coût honnête\n\nLes glissades commerciales coûtent plus cher au départ, mais le calcul s'inverse à l'usage — même une unité de taille moyenne comme la [Jungle Marble 19](/shop/jungle-marble-19) bien réservée se rembourse et dure des années. Une glissade résidentielle poussée en usage commercial lâche tôt, et le remplacement plus les réservations perdues dépassent ce que vous aviez « économisé ». Notre [analyse louer ou acheter](/blog/rent-or-buy-water-slide) détaille tout.\n\n## Toujours indécis ?\n\nLa question décisive est rarement le budget — c'est **à quelle fréquence et à quelle intensité** la glissade travaillera. Dites-nous votre projet et nous vous orienterons vers la bonne qualité. Parcourez [notre boutique](/shop) — du [Whale Splash 16](/shop/whale-splash-16) parfait pour le jardin aux tours commerciales à thème comme le [Volcano Blast 18](/shop/volcano-blast-18) — ou [envoyez-nous votre cas d'usage](/contact) et nous recommanderons exactement ce qu'il vous faut."
+      "en": "From a distance, a residential and a commercial water slide can look identical. Up close — and after a season of use — they're completely different products. Buying the wrong grade is one of the most expensive mistakes a first-time owner makes. Here's how to tell them apart.\n\n## Residential-grade slides\n\nThese are built for a family that'll use the slide on weekends and holidays.\n\n- **Lighter vinyl**, lower price, easier for two people to move and store.\n- **Smaller blower** and lower power draw — usually a standard outlet.\n- Designed for **intermittent use**, not all-day operation.\n\nIf that's your reality — a backyard, a few parties a summer — a residential slide is the smart, cost-effective choice. Pair it with our [backyard party guide](/blog/perfect-backyard-water-slide-party) and you're set.\n\n## Commercial-grade slides\n\nCommercial units are built to survive constant setup, teardown, sun, and crowds.\n\n- **Heavy 18–22 oz UV-treated vinyl** and reinforced, welded seams.\n- **Larger blowers**, often more than one, for continuous rigidity.\n- Rated for **daily, high-traffic operation** and built with anchoring and inspection in mind.\n\nIf you'll [rent the slide out](/rent), run it at a venue, or use it weekly — the duty a unit like the [Cyclone Curve 24](/shop/cyclone-curve-24) is engineered for — residential vinyl simply won't last — and a failure mid-event costs you far more than the price difference.\n\n> Key takeaway: Buy residential for a backyard you enjoy a few times a year. Buy commercial the moment the slide needs to earn money or run often.\n\n## The honest cost comparison\n\nCommercial slides cost more up front, but the math flips with use. A residential slide pushed into commercial duty fails early, and replacement plus lost bookings dwarf what you \"saved.\" A commercial slide booked regularly — even a mid-size unit like the [Jungle Marble 19](/shop/jungle-marble-19) — pays for itself and keeps going for years. Our [rent-or-buy breakdown](/blog/rent-or-buy-water-slide) has the full reasoning.\n\n## Still on the fence?\n\nThe deciding question is rarely budget — it's **how often and how hard** the slide will work. Tell us your plan and we'll steer you to the right grade. Browse [our shop](/shop) for current models — from the backyard-friendly [Whale Splash 16](/shop/whale-splash-16) to themed commercial towers like the [Fire Dragon 18](/shop/fire-dragon-18) — or [send us your use case](/contact) and we'll recommend exactly what you need — nothing more.",
+      "fr": "De loin, une glissade résidentielle et une commerciale peuvent sembler identiques. De près — et après une saison d'usage — ce sont des produits totalement différents. Acheter la mauvaise qualité est l'une des erreurs les plus coûteuses du premier acheteur. Voici comment les distinguer.\n\n## Glissades de qualité résidentielle\n\nConçues pour une famille qui les utilise les week-ends et les jours fériés.\n\n- **Vinyle plus léger**, prix plus bas, faciles à déplacer et ranger à deux.\n- **Soufflerie plus petite** et faible consommation — souvent une prise standard.\n- Conçues pour un **usage intermittent**, pas un fonctionnement toute la journée.\n\nSi c'est votre réalité — un jardin, quelques fêtes par été — une glissade résidentielle est le choix malin et économique. Associez-la à notre [guide de fête au jardin](/blog/perfect-backyard-water-slide-party) et le tour est joué.\n\n## Glissades de qualité commerciale\n\nLes unités commerciales sont faites pour survivre aux installations, démontages, soleil et foules constants.\n\n- **Vinyle lourd de 18 à 22 oz traité anti-UV** et coutures soudées renforcées.\n- **Souffleries plus grandes**, souvent plusieurs, pour une rigidité continue.\n- Conçues pour un **usage quotidien intensif**, avec ancrage et inspection en tête.\n\nSi vous comptez [louer la glissade](/rent), l'exploiter sur un site ou l'utiliser chaque semaine — le rythme pour lequel une unité comme la [Cyclone Curve 24](/shop/cyclone-curve-24) est conçue — le vinyle résidentiel ne tiendra pas — et une panne en plein événement coûte bien plus que la différence de prix.\n\n> À retenir : achetez résidentiel pour un jardin dont vous profitez quelques fois par an. Achetez commercial dès que la glissade doit rapporter ou fonctionner souvent.\n\n## La comparaison de coût honnête\n\nLes glissades commerciales coûtent plus cher au départ, mais le calcul s'inverse à l'usage — même une unité de taille moyenne comme la [Jungle Marble 19](/shop/jungle-marble-19) bien réservée se rembourse et dure des années. Une glissade résidentielle poussée en usage commercial lâche tôt, et le remplacement plus les réservations perdues dépassent ce que vous aviez « économisé ». Notre [analyse louer ou acheter](/blog/rent-or-buy-water-slide) détaille tout.\n\n## Toujours indécis ?\n\nLa question décisive est rarement le budget — c'est **à quelle fréquence et à quelle intensité** la glissade travaillera. Dites-nous votre projet et nous vous orienterons vers la bonne qualité. Parcourez [notre boutique](/shop) — du [Whale Splash 16](/shop/whale-splash-16) parfait pour le jardin aux tours commerciales à thème comme le [Fire Dragon 18](/shop/fire-dragon-18) — ou [envoyez-nous votre cas d'usage](/contact) et nous recommanderons exactement ce qu'il vous faut."
     }
   },
   {
     "slug": "clean-dry-store-inflatable-water-slide",
     "category": "ownership",
-    "tags": ["ownership", "tips"],
+    "tags": [
+      "ownership",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708052329-rosuet-clean-dry-store-inflatable-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 13,
@@ -408,7 +448,10 @@
   {
     "slug": "water-slide-rentals-churches-schools-hoas",
     "category": "events",
-    "tags": ["events", "community"],
+    "tags": [
+      "events",
+      "community"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708058232-5fv3my-water-slide-rentals-churches-schools-hoas.jpg",
     "featured": true,
     "publishedDaysAgo": 16,
@@ -437,7 +480,10 @@
   {
     "slug": "water-slide-season-state-by-state",
     "category": "planning",
-    "tags": ["planning", "seasonal"],
+    "tags": [
+      "planning",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708067810-4ohw8z-water-slide-season-state-by-state.jpg",
     "featured": false,
     "publishedDaysAgo": 20,
@@ -487,7 +533,10 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": ["safety", "tips"],
+    "tags": [
+      "safety",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 6
@@ -516,7 +565,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["guides", "tips"],
+    "tags": [
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 9
@@ -545,7 +597,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["safety", "tips"],
+    "tags": [
+      "safety",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 12
@@ -574,7 +629,10 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["planning", "tips"],
+    "tags": [
+      "planning",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 15
@@ -603,7 +661,11 @@
     },
     "readingMinutes": 6,
     "category": "buying",
-    "tags": ["buying", "commercial", "ownership"],
+    "tags": [
+      "buying",
+      "commercial",
+      "ownership"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -632,7 +694,11 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": ["events", "parties", "seasonal"],
+    "tags": [
+      "events",
+      "parties",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": true,
     "publishedDaysAgo": 2
@@ -661,7 +727,11 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": ["events", "community", "planning"],
+    "tags": [
+      "events",
+      "community",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 1
@@ -690,7 +760,10 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": ["guides", "tips"],
+    "tags": [
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -719,7 +792,11 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": ["events", "parties", "seasonal"],
+    "tags": [
+      "events",
+      "parties",
+      "seasonal"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -743,12 +820,16 @@
       "fr": "Découvrez les 10 meilleures glissades d'eau gonflables à louer pour un anniversaire d'été. Livrées, installées et assurées dès 199 $/jour."
     },
     "content": {
-      "en": "A cake, some balloons, and… a giant water slide in the backyard. That's the birthday party kids talk about for the rest of the summer. To make it easy, here are our 10 most-booked water slide rentals for 2026 — each delivered, set up, sanitized and fully insured, from just $199/day.\n\n## 1. Tidal Tower 27 — the big thrill\nOur tallest slide at 27 feet, with a steep drop into a deep plunge pool. The showstopper for older kids and teens. [See the Tidal Tower 27](/rent/tidal-tower-27).\n\n## 2. Tropical Paradise 18\nA turquoise-and-lime tropical slide with a toucan on top and a big front splash pool — a bright, cheerful favorite. [Check availability](/rent/tropical-paradise-18).\n\n## 3. Fire Dragon 18\nA fierce red-and-charcoal dragon tower with a sculpted head and a steep tail chute — pure adventure. [See the Fire Dragon](/rent/fire-dragon-18).\n\n## 4. Great White Shark 18\nRiders drop through the shark's open jaws into a foamy splash pool. An ocean-party classic. [Rent the Shark](/rent/great-white-shark-18).\n\n## 5. Mermaid Lagoon 18\nShimmering teal, purple and coral with a sculpted mermaid tail — the dream slide for mermaid birthdays. [See the Mermaid Lagoon](/rent/mermaid-lagoon-slide).\n\n## 6. T-Rex Dino 18\nA giant roaring dinosaur head tops this prehistoric thriller. A jaw-dropping hit for dino fans. [Rent the T-Rex](/rent/t-rex-dinosaur-slide).\n\n## 7. Pirate Ship 18\nA galleon-shaped slide with sails, a skull flag and a walk-the-plank chute. Ahoy! [See the Pirate Ship](/rent/pirate-ship-slide).\n\n## 8. Volcano Blast 18\nAn erupting volcano with twin racing lanes and a bubbling splash pool — double the thrills. [Rent the Volcano](/rent/volcano-blast-18).\n\n## 9. Unicorn Dreamland Bouncer\nA white-and-pastel unicorn castle — the most photogenic bouncer around, perfect for little dreamers. [See the Unicorn](/rent/unicorn-dreamland-bouncer).\n\n## 10. Mega Waterpark Combo\nTwo slides, a climbing wall, sprayers and a bounce zone in one flagship unit — hours of fun for a big crowd. [See the Mega Waterpark](/rent/mega-waterpark-combo).\n\n## How to book yours\nPick your favorite, tell us your date and venue, and we'll send a free, no-obligation quote. We deliver, set up, sanitize and pick up — you just enjoy the party. Summer weekends fill up fast, so [browse all rentals](/rent) or [get a free quote](/contact) today.",
-      "fr": "Un gâteau, des ballons et… une glissade d'eau géante dans le jardin. Voilà l'anniversaire dont les enfants parleront tout l'été. Voici nos 10 glissades d'eau les plus réservées pour 2026 — livrées, installées, désinfectées et assurées, dès 199 $/jour.\n\n## 1. Tidal Tower 27 — la grande sensation\nNotre plus haute glissade (27 pi) avec descente abrupte vers une piscine profonde. [Voir la Tidal Tower 27](/rent/tidal-tower-27).\n\n## 2. Tropical Paradise 18\nGlissade tropicale turquoise et citron vert avec toucan et grande pataugeoire. [Vérifier la disponibilité](/rent/tropical-paradise-18).\n\n## 3. Fire Dragon 18\nTour dragon rouge et anthracite avec tête sculptée et couloir abrupt. [Voir le Fire Dragon](/rent/fire-dragon-18).\n\n## 4. Great White Shark 18\nDescente par la gueule du requin vers une pataugeoire écumante. [Louer le requin](/rent/great-white-shark-18).\n\n## 5. Mermaid Lagoon 18\nTurquoise, violet et corail avec queue de sirène sculptée. [Voir le Mermaid Lagoon](/rent/mermaid-lagoon-slide).\n\n## 6. T-Rex Dino 18\nUne énorme tête de dinosaure rugissante couronne ce thriller préhistorique. [Louer le T-Rex](/rent/t-rex-dinosaur-slide).\n\n## 7. Pirate Ship 18\nGlissade galion avec voiles, drapeau tête de mort et couloir « planche ». [Voir le Pirate Ship](/rent/pirate-ship-slide).\n\n## 8. Volcano Blast 18\nVolcan en éruption avec deux couloirs de course. [Louer le Volcano](/rent/volcano-blast-18).\n\n## 9. Unicorn Dreamland\nChâteau licorne blanc et pastel, le plus photogénique. [Voir la licorne](/rent/unicorn-dreamland-bouncer).\n\n## 10. Mega Waterpark Combo\nDeux glissades, mur d'escalade, brumisateurs et zone de saut en une unité. [Voir le Mega Waterpark](/rent/mega-waterpark-combo).\n\n## Comment réserver\nChoisissez votre préférée, indiquez votre date et votre lieu, et nous vous enverrons un devis gratuit. Nous livrons, installons, désinfectons et récupérons. Les week-ends d'été se remplissent vite : [parcourez toutes les locations](/rent) ou [demandez un devis](/contact)."
+      "en": "A cake, some balloons, and… a giant water slide in the backyard. That's the birthday party kids talk about for the rest of the summer. To make it easy, here are our 10 most-booked water slide rentals for 2026 — each delivered, set up, sanitized and fully insured, from just $199/day.\n\n## 1. Tidal Tower 27 — the big thrill\nOur tallest slide at 27 feet, with a steep drop into a deep plunge pool. The showstopper for older kids and teens. [See the Tidal Tower 27](/rent/tidal-tower-27).\n\n## 2. Tropical Paradise 18\nA turquoise-and-lime tropical slide with a toucan on top and a big front splash pool — a bright, cheerful favorite. [Check availability](/rent/tropical-paradise-18).\n\n## 3. Fire Dragon 18\nA fierce red-and-charcoal dragon tower with a sculpted head and a steep tail chute — pure adventure. [See the Fire Dragon](/rent/fire-dragon-18).\n\n## 4. Great White Shark 18\nRiders drop through the shark's open jaws into a foamy splash pool. An ocean-party classic. [Rent the Shark](/rent/great-white-shark-18).\n\n## 5. Mermaid Lagoon 18\nShimmering teal, purple and coral with a sculpted mermaid tail — the dream slide for mermaid birthdays. [See the Mermaid Lagoon](/rent/mermaid-lagoon-slide).\n\n## 6. T-Rex Dino 18\nA giant roaring dinosaur head tops this prehistoric thriller. A jaw-dropping hit for dino fans. [Rent the T-Rex](/rent/t-rex-dinosaur-slide).\n\n## 7. Pirate Ship 18\nA galleon-shaped slide with sails, a skull flag and a walk-the-plank chute. Ahoy! [See the Pirate Ship](/rent/pirate-ship-slide).\n\n## 8. Fire & Ice Racer 18\nFire on one lane, ice on the other — twin racing lanes and a splashdown finish, double the thrills. [Rent the Fire & Ice Racer](/rent/fire-and-ice-racer-18).\n\n## 9. Unicorn Dreamland Bouncer\nA white-and-pastel unicorn castle — the most photogenic bouncer around, perfect for little dreamers. [See the Unicorn](/rent/unicorn-dreamland-bouncer).\n\n## 10. Mega Waterpark Combo\nTwo slides, a climbing wall, sprayers and a bounce zone in one flagship unit — hours of fun for a big crowd. [See the Mega Waterpark](/rent/mega-waterpark-combo).\n\n## How to book yours\nPick your favorite, tell us your date and venue, and we'll send a free, no-obligation quote. We deliver, set up, sanitize and pick up — you just enjoy the party. Summer weekends fill up fast, so [browse all rentals](/rent) or [get a free quote](/contact) today.",
+      "fr": "Un gâteau, des ballons et… une glissade d'eau géante dans le jardin. Voilà l'anniversaire dont les enfants parleront tout l'été. Voici nos 10 glissades d'eau les plus réservées pour 2026 — livrées, installées, désinfectées et assurées, dès 199 $/jour.\n\n## 1. Tidal Tower 27 — la grande sensation\nNotre plus haute glissade (27 pi) avec descente abrupte vers une piscine profonde. [Voir la Tidal Tower 27](/rent/tidal-tower-27).\n\n## 2. Tropical Paradise 18\nGlissade tropicale turquoise et citron vert avec toucan et grande pataugeoire. [Vérifier la disponibilité](/rent/tropical-paradise-18).\n\n## 3. Fire Dragon 18\nTour dragon rouge et anthracite avec tête sculptée et couloir abrupt. [Voir le Fire Dragon](/rent/fire-dragon-18).\n\n## 4. Great White Shark 18\nDescente par la gueule du requin vers une pataugeoire écumante. [Louer le requin](/rent/great-white-shark-18).\n\n## 5. Mermaid Lagoon 18\nTurquoise, violet et corail avec queue de sirène sculptée. [Voir le Mermaid Lagoon](/rent/mermaid-lagoon-slide).\n\n## 6. T-Rex Dino 18\nUne énorme tête de dinosaure rugissante couronne ce thriller préhistorique. [Louer le T-Rex](/rent/t-rex-dinosaur-slide).\n\n## 7. Pirate Ship 18\nGlissade galion avec voiles, drapeau tête de mort et couloir « planche ». [Voir le Pirate Ship](/rent/pirate-ship-slide).\n\n## 8. Fire & Ice Racer 18\nFeu d'un côté, glace de l'autre — deux couloirs de course et une arrivée éclaboussante. [Louer le Fire & Ice Racer](/rent/fire-and-ice-racer-18).\n\n## 9. Unicorn Dreamland\nChâteau licorne blanc et pastel, le plus photogénique. [Voir la licorne](/rent/unicorn-dreamland-bouncer).\n\n## 10. Mega Waterpark Combo\nDeux glissades, mur d'escalade, brumisateurs et zone de saut en une unité. [Voir le Mega Waterpark](/rent/mega-waterpark-combo).\n\n## Comment réserver\nChoisissez votre préférée, indiquez votre date et votre lieu, et nous vous enverrons un devis gratuit. Nous livrons, installons, désinfectons et récupérons. Les week-ends d'été se remplissent vite : [parcourez toutes les locations](/rent) ou [demandez un devis](/contact)."
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["guides", "rentals", "parties"],
+    "tags": [
+      "guides",
+      "rentals",
+      "parties"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342059973-iolc7o-best-water-slide-rentals-birthday-party.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -777,7 +858,11 @@
     },
     "readingMinutes": 4,
     "category": "planning",
-    "tags": ["planning", "rentals", "guides"],
+    "tags": [
+      "planning",
+      "rentals",
+      "guides"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342061961-etbkur-how-to-rent-a-water-slide.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -806,7 +891,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips", "planning"],
+    "tags": [
+      "rentals",
+      "tips",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783427613668-f4nok9-water-slide-electricity-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -835,7 +924,11 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": ["rentals", "guides", "pricing"],
+    "tags": [
+      "rentals",
+      "guides",
+      "pricing"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783427618298-n71rqo-water-slide-included-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -864,7 +957,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips", "planning"],
+    "tags": [
+      "rentals",
+      "tips",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783666387979-7n8i3m-water-slide-generator-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -893,7 +990,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "tips", "planning"],
+    "tags": [
+      "rentals",
+      "tips",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783666390283-ftxlc1-water-slide-prep-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -922,7 +1023,11 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": ["tips", "rentals", "planning"],
+    "tags": [
+      "tips",
+      "rentals",
+      "planning"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781076730-i4xag2-water-slide-yard-prep-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -946,12 +1051,16 @@
       "fr": "Les dix questions qui protègent votre budget : prix tout compris, preuve d'assurance, désinfection, installation et ancrage, espace, électricité, météo et plus."
     },
     "content": {
-      "en": "Before you rent a water slide, ask ten questions: is the price all-inclusive, are they insured, when was it sanitized, who sets it up, what space and power do you need, does it run wet or dry, what's the weather policy, how early should you book, is an attendant available, and exactly what's included. Any solid company answers all ten instantly. Here they are, with the answers you should hear.\n\n## 1. Is the price all-inclusive?\n\nThe most expensive surprise in this industry is a low sticker price that excludes delivery, setup, or insurance. Ask for the out-the-door number. With Big Wave Slides, delivery, professional setup, sanitizing, insurance, and pickup are always in the price — rentals from $199/day, and a showpiece like the [Great White Shark 18](/rent/great-white-shark-18) or [Volcano Blast 18](/rent/volcano-blast-18) is quoted exactly, up front.\n\n## 2. Are you insured — and can you prove it?\n\nAsk for a certificate of insurance (COI). Schools, churches, HOAs, and parks usually require one, and a company that hesitates is telling you something. Every one of our rentals is fully insured, and we provide the COI on request.\n\n## 3. When was the unit last cleaned and sanitized?\n\nThe answer should be \"before every rental,\" not \"regularly.\" Our slides are cleaned and sanitized before each delivery — details in [what's included in a water slide rental](/blog/what-is-included-in-a-water-slide-rental).\n\n## 4. Who sets it up and anchors it?\n\nThe company should — never you. Proper anchoring (stakes on grass, sandbags on concrete) plus a safety check is what keeps a two-story slide like the [Tidal Tower 27](/rent/tidal-tower-27) planted all day. If a company drops off a rolled-up slide and leaves, walk away.\n\n## 5. How much space and power do I need?\n\nA real company gives exact numbers per unit. Each of our listings shows footprint, required level area, and power — for example, a dual-lane racer like the [Double Drop Racer 22](/rent/double-drop-racer-22) runs two blowers on separate circuits. Yard prep is easy: see [how to prepare your yard](/blog/how-to-prepare-your-yard-for-a-water-slide-rental).\n\n## 6. Can it run wet or dry?\n\nMany slides work both ways — useful when the forecast cools off. Ask before booking if that flexibility matters; themed units like the [Mermaid Lagoon 18](/rent/mermaid-lagoon-slide) and [T-Rex Dino 18](/rent/t-rex-dinosaur-slide) are crowd-pleasers either way.\n\n## 7. What happens if the weather turns?\n\nYou want a clear answer on wind limits (inflatables shut down around 15–25 mph), storms, and rescheduling — before you pay anything. Ask how they handle it, and get it in writing on the quote.\n\n## 8. How far in advance should I book?\n\nSummer weekends, holidays, and end-of-school dates go first — 2–4 weeks ahead is the safe window, though last-minute is often possible midweek. Big multi-unit setups like the [Mega Waterpark Combo](/rent/mega-waterpark-combo) deserve extra lead time.\n\n## 9. Do you provide an attendant?\n\nMost backyard rentals run fine with adult supervision, but for school or corporate events an attendant can be worth it. Ask whether one's available and what it costs — and confirm who supervises if not.\n\n## 10. What exactly is included — in writing?\n\nGet the quote as a document listing the unit, date, hours, delivery, setup, insurance, and total. Ours arrives as a signed-quote PDF with every line itemized, whether it's a [Palm Paradise 24](/rent/palm-paradise-24) for a [birthday party](/water-slides-for/birthday-parties) or a [Superhero City Combo](/rent/superhero-city-combo) for the school fair.\n\n## FAQ\n\n**What's the single biggest red flag?**\nNo proof of insurance. Second place: a price that keeps growing after you commit.\n\n**Is a cheap rental ever worth it?**\nOnly if the ten answers above check out. A $50 saving isn't worth an uninsured, unsanitized slide anchored by nobody.\n\n**Do I need to ask all ten every time?**\nWith a new company, yes. Our answers to all ten live on our [answers page](/answers) — and a [free quote](/contact) puts everything in writing.\n\nReady to put us to the test? Ask us anything — then get your free, no-obligation quote with every answer in writing. [Browse the slides](/rent) or [request your quote](/contact). Nationwide, from $199/day.",
-      "fr": "Avant de louer une glissade d'eau, posez dix questions : le prix est-il tout compris, êtes-vous assurés, quand a-t-elle été désinfectée, qui l'installe, quel espace et quelle électricité faut-il, fonctionne-t-elle avec ou sans eau, quelle est la politique météo, combien de temps à l'avance réserver, un préposé est-il offert, et qu'est-ce qui est inclus exactement. Une entreprise sérieuse répond aux dix sans hésiter. Les voici, avec les réponses à exiger.\n\n## 1. Le prix est-il tout compris ?\n\nLa pire surprise du secteur : un prix affiché bas qui exclut livraison, installation ou assurance. Demandez le montant final. Chez Big Wave Slides, livraison, installation professionnelle, désinfection, assurance et récupération sont toujours compris — locations dès 199 $/jour, et une pièce maîtresse comme la [Great White Shark 18](/rent/great-white-shark-18) ou la [Volcano Blast 18](/rent/volcano-blast-18) est chiffrée exactement, d'avance.\n\n## 2. Êtes-vous assurés — avec preuve ?\n\nDemandez un certificat d'assurance. Écoles, églises et municipalités l'exigent souvent, et une entreprise qui hésite vous dit quelque chose. Chacune de nos locations est entièrement assurée, certificat fourni sur demande.\n\n## 3. Quand l'unité a-t-elle été désinfectée ?\n\nLa bonne réponse : « avant chaque location », pas « régulièrement ». Nos glissades sont nettoyées et désinfectées avant chaque livraison — détails dans [ce qui est inclus dans une location](/blog/what-is-included-in-a-water-slide-rental).\n\n## 4. Qui l'installe et l'ancre ?\n\nL'entreprise — jamais vous. Un ancrage adéquat (piquets sur gazon, sacs de sable sur béton) et une vérification de sécurité gardent une glissade de deux étages comme la [Tidal Tower 27](/rent/tidal-tower-27) bien plantée toute la journée. Si on dépose la glissade roulée et qu'on repart, fuyez.\n\n## 5. Quel espace et quelle électricité faut-il ?\n\nUne vraie entreprise donne des chiffres exacts par unité. Chaque fiche affiche l'empreinte, la zone plane requise et l'électricité — par exemple, une double voie comme la [Double Drop Racer 22](/rent/double-drop-racer-22) utilise deux souffleurs sur circuits séparés. La préparation est simple : voyez [comment préparer votre terrain](/blog/how-to-prepare-your-yard-for-a-water-slide-rental).\n\n## 6. Fonctionne-t-elle avec ou sans eau ?\n\nBeaucoup de glissades font les deux — pratique si la météo fraîchit. Demandez avant de réserver ; des unités à thème comme la [Mermaid Lagoon 18](/rent/mermaid-lagoon-slide) et la [T-Rex Dino 18](/rent/t-rex-dinosaur-slide) plaisent dans les deux modes.\n\n## 7. Que se passe-t-il si la météo tourne ?\n\nExigez une réponse claire sur les limites de vent (arrêt autour de 25-40 km/h), les orages et le report — avant de payer. Faites-le inscrire sur le devis.\n\n## 8. Combien de temps à l'avance réserver ?\n\nWeek-ends d'été, fêtes et fins d'année scolaire partent en premier — 2 à 4 semaines d'avance est la fenêtre sûre. Les grandes installations comme le [Mega Waterpark Combo](/rent/mega-waterpark-combo) méritent plus de préavis.\n\n## 9. Offrez-vous un préposé ?\n\nLa plupart des locations résidentielles fonctionnent avec une surveillance adulte, mais pour un événement scolaire ou corporatif, un préposé vaut la peine. Demandez la disponibilité et le coût.\n\n## 10. Qu'est-ce qui est inclus — par écrit ?\n\nObtenez le devis en document : unité, date, heures, livraison, installation, assurance et total. Le nôtre arrive en PDF détaillé ligne par ligne, que ce soit une [Palm Paradise 24](/rent/palm-paradise-24) pour un [anniversaire](/water-slides-for/birthday-parties) ou un [Superhero City Combo](/rent/superhero-city-combo) pour la kermesse.\n\n## FAQ\n\n**Le plus gros signal d'alarme ?**\nAucune preuve d'assurance. En deuxième : un prix qui gonfle après votre engagement.\n\n**Une location pas chère vaut-elle le coup ?**\nSeulement si les dix réponses ci-dessus tiennent. Économiser 50 $ ne vaut pas une glissade non assurée, non désinfectée, ancrée par personne.\n\n**Faut-il poser les dix questions chaque fois ?**\nAvec une nouvelle entreprise, oui. Nos réponses aux dix sont dans notre [centre de réponses](/answers) — et un [devis gratuit](/contact) met tout par écrit.\n\nPrêt à nous mettre à l'épreuve ? Posez-nous toutes vos questions — puis recevez votre devis gratuit et sans engagement, tout par écrit. [Parcourez les glissades](/rent) ou [demandez votre devis](/contact). Partout aux États-Unis, dès 199 $/jour."
+      "en": "Before you rent a water slide, ask ten questions: is the price all-inclusive, are they insured, when was it sanitized, who sets it up, what space and power do you need, does it run wet or dry, what's the weather policy, how early should you book, is an attendant available, and exactly what's included. Any solid company answers all ten instantly. Here they are, with the answers you should hear.\n\n## 1. Is the price all-inclusive?\n\nThe most expensive surprise in this industry is a low sticker price that excludes delivery, setup, or insurance. Ask for the out-the-door number. With Big Wave Slides, delivery, professional setup, sanitizing, insurance, and pickup are always in the price — rentals from $199/day, and a showpiece like the [Great White Shark 18](/rent/great-white-shark-18) or [Fire Dragon 18](/rent/fire-dragon-18) is quoted exactly, up front.\n\n## 2. Are you insured — and can you prove it?\n\nAsk for a certificate of insurance (COI). Schools, churches, HOAs, and parks usually require one, and a company that hesitates is telling you something. Every one of our rentals is fully insured, and we provide the COI on request.\n\n## 3. When was the unit last cleaned and sanitized?\n\nThe answer should be \"before every rental,\" not \"regularly.\" Our slides are cleaned and sanitized before each delivery — details in [what's included in a water slide rental](/blog/what-is-included-in-a-water-slide-rental).\n\n## 4. Who sets it up and anchors it?\n\nThe company should — never you. Proper anchoring (stakes on grass, sandbags on concrete) plus a safety check is what keeps a two-story slide like the [Tidal Tower 27](/rent/tidal-tower-27) planted all day. If a company drops off a rolled-up slide and leaves, walk away.\n\n## 5. How much space and power do I need?\n\nA real company gives exact numbers per unit. Each of our listings shows footprint, required level area, and power — for example, a dual-lane racer like the [Double Drop Racer 22](/rent/double-drop-racer-22) runs two blowers on separate circuits. Yard prep is easy: see [how to prepare your yard](/blog/how-to-prepare-your-yard-for-a-water-slide-rental).\n\n## 6. Can it run wet or dry?\n\nMany slides work both ways — useful when the forecast cools off. Ask before booking if that flexibility matters; themed units like the [Mermaid Lagoon 18](/rent/mermaid-lagoon-slide) and [T-Rex Dino 18](/rent/t-rex-dinosaur-slide) are crowd-pleasers either way.\n\n## 7. What happens if the weather turns?\n\nYou want a clear answer on wind limits (inflatables shut down around 15–25 mph), storms, and rescheduling — before you pay anything. Ask how they handle it, and get it in writing on the quote.\n\n## 8. How far in advance should I book?\n\nSummer weekends, holidays, and end-of-school dates go first — 2–4 weeks ahead is the safe window, though last-minute is often possible midweek. Big multi-unit setups like the [Mega Waterpark Combo](/rent/mega-waterpark-combo) deserve extra lead time.\n\n## 9. Do you provide an attendant?\n\nMost backyard rentals run fine with adult supervision, but for school or corporate events an attendant can be worth it. Ask whether one's available and what it costs — and confirm who supervises if not.\n\n## 10. What exactly is included — in writing?\n\nGet the quote as a document listing the unit, date, hours, delivery, setup, insurance, and total. Ours arrives as a signed-quote PDF with every line itemized, whether it's a [Palm Paradise 24](/rent/palm-paradise-24) for a [birthday party](/water-slides-for/birthday-parties) or a [Superhero City Combo](/rent/superhero-city-combo) for the school fair.\n\n## FAQ\n\n**What's the single biggest red flag?**\nNo proof of insurance. Second place: a price that keeps growing after you commit.\n\n**Is a cheap rental ever worth it?**\nOnly if the ten answers above check out. A $50 saving isn't worth an uninsured, unsanitized slide anchored by nobody.\n\n**Do I need to ask all ten every time?**\nWith a new company, yes. Our answers to all ten live on our [answers page](/answers) — and a [free quote](/contact) puts everything in writing.\n\nReady to put us to the test? Ask us anything — then get your free, no-obligation quote with every answer in writing. [Browse the slides](/rent) or [request your quote](/contact). Nationwide, from $199/day.",
+      "fr": "Avant de louer une glissade d'eau, posez dix questions : le prix est-il tout compris, êtes-vous assurés, quand a-t-elle été désinfectée, qui l'installe, quel espace et quelle électricité faut-il, fonctionne-t-elle avec ou sans eau, quelle est la politique météo, combien de temps à l'avance réserver, un préposé est-il offert, et qu'est-ce qui est inclus exactement. Une entreprise sérieuse répond aux dix sans hésiter. Les voici, avec les réponses à exiger.\n\n## 1. Le prix est-il tout compris ?\n\nLa pire surprise du secteur : un prix affiché bas qui exclut livraison, installation ou assurance. Demandez le montant final. Chez Big Wave Slides, livraison, installation professionnelle, désinfection, assurance et récupération sont toujours compris — locations dès 199 $/jour, et une pièce maîtresse comme la [Great White Shark 18](/rent/great-white-shark-18) ou la [Fire Dragon 18](/rent/fire-dragon-18) est chiffrée exactement, d'avance.\n\n## 2. Êtes-vous assurés — avec preuve ?\n\nDemandez un certificat d'assurance. Écoles, églises et municipalités l'exigent souvent, et une entreprise qui hésite vous dit quelque chose. Chacune de nos locations est entièrement assurée, certificat fourni sur demande.\n\n## 3. Quand l'unité a-t-elle été désinfectée ?\n\nLa bonne réponse : « avant chaque location », pas « régulièrement ». Nos glissades sont nettoyées et désinfectées avant chaque livraison — détails dans [ce qui est inclus dans une location](/blog/what-is-included-in-a-water-slide-rental).\n\n## 4. Qui l'installe et l'ancre ?\n\nL'entreprise — jamais vous. Un ancrage adéquat (piquets sur gazon, sacs de sable sur béton) et une vérification de sécurité gardent une glissade de deux étages comme la [Tidal Tower 27](/rent/tidal-tower-27) bien plantée toute la journée. Si on dépose la glissade roulée et qu'on repart, fuyez.\n\n## 5. Quel espace et quelle électricité faut-il ?\n\nUne vraie entreprise donne des chiffres exacts par unité. Chaque fiche affiche l'empreinte, la zone plane requise et l'électricité — par exemple, une double voie comme la [Double Drop Racer 22](/rent/double-drop-racer-22) utilise deux souffleurs sur circuits séparés. La préparation est simple : voyez [comment préparer votre terrain](/blog/how-to-prepare-your-yard-for-a-water-slide-rental).\n\n## 6. Fonctionne-t-elle avec ou sans eau ?\n\nBeaucoup de glissades font les deux — pratique si la météo fraîchit. Demandez avant de réserver ; des unités à thème comme la [Mermaid Lagoon 18](/rent/mermaid-lagoon-slide) et la [T-Rex Dino 18](/rent/t-rex-dinosaur-slide) plaisent dans les deux modes.\n\n## 7. Que se passe-t-il si la météo tourne ?\n\nExigez une réponse claire sur les limites de vent (arrêt autour de 25-40 km/h), les orages et le report — avant de payer. Faites-le inscrire sur le devis.\n\n## 8. Combien de temps à l'avance réserver ?\n\nWeek-ends d'été, fêtes et fins d'année scolaire partent en premier — 2 à 4 semaines d'avance est la fenêtre sûre. Les grandes installations comme le [Mega Waterpark Combo](/rent/mega-waterpark-combo) méritent plus de préavis.\n\n## 9. Offrez-vous un préposé ?\n\nLa plupart des locations résidentielles fonctionnent avec une surveillance adulte, mais pour un événement scolaire ou corporatif, un préposé vaut la peine. Demandez la disponibilité et le coût.\n\n## 10. Qu'est-ce qui est inclus — par écrit ?\n\nObtenez le devis en document : unité, date, heures, livraison, installation, assurance et total. Le nôtre arrive en PDF détaillé ligne par ligne, que ce soit une [Palm Paradise 24](/rent/palm-paradise-24) pour un [anniversaire](/water-slides-for/birthday-parties) ou un [Superhero City Combo](/rent/superhero-city-combo) pour la kermesse.\n\n## FAQ\n\n**Le plus gros signal d'alarme ?**\nAucune preuve d'assurance. En deuxième : un prix qui gonfle après votre engagement.\n\n**Une location pas chère vaut-elle le coup ?**\nSeulement si les dix réponses ci-dessus tiennent. Économiser 50 $ ne vaut pas une glissade non assurée, non désinfectée, ancrée par personne.\n\n**Faut-il poser les dix questions chaque fois ?**\nAvec une nouvelle entreprise, oui. Nos réponses aux dix sont dans notre [centre de réponses](/answers) — et un [devis gratuit](/contact) met tout par écrit.\n\nPrêt à nous mettre à l'épreuve ? Posez-nous toutes vos questions — puis recevez votre devis gratuit et sans engagement, tout par écrit. [Parcourez les glissades](/rent) ou [demandez votre devis](/contact). Partout aux États-Unis, dès 199 $/jour."
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": ["rentals", "guides", "tips"],
+    "tags": [
+      "rentals",
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781079726-gq62ud-water-slide-questions-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -980,7 +1089,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "planning", "tips"],
+    "tags": [
+      "rentals",
+      "planning",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783881001848-cbqsjh-water-slide-delivery-times-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1009,7 +1122,11 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": ["safety", "rentals", "guides"],
+    "tags": [
+      "safety",
+      "rentals",
+      "guides"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783881003752-xn2tdw-water-slide-insured-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1038,7 +1155,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["tips", "planning", "rentals"],
+    "tags": [
+      "tips",
+      "planning",
+      "rentals"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783967006135-py0t6k-water-slide-small-backyard-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1067,7 +1188,11 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": ["rentals", "guides", "tips"],
+    "tags": [
+      "rentals",
+      "guides",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783967008143-pqve0f-water-slide-setup-time-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1096,7 +1221,11 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": ["guides", "rentals", "tips"],
+    "tags": [
+      "guides",
+      "rentals",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1784194010565-23dpno-water-slide-size-guide-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1125,7 +1254,11 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": ["rentals", "planning", "tips"],
+    "tags": [
+      "rentals",
+      "planning",
+      "tips"
+    ],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1784194014436-d286zm-last-minute-water-slide-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0

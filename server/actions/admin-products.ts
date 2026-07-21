@@ -205,7 +205,15 @@ export async function saveProduct(
 export async function deleteProduct(id: string): Promise<AdminActionResult> {
   const session = await requirePermission("product.delete");
   try {
-    await prisma.product.delete({ where: { id } });
+    // CartItem is the only relation that blocks a product delete (required FK,
+    // no cascade) — visitors' abandoned carts were silently preventing deletes.
+    // Clear those lines first, then delete. Order/booking items are safe by
+    // design: they keep a snapshot of the name/price and auto-null their
+    // product link, so history and past invoices stay intact.
+    await prisma.$transaction([
+      prisma.cartItem.deleteMany({ where: { productId: id } }),
+      prisma.product.delete({ where: { id } }),
+    ]);
     await logActivity(session.id, "product.delete", {
       entityType: "Product",
       entityId: id,
@@ -216,7 +224,7 @@ export async function deleteProduct(id: string): Promise<AdminActionResult> {
   } catch {
     return {
       ok: false,
-      error: "Couldn't delete (it may be referenced by orders).",
+      error: "Couldn't delete this product. Please try again.",
     };
   }
 }
