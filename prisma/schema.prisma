@@ -329,6 +329,7 @@ model Order {
   paymentStatus    PaymentStatus @default(PENDING)
   subtotalCents    Int           @default(0)
   deliveryFeeCents Int           @default(0)
+  taxCents         Int           @default(0)
   totalCents       Int           @default(0)
   amountPaidCents  Int           @default(0)
   invoiceNote      String?
@@ -340,6 +341,33 @@ model Order {
   // Geo location the order was placed from (resolved from IP at checkout):
   // { country, region, city, ip }.
   geo              Json?
+
+  // ── Quote → invoice → payment journey ────────────────────────────────
+  // QUOTE: quote issued, client deciding · INVOICE: quote accepted, invoice
+  // issued, awaiting payment · CONFIRMED: deposit/full payment received.
+  stage             OrderStage @default(QUOTE)
+  eventDate         DateTime?
+  quoteValidUntil   DateTime?
+  quoteAcceptedAt   DateTime?
+  invoiceNumber     String?    @unique
+  invoiceIssuedAt   DateTime?
+  invoiceDueAt      DateTime?
+  // HALF = 50% deposit now + balance before setup · FULL = pay in full.
+  paymentPlan       String?
+  paymentPlanAt     DateTime?
+  // AWAITING_DETAILS | DETAILS_SENT | PROOF_SUBMITTED | PAID | REJECTED
+  paymentDetailsState String   @default("AWAITING_DETAILS")
+  paymentMethodKey    String?
+  paymentMethodLabel  String?
+  paymentDestination  String?
+  paymentInstructions String?
+  paymentNetwork      String?
+  paymentQrUrl        String?
+  proofTxId           String?
+  proofNote           String?
+  proofImageUrl       String?
+  proofSubmittedAt    DateTime?
+
   items            OrderItem[]
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
@@ -347,6 +375,31 @@ model Order {
   @@index([customerId, createdAt])
   @@index([status])
   @@index([paymentStatus])
+  @@index([stage])
+}
+
+// Client-facing journey stage for an order request.
+enum OrderStage {
+  QUOTE
+  INVOICE
+  CONFIRMED
+}
+
+// A manual payment rail (Zelle, Cash App, …) the owner configures once; used
+// to auto-resolve payment details the moment a client picks a plan + method.
+model PaymentMethodConfig {
+  id           String   @id @default(cuid())
+  method       String   @unique // "zelle" | "cash-app" | "chime" | "apple-pay" | "crypto" | custom
+  label        String
+  destination  String   @default("")
+  // Template with {{amount}} {{orderNumber}} {{destination}} {{network}}.
+  instructions String   @default("")
+  network      String? // crypto only, e.g. "USDT · TRON (TRC-20)"
+  qrImageUrl   String?
+  enabled      Boolean  @default(false)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model OrderItem {

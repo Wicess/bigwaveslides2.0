@@ -46,6 +46,11 @@ export function bookingNumber(): string {
   return `BK-${datePart()}-${randomSuffix()}`;
 }
 
+/** e.g. INV-260623-K7P2Q — issued when a client accepts their quote. */
+export function invoiceNumber(): string {
+  return `INV-${datePart()}-${randomSuffix()}`;
+}
+
 /** e.g. CT-260623-K7P2Q (also used as the public contract URL token). */
 export function contractNumber(): string {
   return `CT-${datePart()}-${randomSuffix(7)}`;

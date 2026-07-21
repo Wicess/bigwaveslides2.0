@@ -9,13 +9,26 @@ import {
   renderToBuffer,
 } from "@react-pdf/renderer";
 import { formatPrice } from "@/lib/format";
+import { ANTI_SCAM_HEADING, ANTI_SCAM_BODY } from "@/lib/anti-scam";
+import { amountDueCents, balanceCents } from "@/lib/payment-plan";
+import {
+  TAX_LABEL,
+  TRANSPORT_LABEL,
+  DEPOSIT_RATE,
+  REFUND_NOTICE_DAYS,
+} from "@/lib/pricing";
+import {
+  RENTAL_TERMS,
+  orderTerms,
+  quoteTerms,
+  SETUP_REQUIREMENTS,
+} from "@/lib/legal-terms";
 
 const LOGO =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/brand/logo-email.png";
 const CONTACT_EMAIL = "contact@bigwaveslides.com";
 const CONTACT_PHONE = "+1 (614) 302-5899";
 const SITE = "bigwaveslides.com";
-const GOVERNING_STATE = "Ohio";
 
 const C = {
   ink: "#0f172a",
@@ -25,6 +38,9 @@ const C = {
   primary: "#0099FF",
   accent: "#003366",
   soft: "#f1f8ff",
+  warnBg: "#fef2f2",
+  warnBorder: "#fca5a5",
+  warnInk: "#991b1b",
 };
 
 const s = StyleSheet.create({
@@ -92,7 +108,7 @@ const s = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
   },
   kv: { flexDirection: "row", marginBottom: 2 },
-  kvKey: { width: 62, color: C.muted },
+  kvKey: { width: 70, color: C.muted },
   kvVal: { flex: 1, color: C.ink },
   value: { fontSize: 9.5, color: C.ink, marginBottom: 1 },
   tableHead: {
@@ -117,6 +133,16 @@ const s = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: C.line,
   },
+  includes: {
+    paddingTop: 0,
+    paddingBottom: 8,
+    paddingHorizontal: 12,
+    marginTop: -4,
+    borderBottomWidth: 1,
+    borderBottomColor: C.line,
+    fontSize: 8,
+    color: C.muted,
+  },
   cDesc: { flex: 3 },
   cQty: { flex: 1, textAlign: "center" },
   cRate: { flex: 1.3, textAlign: "right" },
@@ -137,14 +163,20 @@ const s = StyleSheet.create({
   },
   grandLabel: { fontSize: 11, fontFamily: "Helvetica-Bold", color: C.accent },
   grandValue: { fontSize: 13, fontFamily: "Helvetica-Bold", color: C.primary },
-  note: {
+  scheduleBox: {
     marginTop: 12,
-    backgroundColor: C.soft,
+    borderWidth: 1,
+    borderColor: C.line,
     borderRadius: 8,
-    padding: 10,
-    fontSize: 9,
-    color: C.body,
+    padding: 11,
   },
+  scheduleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 2.5,
+  },
+  scheduleKey: { color: C.ink },
+  scheduleVal: { fontFamily: "Helvetica-Bold", color: C.ink },
   payBox: {
     marginTop: 12,
     borderWidth: 1,
@@ -163,6 +195,21 @@ const s = StyleSheet.create({
     borderRadius: 2,
   },
   payLabel: { fontSize: 9.5, color: C.ink, fontFamily: "Helvetica-Bold" },
+  warnBox: {
+    marginTop: 12,
+    backgroundColor: C.warnBg,
+    borderWidth: 1,
+    borderColor: C.warnBorder,
+    borderRadius: 8,
+    padding: 11,
+  },
+  warnTitle: {
+    fontSize: 9.5,
+    fontFamily: "Helvetica-Bold",
+    color: C.warnInk,
+    marginBottom: 3,
+  },
+  warnBody: { fontSize: 8.5, color: C.warnInk, lineHeight: 1.5 },
   sectionTitle: {
     fontSize: 11.5,
     fontFamily: "Helvetica-Bold",
@@ -175,6 +222,7 @@ const s = StyleSheet.create({
   },
   clause: { marginBottom: 6, fontSize: 9, color: C.body, textAlign: "justify" },
   clauseLead: { fontFamily: "Helvetica-Bold", color: C.ink },
+  bullet: { marginBottom: 3, fontSize: 9, color: C.body },
   ack: { marginTop: 10, fontSize: 9, color: C.body, fontStyle: "italic" },
   signRow: { flexDirection: "row", gap: 28, marginTop: 16 },
   signCol: { flex: 1 },
@@ -232,16 +280,33 @@ export type QuoteLineItem = {
   qtyLabel: string;
   rateLabel: string;
   amountCents: number;
+  /** Optional "Includes: …" sub-line under the description. */
+  includes?: string;
 };
 
 export type QuotePdfInput = {
   kind: "order" | "booking";
+  /** "quote" = pre-acceptance document · "invoice" = payable document.
+      Defaults to "invoice" for backwards compatibility. */
+  docType?: "quote" | "invoice";
   number: string;
+  /** On invoices: the originating quote/order reference. */
+  quoteRef?: string;
   dateLabel: string;
-  /** Date of the event, printed on the invoice (orders; bookings use rental.arrival). */
+  /** Quote docs: how long the quote stays valid. */
+  validUntilLabel?: string;
+  /** Invoice docs: when the balance is due. */
+  dueLabel?: string;
+  /** Date of the event, printed prominently. */
   eventDateLabel?: string;
+  /** Event/delivery address. */
+  eventLocation?: string;
   /** "Renter" for rental orders, "Buyer" for purchases. Bookings are always Renter. */
   party?: "Renter" | "Buyer";
+  /** Chosen payment plan (invoice docs, once picked). */
+  paymentPlan?: "HALF" | "FULL";
+  /** Public page where the client can accept/pay online. */
+  onlineUrl?: string;
   heroImageUrl?: string;
   customer: { name: string; email: string; phone?: string; address?: string };
   rental?: {
@@ -259,62 +324,11 @@ export type QuotePdfInput = {
     deliveryCents?: number;
     pickupCents?: number;
     depositCents?: number;
+    taxCents?: number;
     totalCents: number;
   };
   locale?: string;
 };
-
-type Clause = { t: string; b: string };
-
-const RENTAL_TERMS: Clause[] = [
-  {
-    t: "Agreement & validity.",
-    b: 'This Rental Invoice & Agreement becomes binding once signed by the Renter and accepted by Big Wave Slides (the "Company"). This document is the final invoice for the rental — no separate invoice will be issued. Equipment is supplied for the stated rental period only and may not be extended without written approval.',
-  },
-  {
-    t: "Fees & refundable deposit.",
-    b: "Charges are as itemized (rental, delivery/transport, pickup). Any refundable deposit shown covers damage, excessive cleaning, loss, theft, or late return, and is refunded after inspection less any deductions.",
-  },
-  {
-    t: "Site, setup & supervision.",
-    b: "The Renter must provide a safe, level, clear area with a grounded power outlet within 50 ft and clear access; unsuitable or hazardous sites may be refused without refund. Competent adult supervision is required at all times, enforcing all capacity, height, age, and safety rules; no flips, rough play, food, drink, shoes, or use under the influence.",
-  },
-  {
-    t: "Weather.",
-    b: "For safety, inflatables must not be used in sustained winds above 20 mph, storms, or lightning, and must be evacuated and unplugged. The Company may reschedule or cancel for severe weather at its discretion.",
-  },
-  {
-    t: "Renter responsibility, damage & spillage.",
-    b: "The Renter is responsible for the equipment from delivery to pickup and is liable for damage beyond normal wear, loss, or theft. Cleaning fees apply for excessive soiling or spillage (food, drink, paint, silly string, mud, or bodily fluids). Equipment must not be moved after setup.",
-  },
-  {
-    t: "Assumption of risk & indemnification.",
-    b: "Use of water slides and inflatables involves inherent risks of injury. To the fullest extent permitted by law, the Renter assumes these risks and agrees to indemnify and hold harmless the Company, its owners, and staff from any claims, injuries, damages, or losses arising from use during the rental period, except those caused by the Company's gross negligence. The Company carries liability insurance for its equipment.",
-  },
-  {
-    t: "Cancellation, liability & governing law.",
-    b: `To cancel or reschedule, contact the Company as early as possible — we will always try to accommodate a date change. To the maximum extent permitted by law, the Company's total liability shall not exceed the amount paid, and it is not liable for indirect or consequential damages. This Agreement is governed by the laws of the State of ${GOVERNING_STATE}.`,
-  },
-];
-
-const orderTerms = (party: string): Clause[] => [
-  {
-    t: "Agreement & validity.",
-    b: `This Invoice becomes a binding order once signed by the ${party} and accepted by Big Wave Slides. This document is the final invoice for the order — no separate invoice will be issued. Applicable taxes and delivery, where relevant, are itemized above.`,
-  },
-  {
-    t: "Payment.",
-    b: `No charge is processed automatically. Once the signed invoice is returned, the Company sends payment details for the ${party}'s preferred method; the order is confirmed once payment is arranged.`,
-  },
-  {
-    t: "Delivery, inspection & warranty.",
-    b: `Title and risk of loss pass to the ${party} on delivery or collection; timelines are estimates. The ${party} must inspect goods on receipt and report defects within the stated window. Any manufacturer's warranty accompanies the product; returns follow the Company's standard policy.`,
-  },
-  {
-    t: "Safe use, liability & governing law.",
-    b: `Commercial-grade equipment must be installed and operated per the provided guidelines and applicable safety standards. To the maximum extent permitted by law, the Company's liability is limited to the purchase price, and the ${party} assumes responsibility for safe installation, supervision, and use after delivery. Governed by the laws of the State of ${GOVERNING_STATE}.`,
-  },
-];
 
 function KV({ k, v }: { k: string; v?: string }) {
   if (!v) return null;
@@ -330,19 +344,39 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
   const locale = input.locale ?? "en";
   const money = (c: number) => formatPrice(c, locale);
   const isBooking = input.kind === "booking";
-  const partyWord = input.party ?? (isBooking ? "Renter" : "Buyer");
-  const terms = isBooking ? RENTAL_TERMS : orderTerms(partyWord);
+  const docType = input.docType ?? "invoice";
+  const isQuote = docType === "quote";
   const t = input.totals;
   const r = input.rental ?? {};
+  const partyWord = input.party ?? (isBooking ? "Renter" : "Buyer");
+  const terms = isQuote
+    ? quoteTerms(partyWord, input.validUntilLabel)
+    : isBooking
+      ? RENTAL_TERMS
+      : orderTerms(partyWord);
+
+  const half = amountDueCents("HALF", t.totalCents);
+  const halfBalance = balanceCents("HALF", t.totalCents);
+
+  const docTitle = isQuote
+    ? isBooking || partyWord === "Renter"
+      ? "RENTAL QUOTE"
+      : "QUOTE"
+    : isBooking
+      ? "RENTAL INVOICE & AGREEMENT"
+      : partyWord === "Renter"
+        ? "RENTAL INVOICE"
+        : "INVOICE";
 
   return (
     <Document
-      title={`Big Wave Slides Invoice ${input.number}`}
+      title={`Big Wave Slides ${isQuote ? "Quote" : "Invoice"} ${input.number}`}
       author="Big Wave Slides"
-      subject={isBooking ? "Rental Invoice & Agreement" : "Invoice"}
+      subject={docTitle}
     >
       <Page size="A4" style={s.page}>
-        {/* Header */}
+        {/* Header — the logo here is part of the anti-impersonation promise:
+            clients are told to verify it before paying. */}
         <View style={s.headerRow}>
           <Image src={LOGO} style={s.logo} />
           <View style={s.brandRight}>
@@ -355,20 +389,22 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         </View>
 
         <View style={s.titleBar}>
-          <Text style={s.title}>
-            {isBooking
-              ? "RENTAL INVOICE & AGREEMENT"
-              : partyWord === "Renter"
-                ? "RENTAL INVOICE"
-                : "INVOICE"}
-          </Text>
+          <Text style={s.title}>{docTitle}</Text>
           <View>
-            <Text style={s.titleMeta}>Invoice no: {input.number}</Text>
+            <Text style={s.titleMeta}>
+              {isQuote ? "Quote no" : "Invoice no"}: {input.number}
+            </Text>
             <Text style={s.titleMeta}>Issued: {input.dateLabel}</Text>
-            {input.eventDateLabel ? (
+            {isQuote && input.validUntilLabel ? (
               <Text style={s.titleMeta}>
-                Event date: {input.eventDateLabel}
+                Valid until: {input.validUntilLabel}
               </Text>
+            ) : null}
+            {!isQuote && input.dueLabel ? (
+              <Text style={s.titleMeta}>Balance due: {input.dueLabel}</Text>
+            ) : null}
+            {input.eventDateLabel ? (
+              <Text style={s.titleMeta}>Event date: {input.eventDateLabel}</Text>
             ) : null}
           </View>
         </View>
@@ -380,7 +416,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         {/* Parties / logistics */}
         <View style={s.cols}>
           <View style={s.col}>
-            <Text style={s.label}>{partyWord}</Text>
+            <Text style={s.label}>{isQuote ? "Prepared for" : partyWord}</Text>
             <Text style={[s.value, { fontFamily: "Helvetica-Bold" }]}>
               {input.customer.name}
             </Text>
@@ -394,7 +430,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
           </View>
           <View style={s.col}>
             <Text style={s.label}>
-              {isBooking ? "Rental details" : "Order details"}
+              {isBooking ? "Rental details" : "Event details"}
             </Text>
             {isBooking ? (
               <>
@@ -408,10 +444,17 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
               </>
             ) : (
               <>
-                <KV k="Invoice no" v={input.number} />
+                {!isQuote && input.quoteRef ? (
+                  <KV k="Quote ref" v={input.quoteRef} />
+                ) : null}
                 <KV k="Event date" v={input.eventDateLabel} />
+                <KV k="Location" v={input.eventLocation} />
                 <KV k="Items" v={String(input.items.length)} />
                 <KV k="Issued" v={input.dateLabel} />
+                {!isQuote ? <KV k="Due" v={input.dueLabel} /> : null}
+                {isQuote ? (
+                  <KV k="Valid until" v={input.validUntilLabel} />
+                ) : null}
               </>
             )}
           </View>
@@ -426,11 +469,16 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
             <Text style={[s.th, s.cAmt]}>Amount</Text>
           </View>
           {input.items.map((it, i) => (
-            <View style={s.row} key={i}>
-              <Text style={s.cDesc}>{it.name}</Text>
-              <Text style={s.cQty}>{it.qtyLabel}</Text>
-              <Text style={s.cRate}>{it.rateLabel}</Text>
-              <Text style={s.cAmt}>{money(it.amountCents)}</Text>
+            <View key={i}>
+              <View style={[s.row, it.includes ? { borderBottomWidth: 0 } : {}]}>
+                <Text style={s.cDesc}>{it.name}</Text>
+                <Text style={s.cQty}>{it.qtyLabel}</Text>
+                <Text style={s.cRate}>{it.rateLabel}</Text>
+                <Text style={s.cAmt}>{money(it.amountCents)}</Text>
+              </View>
+              {it.includes ? (
+                <Text style={s.includes}>Includes: {it.includes}</Text>
+              ) : null}
             </View>
           ))}
         </View>
@@ -443,7 +491,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
           </View>
           {t.deliveryCents ? (
             <View style={s.totalRow}>
-              <Text>Delivery &amp; transport</Text>
+              <Text>{TRANSPORT_LABEL}</Text>
               <Text>{money(t.deliveryCents)}</Text>
             </View>
           ) : null}
@@ -459,36 +507,123 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
               <Text>{money(t.depositCents)}</Text>
             </View>
           ) : null}
+          {t.taxCents ? (
+            <View style={s.totalRow}>
+              <Text>{TAX_LABEL}</Text>
+              <Text>{money(t.taxCents)}</Text>
+            </View>
+          ) : null}
           <View style={s.grandRow}>
-            <Text style={s.grandLabel}>Total due</Text>
+            <Text style={s.grandLabel}>
+              {isQuote ? "Quote total" : "Total due"}
+            </Text>
             <Text style={s.grandValue}>{money(t.totalCents)}</Text>
           </View>
         </View>
 
-        {/* Payment method — client ticks their preferred option */}
-        <View style={s.payBox} wrap={false}>
-          <Text style={s.label}>Preferred payment method</Text>
-          <Text style={s.payHint}>
-            This is your official invoice — no separate invoice will follow.
-            Tick the option you&apos;d like to use and return the signed
-            invoice; we&apos;ll reply with the exact payment details for your
-            choice.
-          </Text>
-          <View style={s.payRow}>
-            {["Zelle", "Apple Pay", "Chime", "Cash App"].map((m) => (
-              <View style={s.payOpt} key={m}>
-                <View style={s.checkbox} />
-                <Text style={s.payLabel}>{m}</Text>
+        {/* Payment schedule — 50% to reserve, balance before setup. */}
+        <View style={s.scheduleBox} wrap={false}>
+          <Text style={s.label}>Payment schedule</Text>
+          {input.paymentPlan === "FULL" ? (
+            <View style={s.scheduleRow}>
+              <Text style={s.scheduleKey}>
+                Full payment (chosen) — confirms your booking
+              </Text>
+              <Text style={s.scheduleVal}>{money(t.totalCents)}</Text>
+            </View>
+          ) : input.paymentPlan === "HALF" ? (
+            <>
+              <View style={s.scheduleRow}>
+                <Text style={s.scheduleKey}>
+                  50% deposit (chosen) — reserves your date
+                </Text>
+                <Text style={s.scheduleVal}>{money(half)}</Text>
               </View>
-            ))}
-          </View>
+              <View style={s.scheduleRow}>
+                <Text style={s.scheduleKey}>
+                  Balance due 48 hours before your event
+                  {input.dueLabel ? ` — ${input.dueLabel}` : ""}
+                </Text>
+                <Text style={s.scheduleVal}>{money(halfBalance)}</Text>
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={s.scheduleRow}>
+                <Text style={s.scheduleKey}>
+                  Option A — 50% deposit to reserve your date
+                </Text>
+                <Text style={s.scheduleVal}>{money(half)}</Text>
+              </View>
+              <View style={s.scheduleRow}>
+                <Text style={s.scheduleKey}>
+                  {"     "}Balance due 48 hours before your event
+                </Text>
+                <Text style={s.scheduleVal}>{money(halfBalance)}</Text>
+              </View>
+              <View style={s.scheduleRow}>
+                <Text style={s.scheduleKey}>
+                  Option B — pay in full upfront
+                </Text>
+                <Text style={s.scheduleVal}>{money(t.totalCents)}</Text>
+              </View>
+            </>
+          )}
+          <Text style={s.payHint}>
+            {Math.round(DEPOSIT_RATE * 100)}% of your total acts as a
+            refundable deposit — fully refunded if you cancel at least{" "}
+            {REFUND_NOTICE_DAYS} days before your event. Each rental day is one
+            complete 24-hour period.
+          </Text>
         </View>
+
+        {/* Payment methods — invoice only (payment happens after acceptance). */}
+        {!isQuote ? (
+          <View style={s.payBox} wrap={false}>
+            <Text style={s.label}>Preferred payment method</Text>
+            <Text style={s.payHint}>
+              Pick your plan and method on your secure invoice page
+              {input.onlineUrl ? ` (${input.onlineUrl})` : ""} — the exact
+              payment details appear there and are emailed to you instantly.
+            </Text>
+            <View style={s.payRow}>
+              {["Zelle", "Apple Pay", "Chime", "Cash App"].map((m) => (
+                <View style={s.payOpt} key={m}>
+                  <View style={s.checkbox} />
+                  <Text style={s.payLabel}>{m}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        ) : null}
+
+        {/* Anti-impersonation warning — the trust anchor on payable docs. */}
+        {!isQuote ? (
+          <View style={s.warnBox} wrap={false}>
+            <Text style={s.warnTitle}>⚠ {ANTI_SCAM_HEADING}</Text>
+            <Text style={s.warnBody}>{ANTI_SCAM_BODY}</Text>
+          </View>
+        ) : null}
+
+        {/* Setup requirements — quote docs, so clients can prep the site. */}
+        {isQuote ? (
+          <>
+            <Text style={s.sectionTitle}>Setup Requirements</Text>
+            {SETUP_REQUIREMENTS.map((req, i) => (
+              <Text style={s.bullet} key={i}>
+                {i + 1}. {req}
+              </Text>
+            ))}
+          </>
+        ) : null}
 
         {/* Terms */}
         <Text style={s.sectionTitle}>
-          {isBooking
-            ? "Rental Terms, Conditions & Company Policies"
-            : "Order Terms & Conditions"}
+          {isQuote
+            ? "Quote Terms & Conditions"
+            : isBooking
+              ? "Rental Terms, Conditions & Company Policies"
+              : "Order Terms & Conditions"}
         </Text>
         {terms.map((c, i) => (
           <Text style={s.clause} key={i}>
@@ -504,9 +639,10 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
           Acceptance &amp; Signatures
         </Text>
         <Text style={s.ack}>
-          By signing below, the {partyWord} confirms they have read, understood,
-          and agree to this Invoice{isBooking ? " & Agreement" : ""} in full,
-          including the Terms &amp; Conditions
+          By {isQuote ? "accepting this Quote" : "signing below"}, the{" "}
+          {partyWord} confirms they have read, understood, and agree to this{" "}
+          {isQuote ? "Quote" : isBooking ? "Invoice & Agreement" : "Invoice"} in
+          full, including the Terms &amp; Conditions
           {isBooking
             ? ", Company Policies, assumption of risk, and indemnification"
             : ""}{" "}
@@ -544,13 +680,17 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         </View>
 
         <Text style={s.returnNote}>
-          Whenever you&apos;re ready to go ahead, simply sign this invoice and
-          send it back to us at {CONTACT_EMAIL}, and we&apos;ll take care of the
-          rest.{" "}
-          {isBooking
-            ? "You can also sign online using the link in your email. "
-            : ""}
-          Any questions? We&apos;re always happy to help.
+          {isQuote
+            ? `The fastest way to book: review and accept this quote online${
+                input.onlineUrl ? ` at ${input.onlineUrl}` : ""
+              } — your invoice is issued instantly. Prefer email? Sign this quote and send it back to ${CONTACT_EMAIL}. Questions? We're always happy to help.`
+            : `Whenever you're ready to go ahead, choose your payment plan on your invoice page${
+                input.onlineUrl ? ` at ${input.onlineUrl}` : ""
+              } — or sign this invoice and send it back to us at ${CONTACT_EMAIL}, and we'll take care of the rest.${
+                isBooking
+                  ? " You can also sign online using the link in your email."
+                  : ""
+              } Any questions? We're always happy to help.`}
         </Text>
 
         <View style={s.footer} fixed>
@@ -568,7 +708,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
   );
 }
 
-/** Render a branded, multi-page invoice/agreement PDF to a Buffer. */
+/** Render a branded quote or invoice PDF to a Buffer. */
 export async function generateQuotePdf(input: QuotePdfInput): Promise<Buffer> {
   return renderToBuffer(<QuoteDoc input={input} />);
 }

@@ -34,14 +34,16 @@ async function adminRecipients(): Promise<string[]> {
   return Array.from(new Set(all.map((e) => e.toLowerCase())));
 }
 
-/** Best-effort PDF invoice generation — never blocks the email if it fails. */
+/** Best-effort PDF generation — never blocks the email if it fails.
+ *  Filename matches the document type (no docType = invoice, the PDF default). */
 async function buildQuoteAttachment(
   input: QuotePdfInput,
 ): Promise<EmailAttachment[]> {
   try {
     const content = await generateQuotePdf(input);
+    const doc = input.docType === "quote" ? "Quote" : "Invoice";
     return [
-      { filename: `Big-Wave-Slides-Invoice-${input.number}.pdf`, content },
+      { filename: `Big-Wave-Slides-${doc}-${input.number}.pdf`, content },
     ];
   } catch (error) {
     console.error("[pdf error]", error);
@@ -75,11 +77,16 @@ export type OrderEmailInput = {
     mode?: "BUY" | "RENT";
   }[];
   subtotalCents: number;
+  deliveryFeeCents?: number;
+  taxCents?: number;
   totalCents: number;
   /** Event date entered at checkout (yyyy-mm-dd) — printed on the invoice. */
   eventDate?: string;
   locale: string;
 };
+
+const RENTAL_INCLUDES =
+  "slide, commercial blower, anchoring, setup safety & professional workmanship, basic insurance, sanitizing before delivery, pickup. Each rental day is one complete 24-hour period";
 
 export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
   const isRentalOrder = o.items.some((i) => i.mode === "RENT");
@@ -88,12 +95,20 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     eventDay && !Number.isNaN(eventDay.getTime())
       ? formatDate(eventDay, o.locale)
       : undefined;
+  const validUntil = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+  const onlineUrl = siteUrl(
+    `${o.locale === "fr" ? "/fr" : ""}/order/${o.orderNumber}`,
+  );
   const attachments = await buildQuoteAttachment({
     kind: "order",
+    docType: "quote",
     number: o.orderNumber,
     dateLabel: formatDate(new Date(), o.locale),
+    validUntilLabel: formatDate(validUntil, o.locale),
     eventDateLabel,
+    eventLocation: o.address,
     party: isRentalOrder ? "Renter" : "Buyer",
+    onlineUrl,
     heroImageUrl: o.heroImageUrl,
     customer: {
       name: o.name,
@@ -113,37 +128,40 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
           ? `${formatPrice(i.unitPriceCents, o.locale)}/day`
           : formatPrice(i.unitPriceCents, o.locale),
         amountCents: i.lineTotalCents,
+        includes: rent ? RENTAL_INCLUDES : undefined,
       };
     }),
-    totals: { subtotalCents: o.subtotalCents, totalCents: o.totalCents },
+    totals: {
+      subtotalCents: o.subtotalCents,
+      deliveryCents: o.deliveryFeeCents || undefined,
+      taxCents: o.taxCents || undefined,
+      totalCents: o.totalCents,
+    },
     locale: o.locale,
   });
 
   const rows: EmailRow[] = [
-    { label: "Invoice no", value: o.orderNumber },
+    { label: "Quote no", value: o.orderNumber },
     ...(eventDateLabel ? [{ label: "Event date", value: eventDateLabel }] : []),
     { label: "Items", value: String(o.items.length) },
-    { label: "Total due", value: formatPrice(o.totalCents, o.locale) },
+    { label: "Quote total", value: formatPrice(o.totalCents, o.locale) },
   ];
 
   await sendEmail({
     to: o.email,
     replyTo: CONTACT_EMAIL,
-    subject: `Your Big Wave Slides invoice — ${o.orderNumber}`,
+    subject: `Your Big Wave Slides quote — ${o.orderNumber}`,
     attachments,
     html: renderEmail({
-      heading: `Thanks, ${o.name.split(" ")[0] || o.name}! Your invoice is attached`,
+      heading: `Thanks, ${o.name.split(" ")[0] || o.name}! Your quote is ready`,
       preheader:
-        "Your invoice is attached as a PDF. Sign it and reply to confirm your order — no further invoice will follow.",
+        "Review your quote online, then accept it to receive your invoice — or reach out with any questions.",
       intro:
-        "Thanks for your order request with Big Wave Slides. Your official invoice is attached as a PDF — this is the only invoice you'll receive. To confirm your order, please review and sign it, tick your preferred payment method, and return it by replying to this email. We'll reply with the payment details and take care of the rest.",
+        "Thanks for your request with Big Wave Slides! Your personalized quote is attached as a PDF and also available on your secure quote page, together with our terms & conditions. When you're ready, accept the quote online — your official invoice is issued instantly and you can reserve your date with a 50% deposit or full payment. Not sure about something? Contact us first, no obligation.",
       rows,
-      cta: {
-        label: "Reply to confirm",
-        url: `mailto:${CONTACT_EMAIL}?subject=Accept%20invoice%20${o.orderNumber}`,
-      },
+      cta: { label: "View & accept your quote", url: onlineUrl },
       outro:
-        "Have a question first? Just reply to this email and a real person will help.",
+        "Have a question first? Just reply to this email or call +1 (614) 302-5899 — a real person will help.",
     }),
   });
 
@@ -152,25 +170,25 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     await sendEmail({
       to: admins,
       replyTo: o.email,
-      subject: `New order request — ${o.orderNumber}`,
+      subject: `New quote request — ${o.orderNumber}`,
       attachments,
       html: renderEmail({
-        heading: "New order request",
-        intro: `${o.name} (${o.email}${o.phone ? `, ${o.phone}` : ""}) submitted an order request. The generated invoice PDF is attached.`,
+        heading: "New quote request",
+        intro: `${o.name} (${o.email}${o.phone ? `, ${o.phone}` : ""}) requested a quote. The quote PDF is attached; they've been sent their quote page to accept online.`,
         rows,
         cta: { label: "Open in admin", url: siteUrl("/admin/orders") },
       }),
     });
   }
   await notifyAdminWhatsApp(
-    `🛒 New order ${o.orderNumber} from ${o.name} — ${formatPrice(o.totalCents, o.locale)}`,
+    `🛒 New quote request ${o.orderNumber} from ${o.name} — ${formatPrice(o.totalCents, o.locale)}`,
   );
   // Push to the owner's phone; tapping opens this order in the admin panel.
   const placedFrom = [o.geo?.city, o.geo?.region, o.geo?.country]
     .filter(Boolean)
     .join(", ");
   await notifyAdminNtfy({
-    title: `New order ${o.orderNumber} — ${formatPrice(o.totalCents, o.locale)}`,
+    title: `🌊 Quote requested ${o.orderNumber} — ${formatPrice(o.totalCents, o.locale)}`,
     message: [
       o.name,
       `📞 ${o.phone || "no phone"} · ✉️ ${o.email}`,
@@ -546,6 +564,253 @@ export async function sendAbandonedCartReminder(email: string): Promise<void> {
       intro:
         "Your cart is waiting! Finish your request in a couple of clicks — no payment needed, we'll send you a personalized quote.",
       cta: { label: "Return to your cart", url: siteUrl("/cart") },
+    }),
+  });
+}
+
+/* ───────────── Quote → invoice → payment journey emails ───────────── */
+
+import type { Prisma } from "@prisma/client";
+import { ANTI_SCAM_HEADING, ANTI_SCAM_BODY } from "@/lib/anti-scam";
+import { amountDueCents, balanceCents, type PaymentPlan } from "@/lib/payment-plan";
+
+type OrderWithItems = Prisma.OrderGetPayload<{ include: { items: true } }>;
+
+const SCAM_OUTRO = `⚠️ ${ANTI_SCAM_HEADING}: ${ANTI_SCAM_BODY}`;
+
+function orderPagePath(o: OrderWithItems): string {
+  return `/${o.locale}/order/${o.orderNumber}`;
+}
+
+/** Build the PDF input for an order at its current stage. */
+export function orderToPdfInput(
+  o: OrderWithItems,
+  docType: "quote" | "invoice",
+): QuotePdfInput {
+  const addr = (o.deliveryAddress ?? {}) as { address?: string; city?: string };
+  const eventLocation =
+    [addr.address, addr.city].filter(Boolean).join(", ") || undefined;
+  return {
+    kind: "order",
+    docType,
+    number: docType === "invoice" ? (o.invoiceNumber ?? o.orderNumber) : o.orderNumber,
+    quoteRef: docType === "invoice" ? o.orderNumber : undefined,
+    dateLabel: formatDate(
+      docType === "invoice" ? (o.invoiceIssuedAt ?? o.createdAt) : o.createdAt,
+      o.locale,
+    ),
+    validUntilLabel:
+      docType === "quote" && o.quoteValidUntil
+        ? formatDate(o.quoteValidUntil, o.locale)
+        : undefined,
+    dueLabel:
+      docType === "invoice" && o.invoiceDueAt
+        ? formatDate(o.invoiceDueAt, o.locale)
+        : undefined,
+    eventDateLabel: o.eventDate ? formatDate(o.eventDate, o.locale) : undefined,
+    eventLocation,
+    party: "Renter",
+    paymentPlan: (o.paymentPlan as PaymentPlan | null) ?? undefined,
+    onlineUrl: siteUrl(orderPagePath(o)),
+    customer: {
+      name: o.guestName ?? "Customer",
+      email: o.guestEmail ?? "",
+      phone: o.guestPhone ?? undefined,
+      address: eventLocation,
+    },
+    items: o.items.map((i) => {
+      // Rental lines carry a "(Rental)" suffix from checkout; qty = days.
+      const rent = /\(rental\)/i.test(i.name);
+      return {
+        name: i.name,
+        qtyLabel: rent
+          ? `${i.quantity} ${i.quantity === 1 ? "day" : "days"}`
+          : String(i.quantity),
+        rateLabel: rent
+          ? `${formatPrice(i.unitPriceCents, o.locale)}/day`
+          : formatPrice(i.unitPriceCents, o.locale),
+        amountCents: i.lineTotalCents,
+        includes: rent ? RENTAL_INCLUDES : undefined,
+      };
+    }),
+    totals: {
+      subtotalCents: o.subtotalCents,
+      deliveryCents: o.deliveryFeeCents || undefined,
+      taxCents: o.taxCents || undefined,
+      totalCents: o.totalCents,
+    },
+    locale: o.locale,
+  };
+}
+
+/** Quote accepted → email the invoice (PDF + on-site link) to the client. */
+export async function sendInvoiceIssuedEmails(o: OrderWithItems): Promise<void> {
+  if (!o.guestEmail) return;
+  const inv = o.invoiceNumber ?? o.orderNumber;
+  let attachments: EmailAttachment[] = [];
+  try {
+    const pdf = await generateQuotePdf(orderToPdfInput(o, "invoice"));
+    attachments = [{ filename: `Big-Wave-Slides-Invoice-${inv}.pdf`, content: pdf }];
+  } catch (e) {
+    console.error("[pdf error] invoice", e);
+  }
+  const half = amountDueCents("HALF", o.totalCents);
+  await sendEmail({
+    to: o.guestEmail,
+    replyTo: CONTACT_EMAIL,
+    subject: `Your invoice ${inv} — Big Wave Slides`,
+    attachments,
+    html: renderEmail({
+      heading: "Quote confirmed — your invoice is ready 🎉",
+      preheader:
+        "Choose 50% deposit or full payment on your secure invoice page to lock in your date.",
+      intro:
+        `Thanks for confirming your quote! Your official invoice ${inv} is attached and also available on your secure invoice page. ` +
+        `To reserve your date, open the invoice page and choose how you'd like to pay: a 50% deposit (${formatPrice(half, o.locale)}) with the balance due 48 hours before your event, or the full amount (${formatPrice(o.totalCents, o.locale)}) now.`,
+      rows: [
+        { label: "Invoice no", value: inv },
+        ...(o.eventDate
+          ? [{ label: "Event date", value: formatDate(o.eventDate, o.locale) }]
+          : []),
+        ...(o.invoiceDueAt
+          ? [{ label: "Due date", value: formatDate(o.invoiceDueAt, o.locale) }]
+          : []),
+        { label: "Total", value: formatPrice(o.totalCents, o.locale) },
+      ],
+      cta: { label: "Open your invoice & pay", url: siteUrl(orderPagePath(o)) },
+      outro: SCAM_OUTRO,
+    }),
+  });
+
+  const admins = await adminRecipients();
+  if (admins.length) {
+    await sendEmail({
+      to: admins,
+      replyTo: o.guestEmail,
+      subject: `Quote accepted → invoice ${inv} — ${o.orderNumber}`,
+      attachments,
+      html: renderEmail({
+        heading: "Quote accepted 🎉",
+        intro: `${o.guestName ?? "A client"} accepted quote ${o.orderNumber}. Invoice ${inv} was issued and emailed. They're now choosing a payment plan.`,
+        rows: [
+          { label: "Total", value: formatPrice(o.totalCents, o.locale) },
+          { label: "Client", value: `${o.guestName ?? "?"} · ${o.guestEmail}` },
+        ],
+        cta: { label: "Open in admin", url: siteUrl(`/admin/orders/${o.id}`) },
+      }),
+    });
+  }
+}
+
+/** Payment details resolved (auto or admin-posted) → the ONE payment email. */
+export async function sendPaymentDetailsEmail(
+  o: OrderWithItems,
+  dueCentsOverride?: number,
+): Promise<void> {
+  if (!o.guestEmail || !o.paymentDestination) return;
+  const plan = (o.paymentPlan as PaymentPlan | null) ?? "FULL";
+  const due = dueCentsOverride ?? amountDueCents(plan, o.totalCents);
+  const balance = balanceCents(plan, o.totalCents);
+  const inv = o.invoiceNumber ?? o.orderNumber;
+  await sendEmail({
+    to: o.guestEmail,
+    replyTo: CONTACT_EMAIL,
+    subject: `Payment details for invoice ${inv} — Big Wave Slides`,
+    html: renderEmail({
+      heading: "Your payment details are ready 💳",
+      preheader: `Send ${formatPrice(due, o.locale)} via ${o.paymentMethodLabel ?? "your chosen method"} to lock in your booking.`,
+      intro:
+        plan === "HALF"
+          ? `You chose the 50% deposit plan. Send ${formatPrice(due, o.locale)} now to reserve your date — the remaining ${formatPrice(balance, o.locale)} is due 48 hours before your event.`
+          : `You chose to pay in full. Send ${formatPrice(due, o.locale)} to complete your booking.`,
+      quote: o.paymentInstructions ?? undefined,
+      rows: [
+        { label: "Amount due now", value: formatPrice(due, o.locale) },
+        { label: "Method", value: o.paymentMethodLabel ?? o.paymentMethodKey ?? "—" },
+        { label: "Send to", value: o.paymentDestination },
+        ...(o.paymentNetwork ? [{ label: "Network", value: o.paymentNetwork }] : []),
+        { label: "Reference", value: inv },
+      ],
+      cta: {
+        label: "Open your invoice page",
+        url: siteUrl(orderPagePath(o)),
+      },
+      outro: `Once you've sent it, tap "I've paid" on your invoice page so we can confirm right away. ${SCAM_OUTRO}`,
+    }),
+  });
+}
+
+/** Client submitted payment proof → alert every admin inbox. */
+export async function notifyProofSubmitted(o: OrderWithItems): Promise<void> {
+  const admins = await adminRecipients();
+  if (!admins.length) return;
+  const plan = (o.paymentPlan as PaymentPlan | null) ?? "FULL";
+  const due = amountDueCents(plan, o.totalCents);
+  await sendEmail({
+    to: admins,
+    replyTo: o.guestEmail ?? undefined,
+    subject: `Payment proof submitted — ${o.orderNumber}`,
+    html: renderEmail({
+      heading: "Client says they've paid 💵",
+      intro: `${o.guestName ?? "A client"} submitted payment proof for invoice ${o.invoiceNumber ?? o.orderNumber}. Verify the money arrived, then mark it paid in admin.`,
+      rows: [
+        { label: "Expected", value: formatPrice(due, o.locale) },
+        { label: "Plan", value: plan === "HALF" ? "50% deposit" : "Full payment" },
+        { label: "Method", value: o.paymentMethodLabel ?? o.paymentMethodKey ?? "—" },
+        ...(o.proofTxId ? [{ label: "Their reference", value: o.proofTxId }] : []),
+        ...(o.proofImageUrl ? [{ label: "Screenshot", value: o.proofImageUrl }] : []),
+      ],
+      quote: o.proofNote ?? undefined,
+      cta: { label: "Open in admin", url: siteUrl(`/admin/orders/${o.id}`) },
+    }),
+  });
+}
+
+/** Owner verified the money arrived → the client's "you're booked" email. */
+export async function sendPaymentConfirmedEmail(o: OrderWithItems): Promise<void> {
+  if (!o.guestEmail) return;
+  const plan = (o.paymentPlan as PaymentPlan | null) ?? "FULL";
+  const balance = plan === "HALF" ? balanceCents(plan, o.totalCents) : 0;
+  await sendEmail({
+    to: o.guestEmail,
+    replyTo: CONTACT_EMAIL,
+    subject: `Payment received — you're booked! 🎉 (${o.invoiceNumber ?? o.orderNumber})`,
+    html: renderEmail({
+      heading: "Payment received — you're booked! 🎉",
+      preheader: "Your date is locked in. We'll be in touch before your event with delivery timing.",
+      intro:
+        balance > 0
+          ? `We've received your deposit — your date is officially reserved! The remaining balance of ${formatPrice(balance, o.locale)} is due 48 hours before your event${o.invoiceDueAt ? ` (${formatDate(o.invoiceDueAt, o.locale)})` : ""}. We'll reach out before your event to confirm delivery timing.`
+          : "We've received your payment in full — your booking is confirmed! We'll reach out before your event to confirm delivery timing. Nothing else is owed.",
+      rows: [
+        { label: "Invoice", value: o.invoiceNumber ?? o.orderNumber },
+        ...(o.eventDate ? [{ label: "Event date", value: formatDate(o.eventDate, o.locale) }] : []),
+        ...(balance > 0 ? [{ label: "Balance remaining", value: formatPrice(balance, o.locale) }] : []),
+      ],
+      cta: { label: "View your booking", url: siteUrl(orderPagePath(o)) },
+      outro: `${SCAM_OUTRO}`,
+    }),
+  });
+}
+
+/** Owner couldn't verify the payment → ask the client to double-check. */
+export async function sendProofRejectedEmail(
+  o: OrderWithItems,
+  reason?: string,
+): Promise<void> {
+  if (!o.guestEmail) return;
+  await sendEmail({
+    to: o.guestEmail,
+    replyTo: CONTACT_EMAIL,
+    subject: `We couldn't verify your payment yet — ${o.invoiceNumber ?? o.orderNumber}`,
+    html: renderEmail({
+      heading: "We couldn't verify your payment yet",
+      intro:
+        "We checked but couldn't match a payment to your invoice yet — this is usually just a timing or reference issue, nothing to worry about. Please double-check the amount, destination, and that your invoice number was included as the reference, then resubmit on your invoice page. If you did send it, reply to this email with a screenshot and we'll track it down together.",
+      quote: reason || undefined,
+      rows: [{ label: "Invoice", value: o.invoiceNumber ?? o.orderNumber }],
+      cta: { label: "Open your invoice page", url: siteUrl(orderPagePath(o)) },
+      outro: `Questions? Call +1 (614) 302-5899 — a real person will help. ${SCAM_OUTRO}`,
     }),
   });
 }

@@ -24,6 +24,8 @@ export type SiteSettings = {
     pickupCents?: number;
     freeRadiusMiles?: number;
     perMileCents?: number;
+    /** $30 transportation line on quotes/invoices — owner can toggle it off. */
+    transportEnabled?: boolean;
   };
 };
 

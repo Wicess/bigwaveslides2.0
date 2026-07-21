@@ -32,6 +32,7 @@ import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 import { SubscribePopup } from "@/components/layout/subscribe-popup";
 import { Analytics } from "@/components/analytics";
 import { AnalyticsTracker } from "@/components/analytics/analytics-tracker";
+import { PaymentWatcher } from "@/components/order/payment-watcher";
 import { JsonLd } from "@/components/seo/json-ld";
 import { organizationLd, websiteLd } from "@/lib/structured-data";
 // Self-hosted variable fonts (offline, no layout shift). Family names:
@@ -164,6 +165,9 @@ export default async function LocaleLayout({
           <SubscribePopup locale={locale} />
           <Toaster />
           <AnalyticsTracker />
+          {/* Site-wide poll for "payment details posted" — reveals them the
+              moment the owner responds, wherever the buyer is browsing. */}
+          <PaymentWatcher />
         </NextIntlClientProvider>
         <Analytics />
         {/* JSON-LD: structured data that helps search engines understand the site. */}

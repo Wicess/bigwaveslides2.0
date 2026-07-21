@@ -160,10 +160,10 @@ export function CartClient({
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <Button asChild variant="gradient">
-            <Link href="/shop">{t("keepShopping")}</Link>
+            <Link href={`/order/${orderNumber}`}>{t("viewQuote")}</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/">{t("backHome")}</Link>
+            <Link href="/shop">{t("keepShopping")}</Link>
           </Button>
         </div>
       </Card>

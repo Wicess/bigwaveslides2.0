@@ -1,5 +1,7 @@
 import { requirePermission } from "@/lib/admin-auth";
 import { getAllSettings } from "@/server/data/admin-cms";
+import Link from "next/link";
+import { CreditCard } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminCard, Reveal } from "@/components/admin/admin-ui";
 import {
@@ -46,6 +48,12 @@ export default async function AdminSettingsPage() {
         title="Settings"
         description="Contact info, hours, fees, and social links."
       />
+      <Link
+        href="/admin/settings/payments"
+        className="border-border hover:border-primary hover:text-primary mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors"
+      >
+        <CreditCard className="size-4" /> Payment methods (Zelle, Cash App, …)
+      </Link>
       <Reveal delay={0.05}>
         <AdminCard className="p-5 sm:p-6">
           <SettingsForm defaults={defaults} />

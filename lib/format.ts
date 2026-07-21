@@ -16,11 +16,15 @@ export function formatPrice(
   // rounding errors. We divide by 100 here to get the dollar amount (125.00).
   // Intl.NumberFormat adds the "$" / currency symbol and grouping commas, and
   // we use a French ("fr-FR") or US ("en-US") locale based on the language.
-  // maximumFractionDigits: 0 hides the cents, showing e.g. "$125" not "$125.00".
+  // Whole-dollar amounts hide the cents ("$125", not "$125.00"), but amounts
+  // with real cents keep them — tax lines like $617.70 must never display
+  // rounded to $618 on a quote or invoice.
+  const hasCents = cents % 100 !== 0;
   return new Intl.NumberFormat(locale === "fr" ? "fr-FR" : "en-US", {
     style: "currency",
     currency,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: hasCents ? 2 : 0,
+    maximumFractionDigits: hasCents ? 2 : 0,
   }).format(cents / 100);
 }
 
