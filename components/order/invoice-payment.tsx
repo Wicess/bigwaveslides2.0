@@ -194,7 +194,8 @@ export function InvoicePayment({
             onClick={() => setMethod(m.method)}
             aria-pressed={method === m.method}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-medium transition-colors",
+              // min-h-11 = a real 44px thumb target on phones.
+              "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
               method === m.method
                 ? "border-primary bg-primary text-white"
                 : "border-border hover:border-primary hover:text-primary",
@@ -619,19 +620,18 @@ function PaymentDetailsCard({
         ) : null}
         <Row k={t("method")}>{details.label}</Row>
         <Row k={t("sendTo")}>
-          <span className="inline-flex min-w-0 items-center gap-2">
+          {/* The whole value is the tap target — one thumb-tap copies it. */}
+          <button
+            type="button"
+            onClick={() => copy(details.destination)}
+            aria-label={`${t("sendTo")} — copy`}
+            className="border-border hover:border-primary hover:text-primary inline-flex min-h-10 max-w-full min-w-0 items-center gap-2 rounded-lg border px-2.5 py-1.5 transition-colors active:scale-[0.98]"
+          >
             <span className="truncate font-mono font-semibold">
               {details.destination}
             </span>
-            <button
-              type="button"
-              onClick={() => copy(details.destination)}
-              aria-label="Copy"
-              className="text-muted-foreground hover:text-primary shrink-0"
-            >
-              <Copy className="size-4" />
-            </button>
-          </span>
+            <Copy className="text-muted-foreground size-4 shrink-0" />
+          </button>
         </Row>
         {details.network ? <Row k={t("network")}>{details.network}</Row> : null}
         <Row k={t("reference")}>
@@ -646,7 +646,7 @@ function PaymentDetailsCard({
       ) : null}
 
       {details.qrUrl ? (
-        <div className="mt-4">
+        <div className="mt-4 flex justify-center sm:justify-start">
           <Image
             src={details.qrUrl}
             alt="Payment QR code"
@@ -704,8 +704,9 @@ function PaymentDetailsCard({
               </button>
             </div>
           ) : (
-            <label className="text-muted-foreground hover:text-primary mt-2.5 inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium transition-colors">
-              <ImagePlus className="size-3.5 shrink-0" />
+            // Dashed upload zone — camera or gallery, easy thumb hit.
+            <label className="border-border text-muted-foreground hover:border-primary hover:text-primary mt-2.5 flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 text-sm font-medium transition-colors sm:w-auto sm:justify-start">
+              <ImagePlus className="size-4 shrink-0" />
               {t("proofScreenshotCta")}
               <input
                 type="file"

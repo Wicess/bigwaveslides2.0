@@ -60,9 +60,9 @@ export const orderTerms = (party: string): Clause[] => [
 export const quoteTerms = (party: string, validUntil?: string): Clause[] => [
   {
     t: "Quote & validity.",
-    b: `This Quote is an offer, not a bill — nothing is owed until you accept it.${
-      validUntil ? ` It is valid until ${validUntil};` : " It is"
-    } prices are subject to equipment availability at confirmation. Accepting the quote (online, or by signed return) issues your official invoice.`,
+    b: `This Quote is an offer, not a bill — nothing is owed until you accept it. ${
+      validUntil ? `It is valid until ${validUntil}; prices` : "Prices"
+    } are subject to equipment availability at confirmation. Accepting the quote (online, or by signed return) issues your official invoice.`,
   },
   {
     t: "Payment schedule.",

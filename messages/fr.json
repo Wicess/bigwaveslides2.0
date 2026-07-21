@@ -794,6 +794,7 @@
     "paidBody": "Votre date est bloquée. Nous vous recontacterons avant l'événement pour l'horaire de livraison. Préparez-vous à faire des vagues !",
     "transportation": "Transport",
     "tax": "Taxe de vente FL (6,5 %)",
-    "depositNote": "30 % de votre total constitue un dépôt remboursable — intégralement remboursé si vous annulez au moins 7 jours avant votre événement. Chaque jour de location est une période complète de 24 heures."
+    "depositNote": "30 % de votre total constitue un dépôt remboursable — intégralement remboursé si vous annulez au moins 7 jours avant votre événement. Chaque jour de location est une période complète de 24 heures.",
+    "agreeFirstHint": "Cochez la case ci-dessus pour activer le bouton d'acceptation — il s'active dès que vous acceptez."
   }
 }

@@ -30,12 +30,13 @@ export function QuoteActions({ orderNumber }: { orderNumber: string }) {
 
   return (
     <div className="border-border bg-muted/40 rounded-2xl border p-5 sm:p-6">
-      <label className="flex cursor-pointer items-start gap-3">
+      {/* Whole row is the tap target — 44px+ and impossible to miss. */}
+      <label className="border-border bg-background hover:border-primary/50 flex cursor-pointer items-start gap-3 rounded-xl border p-3.5 transition-colors">
         <input
           type="checkbox"
           checked={agreed}
           onChange={(e) => setAgreed(e.target.checked)}
-          className="accent-primary mt-1 size-4 shrink-0"
+          className="accent-primary mt-0.5 size-5 shrink-0"
         />
         <span className="text-sm leading-relaxed">{t("agreeTerms")}</span>
       </label>
@@ -58,7 +59,7 @@ export function QuoteActions({ orderNumber }: { orderNumber: string }) {
         </Button>
       </div>
       <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
-        {t("acceptHint")}
+        {agreed ? t("acceptHint") : t("agreeFirstHint")}
       </p>
     </div>
   );

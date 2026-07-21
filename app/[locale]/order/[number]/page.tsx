@@ -243,8 +243,37 @@ export default async function OrderFlowPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Items */}
-            <div className="border-border overflow-x-auto rounded-2xl border">
+            {/* Items — stacked cards on phones so the price is never hidden
+                behind a side-scroll; classic table from sm: up. */}
+            <div className="space-y-3 sm:hidden">
+              {order.items.map((it) => {
+                const rent = /\(rental\)/i.test(it.name);
+                return (
+                  <div
+                    key={it.id}
+                    className="border-border rounded-2xl border p-4"
+                  >
+                    <p className="text-sm font-semibold">{it.name}</p>
+                    {rent ? (
+                      <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+                        {t("includes")}: {RENTAL_INCLUDES}
+                      </p>
+                    ) : null}
+                    <div className="border-border mt-3 flex items-center justify-between gap-3 border-t pt-2.5 text-sm">
+                      <span className="text-muted-foreground">
+                        {rent
+                          ? `${it.quantity} ${it.quantity === 1 ? t("day") : t("days")} × ${money(it.unitPriceCents)}/${t("day")}`
+                          : `${it.quantity} × ${money(it.unitPriceCents)}`}
+                      </span>
+                      <span className="font-semibold">
+                        {money(it.lineTotalCents)}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="border-border hidden overflow-x-auto rounded-2xl border sm:block">
               <table className="w-full min-w-[480px] text-sm">
                 <thead>
                   <tr className="bg-primary/5 text-primary text-left text-[10px] font-bold tracking-[0.12em] uppercase">
