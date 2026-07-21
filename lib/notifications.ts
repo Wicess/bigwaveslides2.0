@@ -332,7 +332,7 @@ export async function notifyBookingRequest(
         heading: "New booking request",
         intro: `${b.name} (${b.email}${b.phone ? `, ${b.phone}` : ""}) requested a booking for ${datesLabel}. Confirm it in admin to lock the dates. The invoice PDF is attached.`,
         rows,
-        cta: { label: "Open in admin", url: siteUrl("/admin/bookings") },
+        cta: { label: "Open in admin", url: siteUrl("/admin") },
       }),
     });
   }
@@ -354,9 +354,7 @@ export async function notifyBookingRequest(
       `💰 Total: ${formatPrice(b.totalCents, b.locale)}`,
       "Tap to open the booking in admin.",
     ].join("\n"),
-    clickUrl: siteUrl(
-      b.bookingId ? `/admin/bookings/${b.bookingId}` : "/admin/bookings",
-    ),
+    clickUrl: siteUrl("/admin"),
     tags: ["calendar", "ocean"],
     priority: 4,
   });
