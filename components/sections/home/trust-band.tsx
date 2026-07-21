@@ -54,7 +54,7 @@ export async function TrustBand() {
             // <img> react to THIS box being hovered (see group-hover/logo below).
             <span
               key={src}
-              className="group/logo grid h-12 w-24 shrink-0 place-items-center sm:h-20 sm:w-40"
+              className="group/logo grid h-12 w-20 shrink-0 place-items-center sm:h-16 sm:w-28"
             >
               {}
               {/*
@@ -72,11 +72,16 @@ export async function TrustBand() {
               {/* Phones have no hover to restore the color, so the muted
                   grayscale treatment only applies from md up — on mobile the
                   logos show at full color and full opacity. */}
+              {/* Explicit height + w-auto, NOT max-h-full: percentage
+                  max-heights don't resolve inside this content-sized grid
+                  track, so the image used to render oversized and visually
+                  cropped to its middle band. A fixed height guarantees the
+                  whole logo is always visible. */}
               <img
-                src={optimizedSrc(src, 320)}
+                src={optimizedSrc(src, 160)}
                 alt={`Partner ${i + 1}`}
                 loading="lazy"
-                className="max-h-full max-w-full object-contain [mix-blend-mode:multiply] transition-all duration-300 md:opacity-60 md:grayscale md:group-hover/logo:scale-105 md:group-hover/logo:opacity-100 md:group-hover/logo:grayscale-0"
+                className="h-9 w-auto object-contain [mix-blend-mode:multiply] transition-all duration-300 sm:h-12 md:opacity-60 md:grayscale md:group-hover/logo:scale-105 md:group-hover/logo:opacity-100 md:group-hover/logo:grayscale-0"
               />
             </span>
           ))}
