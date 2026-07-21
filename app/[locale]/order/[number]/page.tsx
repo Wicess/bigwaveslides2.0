@@ -11,6 +11,8 @@ import { formatDate, formatPrice } from "@/lib/format";
 import {
   amountDueCents,
   balanceCents,
+  cryptoDiscountCents,
+  effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
 import { loadEnabledMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
@@ -24,6 +26,7 @@ import { Container } from "@/components/ui/container";
 import { QuoteActions } from "@/components/order/quote-actions";
 import { InvoicePayment } from "@/components/order/invoice-payment";
 import { PendingOrderFlag } from "@/components/order/pending-order-flag";
+import { ClaimAccount } from "@/components/order/claim-account";
 import { cn } from "@/lib/utils";
 
 const LOGO =
@@ -73,8 +76,18 @@ export default async function OrderFlowPage({ params }: Props) {
   const docNumber = isQuote
     ? order.orderNumber
     : (order.invoiceNumber ?? order.orderNumber);
-  const half = amountDueCents("HALF", order.totalCents);
-  const halfBalance = balanceCents("HALF", order.totalCents);
+  // Once the client picks crypto, 7% comes off the whole invoice — every
+  // schedule amount below works from the discounted total.
+  const discount = cryptoDiscountCents(
+    order.totalCents,
+    order.paymentMethodKey,
+  );
+  const payableTotal = effectiveTotalCents(
+    order.totalCents,
+    order.paymentMethodKey,
+  );
+  const half = amountDueCents("HALF", payableTotal);
+  const halfBalance = balanceCents("HALF", payableTotal);
   const plan = (order.paymentPlan as PaymentPlan | null) ?? null;
 
   const enabled = await loadEnabledMethods();
@@ -100,6 +113,8 @@ export default async function OrderFlowPage({ params }: Props) {
       {/* Arms the global PaymentWatcher while the buyer waits for payment
           details (plan chosen, admin not yet responded); disarms it once
           details land or the order is paid. Renders nothing. */}
+      {/* Opening this emailed link signs the browser into the account. */}
+      <ClaimAccount orderNumber={order.orderNumber} />
       <PendingOrderFlag
         orderNumber={order.orderNumber}
         email={order.guestEmail ?? ""}
@@ -338,12 +353,18 @@ export default async function OrderFlowPage({ params }: Props) {
                   <span>{money(order.taxCents)}</span>
                 </div>
               ) : null}
+              {discount ? (
+                <div className="flex justify-between font-semibold text-emerald-600">
+                  <span>{t("cryptoDiscountRow")}</span>
+                  <span>−{money(discount)}</span>
+                </div>
+              ) : null}
               <div className="border-primary flex items-center justify-between border-t-2 pt-2">
                 <span className="font-display text-base font-bold">
                   {isQuote ? t("quoteTotal") : t("totalDue")}
                 </span>
                 <span className="text-primary font-display text-2xl font-bold">
-                  {money(order.totalCents)}
+                  {money(payableTotal)}
                 </span>
               </div>
             </div>
@@ -356,7 +377,7 @@ export default async function OrderFlowPage({ params }: Props) {
                 {plan === "FULL" ? (
                   <ScheduleRow
                     k={t("scheduleFullChosen")}
-                    v={money(order.totalCents)}
+                    v={money(payableTotal)}
                   />
                 ) : plan === "HALF" ? (
                   <>
@@ -379,7 +400,7 @@ export default async function OrderFlowPage({ params }: Props) {
                     />
                     <ScheduleRow
                       k={t("scheduleOptionB")}
-                      v={money(order.totalCents)}
+                      v={money(payableTotal)}
                     />
                   </>
                 )}
@@ -411,6 +432,7 @@ export default async function OrderFlowPage({ params }: Props) {
                 locale={locale}
                 totalCents={order.totalCents}
                 plan={plan}
+                methodKey={order.paymentMethodKey}
                 state={order.paymentDetailsState}
                 details={
                   order.paymentDestination

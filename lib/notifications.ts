@@ -573,6 +573,8 @@ import { ANTI_SCAM_HEADING, ANTI_SCAM_BODY } from "@/lib/anti-scam";
 import {
   amountDueCents,
   balanceCents,
+  cryptoDiscountCents,
+  effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
 
@@ -718,8 +720,10 @@ export async function sendPaymentDetailsEmail(
 ): Promise<void> {
   if (!o.guestEmail || !o.paymentDestination) return;
   const plan = (o.paymentPlan as PaymentPlan | null) ?? "FULL";
-  const due = dueCentsOverride ?? amountDueCents(plan, o.totalCents);
-  const balance = balanceCents(plan, o.totalCents);
+  const payable = effectiveTotalCents(o.totalCents, o.paymentMethodKey);
+  const discount = cryptoDiscountCents(o.totalCents, o.paymentMethodKey);
+  const due = dueCentsOverride ?? amountDueCents(plan, payable);
+  const balance = balanceCents(plan, payable);
   const inv = o.invoiceNumber ?? o.orderNumber;
   await sendEmail({
     to: o.guestEmail,
@@ -734,6 +738,14 @@ export async function sendPaymentDetailsEmail(
           : `You chose to pay in full. Send ${formatPrice(due, o.locale)} to complete your booking.`,
       quote: o.paymentInstructions ?? undefined,
       rows: [
+        ...(discount
+          ? [
+              {
+                label: "Crypto discount (7%)",
+                value: `−${formatPrice(discount, o.locale)}`,
+              },
+            ]
+          : []),
         { label: "Amount due now", value: formatPrice(due, o.locale) },
         {
           label: "Method",
@@ -759,7 +771,10 @@ export async function notifyProofSubmitted(o: OrderWithItems): Promise<void> {
   const admins = await adminRecipients();
   if (!admins.length) return;
   const plan = (o.paymentPlan as PaymentPlan | null) ?? "FULL";
-  const due = amountDueCents(plan, o.totalCents);
+  const due = amountDueCents(
+    plan,
+    effectiveTotalCents(o.totalCents, o.paymentMethodKey),
+  );
   await sendEmail({
     to: admins,
     replyTo: o.guestEmail ?? undefined,
@@ -796,7 +811,8 @@ export async function sendPaymentConfirmedEmail(
 ): Promise<void> {
   if (!o.guestEmail) return;
   const plan = (o.paymentPlan as PaymentPlan | null) ?? "FULL";
-  const balance = plan === "HALF" ? balanceCents(plan, o.totalCents) : 0;
+  const payableTotal = effectiveTotalCents(o.totalCents, o.paymentMethodKey);
+  const balance = plan === "HALF" ? balanceCents(plan, payableTotal) : 0;
   await sendEmail({
     to: o.guestEmail,
     replyTo: CONTACT_EMAIL,

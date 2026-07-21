@@ -7,7 +7,12 @@ import { prisma } from "@/lib/prisma";
 import { rateLimit, clientKeyFromHeaders } from "@/lib/rate-limit";
 import { buildMediaKey, r2PutObject } from "@/lib/r2";
 import { invoiceNumber } from "@/lib/ref-number";
-import { amountDueCents, type PaymentPlan } from "@/lib/payment-plan";
+import {
+  amountDueCents,
+  cryptoDiscountCents,
+  effectiveTotalCents,
+  type PaymentPlan,
+} from "@/lib/payment-plan";
 import { resolvePaymentDetails } from "@/lib/payment-methods";
 import { formatPrice } from "@/lib/format";
 import { notifyAdminNtfy } from "@/lib/ntfy";
@@ -130,7 +135,11 @@ export async function choosePaymentPlan(
     if (order.paymentDetailsState === "PAID")
       return { ok: false, error: "This invoice is already paid." };
 
-    const dueCents = amountDueCents(plan as PaymentPlan, order.totalCents);
+    // Crypto earns 7% off the whole invoice; every amount downstream
+    // (details, email, mark-paid) works from the discounted total.
+    const payableCents = effectiveTotalCents(order.totalCents, method);
+    const discountCents = cryptoDiscountCents(order.totalCents, method);
+    const dueCents = amountDueCents(plan as PaymentPlan, payableCents);
     const reference = order.invoiceNumber ?? order.orderNumber;
     const resolved = await resolvePaymentDetails(method, {
       amountCents: dueCents,
@@ -168,13 +177,16 @@ export async function choosePaymentPlan(
       plan === "HALF"
         ? `50% deposit (${formatPrice(dueCents, order.locale)})`
         : `FULL payment (${formatPrice(dueCents, order.locale)})`;
+    const discountNote = discountCents
+      ? ` after 7% crypto discount (−${formatPrice(discountCents, order.locale)})`
+      : "";
     await notifyAdminNtfy({
       title: resolved
         ? `💳 ${order.orderNumber} — ${planLabel} via ${resolved.methodLabel}`
         : `⚠️ ${order.orderNumber} NEEDS payment details`,
       message: resolved
         ? [
-            `${order.guestName ?? "Client"} chose ${planLabel}.`,
+            `${order.guestName ?? "Client"} chose ${planLabel}${discountNote}.`,
             `✅ ${resolved.methodLabel} details auto-sent (${resolved.destination}).`,
             "Watch for the payment, then mark the invoice paid.",
           ].join("\n")

@@ -23,8 +23,11 @@ import {
 import {
   amountDueCents,
   balanceCents,
+  cryptoDiscountCents,
+  effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
+import { paymentLogo } from "@/lib/payment-logos";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -45,6 +48,7 @@ export function InvoicePayment({
   locale,
   totalCents,
   plan,
+  methodKey,
   state,
   details,
   methods,
@@ -54,6 +58,8 @@ export function InvoicePayment({
   locale: string;
   totalCents: number;
   plan: PaymentPlan | null;
+  /** Rail already chosen on the order (null until stage A completes). */
+  methodKey: string | null;
   /** paymentDetailsState from the order. */
   state: string;
   details: Details | null;
@@ -63,12 +69,19 @@ export function InvoicePayment({
   const router = useRouter();
   const [pending, startTransition] = React.useTransition();
   const [chosenPlan, setChosenPlan] = React.useState<PaymentPlan | null>(plan);
-  const [method, setMethod] = React.useState<string | null>(null);
+  const [method, setMethod] = React.useState<string | null>(methodKey);
 
-  const half = amountDueCents("HALF", totalCents);
-  const halfBalance = balanceCents("HALF", totalCents);
   const money = (c: number) => formatPrice(c, locale);
-  const dueNow = plan ? amountDueCents(plan, totalCents) : null;
+  // Crypto takes 7% off the whole invoice — reflect it live as the client
+  // toggles methods so the saving is impossible to miss.
+  const pickDiscount = cryptoDiscountCents(totalCents, method);
+  const payable = effectiveTotalCents(totalCents, method);
+  const half = amountDueCents("HALF", payable);
+  const halfBalance = balanceCents("HALF", payable);
+  // Amounts for the post-choice stages use the rail stored on the order.
+  const storedPayable = effectiveTotalCents(totalCents, methodKey);
+  const storedDiscount = cryptoDiscountCents(totalCents, methodKey);
+  const dueNow = plan ? amountDueCents(plan, storedPayable) : null;
 
   /* ── Stage C/D/E: details present, proof submitted, or paid ── */
   if (state === "PAID") {
@@ -92,8 +105,12 @@ export function InvoicePayment({
       <PaymentDetailsCard
         orderNumber={orderNumber}
         details={details}
-        amountLabel={dueNow != null ? money(dueNow) : money(totalCents)}
-        balanceLabel={plan === "HALF" ? money(halfBalance) : null}
+        methodKey={methodKey}
+        amountLabel={dueNow != null ? money(dueNow) : money(storedPayable)}
+        balanceLabel={
+          plan === "HALF" ? money(balanceCents(plan, storedPayable)) : null
+        }
+        discountLabel={storedDiscount ? `−${money(storedDiscount)}` : null}
         state={state}
       />
     );
@@ -143,7 +160,7 @@ export function InvoicePayment({
             {
               key: "FULL" as const,
               title: t("planFullTitle"),
-              amount: money(totalCents),
+              amount: money(payable),
               desc: t("planFullDesc"),
             },
           ] as const
@@ -175,8 +192,19 @@ export function InvoicePayment({
                 ) : null}
               </span>
             </span>
-            <span className="text-primary font-display mt-1 block text-xl font-bold">
-              {p.amount}
+            <span className="mt-1 block">
+              <span className="text-primary font-display text-xl font-bold">
+                {p.amount}
+              </span>
+              {pickDiscount ? (
+                <span className="text-muted-foreground ml-2 text-sm line-through">
+                  {money(
+                    p.key === "FULL"
+                      ? totalCents
+                      : amountDueCents("HALF", totalCents),
+                  )}
+                </span>
+              ) : null}
             </span>
             <span className="text-muted-foreground mt-1 block text-xs leading-relaxed">
               {p.desc}
@@ -186,26 +214,55 @@ export function InvoicePayment({
       </div>
 
       <p className="mt-5 text-sm font-semibold">{t("chooseMethodTitle")}</p>
-      <div className="mt-2 flex flex-wrap gap-2">
-        {methods.map((m) => (
-          <button
-            key={m.method}
-            type="button"
-            onClick={() => setMethod(m.method)}
-            aria-pressed={method === m.method}
-            className={cn(
-              // min-h-11 = a real 44px thumb target on phones.
-              "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
-              method === m.method
-                ? "border-primary bg-primary text-white"
-                : "border-border hover:border-primary hover:text-primary",
-            )}
-          >
-            <Wallet className="size-3.5" />
-            {m.label}
-          </button>
-        ))}
+      <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
+        {methods.map((m) => {
+          const logo = paymentLogo(m.method);
+          const isCrypto = m.method === "crypto";
+          return (
+            <button
+              key={m.method}
+              type="button"
+              onClick={() => setMethod(m.method)}
+              aria-pressed={method === m.method}
+              className={cn(
+                "relative flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl border p-2 transition-all",
+                method === m.method
+                  ? "border-primary ring-primary/30 bg-primary/5 ring-2"
+                  : "border-border hover:border-primary/50",
+              )}
+            >
+              {isCrypto ? (
+                <span className="absolute -top-2 right-1.5 rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-sm">
+                  −7%
+                </span>
+              ) : null}
+              {logo ? (
+                <Image
+                  src={logo}
+                  alt=""
+                  width={56}
+                  height={24}
+                  className="h-5 w-auto max-w-14 object-contain sm:h-6"
+                />
+              ) : (
+                <Wallet className="text-muted-foreground size-5" />
+              )}
+              <span className="text-[10px] leading-tight font-semibold sm:text-[11px]">
+                {m.label}
+              </span>
+            </button>
+          );
+        })}
       </div>
+      {pickDiscount ? (
+        <p className="mt-2.5 rounded-xl bg-emerald-50 px-3.5 py-2.5 text-sm font-semibold text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
+          🎉{" "}
+          {t("cryptoApplied", {
+            amount: money(pickDiscount),
+            total: money(payable),
+          })}
+        </p>
+      ) : null}
 
       <Button
         size="lg"
@@ -388,14 +445,19 @@ function AwaitingDetails({
 function PaymentDetailsCard({
   orderNumber,
   details,
+  methodKey,
   amountLabel,
   balanceLabel,
+  discountLabel,
   state,
 }: {
   orderNumber: string;
   details: Details;
+  methodKey: string | null;
   amountLabel: string;
   balanceLabel: string | null;
+  /** e.g. "−$43.26" when the 7% crypto discount applies. */
+  discountLabel: string | null;
   state: string;
 }) {
   const t = useTranslations("OrderFlow");
@@ -610,6 +672,13 @@ function PaymentDetailsCard({
       </div>
 
       <dl className="mt-4 space-y-2.5 text-sm">
+        {discountLabel ? (
+          <Row k={t("cryptoDiscountRow")}>
+            <span className="font-semibold text-emerald-600">
+              {discountLabel}
+            </span>
+          </Row>
+        ) : null}
         <Row k={t("amountDueNow")}>
           <span className="text-primary font-display text-xl font-bold">
             {amountLabel}
@@ -618,7 +687,20 @@ function PaymentDetailsCard({
         {balanceLabel ? (
           <Row k={t("balanceBeforeSetup")}>{balanceLabel}</Row>
         ) : null}
-        <Row k={t("method")}>{details.label}</Row>
+        <Row k={t("method")}>
+          <span className="inline-flex items-center gap-1.5">
+            {methodKey && paymentLogo(methodKey) ? (
+              <Image
+                src={paymentLogo(methodKey)!}
+                alt=""
+                width={40}
+                height={16}
+                className="h-4 w-auto object-contain"
+              />
+            ) : null}
+            {details.label}
+          </span>
+        </Row>
         <Row k={t("sendTo")}>
           {/* The whole value is the tap target — one thumb-tap copies it. */}
           <button

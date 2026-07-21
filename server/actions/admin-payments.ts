@@ -9,7 +9,11 @@ import {
   savePaymentMethods,
   buildInstructionsForMethod,
 } from "@/lib/payment-methods";
-import { amountDueCents, type PaymentPlan } from "@/lib/payment-plan";
+import {
+  amountDueCents,
+  effectiveTotalCents,
+  type PaymentPlan,
+} from "@/lib/payment-plan";
 import {
   sendPaymentDetailsEmail,
   sendPaymentConfirmedEmail,
@@ -111,7 +115,10 @@ export async function postOrderPaymentDetails(
     if (!order) return { ok: false, error: "Order not found." };
 
     const plan = (order.paymentPlan as PaymentPlan | null) ?? "FULL";
-    const dueCents = amountDueCents(plan, order.totalCents);
+    const dueCents = amountDueCents(
+      plan,
+      effectiveTotalCents(order.totalCents, order.paymentMethodKey),
+    );
     const built = await buildInstructionsForMethod(
       parsed.data.method || order.paymentMethodKey || "zelle",
       {
@@ -168,7 +175,10 @@ export async function markOrderPaid(
     if (!order) return { ok: false, error: "Order not found." };
 
     const plan = (order.paymentPlan as PaymentPlan | null) ?? "FULL";
-    const dueCents = amountDueCents(plan, order.totalCents);
+    const dueCents = amountDueCents(
+      plan,
+      effectiveTotalCents(order.totalCents, order.paymentMethodKey),
+    );
     const fullyPaid = plan === "FULL";
 
     // Credit the amount actually received to the customer's lifetime value.

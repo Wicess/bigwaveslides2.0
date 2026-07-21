@@ -795,6 +795,8 @@
     "transportation": "Transportation",
     "tax": "FL sales tax (6.5%)",
     "depositNote": "30% of your total acts as a refundable deposit — fully refunded if you cancel at least 7 days before your event. Each rental day is one complete 24-hour period.",
-    "agreeFirstHint": "Tick the box above to enable the accept button — it activates the moment you agree."
+    "agreeFirstHint": "Tick the box above to enable the accept button — it activates the moment you agree.",
+    "cryptoApplied": "7% Bitcoin discount applied — you save {amount}. New total: {total}.",
+    "cryptoDiscountRow": "Crypto discount (7%)"
   }
 }
