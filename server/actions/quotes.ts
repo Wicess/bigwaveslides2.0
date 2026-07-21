@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { quoteNumber } from "@/lib/ref-number";
 import { notifyQuoteRequest } from "@/lib/notifications";
+import { upsertCustomerFromGuest } from "@/lib/customers";
 
 const CONTEXTS = ["SHOP", "RENTAL", "SERVICE", "GENERAL"] as const;
 
@@ -40,9 +41,18 @@ export async function createQuoteRequest(
 
   try {
     const eventDate = data.eventDate ? new Date(data.eventDate) : null;
+    // Auto-create/refresh the customer's account and attach this quote.
+    const customerId = await upsertCustomerFromGuest({
+      name: data.name,
+      email: data.email,
+      phone: data.phone || null,
+      locale: data.locale,
+    });
+
     const quote = await prisma.quoteRequest.create({
       data: {
         quoteNumber: quoteNumber(),
+        ...(customerId ? { customerId } : {}),
         guestName: data.name,
         guestEmail: data.email,
         guestPhone: data.phone || null,

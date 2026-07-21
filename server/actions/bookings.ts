@@ -8,6 +8,7 @@ import { checkRange } from "@/server/data/availability";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { bookingNumber, contractNumber } from "@/lib/ref-number";
 import { notifyBookingRequest } from "@/lib/notifications";
+import { upsertCustomerFromGuest } from "@/lib/customers";
 
 const schema = z.object({
   productId: z.string().min(1),
@@ -89,9 +90,18 @@ export async function createBookingRequest(
     });
     const name = getLocalized(product.name, d.locale);
 
+    // Auto-create/refresh the customer's account and attach this booking.
+    const customerId = await upsertCustomerFromGuest({
+      name: d.name,
+      email: d.email,
+      phone: d.phone,
+      locale: d.locale,
+    });
+
     const created = await prisma.booking.create({
       data: {
         bookingNumber: bookingNumber(),
+        ...(customerId ? { customerId } : {}),
         guestName: d.name,
         guestEmail: d.email,
         guestPhone: d.phone,

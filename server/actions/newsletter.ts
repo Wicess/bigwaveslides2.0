@@ -42,6 +42,14 @@ export async function subscribeNewsletter(input: {
       },
     });
 
+    // Fold the subscription into the customer's account when one exists.
+    await prisma.customer
+      .updateMany({
+        where: { email: { equals: parsed.data.email, mode: "insensitive" } },
+        data: { marketingOptIn: true },
+      })
+      .catch(() => {});
+
     if (isNew) {
       // Best-effort: never fail the subscription if email sending hiccups.
       await notifyNewsletterSignup({

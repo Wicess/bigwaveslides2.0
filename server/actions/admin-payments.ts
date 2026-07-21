@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { addToLifetimeValue } from "@/lib/customers";
 import { requirePermission, logActivity } from "@/lib/admin-auth";
 import {
   savePaymentMethods,
@@ -169,6 +170,13 @@ export async function markOrderPaid(
     const plan = (order.paymentPlan as PaymentPlan | null) ?? "FULL";
     const dueCents = amountDueCents(plan, order.totalCents);
     const fullyPaid = plan === "FULL";
+
+    // Credit the amount actually received to the customer's lifetime value.
+    const owner = await prisma.order.findUnique({
+      where: { id: order.id },
+      select: { customerId: true },
+    });
+    await addToLifetimeValue(owner?.customerId, dueCents);
 
     const updated = await prisma.order.update({
       where: { id: order.id },

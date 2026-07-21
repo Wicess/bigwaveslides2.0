@@ -10,6 +10,7 @@ import { notifyOrderRequest } from "@/lib/notifications";
 import { getSettings } from "@/server/data/settings";
 import { TRANSPORT_CENTS, taxCentsFor } from "@/lib/pricing";
 import { cartUnitPrice } from "@/server/data/cart";
+import { upsertCustomerFromGuest } from "@/lib/customers";
 import {
   geoFromHeaders,
   geoFromIp,
@@ -150,9 +151,18 @@ export async function createOrderRequest(
     const eventDay = data.eventDate
       ? new Date(`${data.eventDate}T12:00:00`)
       : null;
+    // Auto-create/refresh the customer's account and attach this order to it.
+    const customerId = await upsertCustomerFromGuest({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      locale: data.locale,
+    });
+
     const order = await prisma.order.create({
       data: {
         orderNumber: orderNumber(),
+        ...(customerId ? { customerId } : {}),
         ...(orderGeo ? { geo: orderGeo } : {}),
         guestName: data.name,
         guestEmail: data.email,

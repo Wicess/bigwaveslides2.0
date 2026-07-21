@@ -9,7 +9,6 @@ import {
   BarChart3,
   Package,
   Boxes,
-  CalendarCheck,
   ShoppingCart,
   FileText,
   Users,
@@ -18,9 +17,8 @@ import {
   Inbox,
   Mail,
   Newspaper,
-  Image,
   Settings,
-  Shield,
+  CreditCard,
   History,
   LogOut,
   Menu,
@@ -44,8 +42,12 @@ const GROUPS = [
       },
       { href: "/admin/products", label: "Products", icon: Package },
       { href: "/admin/inventory", label: "Inventory", icon: Boxes },
-      { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
       { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+      {
+        href: "/admin/settings/payments",
+        label: "Payments",
+        icon: CreditCard,
+      },
       { href: "/admin/analytics/visitors", label: "Visitors", icon: Users },
       { href: "/admin/quotes", label: "Quotes", icon: FileText },
     ],
@@ -53,7 +55,6 @@ const GROUPS = [
   {
     label: "CRM & comms",
     items: [
-      { href: "/admin/customers", label: "Customers", icon: Users },
       { href: "/admin/reviews", label: "Reviews", icon: Star },
       {
         href: "/admin/testimonials",
@@ -68,7 +69,6 @@ const GROUPS = [
     label: "Content",
     items: [
       { href: "/admin/blog", label: "Blog", icon: Newspaper },
-      { href: "/admin/media", label: "Media", icon: Image },
     ],
   },
   {
@@ -87,7 +87,6 @@ const GROUPS = [
     items: [
       { href: "/admin/settings", label: "Settings", icon: Settings },
       { href: "/admin/users", label: "Users", icon: Users },
-      { href: "/admin/roles", label: "Roles", icon: Shield },
       { href: "/admin/activity", label: "Activity", icon: History },
     ],
   },
