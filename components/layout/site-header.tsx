@@ -21,6 +21,7 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   Phone,
   ShoppingBag,
+  User,
   Menu,
   X,
   ChevronDown,
@@ -212,6 +213,10 @@ export function SiteHeader({ locale, data }: Props) {
                 tel: URL instead of the locale-aware <Link>. */}
             <IconChip href={telHref} label={t("call")} external>
               <Phone className="size-4 sm:size-[18px]" />
+            </IconChip>
+
+            <IconChip href="/account" label={t("account")}>
+              <User className="size-4 sm:size-[18px]" />
             </IconChip>
 
             <button

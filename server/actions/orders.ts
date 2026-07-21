@@ -11,6 +11,7 @@ import { getSettings } from "@/server/data/settings";
 import { TRANSPORT_CENTS, taxCentsFor } from "@/lib/pricing";
 import { cartUnitPrice } from "@/server/data/cart";
 import { upsertCustomerFromGuest } from "@/lib/customers";
+import { createCustomerSession } from "@/lib/customer-auth";
 import {
   geoFromHeaders,
   geoFromIp,
@@ -193,6 +194,9 @@ export async function createOrderRequest(
       },
       select: { id: true, orderNumber: true },
     });
+
+    // Sign this browser into the customer's account (passwordless, same device).
+    if (customerId) await createCustomerSession(customerId);
 
     // Mark cart converted and drop the session cookie.
     await prisma.cart.update({

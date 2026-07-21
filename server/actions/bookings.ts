@@ -9,6 +9,7 @@ import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { bookingNumber, contractNumber } from "@/lib/ref-number";
 import { notifyBookingRequest } from "@/lib/notifications";
 import { upsertCustomerFromGuest } from "@/lib/customers";
+import { createCustomerSession } from "@/lib/customer-auth";
 
 const schema = z.object({
   productId: z.string().min(1),
@@ -144,6 +145,9 @@ export async function createBookingRequest(
         contract: { select: { contractNumber: true } },
       },
     });
+
+    // Sign this browser into the customer's account (passwordless, same device).
+    if (customerId) await createCustomerSession(customerId);
 
     await notifyBookingRequest({
       bookingNumber: created.bookingNumber,

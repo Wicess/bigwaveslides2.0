@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { quoteNumber } from "@/lib/ref-number";
 import { notifyQuoteRequest } from "@/lib/notifications";
 import { upsertCustomerFromGuest } from "@/lib/customers";
+import { createCustomerSession } from "@/lib/customer-auth";
 
 const CONTEXTS = ["SHOP", "RENTAL", "SERVICE", "GENERAL"] as const;
 
@@ -75,6 +76,9 @@ export async function createQuoteRequest(
       },
       select: { quoteNumber: true },
     });
+
+    // Sign this browser into the customer's account (passwordless, same device).
+    if (customerId) await createCustomerSession(customerId);
 
     await notifyQuoteRequest({
       quoteNumber: quote.quoteNumber,
