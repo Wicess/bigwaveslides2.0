@@ -223,9 +223,10 @@ export async function rejectOrderProof(
       include: { items: true },
     });
 
-    await sendProofRejectedEmail(updated, parsed.data.reason || undefined).catch(
-      (e) => console.error("[admin-payments] reject email failed", e),
-    );
+    await sendProofRejectedEmail(
+      updated,
+      parsed.data.reason || undefined,
+    ).catch((e) => console.error("[admin-payments] reject email failed", e));
     await logActivity(session.id, "order.update", {
       entityType: "Order",
       entityId: order.id,

@@ -126,9 +126,7 @@ export async function loadEnabledMethods(): Promise<PaymentMethod[]> {
 }
 
 export async function savePaymentMethods(
-  list: Array<
-    Pick<PaymentMethod, "method" | "label"> & Partial<PaymentMethod>
-  >,
+  list: Array<Pick<PaymentMethod, "method" | "label"> & Partial<PaymentMethod>>,
 ): Promise<void> {
   for (const [i, m] of list.entries()) {
     await prisma.paymentMethodConfig.upsert({

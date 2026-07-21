@@ -34,7 +34,9 @@ export const getSettings = unstable_cache(
     const rows = await withRetry(() =>
       prisma.siteSetting.findMany({ select: { key: true, value: true } }),
     );
-    return Object.fromEntries(rows.map((r) => [r.key, r.value])) as SiteSettings;
+    return Object.fromEntries(
+      rows.map((r) => [r.key, r.value]),
+    ) as SiteSettings;
   },
   ["site-settings"],
   { tags: ["settings"], revalidate: 3600 },

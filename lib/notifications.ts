@@ -572,7 +572,11 @@ export async function sendAbandonedCartReminder(email: string): Promise<void> {
 
 import type { Prisma } from "@prisma/client";
 import { ANTI_SCAM_HEADING, ANTI_SCAM_BODY } from "@/lib/anti-scam";
-import { amountDueCents, balanceCents, type PaymentPlan } from "@/lib/payment-plan";
+import {
+  amountDueCents,
+  balanceCents,
+  type PaymentPlan,
+} from "@/lib/payment-plan";
 
 type OrderWithItems = Prisma.OrderGetPayload<{ include: { items: true } }>;
 
@@ -593,7 +597,10 @@ export function orderToPdfInput(
   return {
     kind: "order",
     docType,
-    number: docType === "invoice" ? (o.invoiceNumber ?? o.orderNumber) : o.orderNumber,
+    number:
+      docType === "invoice"
+        ? (o.invoiceNumber ?? o.orderNumber)
+        : o.orderNumber,
     quoteRef: docType === "invoice" ? o.orderNumber : undefined,
     dateLabel: formatDate(
       docType === "invoice" ? (o.invoiceIssuedAt ?? o.createdAt) : o.createdAt,
@@ -644,13 +651,17 @@ export function orderToPdfInput(
 }
 
 /** Quote accepted → email the invoice (PDF + on-site link) to the client. */
-export async function sendInvoiceIssuedEmails(o: OrderWithItems): Promise<void> {
+export async function sendInvoiceIssuedEmails(
+  o: OrderWithItems,
+): Promise<void> {
   if (!o.guestEmail) return;
   const inv = o.invoiceNumber ?? o.orderNumber;
   let attachments: EmailAttachment[] = [];
   try {
     const pdf = await generateQuotePdf(orderToPdfInput(o, "invoice"));
-    attachments = [{ filename: `Big-Wave-Slides-Invoice-${inv}.pdf`, content: pdf }];
+    attachments = [
+      { filename: `Big-Wave-Slides-Invoice-${inv}.pdf`, content: pdf },
+    ];
   } catch (e) {
     console.error("[pdf error] invoice", e);
   }
@@ -726,9 +737,14 @@ export async function sendPaymentDetailsEmail(
       quote: o.paymentInstructions ?? undefined,
       rows: [
         { label: "Amount due now", value: formatPrice(due, o.locale) },
-        { label: "Method", value: o.paymentMethodLabel ?? o.paymentMethodKey ?? "—" },
+        {
+          label: "Method",
+          value: o.paymentMethodLabel ?? o.paymentMethodKey ?? "—",
+        },
         { label: "Send to", value: o.paymentDestination },
-        ...(o.paymentNetwork ? [{ label: "Network", value: o.paymentNetwork }] : []),
+        ...(o.paymentNetwork
+          ? [{ label: "Network", value: o.paymentNetwork }]
+          : []),
         { label: "Reference", value: inv },
       ],
       cta: {
@@ -755,10 +771,20 @@ export async function notifyProofSubmitted(o: OrderWithItems): Promise<void> {
       intro: `${o.guestName ?? "A client"} submitted payment proof for invoice ${o.invoiceNumber ?? o.orderNumber}. Verify the money arrived, then mark it paid in admin.`,
       rows: [
         { label: "Expected", value: formatPrice(due, o.locale) },
-        { label: "Plan", value: plan === "HALF" ? "50% deposit" : "Full payment" },
-        { label: "Method", value: o.paymentMethodLabel ?? o.paymentMethodKey ?? "—" },
-        ...(o.proofTxId ? [{ label: "Their reference", value: o.proofTxId }] : []),
-        ...(o.proofImageUrl ? [{ label: "Screenshot", value: o.proofImageUrl }] : []),
+        {
+          label: "Plan",
+          value: plan === "HALF" ? "50% deposit" : "Full payment",
+        },
+        {
+          label: "Method",
+          value: o.paymentMethodLabel ?? o.paymentMethodKey ?? "—",
+        },
+        ...(o.proofTxId
+          ? [{ label: "Their reference", value: o.proofTxId }]
+          : []),
+        ...(o.proofImageUrl
+          ? [{ label: "Screenshot", value: o.proofImageUrl }]
+          : []),
       ],
       quote: o.proofNote ?? undefined,
       cta: { label: "Open in admin", url: siteUrl(`/admin/orders/${o.id}`) },
@@ -767,7 +793,9 @@ export async function notifyProofSubmitted(o: OrderWithItems): Promise<void> {
 }
 
 /** Owner verified the money arrived → the client's "you're booked" email. */
-export async function sendPaymentConfirmedEmail(o: OrderWithItems): Promise<void> {
+export async function sendPaymentConfirmedEmail(
+  o: OrderWithItems,
+): Promise<void> {
   if (!o.guestEmail) return;
   const plan = (o.paymentPlan as PaymentPlan | null) ?? "FULL";
   const balance = plan === "HALF" ? balanceCents(plan, o.totalCents) : 0;
@@ -777,15 +805,25 @@ export async function sendPaymentConfirmedEmail(o: OrderWithItems): Promise<void
     subject: `Payment received — you're booked! 🎉 (${o.invoiceNumber ?? o.orderNumber})`,
     html: renderEmail({
       heading: "Payment received — you're booked! 🎉",
-      preheader: "Your date is locked in. We'll be in touch before your event with delivery timing.",
+      preheader:
+        "Your date is locked in. We'll be in touch before your event with delivery timing.",
       intro:
         balance > 0
           ? `We've received your deposit — your date is officially reserved! The remaining balance of ${formatPrice(balance, o.locale)} is due 48 hours before your event${o.invoiceDueAt ? ` (${formatDate(o.invoiceDueAt, o.locale)})` : ""}. We'll reach out before your event to confirm delivery timing.`
           : "We've received your payment in full — your booking is confirmed! We'll reach out before your event to confirm delivery timing. Nothing else is owed.",
       rows: [
         { label: "Invoice", value: o.invoiceNumber ?? o.orderNumber },
-        ...(o.eventDate ? [{ label: "Event date", value: formatDate(o.eventDate, o.locale) }] : []),
-        ...(balance > 0 ? [{ label: "Balance remaining", value: formatPrice(balance, o.locale) }] : []),
+        ...(o.eventDate
+          ? [{ label: "Event date", value: formatDate(o.eventDate, o.locale) }]
+          : []),
+        ...(balance > 0
+          ? [
+              {
+                label: "Balance remaining",
+                value: formatPrice(balance, o.locale),
+              },
+            ]
+          : []),
       ],
       cta: { label: "View your booking", url: siteUrl(orderPagePath(o)) },
       outro: `${SCAM_OUTRO}`,

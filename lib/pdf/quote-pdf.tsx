@@ -404,7 +404,9 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
               <Text style={s.titleMeta}>Balance due: {input.dueLabel}</Text>
             ) : null}
             {input.eventDateLabel ? (
-              <Text style={s.titleMeta}>Event date: {input.eventDateLabel}</Text>
+              <Text style={s.titleMeta}>
+                Event date: {input.eventDateLabel}
+              </Text>
             ) : null}
           </View>
         </View>
@@ -470,7 +472,9 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
           </View>
           {input.items.map((it, i) => (
             <View key={i}>
-              <View style={[s.row, it.includes ? { borderBottomWidth: 0 } : {}]}>
+              <View
+                style={[s.row, it.includes ? { borderBottomWidth: 0 } : {}]}
+              >
                 <Text style={s.cDesc}>{it.name}</Text>
                 <Text style={s.cQty}>{it.qtyLabel}</Text>
                 <Text style={s.cRate}>{it.rateLabel}</Text>
@@ -570,10 +574,10 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
             </>
           )}
           <Text style={s.payHint}>
-            {Math.round(DEPOSIT_RATE * 100)}% of your total acts as a
-            refundable deposit — fully refunded if you cancel at least{" "}
-            {REFUND_NOTICE_DAYS} days before your event. Each rental day is one
-            complete 24-hour period.
+            {Math.round(DEPOSIT_RATE * 100)}% of your total acts as a refundable
+            deposit — fully refunded if you cancel at least {REFUND_NOTICE_DAYS}{" "}
+            days before your event. Each rental day is one complete 24-hour
+            period.
           </Text>
         </View>
 
