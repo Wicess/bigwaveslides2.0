@@ -108,7 +108,9 @@ export default async function ProductDetailPage({ params }: Props) {
     getLocalized(product.description, locale) || shortDescription;
   const features = asList(product.features, locale);
 
-  const gallery: GalleryItem[] = product.media.map((m) => ({
+  // Sales side shows a single hero image (owner request) — the rent page
+  // keeps the full gallery.
+  const gallery: GalleryItem[] = product.media.slice(0, 1).map((m) => ({
     type: m.type,
     url: m.url,
     alt: getLocalized(m.alt, locale, name),

@@ -18,6 +18,7 @@ import {
 } from "@/components/admin/admin-ui";
 import { FilterSelect } from "@/components/admin/list-controls";
 import { DropdownMenu, DropdownLink } from "@/components/admin/dropdown-menu";
+import { ShopToggle } from "@/components/admin/shop-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +93,7 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                       <Th>Product</Th>
                       <Th>SKU</Th>
                       <Th>Type</Th>
+                      <Th>In shop</Th>
                       <Th>Price</Th>
                       <Th>Status</Th>
                       <Th className="text-right">Actions</Th>
@@ -130,6 +132,13 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                               {p.type === "SALE" ? "Sale" : "Rental"}
                             </span>
                           </td>
+                          <td className="px-5 py-3.5">
+                            <ShopToggle
+                              productId={p.id}
+                              inShop={p.type === "SALE" || p.type === "BOTH"}
+                              name={getLocalized(p.name, "en")}
+                            />
+                          </td>
                           <td className="px-5 py-3.5 font-bold text-foreground">
                             {price != null ? formatPrice(price, "en") : "—"}
                           </td>
@@ -162,8 +171,8 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                 {products.map((p) => {
                   const price = p.type === "SALE" ? p.salePriceCents : p.dailyRateCents;
                   return (
-                    <li key={p.id}>
-                      <Link href={`/admin/products/${p.id}`} className="flex items-center gap-3 p-4 active:bg-primary-50/40">
+                    <li key={p.id} className="flex items-center gap-2 pr-4">
+                      <Link href={`/admin/products/${p.id}`} className="flex min-w-0 flex-1 items-center gap-3 p-4 active:bg-primary-50/40">
                         <IconChip icon={Package} />
                         <span className="min-w-0 flex-1">
                           <span className="flex items-center gap-2">
@@ -186,6 +195,11 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                           </span>
                         </span>
                       </Link>
+                      <ShopToggle
+                        productId={p.id}
+                        inShop={p.type === "SALE" || p.type === "BOTH"}
+                        name={getLocalized(p.name, "en")}
+                      />
                     </li>
                   );
                 })}

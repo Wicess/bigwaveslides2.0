@@ -202,6 +202,37 @@ export async function saveProduct(
   }
 }
 
+/**
+ * Toggle whether a product appears on the sales side (/shop). "In shop" means
+ * type SALE or BOTH; toggling off makes it RENTAL-only (it stays rentable —
+ * every unit in this fleet rents), toggling on makes it BOTH.
+ */
+export async function toggleProductSale(id: string): Promise<AdminActionResult> {
+  const session = await requirePermission("product.write");
+  try {
+    const p = await prisma.product.findUnique({
+      where: { id },
+      select: { type: true },
+    });
+    if (!p) return { ok: false, error: "Product not found." };
+    const inShop = p.type === "SALE" || p.type === "BOTH";
+    await prisma.product.update({
+      where: { id },
+      data: { type: inShop ? "RENTAL" : "BOTH" },
+    });
+    await logActivity(session.id, "product.write", {
+      entityType: "Product",
+      entityId: id,
+      summary: inShop ? "Removed from shop (rental-only)" : "Added to shop",
+    });
+    revalidateTag("products");
+    revalidatePath("/admin/products");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Couldn't update the product." };
+  }
+}
+
 export async function deleteProduct(id: string): Promise<AdminActionResult> {
   const session = await requirePermission("product.delete");
   try {
