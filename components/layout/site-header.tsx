@@ -73,7 +73,7 @@ export function SiteHeader({ locale, data }: Props) {
   return (
     // `sticky top-0` keeps this header pinned to the top of the viewport as the
     // user scrolls; `z-50` stacks it above normal page content.
-    <header className="sticky top-0 z-50 px-3 pt-5 sm:px-5 sm:pt-7">
+    <header className="sticky top-0 z-50 px-3 pt-[max(env(safe-area-inset-top),1.25rem)] sm:px-5 sm:pt-[max(env(safe-area-inset-top),1.75rem)]">
       <div className="mx-auto max-w-[84rem]">
         <div className="flex h-[5.5rem] items-center justify-between gap-3 rounded-[8px] border border-white/10 bg-[rgba(18,19,26,0.45)] px-4 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:px-6">
           {/* Left: logo + desktop nav */}

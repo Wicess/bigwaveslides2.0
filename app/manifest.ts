@@ -10,8 +10,13 @@ export default function manifest(): MetadataRoute.Manifest {
       "Rent premium inflatable water slides & bounce houses — delivered, set up, sanitized & fully insured, nationwide.",
     id: "/",
     start_url: "/",
-    display: "standalone",
-    background_color: "#ffffff",
+    // Immersive install: hide the OS status bar (battery/clock/network) AND the
+    // bottom navigation bar so the site paints edge-to-edge like a native app.
+    // display_override is the progressive-enhancement list Android reads first;
+    // `display` is the fallback for engines that don't support it.
+    display: "fullscreen",
+    display_override: ["fullscreen", "standalone", "minimal-ui"],
+    background_color: "#0a1a2f",
     theme_color: "#0a1a2f",
     orientation: "portrait",
     icons: [
