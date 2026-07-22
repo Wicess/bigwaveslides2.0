@@ -8,6 +8,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 // Lenis is the smooth-scroll library.
 import Lenis from "lenis";
 // gsap drives animations; ScrollTrigger fires animations based on scroll.
@@ -19,6 +20,9 @@ import { gsap, ScrollTrigger } from "./gsap";
  * Disabled entirely when the user prefers reduced motion.
  */
 export function LenisProvider({ children }: { children: React.ReactNode }) {
+  const lenisRef = React.useRef<Lenis | null>(null);
+  const pathname = usePathname();
+
   // useEffect runs once after the component mounts (in the browser only).
   React.useEffect(() => {
     // Safety check: skip on the server where `window` doesn't exist.
@@ -38,6 +42,9 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
       smoothWheel: true,
       wheelMultiplier: 1,
     });
+    lenisRef.current = lenis;
+    // Expose it so navigations elsewhere can reset scroll (see lib/scroll.ts).
+    (window as Window & { __lenis?: Lenis }).__lenis = lenis;
 
     // Whenever Lenis scrolls, tell ScrollTrigger to recalculate so scroll-based
     // animations match the smoothed position.
@@ -57,8 +64,19 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     return () => {
       gsap.ticker.remove(onRaf);
       lenis.destroy();
+      lenisRef.current = null;
+      delete (window as Window & { __lenis?: Lenis }).__lenis;
     };
   }, []);
+
+  // On every route change, jump back to the top. Lenis holds its scroll
+  // position across client navigations, which otherwise lands the next page
+  // wherever the previous one was scrolled to (e.g. quote → invoice opened at
+  // the bottom). Skip when navigating to an in-page anchor.
+  React.useEffect(() => {
+    if (typeof window === "undefined" || window.location.hash) return;
+    lenisRef.current?.scrollTo(0, { immediate: true });
+  }, [pathname]);
 
   // This provider doesn't render any visible markup — it just renders whatever
   // children it wraps, after attaching the smooth-scroll behavior above.

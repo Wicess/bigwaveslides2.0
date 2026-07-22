@@ -752,12 +752,12 @@
     "planFullTitle": "Payer en totalité",
     "planFullDesc": "Un seul paiement, tout est réglé — rien à payer le jour de l'événement.",
     "chooseMethodTitle": "Moyen de paiement préféré",
-    "getPaymentDetails": "Obtenir mes coordonnées de paiement",
+    "getPaymentDetails": "Payer maintenant",
     "noAutoCharge": "Nous ne prélevons jamais automatiquement. Les coordonnées exactes s'affichent sur cette page et vous sont envoyées uniquement depuis contact@bigwaveslides.com.",
     "detailsReadyToast": "Vos coordonnées de paiement sont prêtes 💳",
     "detailsSoonToast": "C'est noté — vos coordonnées de paiement sont en cours d'attribution.",
     "awaitTitle": "Attribution de vos coordonnées de paiement sécurisées",
-    "awaitBadge": "Commande protégée",
+    "awaitBadge": "Commande sécurisée",
     "awaitStep1": "Commande reçue",
     "awaitStep2": "Votre toboggan est réservé pour vous",
     "awaitStep3": "Attribution de votre canal de paiement sécurisé",
@@ -804,8 +804,11 @@
     "saveLabel": "Économisez {pct}",
     "backToInvoice": "Retour à la facture",
     "secureCheckout": "Paiement sécurisé",
-    "securingTitle": "Sécurisation de votre paiement",
+    "securingTitle": "Coordonnées de paiement",
     "payTitle": "Finalisez votre paiement",
-    "securedBadgeNote": "Cette page est surveillée en temps réel. Vos coordonnées de paiement personnalisées sont attribuées manuellement et apparaissent ici dès qu'elles sont prêtes."
+    "securedBadgeNote": "Cette page est surveillée en temps réel. Vos coordonnées de paiement personnalisées sont attribuées manuellement et apparaissent ici dès qu'elles sont prêtes.",
+    "awaitBody": "Un instant, pour votre sécurité. Nous vous enverrons vos coordonnées de paiement ici et par courriel — vous les trouverez aussi dans votre compte.",
+    "arrivedBannerDesc": "Envoyez le montant ci-dessous pour finaliser votre réservation, puis appuyez sur « J’ai payé ».",
+    "arrivedBannerDismiss": "Fermer"
   }
 }

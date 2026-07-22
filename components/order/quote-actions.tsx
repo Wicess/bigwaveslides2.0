@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { acceptQuote } from "@/server/actions/order-flow";
+import { scrollToTop } from "@/lib/scroll";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toaster";
@@ -27,6 +28,9 @@ export function QuoteActions({ orderNumber }: { orderNumber: string }) {
       const res = await acceptQuote({ orderNumber });
       if (res.ok) {
         toast.success(t("quoteAcceptedToast"));
+        // Same URL re-renders as the invoice in place — reset to the top so it
+        // doesn't open scrolled down where the Accept button was.
+        scrollToTop();
         router.refresh();
       } else {
         toast.error(res.error ?? "Something went wrong.");

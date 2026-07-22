@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   BadgeCheck,
+  BellRing,
   CheckCircle2,
   Copy,
   CreditCard,
@@ -42,6 +43,56 @@ type Details = {
   network: string | null;
   qrUrl: string | null;
 };
+
+/* ── Arrival sound cue ──────────────────────────────────────────────────
+   A short, pleasant two-note chime synthesised with the Web Audio API (no
+   asset to download). This is the signal that reaches a client who's looking
+   away — visuals alone are easy to miss. Browsers only allow audio after a
+   user gesture, so AwaitingDetails unlocks the context on the client's first
+   interaction while they wait; if they never interact the chime is silently
+   skipped and the visual signals still fire. */
+let sharedAudioCtx: AudioContext | null = null;
+
+function getAudioCtx(): AudioContext | null {
+  if (typeof window === "undefined") return null;
+  const Ctor =
+    window.AudioContext ??
+    (window as unknown as { webkitAudioContext?: typeof AudioContext })
+      .webkitAudioContext;
+  if (!Ctor) return null;
+  if (!sharedAudioCtx) sharedAudioCtx = new Ctor();
+  return sharedAudioCtx;
+}
+
+/** Best-effort: resume a suspended AudioContext from within a user gesture. */
+function unlockAudio(): void {
+  const ctx = getAudioCtx();
+  if (ctx && ctx.state === "suspended") ctx.resume().catch(() => {});
+}
+
+/** Play a rising two-note "ready" chime. No-op if audio isn't unlocked. */
+function playArrivalChime(): void {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  if (ctx.state === "suspended") ctx.resume().catch(() => {});
+  const now = ctx.currentTime;
+  // A5 → D6, soft sine with a quick attack and gentle exponential release.
+  for (const [freq, at] of [
+    [880, 0],
+    [1174.66, 0.15],
+  ] as const) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, now + at);
+    gain.gain.linearRampToValueAtTime(0.28, now + at + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + at + 0.5);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now + at);
+    osc.stop(now + at + 0.55);
+  }
+}
 
 export function InvoicePayment({
   orderNumber,
@@ -216,7 +267,8 @@ export function InvoicePayment({
       </div>
 
       <p className="mt-5 text-sm font-semibold">{t("chooseMethodTitle")}</p>
-      <div className="mt-2.5 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+      {/* One bordered list, divided rows — not six separate cards. */}
+      <div className="border-border divide-border mt-2.5 divide-y overflow-hidden rounded-xl border">
         {methods.map((m) => {
           const logo = paymentLogo(m.method);
           const disc = discountLabelFor(m.method);
@@ -228,52 +280,45 @@ export function InvoicePayment({
               onClick={() => setMethod(m.method)}
               aria-pressed={selected}
               className={cn(
-                "relative flex items-center gap-3 rounded-2xl border bg-white p-3 text-left transition-all",
-                selected
-                  ? "border-primary ring-primary/30 bg-primary/5 ring-2"
-                  : "border-border hover:border-primary/50 hover:shadow-sm",
+                "flex w-full items-center gap-3.5 px-4 py-3.5 text-left transition-colors",
+                selected ? "bg-primary/5" : "hover:bg-muted/40",
               )}
             >
-              {disc ? (
-                <span className="absolute -top-2 right-2 rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-bold text-white shadow-sm">
-                  −{disc}
-                </span>
-              ) : null}
-              <span className="border-border grid size-10 shrink-0 place-items-center rounded-xl border bg-white">
+              <span className="flex h-7 w-12 shrink-0 items-center">
                 {logo ? (
                   <Image
                     src={logo}
                     alt=""
-                    width={40}
-                    height={24}
-                    className="h-5 w-auto max-w-9 object-contain"
+                    width={48}
+                    height={28}
+                    className="max-h-6 w-auto max-w-full object-contain"
                   />
                 ) : (
-                  <Wallet className="text-muted-foreground size-5" />
+                  <Wallet className="text-muted-foreground size-6" />
                 )}
               </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-sm leading-tight font-semibold">
-                  {m.label}
+              <span className="flex-1 text-sm font-semibold">{m.label}</span>
+              {disc ? (
+                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700">
+                  {t("saveLabel", { pct: disc })}
                 </span>
-                {disc ? (
-                  <span className="mt-0.5 block text-xs font-semibold text-emerald-600">
-                    {t("saveLabel", { pct: disc })}
-                  </span>
+              ) : null}
+              <span
+                className={cn(
+                  "grid size-5 shrink-0 place-items-center rounded-full border-2 transition-colors",
+                  selected ? "border-primary" : "border-border",
+                )}
+              >
+                {selected ? (
+                  <span className="bg-primary size-2.5 rounded-full" />
                 ) : null}
               </span>
-              {/* Selection shown by the ring + this check (no empty circles
-                  eating the label's width). */}
-              {selected ? (
-                <CheckCircle2 className="text-primary size-5 shrink-0" />
-              ) : null}
             </button>
           );
         })}
       </div>
       {pickDiscount ? (
-        <p className="mt-2.5 rounded-xl bg-emerald-50 px-3.5 py-2.5 text-sm font-semibold text-emerald-800">
-          🎉{" "}
+        <p className="mt-3 text-sm font-semibold text-emerald-700">
           {t("cryptoApplied", {
             amount: money(pickDiscount),
             total: money(payable),
@@ -302,7 +347,7 @@ export function InvoicePayment({
   );
 }
 
-/* ───────────── Waiting state — honest, live, reassuring ───────────── */
+/* ───────────── Waiting state — premium, minimal, secure ───────────── */
 
 function AwaitingDetails({
   orderNumber,
@@ -313,24 +358,27 @@ function AwaitingDetails({
 }) {
   const t = useTranslations("OrderFlow");
   const router = useRouter();
-  const [elapsed, setElapsed] = React.useState(0);
-  const [lastCheck, setLastCheck] = React.useState<number | null>(null);
-  const startRef = React.useRef(Date.now());
 
-  // Live elapsed timer — proof that time is really passing, not a stuck page.
+  // Prime the audio context on the client's first interaction while they wait,
+  // so the arrival chime is allowed to play the moment details land (browsers
+  // block audio not tied to a gesture). Harmless if never triggered.
   React.useEffect(() => {
-    const id = setInterval(
-      () => setElapsed(Math.floor((Date.now() - startRef.current) / 1000)),
-      1000,
-    );
-    return () => clearInterval(id);
+    const unlock = () => unlockAudio();
+    const opts: AddEventListenerOptions = { once: true, passive: true };
+    window.addEventListener("pointerdown", unlock, opts);
+    window.addEventListener("touchstart", unlock, opts);
+    window.addEventListener("keydown", unlock, opts);
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("touchstart", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
   }, []);
 
   // Slow fallback polling — the global <PaymentWatcher /> (mounted in the
-  // locale layout) already checks every 6s and feeds us via the
-  // bws:payment-poll / bws:payment-ready events below. This local loop only
-  // covers the case where localStorage is unavailable (so the watcher never
-  // armed) — hence 30s, not 6s, to avoid doubling request volume.
+  // locale layout) already checks every 6s and reveals via the
+  // bws:payment-ready event below. This 30s loop only covers the case where
+  // localStorage is unavailable (so the watcher never armed).
   React.useEffect(() => {
     let stopped = false;
     const check = async () => {
@@ -340,10 +388,7 @@ function AwaitingDetails({
           { cache: "no-store" },
         );
         const data = (await res.json()) as { hasDetails?: boolean };
-        if (!stopped) {
-          setLastCheck(Date.now());
-          if (data.hasDetails) router.refresh();
-        }
+        if (!stopped && data.hasDetails) router.refresh();
       } catch {
         /* transient network error — next tick will retry */
       }
@@ -361,98 +406,41 @@ function AwaitingDetails({
     };
   }, [orderNumber, email, router]);
 
-  // The global payment watcher also checks in the background — surface its
-  // checks on the same heartbeat so "last checked" reflects every real poll.
   React.useEffect(() => {
-    const onPoll = (e: Event) => {
-      const d = (e as CustomEvent<{ orderNumber?: string; at?: number }>)
-        .detail;
-      if (d?.orderNumber === orderNumber) setLastCheck(d.at ?? Date.now());
-    };
     const onReady = (e: Event) => {
       const d = (e as CustomEvent<{ orderNumber?: string }>).detail;
       if (d?.orderNumber === orderNumber) router.refresh();
     };
-    window.addEventListener("bws:payment-poll", onPoll);
     window.addEventListener("bws:payment-ready", onReady);
-    return () => {
-      window.removeEventListener("bws:payment-poll", onPoll);
-      window.removeEventListener("bws:payment-ready", onReady);
-    };
+    return () => window.removeEventListener("bws:payment-ready", onReady);
   }, [orderNumber, router]);
 
-  const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
-  const ss = String(elapsed % 60).padStart(2, "0");
-  const checkedAgo =
-    lastCheck == null ? null : Math.round((Date.now() - lastCheck) / 1000);
-
   return (
-    <div className="border-border rounded-2xl border p-5 sm:p-6">
-      <div className="flex items-center justify-between gap-3">
-        <p className="font-display text-lg font-bold">{t("awaitTitle")}</p>
-        <span className="text-primary bg-primary/10 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold">
-          <ShieldCheck className="size-3.5" /> {t("awaitBadge")}
-        </span>
+    <div className="flex flex-col items-center py-6 text-center">
+      {/* Premium secure loader: a spinning gradient ring around a shield, with
+          a soft pulsing halo — reads as "securely working", no fake progress. */}
+      <div className="relative grid size-24 place-items-center">
+        <span
+          aria-hidden
+          className="border-primary/15 absolute inset-0 rounded-full border-4"
+        />
+        <span
+          aria-hidden
+          className="absolute inset-0 rounded-full border-4 border-transparent [border-top-color:var(--color-primary)] [border-right-color:var(--color-primary)] motion-safe:animate-spin [animation-duration:1.1s]"
+        />
+        <span
+          aria-hidden
+          className="bg-primary/10 absolute inset-2 rounded-full motion-safe:animate-ping [animation-duration:2.2s]"
+        />
+        <ShieldCheck className="text-primary relative size-9" />
       </div>
 
-      <ul className="mt-4 space-y-3 text-sm">
-        <li
-          className="flex items-center gap-2.5 motion-safe:animate-[await-item_0.5s_ease-out_both]"
-          style={{ animationDelay: "0s" }}
-        >
-          <CheckCircle2 className="size-4.5 text-emerald-500" />
-          {t("awaitStep1")}
-        </li>
-        <li
-          className="flex items-center gap-2.5 motion-safe:animate-[await-item_0.5s_ease-out_both]"
-          style={{ animationDelay: "0.35s" }}
-        >
-          <CheckCircle2 className="size-4.5 text-emerald-500" />
-          {t("awaitStep2")}
-        </li>
-        <li
-          className="flex items-start gap-2.5 motion-safe:animate-[await-item_0.5s_ease-out_both]"
-          style={{ animationDelay: "0.7s" }}
-        >
-          <span className="relative mt-0.5 grid size-4.5 place-items-center">
-            <span className="bg-primary absolute size-2.5 animate-ping rounded-full opacity-40 [animation-duration:2.6s]" />
-            <span className="bg-primary relative size-2.5 rounded-full" />
-          </span>
-          <span>
-            <span className="font-semibold">{t("awaitStep3")}</span>
-            <span className="text-muted-foreground border-border ml-2 rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-wide uppercase">
-              {t("awaitEta")}
-            </span>
-            <span className="text-muted-foreground mt-1 block text-xs leading-relaxed">
-              {t("awaitStep3Desc")}
-            </span>
-          </span>
-        </li>
-      </ul>
-
-      {/* Indeterminate scan bar — honest: no fake percentage. */}
-      <div className="bg-muted mt-4 h-1.5 overflow-hidden rounded-full">
-        <div className="bg-primary/70 h-full w-1/3 animate-[scan_1.8s_ease-in-out_infinite] rounded-full" />
-      </div>
-      <style>{`@keyframes scan{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}@keyframes await-item{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}`}</style>
-
-      <div className="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
-        <span>
-          {t("awaitElapsed")} {mm}:{ss}
-        </span>
-        {checkedAgo != null ? (
-          <span className="inline-flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-emerald-500" />
-            {checkedAgo <= 3
-              ? t("checkedJustNow")
-              : t("checkedAgo", { s: checkedAgo })}
-          </span>
-        ) : null}
-      </div>
-
-      <p className="border-border bg-muted/50 mt-4 rounded-xl border p-3.5 text-xs leading-relaxed">
-        {t("awaitNote")}
+      <p className="text-muted-foreground mt-5 max-w-xs text-sm leading-relaxed">
+        {t("awaitBody")}
       </p>
+      <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+        <ShieldCheck className="size-3.5" /> {t("awaitBadge")}
+      </span>
     </div>
   );
 }
@@ -484,6 +472,9 @@ function PaymentDetailsCard({
   const [proofFile, setProofFile] = React.useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   const [highlight, setHighlight] = React.useState(false);
+  // A persistent (until dismissed) "details are ready" banner — unlike the
+  // toast, it stays put so a client who looked away still sees it on return.
+  const [justArrived, setJustArrived] = React.useState(false);
   const cardRef = React.useRef<HTMLDivElement>(null);
 
   /* ── Arrival announcement — the details must never appear silently ── */
@@ -550,9 +541,13 @@ function PaymentDetailsCard({
       duration: 10000,
     });
     setHighlight(true);
+    setJustArrived(true);
     window.setTimeout(() => setHighlight(false), 2600);
     cardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    navigator.vibrate?.([90, 60, 90]);
+    // Sound + haptics — the cues that reach a client looking away from the
+    // screen. Both are best-effort and degrade silently where unsupported.
+    playArrivalChime();
+    navigator.vibrate?.([90, 60, 90, 60, 140]);
     flashRef.current.until = Date.now() + 30000;
     startTitleFlash();
   }, [orderNumber, startTitleFlash, t]);
@@ -674,6 +669,27 @@ function PaymentDetailsCard({
           : "border-border ring-primary/0 ring-0",
       )}
     >
+      {/* Persistent arrival banner — stays until dismissed, so a client who
+          glanced away still sees it when they look back. */}
+      {justArrived ? (
+        <div className="mb-4 flex items-center gap-3 rounded-xl border border-emerald-300 bg-emerald-50 p-3.5 text-emerald-900 motion-safe:animate-[await-item_0.4s_ease-out_both] dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200">
+          <BellRing className="size-5 shrink-0 motion-safe:animate-[wiggle_0.8s_ease-in-out_2]" />
+          <div className="min-w-0 flex-1">
+            <p className="font-bold">{t("readyToastTitle")}</p>
+            <p className="text-sm leading-snug">{t("arrivedBannerDesc")}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setJustArrived(false)}
+            aria-label={t("arrivedBannerDismiss")}
+            className="shrink-0 rounded-full p-1 text-emerald-700 transition-colors hover:bg-emerald-100 dark:text-emerald-300 dark:hover:bg-emerald-900"
+          >
+            <X className="size-4" />
+          </button>
+          <style>{`@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}`}</style>
+        </div>
+      ) : null}
+
       <div className="flex items-center justify-between gap-3">
         <p className="font-display min-w-0 text-lg font-bold">
           {t("detailsTitle")}

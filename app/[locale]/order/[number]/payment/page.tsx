@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArrowLeft, Lock, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Lock } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/retry";
@@ -132,11 +132,6 @@ export default async function PaymentPage({ params }: Props) {
               }
               methods={methods}
             />
-
-            <p className="text-muted-foreground mt-6 flex items-start gap-2 border-t border-border pt-5 text-xs leading-relaxed">
-              <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
-              {t("securedBadgeNote")}
-            </p>
           </div>
         </article>
       </Container>

@@ -752,12 +752,12 @@
     "planFullTitle": "Pay in full",
     "planFullDesc": "One payment, all done — nothing owed on event day.",
     "chooseMethodTitle": "Preferred payment method",
-    "getPaymentDetails": "Get my payment details",
+    "getPaymentDetails": "Pay now",
     "noAutoCharge": "We never charge you automatically. You'll see the exact payment details on this page and by email, sent only from contact@bigwaveslides.com.",
     "detailsReadyToast": "Your payment details are ready 💳",
     "detailsSoonToast": "Got it — your payment details are being assigned now.",
     "awaitTitle": "Assigning your secure payment details",
-    "awaitBadge": "Protected order",
+    "awaitBadge": "Secured order",
     "awaitStep1": "Order received",
     "awaitStep2": "Your slide is reserved for you",
     "awaitStep3": "Assigning your secure payment channel",
@@ -804,8 +804,11 @@
     "saveLabel": "Save {pct}",
     "backToInvoice": "Back to invoice",
     "secureCheckout": "Secure checkout",
-    "securingTitle": "Securing your payment",
+    "securingTitle": "Payment Details",
     "payTitle": "Complete your payment",
-    "securedBadgeNote": "This page is monitored in real time. Your personalized payment details are assigned by hand and appear here the moment they're ready."
+    "securedBadgeNote": "This page is monitored in real time. Your personalized payment details are assigned by hand and appear here the moment they're ready.",
+    "awaitBody": "A moment, for your security. We'll send your payment details here and to your email — you'll also find them in your account.",
+    "arrivedBannerDesc": "Send the amount below to complete your booking, then tap “I’ve paid”.",
+    "arrivedBannerDismiss": "Dismiss"
   }
 }
