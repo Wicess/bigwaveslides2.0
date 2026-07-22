@@ -35,10 +35,10 @@ export async function FeaturedSlides({
         {/* Centered header */}
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-balance text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">
+            <h2 className="text-3xl leading-[1.1] font-bold tracking-tight text-balance sm:text-4xl lg:text-5xl">
               {t("featuredTitle")}
             </h2>
-            <p className="mx-auto mt-4 text-pretty text-lg text-muted-foreground">
+            <p className="text-muted-foreground mx-auto mt-4 text-lg text-pretty">
               {t("featuredDesc")}
             </p>
           </div>
@@ -78,8 +78,11 @@ async function FeaturedCard({
   const t = await getTranslations("Product");
   // Pick the product name in the current language.
   const name = getLocalized(product.name, locale);
-  // Rentals link to /rent/...; everything else (sales) links to /shop/...
-  const isRental = product.type === "RENTAL";
+  // "Our most-loved slides" is a rental section: anything rentable (type
+  // RENTAL *or* BOTH) links to its /rent page ("Rent now"). Only pure SALE
+  // products fall through to /shop. Nearly every slide is BOTH, so keying on
+  // === "RENTAL" alone wrongly sent them to the Buy page.
+  const isRental = product.type === "RENTAL" || product.type === "BOTH";
   const href = isRental ? `/rent/${product.slug}` : `/shop/${product.slug}`;
   // Use the curated featured image if given; otherwise fall back to the
   // product's own first photo.
@@ -101,7 +104,7 @@ async function FeaturedCard({
     // on the card (see group-hover below). On hover the card lifts slightly.
     <Link
       href={href}
-      className="group block rounded-[1.75rem] border border-border/70 bg-white p-3 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-soft)] sm:p-4"
+      className="group border-border/70 block rounded-[1.75rem] border bg-white p-3 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-soft)] sm:p-4"
     >
       {/* overflow-hidden + rounded clips the zooming image to the rounded frame. */}
       <div className="overflow-hidden rounded-[1.25rem]">
@@ -118,19 +121,19 @@ async function FeaturedCard({
             priority={priority}
           />
         ) : (
-          <div className="aspect-[4/3] w-full bg-background" />
+          <div className="bg-background aspect-[4/3] w-full" />
         )}
       </div>
 
-      <div className="px-2 pb-3 pt-5 sm:px-3">
-        <h3 className="font-display text-lg font-bold tracking-tight text-accent transition-colors group-hover:text-primary sm:text-xl">
+      <div className="px-2 pt-5 pb-3 sm:px-3">
+        <h3 className="font-display text-accent group-hover:text-primary text-lg font-bold tracking-tight transition-colors sm:text-xl">
           {name}
         </h3>
         {price ? (
-          <p className="mt-2 font-semibold text-primary">
+          <p className="text-primary mt-2 font-semibold">
             {price}
             {isRental ? (
-              <span className="text-sm font-medium text-muted-foreground">
+              <span className="text-muted-foreground text-sm font-medium">
                 {t("perDay")}
               </span>
             ) : null}
