@@ -2,9 +2,15 @@
 
 export type PaymentPlan = "HALF" | "FULL";
 
-/** Paying with crypto takes 7% off the whole invoice — shown prominently to
+/** Paying with crypto takes 11.5% off the whole invoice — shown prominently to
     encourage the rail (it's instant and fee-free on our side). */
-export const CRYPTO_DISCOUNT_RATE = 0.07;
+export const CRYPTO_DISCOUNT_RATE = 0.115;
+
+/** Human label for the discount, derived from the rate so UI never drifts
+    (e.g. "11.5%"). Trailing ".0" is trimmed so a round rate reads "10%". */
+export const CRYPTO_DISCOUNT_LABEL = `${Number(
+  (CRYPTO_DISCOUNT_RATE * 100).toFixed(1),
+)}%`;
 
 /** True when the chosen rail earns the crypto discount. */
 export function isCryptoMethod(method?: string | null): boolean {

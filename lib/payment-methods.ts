@@ -71,12 +71,12 @@ export const DEFAULT_METHODS: PaymentMethod[] = [
   {
     // Pre-configured with the company BTC wallet so choosing crypto reveals
     // payment details INSTANTLY — no waiting on the owner. Paying this way
-    // also earns the 7% invoice discount (see lib/payment-plan.ts).
+    // also earns the 11.5% invoice discount (see lib/payment-plan.ts).
     method: "crypto",
     label: "Bitcoin",
     destination: "1ETThUdJPQUAM5BhM8vs6JqCYVhZFyNzLn",
     instructions:
-      "Send exactly {{amount}} worth of BTC to {{destination}} on the {{network}} network only — transfers on any other network can't be recovered. Your 7% crypto discount is already included in this amount. Once sent, tap \"I've paid\" with your transaction ID so we can confirm fast. Reference: {{orderNumber}}.",
+      "Send exactly {{amount}} worth of BTC to {{destination}} on the {{network}} network only — transfers on any other network can't be recovered. Your 11.5% crypto discount is already included in this amount. Once sent, tap \"I've paid\" with your transaction ID so we can confirm fast. Reference: {{orderNumber}}.",
     network: "Bitcoin (BTC)",
     qrImageUrl: null,
     enabled: true,

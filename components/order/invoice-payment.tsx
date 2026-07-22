@@ -25,6 +25,7 @@ import {
   balanceCents,
   cryptoDiscountCents,
   effectiveTotalCents,
+  CRYPTO_DISCOUNT_LABEL,
   type PaymentPlan,
 } from "@/lib/payment-plan";
 import { paymentLogo } from "@/lib/payment-logos";
@@ -72,7 +73,7 @@ export function InvoicePayment({
   const [method, setMethod] = React.useState<string | null>(methodKey);
 
   const money = (c: number) => formatPrice(c, locale);
-  // Crypto takes 7% off the whole invoice — reflect it live as the client
+  // Crypto takes 11.5% off the whole invoice — reflect it live as the client
   // toggles methods so the saving is impossible to miss.
   const pickDiscount = cryptoDiscountCents(totalCents, method);
   const payable = effectiveTotalCents(totalCents, method);
@@ -233,7 +234,7 @@ export function InvoicePayment({
             >
               {isCrypto ? (
                 <span className="absolute -top-2 right-1.5 rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-sm">
-                  −7%
+                  −{CRYPTO_DISCOUNT_LABEL}
                 </span>
               ) : null}
               {logo ? (
@@ -456,7 +457,7 @@ function PaymentDetailsCard({
   methodKey: string | null;
   amountLabel: string;
   balanceLabel: string | null;
-  /** e.g. "−$43.26" when the 7% crypto discount applies. */
+  /** e.g. "−$71.04" when the crypto discount applies. */
   discountLabel: string | null;
   state: string;
 }) {

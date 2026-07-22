@@ -135,7 +135,7 @@ export async function choosePaymentPlan(
     if (order.paymentDetailsState === "PAID")
       return { ok: false, error: "This invoice is already paid." };
 
-    // Crypto earns 7% off the whole invoice; every amount downstream
+    // Crypto earns 11.5% off the whole invoice; every amount downstream
     // (details, email, mark-paid) works from the discounted total.
     const payableCents = effectiveTotalCents(order.totalCents, method);
     const discountCents = cryptoDiscountCents(order.totalCents, method);
@@ -178,7 +178,7 @@ export async function choosePaymentPlan(
         ? `50% deposit (${formatPrice(dueCents, order.locale)})`
         : `FULL payment (${formatPrice(dueCents, order.locale)})`;
     const discountNote = discountCents
-      ? ` after 7% crypto discount (−${formatPrice(discountCents, order.locale)})`
+      ? ` after 11.5% crypto discount (−${formatPrice(discountCents, order.locale)})`
       : "";
     await notifyAdminNtfy({
       title: resolved

@@ -742,7 +742,7 @@ export async function sendPaymentDetailsEmail(
         ...(discount
           ? [
               {
-                label: "Crypto discount (7%)",
+                label: "Crypto discount (11.5%)",
                 value: `−${formatPrice(discount, o.locale)}`,
               },
             ]

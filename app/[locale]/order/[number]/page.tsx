@@ -71,7 +71,7 @@ export default async function OrderFlowPage({ params }: Props) {
   const docNumber = isQuote
     ? order.orderNumber
     : (order.invoiceNumber ?? order.orderNumber);
-  // Once the client picks crypto, 7% comes off the whole invoice — every
+  // Once the client picks crypto, 11.5% comes off the whole invoice — every
   // schedule amount below works from the discounted total.
   const discount = cryptoDiscountCents(
     order.totalCents,
