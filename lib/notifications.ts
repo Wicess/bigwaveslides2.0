@@ -816,7 +816,7 @@ export async function sendPaymentConfirmedEmail(
   await sendEmail({
     to: o.guestEmail,
     replyTo: CONTACT_EMAIL,
-    subject: `Payment received — you're booked! 🎉 (${o.invoiceNumber ?? o.orderNumber})`,
+    subject: `Payment received — you're booked (${o.invoiceNumber ?? o.orderNumber})`,
     html: renderEmail({
       heading: "Payment received — you're booked! 🎉",
       preheader:
