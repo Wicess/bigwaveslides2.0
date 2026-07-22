@@ -72,14 +72,15 @@ export const metadata: Metadata = {
     google: "EiaEaBxPwPlkg1Q-kchHGk0G47tnHzV55VN85wQAf1I",
     other: { "msvalidate.01": "A8C9495020F192A25CD68B7F02D73D38" },
   },
-  // iOS home-screen app behavior (Add to Home Screen). iOS ignores the
-  // manifest's `display`, so "black-translucent" is its immersive equivalent:
-  // the web content paints up behind the status bar instead of sitting below a
-  // solid bar. Safe-area insets (below) keep the header clear of the clock.
+  // iOS home-screen app behavior (Add to Home Screen). "default" keeps a
+  // normal, visible status bar (dark text on light) with the web content
+  // sitting below it — matching Android's standalone display, so the system
+  // chrome (clock, battery, and the swipe-down affordances) stays present
+  // instead of being hidden behind an immersive translucent bar.
   appleWebApp: {
     capable: true,
     title: "Big Wave Slides",
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
   },
 };
 

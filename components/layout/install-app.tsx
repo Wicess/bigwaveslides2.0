@@ -26,6 +26,10 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 };
 
+// Persisted once the app is installed, so the install button stays hidden in
+// the browser tab across future visits (not just while running standalone).
+const INSTALLED_KEY = "bws_pwa_installed";
+
 const STRINGS = {
   en: {
     install: "Install app",
@@ -95,16 +99,48 @@ export function InstallApp({
   React.useEffect(() => {
     setMounted(true);
 
-    // Already running as an installed app? Hide the button entirely.
-    const mq = window.matchMedia("(display-mode: standalone)");
+    // Hide the button when the app is installed — whether we're running inside
+    // it (any app display mode) OR we're in a browser tab but the PWA is known
+    // to be installed (persisted flag + getInstalledRelatedApps below).
+    const mq = window.matchMedia(
+      "(display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui)",
+    );
+    const isInstalledFlag = () => {
+      try {
+        return localStorage.getItem(INSTALLED_KEY) === "1";
+      } catch {
+        return false;
+      }
+    };
     const compute = () =>
       setStandalone(
         mq.matches ||
           (navigator as unknown as { standalone?: boolean }).standalone ===
-            true,
+            true ||
+          isInstalledFlag(),
       );
     compute();
     mq.addEventListener?.("change", compute);
+
+    // Already installed from a previous session? Ask the browser directly so we
+    // can hide the button even in a normal tab (Android Chrome).
+    (
+      navigator as Navigator & {
+        getInstalledRelatedApps?: () => Promise<unknown[]>;
+      }
+    )
+      .getInstalledRelatedApps?.()
+      .then((apps) => {
+        if (apps && apps.length > 0) {
+          try {
+            localStorage.setItem(INSTALLED_KEY, "1");
+          } catch {
+            /* ignore */
+          }
+          setStandalone(true);
+        }
+      })
+      .catch(() => {});
 
     // iOS (incl. iPadOS which masquerades as MacIntel with touch).
     setIsIOS(
@@ -119,6 +155,11 @@ export function InstallApp({
     };
     window.addEventListener("beforeinstallprompt", onPrompt);
     const onInstalled = () => {
+      try {
+        localStorage.setItem(INSTALLED_KEY, "1");
+      } catch {
+        /* ignore */
+      }
       deferredRef.current = null;
       setStandalone(true);
       setSheetOpen(false);
