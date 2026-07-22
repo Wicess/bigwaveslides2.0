@@ -253,25 +253,20 @@ export function InvoicePayment({
                 )}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-semibold">
+                <span className="block text-sm leading-tight font-semibold">
                   {m.label}
                 </span>
                 {disc ? (
-                  <span className="block text-xs font-semibold text-emerald-600">
+                  <span className="mt-0.5 block text-xs font-semibold text-emerald-600">
                     {t("saveLabel", { pct: disc })}
                   </span>
                 ) : null}
               </span>
-              <span
-                className={cn(
-                  "grid size-5 shrink-0 place-items-center rounded-full border",
-                  selected
-                    ? "border-primary bg-primary text-white"
-                    : "border-border",
-                )}
-              >
-                {selected ? <CheckCircle2 className="size-3.5" /> : null}
-              </span>
+              {/* Selection shown by the ring + this check (no empty circles
+                  eating the label's width). */}
+              {selected ? (
+                <CheckCircle2 className="text-primary size-5 shrink-0" />
+              ) : null}
             </button>
           );
         })}
