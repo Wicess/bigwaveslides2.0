@@ -23,10 +23,7 @@
     },
     "readingMinutes": 6,
     "category": "pricing",
-    "tags": [
-      "pricing",
-      "rentals"
-    ],
+    "tags": ["pricing", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg",
     "featured": true,
     "publishedDaysAgo": 3
@@ -55,10 +52,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "tips",
-      "rentals"
-    ],
+    "tags": ["tips", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 8
@@ -87,10 +81,7 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": [
-      "parties",
-      "tips"
-    ],
+    "tags": ["parties", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 13
@@ -119,10 +110,7 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": [
-      "tips",
-      "rentals"
-    ],
+    "tags": ["tips", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390938-cu27zd-overview-domaine-les-landes-de-gascogne-center-parcs-beauziac-france-photo01-768x575.jpg",
     "featured": false,
     "publishedDaysAgo": 18
@@ -151,9 +139,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "tips"
-    ],
+    "tags": ["tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 23
@@ -182,10 +168,7 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": [
-      "events",
-      "corporate"
-    ],
+    "tags": ["events", "corporate"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": false,
     "publishedDaysAgo": 28
@@ -214,9 +197,7 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": [
-      "safety"
-    ],
+    "tags": ["safety"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 33
@@ -245,10 +226,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "tips"
-    ],
+    "tags": ["rentals", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484404870-axgpl1-aquasplash-water-world-at-shanghai-lsnow-indoor-skiing-theme-resort-shanghai-china-photo28-1-2048x1534.jpg",
     "featured": false,
     "publishedDaysAgo": 38
@@ -277,10 +255,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips"
-    ],
+    "tags": ["rentals", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 43
@@ -309,10 +284,7 @@
     },
     "readingMinutes": 6,
     "category": "safety",
-    "tags": [
-      "tips",
-      "safety"
-    ],
+    "tags": ["tips", "safety"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484417138-3mz3g3-spinning-rapids-ride-wanda-ghuanghou-ghuanghou-china.jpg",
     "featured": false,
     "publishedDaysAgo": 48
@@ -320,10 +292,7 @@
   {
     "slug": "best-inflatable-water-slides-to-buy-2026",
     "category": "buying",
-    "tags": [
-      "buying",
-      "guides"
-    ],
+    "tags": ["buying", "guides"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708041891-ow1xnn-best-inflatable-water-slides-to-buy-2026.jpg",
     "featured": true,
     "publishedDaysAgo": 2,
@@ -352,10 +321,7 @@
   {
     "slug": "commercial-water-slide-buying-guide",
     "category": "buying",
-    "tags": [
-      "buying",
-      "commercial"
-    ],
+    "tags": ["buying", "commercial"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": false,
     "publishedDaysAgo": 5,
@@ -384,10 +350,7 @@
   {
     "slug": "residential-vs-commercial-water-slide",
     "category": "buying",
-    "tags": [
-      "buying",
-      "tips"
-    ],
+    "tags": ["buying", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708046034-bkhz5p-residential-vs-commercial-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 9,
@@ -416,10 +379,7 @@
   {
     "slug": "clean-dry-store-inflatable-water-slide",
     "category": "ownership",
-    "tags": [
-      "ownership",
-      "tips"
-    ],
+    "tags": ["ownership", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708052329-rosuet-clean-dry-store-inflatable-water-slide.jpg",
     "featured": false,
     "publishedDaysAgo": 13,
@@ -448,10 +408,7 @@
   {
     "slug": "water-slide-rentals-churches-schools-hoas",
     "category": "events",
-    "tags": [
-      "events",
-      "community"
-    ],
+    "tags": ["events", "community"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708058232-5fv3my-water-slide-rentals-churches-schools-hoas.jpg",
     "featured": true,
     "publishedDaysAgo": 16,
@@ -480,10 +437,7 @@
   {
     "slug": "water-slide-season-state-by-state",
     "category": "planning",
-    "tags": [
-      "planning",
-      "seasonal"
-    ],
+    "tags": ["planning", "seasonal"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708067810-4ohw8z-water-slide-season-state-by-state.jpg",
     "featured": false,
     "publishedDaysAgo": 20,
@@ -533,10 +487,7 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": [
-      "safety",
-      "tips"
-    ],
+    "tags": ["safety", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 6
@@ -565,10 +516,7 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": [
-      "guides",
-      "tips"
-    ],
+    "tags": ["guides", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg",
     "featured": false,
     "publishedDaysAgo": 9
@@ -597,10 +545,7 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": [
-      "safety",
-      "tips"
-    ],
+    "tags": ["safety", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg",
     "featured": false,
     "publishedDaysAgo": 12
@@ -629,10 +574,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "planning",
-      "tips"
-    ],
+    "tags": ["planning", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": false,
     "publishedDaysAgo": 15
@@ -661,11 +603,7 @@
     },
     "readingMinutes": 6,
     "category": "buying",
-    "tags": [
-      "buying",
-      "commercial",
-      "ownership"
-    ],
+    "tags": ["buying", "commercial", "ownership"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782708044608-d67aa1-commercial-water-slide-buying-guide.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -694,11 +632,7 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": [
-      "events",
-      "parties",
-      "seasonal"
-    ],
+    "tags": ["events", "parties", "seasonal"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg",
     "featured": true,
     "publishedDaysAgo": 2
@@ -727,11 +661,7 @@
     },
     "readingMinutes": 6,
     "category": "events",
-    "tags": [
-      "events",
-      "community",
-      "planning"
-    ],
+    "tags": ["events", "community", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484415828-npyn0m-serengeti-springs-098.jpg",
     "featured": false,
     "publishedDaysAgo": 1
@@ -760,10 +690,7 @@
     },
     "readingMinutes": 4,
     "category": "guides",
-    "tags": [
-      "guides",
-      "tips"
-    ],
+    "tags": ["guides", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -792,11 +719,7 @@
     },
     "readingMinutes": 5,
     "category": "events",
-    "tags": [
-      "events",
-      "parties",
-      "seasonal"
-    ],
+    "tags": ["events", "parties", "seasonal"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -825,11 +748,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "guides",
-      "rentals",
-      "parties"
-    ],
+    "tags": ["guides", "rentals", "parties"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342059973-iolc7o-best-water-slide-rentals-birthday-party.jpg",
     "featured": true,
     "publishedDaysAgo": 1
@@ -858,11 +777,7 @@
     },
     "readingMinutes": 4,
     "category": "planning",
-    "tags": [
-      "planning",
-      "rentals",
-      "guides"
-    ],
+    "tags": ["planning", "rentals", "guides"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783342061961-etbkur-how-to-rent-a-water-slide.jpg",
     "featured": true,
     "publishedDaysAgo": 0
@@ -891,11 +806,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips",
-      "planning"
-    ],
+    "tags": ["rentals", "tips", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783427613668-f4nok9-water-slide-electricity-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -924,11 +835,7 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "guides",
-      "pricing"
-    ],
+    "tags": ["rentals", "guides", "pricing"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783427618298-n71rqo-water-slide-included-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -957,11 +864,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips",
-      "planning"
-    ],
+    "tags": ["rentals", "tips", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783666387979-7n8i3m-water-slide-generator-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -990,11 +893,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "tips",
-      "planning"
-    ],
+    "tags": ["rentals", "tips", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783666390283-ftxlc1-water-slide-prep-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1023,11 +922,7 @@
     },
     "readingMinutes": 6,
     "category": "planning",
-    "tags": [
-      "tips",
-      "rentals",
-      "planning"
-    ],
+    "tags": ["tips", "rentals", "planning"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781076730-i4xag2-water-slide-yard-prep-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1056,11 +951,7 @@
     },
     "readingMinutes": 6,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "guides",
-      "tips"
-    ],
+    "tags": ["rentals", "guides", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783781079726-gq62ud-water-slide-questions-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1089,11 +980,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "planning",
-      "tips"
-    ],
+    "tags": ["rentals", "planning", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783881001848-cbqsjh-water-slide-delivery-times-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1122,11 +1009,7 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": [
-      "safety",
-      "rentals",
-      "guides"
-    ],
+    "tags": ["safety", "rentals", "guides"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783881003752-xn2tdw-water-slide-insured-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1155,11 +1038,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "tips",
-      "planning",
-      "rentals"
-    ],
+    "tags": ["tips", "planning", "rentals"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783967006135-py0t6k-water-slide-small-backyard-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1188,11 +1067,7 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": [
-      "rentals",
-      "guides",
-      "tips"
-    ],
+    "tags": ["rentals", "guides", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1783967008143-pqve0f-water-slide-setup-time-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1221,11 +1096,7 @@
     },
     "readingMinutes": 5,
     "category": "guides",
-    "tags": [
-      "guides",
-      "rentals",
-      "tips"
-    ],
+    "tags": ["guides", "rentals", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1784194010565-23dpno-water-slide-size-guide-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1254,11 +1125,7 @@
     },
     "readingMinutes": 5,
     "category": "planning",
-    "tags": [
-      "rentals",
-      "planning",
-      "tips"
-    ],
+    "tags": ["rentals", "planning", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1784194014436-d286zm-last-minute-water-slide-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1287,11 +1154,7 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": [
-      "safety",
-      "rentals",
-      "tips"
-    ],
+    "tags": ["safety", "rentals", "tips"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1784603838395-3a39su-water-slide-wind-limits-hero.jpg",
     "featured": false,
     "publishedDaysAgo": 0
@@ -1320,12 +1183,66 @@
     },
     "readingMinutes": 5,
     "category": "safety",
-    "tags": [
-      "safety",
-      "rentals",
-      "guides"
-    ],
+    "tags": ["safety", "rentals", "guides"],
     "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1784603842398-42g9mb-water-slide-cleaning-hero.jpg",
+    "featured": false,
+    "publishedDaysAgo": 0
+  },
+  {
+    "slug": "do-you-have-to-pay-a-deposit-to-rent-a-water-slide",
+    "title": {
+      "en": "Do You Have to Pay a Deposit to Rent a Water Slide?",
+      "fr": "Faut-il payer un acompte pour louer un toboggan aquatique ?"
+    },
+    "excerpt": {
+      "en": "Yes — most rentals need a deposit to hold your date. Here's exactly how Big Wave Slides' 50% deposit, 48-hour balance, and fully refundable damage deposit work.",
+      "fr": "Oui — la plupart des locations exigent un acompte pour bloquer votre date. Voici comment fonctionnent l'acompte de 50 %, le solde à 48 h et le dépôt remboursable de Big Wave Slides."
+    },
+    "metaTitle": {
+      "en": "Do You Have to Pay a Deposit to Rent a Water Slide?",
+      "fr": "Acompte pour louer un toboggan aquatique : le guide"
+    },
+    "metaDescription": {
+      "en": "Yes — reserve with a 50% deposit, pay the balance ~48h before your event, and get your refundable damage deposit back in full. Rentals from $199/day, plus 11.5% off with Bitcoin.",
+      "fr": "Oui — réservez avec 50 % d'acompte, payez le solde ~48 h avant l'événement, et récupérez votre dépôt remboursable en totalité. Dès 199 $/jour, −11,5 % en Bitcoin."
+    },
+    "content": {
+      "en": "Yes — most water slide rentals require a deposit to lock in your date, and Big Wave Slides is no different. You reserve your slide with a 50% deposit, then pay the remaining 50% about 48 hours before your event. Part of your total also acts as a fully refundable damage deposit, returned in full when you cancel at least 7 days ahead. Rentals start at $199/day, delivered and set up.\n\n## Why do water slide rentals need a deposit?\n\nA deposit does two jobs. First, it **holds your date** — summer weekends book fast, and once you've put a deposit down, that slide is yours and comes off the calendar for everyone else. Second, a portion of it protects the equipment. Commercial-grade inflatables like the [Mega Monsoon 28](/rent/mega-monsoon-28) or [Blue Vortex 26](/rent/blue-vortex-26) are a serious investment, so a refundable damage deposit keeps rentals affordable for everyone while covering the rare case of real damage.\n\n## How much is the deposit at Big Wave Slides?\n\nTo **reserve your date, you pay 50% of your quote upfront** — that's your booking deposit. The remaining 50% is due about 48 hours before setup on event day. So if you rent the [Tropical Wave 18](/rent/tropical-wave-18) or a compact [Aqua Wave 15](/rent/aqua-wave-15), half locks it in today and half is paid just before we roll up.\n\nSeparately, **30% of your total is treated as a refundable damage deposit** — it's already inside your quote, not an extra charge, and it comes straight back to you after the event once the slide is returned in good condition.\n\n## Is the deposit refundable?\n\nThe damage-deposit portion is **fully refundable**. If you cancel at least **7 days before your event**, you get it back in full — no questions. We'd always rather reschedule than have you lose money, so if the weather turns or plans change, reach out early and we'll work with you. Our [rain and weather policy](/blog/water-slide-rain-weather-policy) covers what happens if a storm rolls in on the day.\n\n## When is the rest of the balance due?\n\nThe balance — the other 50% — is due about **48 hours before setup**. That gives everyone certainty: your date is locked, the crew is scheduled, and there are no surprises on event morning. You'll get a clear invoice showing exactly what's paid and what's left, whether you booked the family-friendly [Castle Splash Combo](/rent/castle-splash-combo) or a towering [Tidal Tower 27](/rent/tidal-tower-27).\n\n## How do you actually pay the deposit?\n\nEverything is quote-based — **there's no online checkout and we never charge your card automatically**. You request a quote, we send it over, and when you accept, your invoice appears on your secure order page. You pick how to pay (Zelle, Cash App, Apple Pay, Chime, or Bitcoin) and the exact details show up right there.\n\n**Paying by Bitcoin takes 11.5% off your whole invoice** — a real saving on a bigger rental like the [Palm Paradise 24](/rent/palm-paradise-24) racing slide or the [Mega Waterpark Combo](/rent/mega-waterpark-combo). If crypto isn't your thing, the other rails work exactly the same, just without the discount.\n\n## Does the deposit change by slide size or event?\n\nThe 50%-to-book, 50%-before structure is the same whether you rent a toddler-friendly [Lil' Splash Junior](/rent/lil-splash-junior) for a backyard birthday or outfit a whole [school or church event](/water-slides-for/school-events) with several units. Bigger orders simply have bigger totals, so the deposit scales with them. For [HOA and neighborhood events](/water-slides-for/hoa-neighborhood-events) or [pool parties](/water-slides-for/pool-parties), we're happy to quote multiple slides together so you see one clear deposit for the whole day.\n\nWherever you are — from [Dallas](/water-slide-rentals/texas/dallas) to anywhere we serve nationwide — delivery, professional setup, anchoring, sanitizing, and full insurance are always included in that price.\n\n## FAQ\n\n### Do I get my deposit back?\nThe 30% refundable damage-deposit portion comes back in full after your event, and if you cancel at least 7 days ahead you're refunded completely. Damage beyond normal wear is the only thing that would reduce it.\n\n### How much do I pay to reserve my date?\n50% of your quote. The other 50% is due about 48 hours before setup. [Request a free quote](/contact) to see your exact numbers.\n\n### Is there a cheaper way to pay?\nYes — paying your invoice with Bitcoin takes 11.5% off the whole total. Every other method (Zelle, Cash App, Apple Pay, Chime) is available too.\n\n### What if I need to cancel?\nContact us as early as you can — we'll always try to reschedule first. Cancel 7+ days out and your refundable deposit returns in full. More quick answers live on our [answers page](/answers), or call +1 (614) 302-5899.",
+      "fr": "Oui — la plupart des locations de toboggans aquatiques exigent un acompte pour bloquer votre date, et Big Wave Slides ne fait pas exception. Vous réservez votre toboggan avec un acompte de 50 %, puis réglez les 50 % restants environ 48 heures avant votre événement. Une partie du total sert aussi de dépôt de garantie entièrement remboursable, rendu en totalité si vous annulez au moins 7 jours à l'avance. Location dès 199 $/jour, livrée et installée.\n\n## Pourquoi un acompte est-il demandé ?\n\nL'acompte a deux rôles. D'abord, il **bloque votre date** — les week-ends d'été partent vite, et une fois l'acompte versé, le toboggan est à vous et sort du calendrier pour tout le monde. Ensuite, une partie protège le matériel. Les toboggans de qualité commerciale comme le [Mega Monsoon 28](/rent/mega-monsoon-28) ou le [Blue Vortex 26](/rent/blue-vortex-26) représentent un vrai investissement : un dépôt de garantie remboursable garde les prix accessibles tout en couvrant les rares cas de dommage réel.\n\n## Quel est le montant de l'acompte chez Big Wave Slides ?\n\nPour **réserver votre date, vous versez 50 % de votre devis** — c'est votre acompte de réservation. Les 50 % restants sont dus environ 48 heures avant l'installation le jour J. Ainsi, que vous louiez le [Tropical Wave 18](/rent/tropical-wave-18) ou un compact [Aqua Wave 15](/rent/aqua-wave-15), la moitié le bloque aujourd'hui et la moitié se règle juste avant notre arrivée.\n\nPar ailleurs, **30 % de votre total constitue un dépôt de garantie remboursable** — déjà inclus dans votre devis, ce n'est pas un frais supplémentaire, et il vous revient après l'événement dès que le toboggan est rendu en bon état.\n\n## L'acompte est-il remboursable ?\n\nLa part de dépôt de garantie est **entièrement remboursable**. Si vous annulez au moins **7 jours avant votre événement**, vous la récupérez intégralement — sans discussion. Nous préférons toujours reporter plutôt que vous faire perdre de l'argent : si la météo tourne ou vos plans changent, prévenez-nous tôt et nous nous adapterons. Notre [politique météo](/blog/water-slide-rain-weather-policy) explique ce qui se passe en cas d'orage le jour même.\n\n## Quand le solde est-il dû ?\n\nLe solde — les autres 50 % — est dû environ **48 heures avant l'installation**. Tout le monde y gagne en certitude : votre date est bloquée, l'équipe est planifiée, et aucune surprise le matin de l'événement. Vous recevez une facture claire indiquant ce qui est payé et ce qui reste, que vous ayez réservé le familial [Castle Splash Combo](/rent/castle-splash-combo) ou un imposant [Tidal Tower 27](/rent/tidal-tower-27).\n\n## Comment payer l'acompte concrètement ?\n\nTout se fait sur devis — **il n'y a pas de paiement en ligne et nous ne prélevons jamais votre carte automatiquement**. Vous demandez un devis, nous vous l'envoyons, et à l'acceptation, votre facture apparaît sur votre page de commande sécurisée. Vous choisissez le mode de paiement (Zelle, Cash App, Apple Pay, Chime ou Bitcoin) et les coordonnées exactes s'affichent là.\n\n**Payer en Bitcoin retire 11,5 % de toute votre facture** — une vraie économie sur une location plus grande comme le toboggan de course [Palm Paradise 24](/rent/palm-paradise-24) ou le [Mega Waterpark Combo](/rent/mega-waterpark-combo). Si la crypto n'est pas pour vous, les autres moyens fonctionnent pareil, simplement sans la remise.\n\n## L'acompte change-t-il selon la taille ou l'événement ?\n\nLa structure 50 % à la réservation, 50 % avant reste identique, que vous louiez un [Lil' Splash Junior](/rent/lil-splash-junior) pour tout-petits ou équipiez tout un [événement scolaire ou paroissial](/water-slides-for/school-events) de plusieurs unités. Les commandes plus grandes ont simplement des totaux plus élevés, donc l'acompte suit. Pour les [fêtes de quartier](/water-slides-for/hoa-neighborhood-events) ou les [fêtes de piscine](/water-slides-for/pool-parties), nous chiffrons volontiers plusieurs toboggans ensemble pour un acompte unique et clair.\n\nOù que vous soyez — de [Dallas](/water-slide-rentals/texas/dallas) à partout où nous intervenons au pays — livraison, installation professionnelle, ancrage, désinfection et assurance complète sont toujours compris dans ce prix.\n\n## FAQ\n\n### Vais-je récupérer mon acompte ?\nLa part de dépôt de garantie de 30 % revient en totalité après votre événement, et si vous annulez au moins 7 jours à l'avance, vous êtes remboursé intégralement. Seuls des dommages au-delà de l'usure normale la réduiraient.\n\n### Combien pour réserver ma date ?\n50 % de votre devis. Les autres 50 % sont dus environ 48 heures avant l'installation. [Demandez un devis gratuit](/contact) pour voir vos chiffres exacts.\n\n### Existe-t-il un moyen de payer moins cher ?\nOui — payer votre facture en Bitcoin retire 11,5 % du total. Tous les autres moyens (Zelle, Cash App, Apple Pay, Chime) sont aussi disponibles.\n\n### Et si je dois annuler ?\nContactez-nous le plus tôt possible — nous essaierons toujours de reporter d'abord. Annulez 7 jours ou plus à l'avance et votre dépôt remboursable revient en totalité. Plus de réponses sur notre [page réponses](/answers), ou appelez le +1 (614) 302-5899."
+    },
+    "readingMinutes": 5,
+    "category": "pricing",
+    "tags": ["pricing", "rentals", "planning"],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg",
+    "featured": false,
+    "publishedDaysAgo": 0
+  },
+  {
+    "slug": "water-slide-weight-limit",
+    "title": {
+      "en": "What's the Weight Limit on an Inflatable Water Slide?",
+      "fr": "Quelle est la limite de poids d'un toboggan aquatique gonflable ?"
+    },
+    "excerpt": {
+      "en": "Most inflatable water slides hold 150–200 lbs per rider and 300–600 lbs total at once. Here's how weight limits, rider counts, and adult use really work.",
+      "fr": "La plupart des toboggans gonflables supportent 70–90 kg par utilisateur et 135–270 kg au total à la fois. Voici comment fonctionnent vraiment les limites de poids et l'usage adulte."
+    },
+    "metaTitle": {
+      "en": "Water Slide Weight Limit: How Much Can They Hold?",
+      "fr": "Limite de poids d'un toboggan aquatique gonflable"
+    },
+    "metaDescription": {
+      "en": "Most inflatable water slides hold 150–200 lbs per rider and 300–600 lbs total. Learn rider counts, adult use, and how to pick a slide that fits your guests. Commercial-grade rentals from $199/day.",
+      "fr": "La plupart des toboggans gonflables supportent 70–90 kg par utilisateur et 135–270 kg au total. Nombre d'utilisateurs, usage adulte et choix adapté. Location commerciale dès 199 $/jour."
+    },
+    "content": {
+      "en": "Most residential inflatable water slides safely hold about 150–200 lbs per rider and 300–600 lbs total at any one time, depending on the slide's size. Commercial-grade units like ours are built stronger and rated higher, but every slide has a rider count and weight limit printed on its product page — always follow it. Big Wave Slides rents fully insured, commercial-grade slides nationwide from $199/day.\n\n## What's a typical weight limit for an inflatable water slide?\n\nIt comes down to two numbers: **per-rider weight** and **total capacity at once**. As a rule of thumb, most inflatable slides allow **150–200 lbs per rider**, and the total on the unit at any moment ranges from around 300 lbs on a compact backyard slide to 600+ lbs on a big commercial tower. A smaller slide like the [Aqua Wave 15](/rent/aqua-wave-15) or [Fiesta Splash 16](/rent/fiesta-splash-16) is built for a few kids at a time, while a giant like the [Mega Monsoon 28](/rent/mega-monsoon-28) or [Blue Vortex 26](/rent/blue-vortex-26) handles bigger, older riders and a fuller platform.\n\n## How many people can be on a water slide at once?\n\nCapacity is really about **how many riders the platform and lane hold safely** — not just pounds. Each of our product pages lists a rider count: the [Tropical Wave 18](/rent/tropical-wave-18) and [Coral Reef 18](/rent/coral-reef-18) comfortably suit around six kids cycling through, while two-lane racers like the [Double Drop Racer 22](/rent/double-drop-racer-22) and [Palm Paradise 24](/rent/palm-paradise-24) take riders two at a time so the line keeps moving. The golden rule is **one or two riders down at a time** — never a pile-up at the top or bottom.\n\n## Can adults use inflatable water slides?\n\nOn the right slide, absolutely. Taller, commercial-grade units are rated for teens and adults — the [Tidal Tower 27](/rent/tidal-tower-27), [Arctic Frost 18](/rent/arctic-frost-slide), and [Tsunami Crush 20](/rent/tsunami-crush-20) are all popular for grown-up guests at [corporate and community events](/water-slides-for/corporate-events). Just match the rider to the slide's stated limit and never mix wildly different sizes on the lane at the same time. For little ones, a gentle [Lil' Splash Junior](/rent/lil-splash-junior) (ages 2–6) is the safer fit.\n\n## What happens if you go over the weight limit?\n\nExceeding the limit doesn't usually cause a dramatic \"pop\" — inflatables are tough — but it does raise the real risks: **harder collisions, riders bottoming out on the landing, and faster wear on seams and anchor points.** That's why supervision matters more than the number itself. An adult should enforce the rider count and weight limit at all times, which we walk you through at delivery. Our guide on [whether inflatable water slides are safe](/blog/are-inflatable-water-slides-safe) goes deeper on safe use.\n\n## How do you pick a slide that fits your guests' sizes?\n\nThink about **who's actually riding**. All-toddler party? A low, soft unit like the [Whale Splash 16](/rent/whale-splash-16) or a [Castle Splash Combo](/rent/castle-splash-combo) keeps everyone within limits easily. Mixed ages? A mid-size 18-footer such as the [Blue Crush 18](/rent/blue-crush-18) or [Jungle Marble 19](/rent/jungle-marble-19) covers a wide range. Teens and adults who want a real thrill? Go tall with the [Mega Monsoon 28](/rent/mega-monsoon-28). Not sure? Our [size guide](/blog/what-size-water-slide-should-you-rent) matches slides to your guest count, and we'll happily recommend one for your crowd.\n\nEvery rental — anywhere from [Dallas](/water-slide-rentals/texas/dallas) to nationwide — is commercial-grade, fully insured, sanitized, and delivered, set up, and anchored by our crew, so the equipment is rated and installed to handle your guests safely.\n\n## FAQ\n\n### What's the weight limit on a backyard water slide?\nMost allow 150–200 lbs per rider and 300–600 lbs total at once, depending on size. Check the exact figure on each slide's product page.\n\n### Can two people go down at the same time?\nOnly on slides built for it, like our two-lane racers — the [Double Drop Racer 22](/rent/double-drop-racer-22) and [Palm Paradise 24](/rent/palm-paradise-24). On single-lane slides, send one rider at a time.\n\n### Are your slides strong enough for adults?\nYes — our taller commercial units are rated for teens and adults. Tell us who's riding and we'll recommend the right one.\n\n### How do I find the exact limit for a slide?\nIt's on every product page, and we confirm it at delivery with a safety walkthrough. Questions? [Request a quote](/contact), call +1 (614) 302-5899, or see our [answers page](/answers).",
+      "fr": "La plupart des toboggans aquatiques gonflables résidentiels supportent en toute sécurité environ 70 à 90 kg (150–200 lb) par utilisateur et 135 à 270 kg (300–600 lb) au total à un instant donné, selon la taille du toboggan. Les modèles de qualité commerciale comme les nôtres sont plus robustes et mieux notés, mais chaque toboggan affiche un nombre d'utilisateurs et une limite de poids sur sa fiche produit — respectez-les toujours. Big Wave Slides loue des toboggans de qualité commerciale, entièrement assurés, dans tout le pays dès 199 $/jour.\n\n## Quelle est la limite de poids typique ?\n\nTout tient à deux chiffres : le **poids par utilisateur** et la **capacité totale simultanée**. En règle générale, la plupart des toboggans gonflables autorisent **70 à 90 kg par utilisateur**, et le total sur l'unité varie d'environ 135 kg sur un compact de jardin à plus de 270 kg sur une grande tour commerciale. Un petit toboggan comme l'[Aqua Wave 15](/rent/aqua-wave-15) ou le [Fiesta Splash 16](/rent/fiesta-splash-16) est conçu pour quelques enfants à la fois, tandis qu'un géant comme le [Mega Monsoon 28](/rent/mega-monsoon-28) ou le [Blue Vortex 26](/rent/blue-vortex-26) accueille des utilisateurs plus grands, plus âgés et une plateforme plus remplie.\n\n## Combien de personnes à la fois ?\n\nLa capacité concerne surtout **le nombre d'utilisateurs que la plateforme et la voie supportent en sécurité** — pas seulement les kilos. Chaque fiche produit indique un nombre : le [Tropical Wave 18](/rent/tropical-wave-18) et le [Coral Reef 18](/rent/coral-reef-18) conviennent aisément à environ six enfants qui se relaient, tandis que les toboggans de course à deux voies comme le [Double Drop Racer 22](/rent/double-drop-racer-22) et le [Palm Paradise 24](/rent/palm-paradise-24) prennent deux utilisateurs à la fois pour que la file avance. La règle d'or : **un ou deux utilisateurs qui descendent à la fois** — jamais d'amoncellement en haut ou en bas.\n\n## Les adultes peuvent-ils utiliser les toboggans gonflables ?\n\nSur le bon toboggan, absolument. Les unités plus hautes et de qualité commerciale sont conçues pour ados et adultes — le [Tidal Tower 27](/rent/tidal-tower-27), le [Arctic Frost 18](/rent/arctic-frost-slide) et le [Tsunami Crush 20](/rent/tsunami-crush-20) sont prisés pour les invités adultes lors d'[événements d'entreprise et communautaires](/water-slides-for/corporate-events). Adaptez simplement l'utilisateur à la limite indiquée et ne mélangez jamais des gabarits très différents sur la voie en même temps. Pour les tout-petits, un doux [Lil' Splash Junior](/rent/lil-splash-junior) (2 à 6 ans) est plus adapté.\n\n## Que se passe-t-il si on dépasse la limite ?\n\nDépasser la limite ne provoque pas d'« éclatement » spectaculaire — les gonflables sont solides — mais cela augmente les vrais risques : **collisions plus dures, utilisateurs qui touchent le fond à l'arrivée, et usure plus rapide des coutures et points d'ancrage.** C'est pourquoi la surveillance compte plus que le chiffre lui-même. Un adulte doit faire respecter le nombre d'utilisateurs et la limite de poids en permanence, ce que nous expliquons à la livraison. Notre guide sur [la sécurité des toboggans gonflables](/blog/are-inflatable-water-slides-safe) approfondit l'utilisation sûre.\n\n## Comment choisir un toboggan adapté aux gabarits ?\n\nPensez à **qui va réellement glisser**. Une fête de tout-petits ? Une unité basse et douce comme le [Whale Splash 16](/rent/whale-splash-16) ou un [Castle Splash Combo](/rent/castle-splash-combo) garde tout le monde dans les limites. Des âges variés ? Un 18 pi de taille moyenne comme le [Blue Crush 18](/rent/blue-crush-18) ou le [Jungle Marble 19](/rent/jungle-marble-19) couvre un large éventail. Des ados et adultes en quête de sensations ? Voyez grand avec le [Mega Monsoon 28](/rent/mega-monsoon-28). Un doute ? Notre [guide des tailles](/blog/what-size-water-slide-should-you-rent) associe les toboggans au nombre d'invités, et nous vous en recommanderons un avec plaisir.\n\nChaque location — de [Dallas](/water-slide-rentals/texas/dallas) à tout le pays — est de qualité commerciale, entièrement assurée, désinfectée, livrée, installée et ancrée par notre équipe, afin que le matériel soit conçu et posé pour accueillir vos invités en sécurité.\n\n## FAQ\n\n### Quelle est la limite de poids d'un toboggan de jardin ?\nLa plupart autorisent 70 à 90 kg par utilisateur et 135 à 270 kg au total à la fois, selon la taille. Vérifiez le chiffre exact sur chaque fiche produit.\n\n### Deux personnes peuvent-elles descendre en même temps ?\nUniquement sur les toboggans conçus pour, comme nos deux-voies — le [Double Drop Racer 22](/rent/double-drop-racer-22) et le [Palm Paradise 24](/rent/palm-paradise-24). Sur les toboggans à une voie, un utilisateur à la fois.\n\n### Vos toboggans sont-ils assez solides pour les adultes ?\nOui — nos unités commerciales plus hautes sont conçues pour ados et adultes. Dites-nous qui glisse et nous recommanderons le bon modèle.\n\n### Comment trouver la limite exacte d'un toboggan ?\nElle figure sur chaque fiche produit, et nous la confirmons à la livraison lors d'une présentation sécurité. Des questions ? [Demandez un devis](/contact), appelez le +1 (614) 302-5899, ou consultez notre [page réponses](/answers)."
+    },
+    "readingMinutes": 5,
+    "category": "safety",
+    "tags": ["safety", "rentals", "tips"],
+    "coverImage": "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg",
     "featured": false,
     "publishedDaysAgo": 0
   }
