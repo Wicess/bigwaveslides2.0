@@ -81,7 +81,7 @@ export function SiteHeader({ locale, data }: Props) {
             <Link
               href="/"
               aria-label="Big Wave Slides — home"
-              className="flex items-center gap-2.5"
+              className="flex shrink-0 items-center gap-2.5"
             >
               <Image
                 src="/logo.png"
@@ -92,9 +92,12 @@ export function SiteHeader({ locale, data }: Props) {
                 priority
                 className="h-10 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] sm:h-12"
               />
+              {/* Redundant with the logo image (which already reads "Big Wave
+                  Slides") — hidden on narrow phones so the crowded action row
+                  never overflows and collides with the logo. */}
               <span
                 aria-hidden
-                className="font-brand text-[1.65rem] font-bold tracking-[-0.01em] text-white"
+                className="font-brand hidden text-[1.65rem] font-bold tracking-[-0.01em] text-white min-[430px]:inline"
               >
                 BWS
               </span>
@@ -204,7 +207,7 @@ export function SiteHeader({ locale, data }: Props) {
 
           {/* Right: action buttons (language toggle, call, cart, quote, contact,
               and the hamburger that opens the mobile menu). */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             {/* Desktop: language toggle. Mobile: install-the-app button. */}
             <HeaderLocale />
             <InstallApp variant="chip" />
