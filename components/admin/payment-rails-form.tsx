@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { Loader2, Save } from "lucide-react";
 import { savePaymentRails } from "@/server/actions/admin-payments";
 import type { PaymentMethod } from "@/lib/payment-methods";
+import { paymentLogo } from "@/lib/payment-logos";
 import { AdminSwitch } from "@/components/admin/admin-switch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -84,6 +86,15 @@ export function PaymentRailsForm({ initial }: { initial: Rail[] }) {
                   onChange={() => patch(i, { enabled: !r.enabled })}
                   label={`${r.label} enabled`}
                 />
+                {paymentLogo(r.method) ? (
+                  <Image
+                    src={paymentLogo(r.method)!}
+                    alt=""
+                    width={44}
+                    height={18}
+                    className="h-4 w-auto object-contain"
+                  />
+                ) : null}
                 <p className="text-foreground font-semibold">{r.label}</p>
                 <span
                   className={cn(

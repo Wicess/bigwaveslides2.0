@@ -784,9 +784,9 @@
     "network": "Réseau",
     "reference": "Référence",
     "copied": "Copié dans le presse-papiers",
-    "proofTitle": "C'est envoyé ? Dites-le-nous pour une confirmation rapide.",
+    "proofTitle": "Payé ? Envoyez votre identifiant de transaction ou une capture du paiement pour confirmation.",
     "proofPlaceholder": "ID de transaction / confirmation (facultatif)",
-    "proofCta": "J'ai payé",
+    "proofCta": "Envoyer la preuve",
     "proofToast": "Merci ! Nous vérifions votre paiement.",
     "proofPendingTitle": "Nous confirmons votre paiement",
     "proofPendingBody": "Merci — notre équipe a été notifiée et vérifie votre paiement. Vous recevrez un e-mail de confirmation dès réception (généralement en moins d'une heure).",
@@ -797,6 +797,9 @@
     "depositNote": "30 % de votre total constitue un dépôt remboursable — intégralement remboursé si vous annulez au moins 7 jours avant votre événement. Chaque jour de location est une période complète de 24 heures.",
     "agreeFirstHint": "Cochez la case ci-dessus pour activer le bouton d'acceptation — il s'active dès que vous acceptez.",
     "cryptoApplied": "Remise Bitcoin de 7 % appliquée — vous économisez {amount}. Nouveau total : {total}.",
-    "cryptoDiscountRow": "Remise crypto (7 %)"
+    "cryptoDiscountRow": "Remise crypto (7 %)",
+    "secureBadge": "Page sécurisée",
+    "viewBreakdown": "Voir le détail des prix",
+    "reserveLine": "À l'acceptation, réservez votre date avec un acompte de 50 % ({half}) ou payez {total} en totalité — à vous de choisir."
   }
 }

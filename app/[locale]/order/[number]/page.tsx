@@ -3,25 +3,20 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { AlertTriangle, Check } from "lucide-react";
+import { Check, ChevronDown, ShieldCheck } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/retry";
 import { formatDate, formatPrice } from "@/lib/format";
 import {
   amountDueCents,
-  balanceCents,
   cryptoDiscountCents,
   effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
 import { loadEnabledMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
 import { quoteTerms, orderTerms, SETUP_REQUIREMENTS } from "@/lib/legal-terms";
-import {
-  ANTI_SCAM_HEADING,
-  ANTI_SCAM_BODY,
-  ANTI_SCAM_BODY_FR,
-} from "@/lib/anti-scam";
+import { ANTI_SCAM_SHORT, ANTI_SCAM_SHORT_FR } from "@/lib/anti-scam";
 import { Container } from "@/components/ui/container";
 import { QuoteActions } from "@/components/order/quote-actions";
 import { InvoicePayment } from "@/components/order/invoice-payment";
@@ -87,7 +82,6 @@ export default async function OrderFlowPage({ params }: Props) {
     order.paymentMethodKey,
   );
   const half = amountDueCents("HALF", payableTotal);
-  const halfBalance = balanceCents("HALF", payableTotal);
   const plan = (order.paymentPlan as PaymentPlan | null) ?? null;
 
   const enabled = await loadEnabledMethods();
@@ -164,33 +158,29 @@ export default async function OrderFlowPage({ params }: Props) {
         </ol>
 
         {/* Document card */}
-        <article className="border-border overflow-hidden rounded-3xl border bg-white shadow-sm dark:bg-slate-950">
+        <article className="border-border overflow-hidden rounded-3xl border bg-white shadow-sm">
           {/* Brand header — clients are told to verify this logo before paying */}
-          <header className="flex items-start justify-between gap-4 px-6 pt-6 sm:px-10 sm:pt-8">
+          <header className="flex items-center justify-between gap-4 px-6 pt-6 sm:px-10 sm:pt-8">
             <Image
               src={LOGO}
               alt="Big Wave Slides"
               width={220}
               height={110}
-              className="h-14 w-auto"
+              className="h-12 w-auto sm:h-14"
               priority
             />
-            <div className="text-muted-foreground text-right text-xs leading-relaxed">
-              <p className="text-foreground font-display text-sm font-bold">
-                Big Wave Slides
-              </p>
-              <p>{CONTACT_EMAIL}</p>
-              <p>{CONTACT_PHONE}</p>
-              <p>bigwaveslides.com</p>
-            </div>
+            <span className="text-primary bg-primary/10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
+              <ShieldCheck className="size-3.5" />
+              {t("secureBadge")}
+            </span>
           </header>
 
           {/* Title bar */}
-          <div className="mx-6 mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4 text-white [background:linear-gradient(135deg,#0a1a2f_0%,#0e2742_100%)] sm:mx-10">
+          <div className="mx-6 mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4 text-white [background:var(--gradient-deep)] sm:mx-10">
             <h1 className="font-display text-xl font-bold tracking-wide sm:text-2xl">
               {isQuote ? t("docQuote") : t("docInvoice")}
             </h1>
-            <div className="text-right text-xs text-white/70">
+            <div className="text-right text-xs text-white/75">
               <p>
                 {isQuote ? t("quoteNo") : t("invoiceNo")}:{" "}
                 <span className="font-semibold text-white">{docNumber}</span>
@@ -218,13 +208,15 @@ export default async function OrderFlowPage({ params }: Props) {
           </div>
 
           <div className="space-y-6 px-6 py-6 sm:px-10 sm:py-8">
-            {/* Parties */}
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="border-border rounded-2xl border p-4">
+            {/* Parties — flat, divided sections (no nested cards) */}
+            <div className="border-border grid gap-4 rounded-2xl border p-4 sm:grid-cols-2 sm:gap-6 sm:p-5">
+              <div className="sm:border-border sm:border-r sm:pr-6">
                 <p className="text-muted-foreground text-[10px] font-bold tracking-[0.14em] uppercase">
                   {isQuote ? t("preparedFor") : t("billTo")}
                 </p>
-                <p className="mt-1.5 font-semibold">{order.guestName}</p>
+                <p className="text-foreground mt-1.5 font-semibold">
+                  {order.guestName}
+                </p>
                 <p className="text-muted-foreground text-sm">
                   {order.guestEmail}
                 </p>
@@ -234,7 +226,7 @@ export default async function OrderFlowPage({ params }: Props) {
                   </p>
                 ) : null}
               </div>
-              <div className="border-border rounded-2xl border p-4 text-sm">
+              <div className="text-sm">
                 <p className="text-muted-foreground text-[10px] font-bold tracking-[0.14em] uppercase">
                   {t("eventDetails")}
                 </p>
@@ -333,96 +325,86 @@ export default async function OrderFlowPage({ params }: Props) {
               </table>
             </div>
 
-            {/* Totals + payment schedule */}
-            <div className="ml-auto w-full max-w-sm space-y-1.5 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t("subtotal")}</span>
-                <span>{money(order.subtotalCents)}</span>
-              </div>
-              {order.deliveryFeeCents ? (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">
-                    {t("transportation")}
-                  </span>
-                  <span>{money(order.deliveryFeeCents)}</span>
-                </div>
-              ) : null}
-              {order.taxCents ? (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t("tax")}</span>
-                  <span>{money(order.taxCents)}</span>
-                </div>
-              ) : null}
-              {discount ? (
-                <div className="flex justify-between font-semibold text-emerald-600">
-                  <span>{t("cryptoDiscountRow")}</span>
-                  <span>−{money(discount)}</span>
-                </div>
-              ) : null}
-              <div className="border-primary flex items-center justify-between border-t-2 pt-2">
+            {/* Total — one prominent number; the math lives in a dropdown */}
+            <div className="border-primary/20 bg-primary/5 rounded-2xl border p-4 sm:p-5">
+              <div className="flex items-end justify-between gap-4">
                 <span className="font-display text-base font-bold">
                   {isQuote ? t("quoteTotal") : t("totalDue")}
                 </span>
-                <span className="text-primary font-display text-2xl font-bold">
+                <span className="text-primary font-display text-3xl font-bold">
                   {money(payableTotal)}
                 </span>
               </div>
+              <Disclosure summary={t("viewBreakdown")}>
+                <dl className="space-y-1.5 text-sm">
+                  <BreakRow k={t("subtotal")} v={money(order.subtotalCents)} />
+                  {order.deliveryFeeCents ? (
+                    <BreakRow
+                      k={t("transportation")}
+                      v={money(order.deliveryFeeCents)}
+                    />
+                  ) : null}
+                  {order.taxCents ? (
+                    <BreakRow k={t("tax")} v={money(order.taxCents)} />
+                  ) : null}
+                  {discount ? (
+                    <BreakRow
+                      k={t("cryptoDiscountRow")}
+                      v={`−${money(discount)}`}
+                      accent
+                    />
+                  ) : null}
+                  <div className="border-border mt-1 flex justify-between border-t pt-1.5 font-semibold">
+                    <dt>{isQuote ? t("quoteTotal") : t("totalDue")}</dt>
+                    <dd>{money(payableTotal)}</dd>
+                  </div>
+                </dl>
+              </Disclosure>
             </div>
 
-            <div className="border-border rounded-2xl border p-4 text-sm">
-              <p className="text-muted-foreground text-[10px] font-bold tracking-[0.14em] uppercase">
-                {t("paymentSchedule")}
+            {/* One-line payment summary on the quote (no calculations dumped) */}
+            {isQuote ? (
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {t("reserveLine", {
+                  half: money(half),
+                  total: money(payableTotal),
+                })}
               </p>
-              <div className="mt-2 space-y-1.5">
-                {plan === "FULL" ? (
-                  <ScheduleRow
-                    k={t("scheduleFullChosen")}
-                    v={money(payableTotal)}
-                  />
-                ) : plan === "HALF" ? (
-                  <>
-                    <ScheduleRow k={t("scheduleHalfChosen")} v={money(half)} />
-                    <ScheduleRow
-                      k={t("scheduleBalance", {
-                        date: order.invoiceDueAt
-                          ? formatDate(order.invoiceDueAt, locale)
-                          : t("beforeSetup"),
-                      })}
-                      v={money(halfBalance)}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <ScheduleRow k={t("scheduleOptionA")} v={money(half)} />
-                    <ScheduleRow
-                      k={t("scheduleOptionABalance")}
-                      v={money(halfBalance)}
-                    />
-                    <ScheduleRow
-                      k={t("scheduleOptionB")}
-                      v={money(payableTotal)}
-                    />
-                  </>
-                )}
-              </div>
-              <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
-                {t("depositNote")}
-              </p>
-            </div>
-
-            {/* Anti-scam warning — always on the payable stage */}
-            {!isQuote ? (
-              <div className="rounded-2xl border border-red-300 bg-red-50 p-4 text-sm leading-relaxed text-red-900 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
-                <p className="flex items-center gap-2 font-bold">
-                  <AlertTriangle className="size-4" /> {ANTI_SCAM_HEADING}
-                </p>
-                <p className="mt-1">
-                  {locale === "fr" ? ANTI_SCAM_BODY_FR : ANTI_SCAM_BODY}
-                </p>
-              </div>
             ) : null}
 
-            {/* Action zone */}
+            {/* Anti-scam — one calm line, full wording is on the PDF */}
+            <p className="text-muted-foreground flex items-start gap-2 text-xs leading-relaxed">
+              <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
+              {locale === "fr" ? ANTI_SCAM_SHORT_FR : ANTI_SCAM_SHORT}
+            </p>
+
+            {/* Setup + Terms — collapsed, professional disclosures */}
+            {isQuote ? (
+              <Disclosure summary={t("setupReqTitle")} card>
+                <ol className="text-muted-foreground list-decimal space-y-1.5 pl-5 text-sm leading-relaxed">
+                  {SETUP_REQUIREMENTS.map((r) => (
+                    <li key={r}>{r}</li>
+                  ))}
+                </ol>
+              </Disclosure>
+            ) : null}
+            <Disclosure
+              summary={isQuote ? t("quoteTermsTitle") : t("invoiceTermsTitle")}
+              card
+            >
+              <div className="text-muted-foreground space-y-2.5 text-sm leading-relaxed">
+                {terms.map((c, i) => (
+                  <p key={i}>
+                    <span className="text-foreground font-semibold">
+                      {i + 1}. {c.t}
+                    </span>{" "}
+                    {c.b}
+                  </p>
+                ))}
+              </div>
+            </Disclosure>
+
+            {/* Action zone — at the bottom, where the decision is made */}
             {isQuote ? (
               <QuoteActions orderNumber={order.orderNumber} />
             ) : (
@@ -451,37 +433,6 @@ export default async function OrderFlowPage({ params }: Props) {
                 methods={methods}
               />
             )}
-
-            {/* Setup requirements (quote stage) */}
-            {isQuote ? (
-              <section>
-                <h2 className="font-display text-base font-bold">
-                  {t("setupReqTitle")}
-                </h2>
-                <ol className="text-muted-foreground mt-2 list-decimal space-y-1.5 pl-5 text-sm leading-relaxed">
-                  {SETUP_REQUIREMENTS.map((r) => (
-                    <li key={r}>{r}</li>
-                  ))}
-                </ol>
-              </section>
-            ) : null}
-
-            {/* Terms */}
-            <section>
-              <h2 className="font-display text-base font-bold">
-                {isQuote ? t("quoteTermsTitle") : t("invoiceTermsTitle")}
-              </h2>
-              <div className="text-muted-foreground mt-2 space-y-2.5 text-sm leading-relaxed">
-                {terms.map((c, i) => (
-                  <p key={i}>
-                    <span className="text-foreground font-semibold">
-                      {i + 1}. {c.t}
-                    </span>{" "}
-                    {c.b}
-                  </p>
-                ))}
-              </div>
-            </section>
           </div>
 
           <footer className="border-border text-muted-foreground border-t px-6 py-4 text-center text-xs sm:px-10">
@@ -502,11 +453,60 @@ function DetailRow({ k, v }: { k: string; v: string }) {
   );
 }
 
-function ScheduleRow({ k, v }: { k: string; v: string }) {
+/** Native <details> disclosure — collapsed by default, no JS, no clipping. */
+function Disclosure({
+  summary,
+  children,
+  card,
+}: {
+  summary: string;
+  children: React.ReactNode;
+  /** Standalone bordered card (Setup/Terms) vs. inline (breakdown). */
+  card?: boolean;
+}) {
   return (
-    <div className="flex items-baseline justify-between gap-4">
-      <span>{k}</span>
-      <span className="font-semibold">{v}</span>
+    <details
+      className={cn(
+        "group",
+        card ? "border-border overflow-hidden rounded-2xl border" : "mt-3",
+      )}
+    >
+      <summary
+        className={cn(
+          "flex cursor-pointer list-none items-center justify-between gap-3 font-semibold [&::-webkit-details-marker]:hidden",
+          card
+            ? "font-display px-4 py-3.5 text-sm"
+            : "text-primary text-xs tracking-wide",
+        )}
+      >
+        {summary}
+        <ChevronDown className="text-muted-foreground size-4 shrink-0 transition-transform duration-200 group-open:rotate-180" />
+      </summary>
+      <div className={cn(card ? "border-border border-t p-4" : "mt-2.5")}>
+        {children}
+      </div>
+    </details>
+  );
+}
+
+function BreakRow({
+  k,
+  v,
+  accent,
+}: {
+  k: string;
+  v: string;
+  accent?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex justify-between",
+        accent ? "font-semibold text-emerald-600" : "",
+      )}
+    >
+      <dt className={accent ? "" : "text-muted-foreground"}>{k}</dt>
+      <dd>{v}</dd>
     </div>
   );
 }

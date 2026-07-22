@@ -2,6 +2,20 @@
 @import "tw-animate-css";
 
 /*
+  This is a LIGHT-ONLY site (no dark token set, no theme toggle). By default
+  Tailwind v4 fires `dark:` utilities on the OS `prefers-color-scheme: dark`,
+  which half-applied a broken dark mode (dark card + light-mode text tokens =
+  unreadable). Gate `dark:` behind an explicit `.dark` class instead — since we
+  never add it, every stray `dark:` utility becomes inert and the design renders
+  as intended in light. `color-scheme: light` also keeps native controls light.
+*/
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  color-scheme: light;
+}
+
+/*
   Big Wave Slides — design tokens (Tailwind v4, CSS-first).
   Brand palette:
     Primary  #0099FF   Secondary #00D4FF   Accent #003366

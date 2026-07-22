@@ -734,8 +734,9 @@ export async function sendPaymentDetailsEmail(
       preheader: `Send ${formatPrice(due, o.locale)} via ${o.paymentMethodLabel ?? "your chosen method"} to lock in your booking.`,
       intro:
         plan === "HALF"
-          ? `You chose the 50% deposit plan. Send ${formatPrice(due, o.locale)} now to reserve your date — the remaining ${formatPrice(balance, o.locale)} is due 48 hours before your event.`
-          : `You chose to pay in full. Send ${formatPrice(due, o.locale)} to complete your booking.`,
+          ? `You've chosen the 50% deposit plan. Send ${formatPrice(due, o.locale)} now to reserve your date — the remaining ${formatPrice(balance, o.locale)} is due 48 hours before your event.`
+          : `You've chosen to pay in full. Send ${formatPrice(due, o.locale)} to complete your booking.`,
+      copyable: { label: "Send payment to", value: o.paymentDestination },
       quote: o.paymentInstructions ?? undefined,
       rows: [
         ...(discount
@@ -751,7 +752,6 @@ export async function sendPaymentDetailsEmail(
           label: "Method",
           value: o.paymentMethodLabel ?? o.paymentMethodKey ?? "—",
         },
-        { label: "Send to", value: o.paymentDestination },
         ...(o.paymentNetwork
           ? [{ label: "Network", value: o.paymentNetwork }]
           : []),
@@ -761,7 +761,7 @@ export async function sendPaymentDetailsEmail(
         label: "Open your invoice page",
         url: siteUrl(orderPagePath(o)),
       },
-      outro: `Once you've sent it, tap "I've paid" on your invoice page so we can confirm right away. ${SCAM_OUTRO}`,
+      outro: `Once you've sent it, submit your transaction ID or a payment screenshot on your invoice page so we can confirm right away. ${SCAM_OUTRO}`,
     }),
   });
 }

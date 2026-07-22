@@ -722,7 +722,7 @@ function PaymentDetailsCard({
       </dl>
 
       {details.instructions ? (
-        <p className="border-primary bg-primary/5 mt-4 rounded-xl border-l-4 p-3.5 text-sm leading-relaxed">
+        <p className="border-primary/20 bg-primary/5 mt-4 rounded-xl border p-3.5 text-sm leading-relaxed">
           {details.instructions}
         </p>
       ) : null}

@@ -161,10 +161,20 @@ export function renderEmail(opts: {
   rows?: EmailRow[];
   /** Highlighted block (e.g. the visitor's message). */
   quote?: string;
+  /** Prominent, select-to-copy value (e.g. a payment destination). */
+  copyable?: { label: string; value: string };
   cta?: { label: string; url: string };
   outro?: string;
 }): string {
   const preheader = opts.preheader ?? opts.intro;
+
+  const copyableBlock = opts.copyable
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0"><tr><td style="background:#f1f8ff;border:1.5px solid #0099FF;border-radius:12px;padding:16px 18px">
+        <div style="color:#6b7280;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">${escape(opts.copyable.label)}</div>
+        <div style="color:#0f172a;font-size:19px;font-weight:700;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;word-break:break-all;line-height:1.4">${escape(opts.copyable.value)}</div>
+        <div style="color:#94a3b8;font-size:12px;margin-top:6px">Tap &amp; hold to copy</div>
+      </td></tr></table>`
+    : "";
 
   // Only show the website link when it's a real public URL — never leak a
   // localhost dev address into a customer's inbox.
@@ -204,6 +214,7 @@ export function renderEmail(opts: {
         <tr><td style="padding:30px 32px">
           <h1 style="margin:0 0 10px;color:#0f172a;font-size:23px;line-height:1.25">${escape(opts.heading)}</h1>
           <p style="margin:0 0 8px;color:#374151;font-size:15px;line-height:1.65">${escape(opts.intro)}</p>
+          ${copyableBlock}
           ${quoteBlock}
           ${rows ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #eef2f7;border-bottom:1px solid #eef2f7;margin:14px 0">${rows}</table>` : ""}
           ${cta}

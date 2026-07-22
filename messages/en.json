@@ -784,9 +784,9 @@
     "network": "Network",
     "reference": "Reference",
     "copied": "Copied to clipboard",
-    "proofTitle": "Sent it? Let us know so we can confirm right away.",
+    "proofTitle": "Paid? Send your transaction ID or a payment screenshot so we can confirm.",
     "proofPlaceholder": "Transaction ID / confirmation (optional)",
-    "proofCta": "I've paid",
+    "proofCta": "Send proof",
     "proofToast": "Thanks! We're verifying your payment now.",
     "proofPendingTitle": "We're confirming your payment",
     "proofPendingBody": "Thanks — our team has been notified and is verifying your payment. You'll get a confirmation email as soon as it lands (usually well within the hour).",
@@ -797,6 +797,9 @@
     "depositNote": "30% of your total acts as a refundable deposit — fully refunded if you cancel at least 7 days before your event. Each rental day is one complete 24-hour period.",
     "agreeFirstHint": "Tick the box above to enable the accept button — it activates the moment you agree.",
     "cryptoApplied": "7% Bitcoin discount applied — you save {amount}. New total: {total}.",
-    "cryptoDiscountRow": "Crypto discount (7%)"
+    "cryptoDiscountRow": "Crypto discount (7%)",
+    "secureBadge": "Secure page",
+    "viewBreakdown": "View price breakdown",
+    "reserveLine": "When you accept, reserve your date with a 50% deposit ({half}) or pay {total} in full — your choice."
   }
 }
