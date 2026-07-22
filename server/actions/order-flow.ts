@@ -10,6 +10,7 @@ import { invoiceNumber } from "@/lib/ref-number";
 import {
   amountDueCents,
   cryptoDiscountCents,
+  discountLabelFor,
   effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
@@ -178,7 +179,7 @@ export async function choosePaymentPlan(
         ? `50% deposit (${formatPrice(dueCents, order.locale)})`
         : `FULL payment (${formatPrice(dueCents, order.locale)})`;
     const discountNote = discountCents
-      ? ` after 11.5% crypto discount (−${formatPrice(discountCents, order.locale)})`
+      ? ` after ${discountLabelFor(method) ?? ""} instant-pay discount (−${formatPrice(discountCents, order.locale)})`
       : "";
     await notifyAdminNtfy({
       title: resolved

@@ -24,8 +24,8 @@ import {
   amountDueCents,
   balanceCents,
   cryptoDiscountCents,
+  discountLabelFor,
   effectiveTotalCents,
-  CRYPTO_DISCOUNT_LABEL,
   type PaymentPlan,
 } from "@/lib/payment-plan";
 import { paymentLogo } from "@/lib/payment-logos";
@@ -135,7 +135,8 @@ export function InvoicePayment({
         toast.success(
           res.hasDetails ? t("detailsReadyToast") : t("detailsSoonToast"),
         );
-        router.refresh();
+        // Move to the dedicated premium payment page for the waiting/reveal.
+        router.push(`/${locale}/order/${orderNumber}/payment`);
       } else {
         toast.error(res.error ?? "Something went wrong.");
       }
@@ -215,48 +216,68 @@ export function InvoicePayment({
       </div>
 
       <p className="mt-5 text-sm font-semibold">{t("chooseMethodTitle")}</p>
-      <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
+      <div className="mt-2.5 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
         {methods.map((m) => {
           const logo = paymentLogo(m.method);
-          const isCrypto = m.method === "crypto";
+          const disc = discountLabelFor(m.method);
+          const selected = method === m.method;
           return (
             <button
               key={m.method}
               type="button"
               onClick={() => setMethod(m.method)}
-              aria-pressed={method === m.method}
+              aria-pressed={selected}
               className={cn(
-                "relative flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl border p-2 transition-all",
-                method === m.method
+                "relative flex items-center gap-3 rounded-2xl border bg-white p-3 text-left transition-all",
+                selected
                   ? "border-primary ring-primary/30 bg-primary/5 ring-2"
-                  : "border-border hover:border-primary/50",
+                  : "border-border hover:border-primary/50 hover:shadow-sm",
               )}
             >
-              {isCrypto ? (
-                <span className="absolute -top-2 right-1.5 rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-sm">
-                  −{CRYPTO_DISCOUNT_LABEL}
+              {disc ? (
+                <span className="absolute -top-2 right-2 rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-bold text-white shadow-sm">
+                  −{disc}
                 </span>
               ) : null}
-              {logo ? (
-                <Image
-                  src={logo}
-                  alt=""
-                  width={56}
-                  height={24}
-                  className="h-5 w-auto max-w-14 object-contain sm:h-6"
-                />
-              ) : (
-                <Wallet className="text-muted-foreground size-5" />
-              )}
-              <span className="text-[10px] leading-tight font-semibold sm:text-[11px]">
-                {m.label}
+              <span className="border-border grid size-10 shrink-0 place-items-center rounded-xl border bg-white">
+                {logo ? (
+                  <Image
+                    src={logo}
+                    alt=""
+                    width={40}
+                    height={24}
+                    className="h-5 w-auto max-w-9 object-contain"
+                  />
+                ) : (
+                  <Wallet className="text-muted-foreground size-5" />
+                )}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-semibold">
+                  {m.label}
+                </span>
+                {disc ? (
+                  <span className="block text-xs font-semibold text-emerald-600">
+                    {t("saveLabel", { pct: disc })}
+                  </span>
+                ) : null}
+              </span>
+              <span
+                className={cn(
+                  "grid size-5 shrink-0 place-items-center rounded-full border",
+                  selected
+                    ? "border-primary bg-primary text-white"
+                    : "border-border",
+                )}
+              >
+                {selected ? <CheckCircle2 className="size-3.5" /> : null}
               </span>
             </button>
           );
         })}
       </div>
       {pickDiscount ? (
-        <p className="mt-2.5 rounded-xl bg-emerald-50 px-3.5 py-2.5 text-sm font-semibold text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
+        <p className="mt-2.5 rounded-xl bg-emerald-50 px-3.5 py-2.5 text-sm font-semibold text-emerald-800">
           🎉{" "}
           {t("cryptoApplied", {
             amount: money(pickDiscount),

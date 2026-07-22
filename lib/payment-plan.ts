@@ -2,33 +2,53 @@
 
 export type PaymentPlan = "HALF" | "FULL";
 
-/** Paying with crypto takes 11.5% off the whole invoice — shown prominently to
-    encourage the rail (it's instant and fee-free on our side). */
-export const CRYPTO_DISCOUNT_RATE = 0.115;
+/**
+ * Instant-pay discounts, applied to the whole invoice and shown prominently to
+ * steer buyers toward the rails that clear fastest and cheapest on our side.
+ * Crypto is instant + fee-free; Chime clears fast with no card fees.
+ * One source of truth — badges, rows, plan math and the PDF all read from here.
+ */
+export const METHOD_DISCOUNT_RATES: Record<string, number> = {
+  crypto: 0.115,
+  chime: 0.03,
+};
 
-/** Human label for the discount, derived from the rate so UI never drifts
-    (e.g. "11.5%"). Trailing ".0" is trimmed so a round rate reads "10%". */
-export const CRYPTO_DISCOUNT_LABEL = `${Number(
-  (CRYPTO_DISCOUNT_RATE * 100).toFixed(1),
-)}%`;
+/** Back-compat: the crypto rate as a named constant. */
+export const CRYPTO_DISCOUNT_RATE = METHOD_DISCOUNT_RATES.crypto;
+
+/** Discount rate for a method (0 when it earns none). */
+export function methodDiscountRate(method?: string | null): number {
+  if (!method) return 0;
+  return METHOD_DISCOUNT_RATES[method] ?? 0;
+}
+
+/** Human label for a method's discount (e.g. "11.5%", "3%"), or null. Trailing
+    ".0" is trimmed so a round rate reads "10%", not "10.0%". */
+export function discountLabelFor(method?: string | null): string | null {
+  const rate = methodDiscountRate(method);
+  return rate ? `${Number((rate * 100).toFixed(1))}%` : null;
+}
+
+/** Back-compat crypto label. */
+export const CRYPTO_DISCOUNT_LABEL = discountLabelFor("crypto") ?? "";
 
 /** True when the chosen rail earns the crypto discount. */
 export function isCryptoMethod(method?: string | null): boolean {
   return method === "crypto";
 }
 
-/** Dollars-off for paying with crypto (0 for every other method). */
+/** Dollars-off for the chosen method's instant-pay discount (0 for none).
+    Named `cryptoDiscountCents` for back-compat; now covers every rail with a
+    configured rate (crypto, chime, …), not just crypto. */
 export function cryptoDiscountCents(
   totalCents: number,
   method?: string | null,
 ): number {
-  return isCryptoMethod(method)
-    ? Math.round(totalCents * CRYPTO_DISCOUNT_RATE)
-    : 0;
+  return Math.round(totalCents * methodDiscountRate(method));
 }
 
-/** The invoice total after any crypto discount — the amount everything else
-    (plans, balances, mark-paid) is computed from. */
+/** The invoice total after any instant-pay discount — the amount everything
+    else (plans, balances, mark-paid) is computed from. */
 export function effectiveTotalCents(
   totalCents: number,
   method?: string | null,

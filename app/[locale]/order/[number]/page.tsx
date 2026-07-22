@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Check, ChevronDown, ShieldCheck } from "lucide-react";
@@ -14,7 +14,7 @@ import {
   effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
-import { loadEnabledMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
+import { loadPaymentMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
 import { quoteTerms, orderTerms, SETUP_REQUIREMENTS } from "@/lib/legal-terms";
 import { ANTI_SCAM_SHORT, ANTI_SCAM_SHORT_FR } from "@/lib/anti-scam";
 import { Container } from "@/components/ui/container";
@@ -84,11 +84,19 @@ export default async function OrderFlowPage({ params }: Props) {
   const half = amountDueCents("HALF", payableTotal);
   const plan = (order.paymentPlan as PaymentPlan | null) ?? null;
 
-  const enabled = await loadEnabledMethods();
-  const methods = (enabled.length ? enabled : DEFAULT_METHODS).map((m) => ({
-    method: m.method,
-    label: m.label,
-  }));
+  // Once a plan is chosen, the payment step lives on its own premium, secure
+  // page — send them there (waiting UI, details reveal, proof all happen there).
+  if (!isQuote && plan !== null) {
+    redirect(`/${locale}/order/${order.orderNumber}/payment`);
+  }
+
+  // Show every payment option (owner labels merged over the defaults) — the
+  // buyer picks any; owner-configured rails send details instantly, the rest
+  // route through the manual assign flow.
+  const allMethods = await loadPaymentMethods();
+  const methods = (allMethods.length ? allMethods : DEFAULT_METHODS).map(
+    (m) => ({ method: m.method, label: m.label }),
+  );
 
   const terms = isQuote
     ? quoteTerms(

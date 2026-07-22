@@ -2,7 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, MessageCircleQuestion } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  MessageCircleQuestion,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { acceptQuote } from "@/server/actions/order-flow";
 import { Link } from "@/i18n/navigation";
@@ -40,27 +45,35 @@ export function QuoteActions({ orderNumber }: { orderNumber: string }) {
         />
         <span className="text-sm leading-relaxed">{t("agreeTerms")}</span>
       </label>
-      <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-        <Button
-          size="lg"
-          variant="gradient"
-          disabled={!agreed || pending}
-          onClick={accept}
-          className="flex-1"
-        >
-          <CheckCircle2 className="size-4" />
-          {pending ? t("accepting") : t("acceptCta")}
-        </Button>
-        <Button asChild size="lg" variant="outline" className="flex-1">
-          <Link href="/contact">
-            <MessageCircleQuestion className="size-4" />
-            {t("contactCta")}
-          </Link>
-        </Button>
-      </div>
-      <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
+      {/* Accept is the hero — full-width, taller, with a leading check and a
+          trailing arrow. The question is a slim, quiet secondary beneath it. */}
+      <Button
+        size="lg"
+        variant="gradient"
+        disabled={!agreed || pending}
+        onClick={accept}
+        className="group mt-4 h-14 w-full text-base font-bold"
+      >
+        {pending ? (
+          <Loader2 className="size-5 animate-spin" />
+        ) : (
+          <CheckCircle2 className="size-5" />
+        )}
+        {pending ? t("accepting") : t("acceptCta")}
+        {!pending ? (
+          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+        ) : null}
+      </Button>
+      <p className="text-muted-foreground mt-2.5 text-center text-xs leading-relaxed">
         {agreed ? t("acceptHint") : t("agreeFirstHint")}
       </p>
+      <Link
+        href="/contact"
+        className="text-muted-foreground hover:text-primary mt-3 inline-flex w-full items-center justify-center gap-1.5 text-sm font-medium transition-colors"
+      >
+        <MessageCircleQuestion className="size-4" />
+        {t("contactCta")}
+      </Link>
     </div>
   );
 }
