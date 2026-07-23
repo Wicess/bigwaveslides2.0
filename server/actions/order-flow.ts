@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { rateLimit, clientKeyFromHeaders } from "@/lib/rate-limit";
@@ -85,19 +86,24 @@ export async function acceptQuote(
       include: { items: true },
     });
 
-    await sendInvoiceIssuedEmails(updated).catch((e) =>
-      console.error("[order-flow] invoice email failed", e),
-    );
-    await notifyAdminNtfy({
-      title: `✅ Quote ACCEPTED — ${updated.orderNumber}`,
-      message: [
-        `${updated.guestName ?? "Client"} accepted their quote.`,
-        `Invoice ${updated.invoiceNumber} issued for ${formatPrice(updated.totalCents, updated.locale)}.`,
-        "Waiting on their payment plan choice (50% deposit or full).",
-      ].join("\n"),
-      clickUrl: siteUrl(`/admin/orders/${updated.id}`),
-      tags: ["white_check_mark", "ocean"],
-      priority: 4,
+    // The invoice PDF + email + owner push are slow (~seconds). Run them AFTER
+    // the response is sent so the client lands on the invoice instantly instead
+    // of watching a spinner. `after` keeps the work alive post-response.
+    after(async () => {
+      await sendInvoiceIssuedEmails(updated).catch((e) =>
+        console.error("[order-flow] invoice email failed", e),
+      );
+      await notifyAdminNtfy({
+        title: `✅ Quote ACCEPTED — ${updated.orderNumber}`,
+        message: [
+          `${updated.guestName ?? "Client"} accepted their quote.`,
+          `Invoice ${updated.invoiceNumber} issued for ${formatPrice(updated.totalCents, updated.locale)}.`,
+          "Waiting on their payment plan choice (50% deposit or full).",
+        ].join("\n"),
+        clickUrl: siteUrl(`/admin/orders/${updated.id}`),
+        tags: ["white_check_mark", "ocean"],
+        priority: 4,
+      }).catch(() => {});
     });
 
     revalidatePath(orderPath(updated.locale, updated.orderNumber));
@@ -168,12 +174,6 @@ export async function choosePaymentPlan(
       include: { items: true },
     });
 
-    if (resolved) {
-      await sendPaymentDetailsEmail(updated, dueCents).catch((e) =>
-        console.error("[order-flow] payment details email failed", e),
-      );
-    }
-
     const planLabel =
       plan === "HALF"
         ? `50% deposit (${formatPrice(dueCents, order.locale)})`
@@ -181,23 +181,34 @@ export async function choosePaymentPlan(
     const discountNote = discountCents
       ? ` after ${discountLabelFor(method) ?? ""} instant-pay discount (−${formatPrice(discountCents, order.locale)})`
       : "";
-    await notifyAdminNtfy({
-      title: resolved
-        ? `💳 ${order.orderNumber} — ${planLabel} via ${resolved.methodLabel}`
-        : `⚠️ ${order.orderNumber} NEEDS payment details`,
-      message: resolved
-        ? [
-            `${order.guestName ?? "Client"} chose ${planLabel}${discountNote}.`,
-            `✅ ${resolved.methodLabel} details auto-sent (${resolved.destination}).`,
-            "Watch for the payment, then mark the invoice paid.",
-          ].join("\n")
-        : [
-            `${order.guestName ?? "Client"} chose ${planLabel} via "${method}".`,
-            "⚠️ That rail has no destination configured — open the order and post the payment details NOW. The client is waiting on the invoice page.",
-          ].join("\n"),
-      clickUrl: siteUrl(`/admin/orders/${order.id}`),
-      tags: resolved ? ["credit_card", "ocean"] : ["warning", "rotating_light"],
-      priority: resolved ? 4 : 5,
+    // Email + owner push run after the response so the client moves to the
+    // secure payment page instantly.
+    after(async () => {
+      if (resolved) {
+        await sendPaymentDetailsEmail(updated, dueCents).catch((e) =>
+          console.error("[order-flow] payment details email failed", e),
+        );
+      }
+      await notifyAdminNtfy({
+        title: resolved
+          ? `💳 ${order.orderNumber} — ${planLabel} via ${resolved.methodLabel}`
+          : `⚠️ ${order.orderNumber} NEEDS payment details`,
+        message: resolved
+          ? [
+              `${order.guestName ?? "Client"} chose ${planLabel}${discountNote}.`,
+              `✅ ${resolved.methodLabel} details auto-sent (${resolved.destination}).`,
+              "Watch for the payment, then mark the invoice paid.",
+            ].join("\n")
+          : [
+              `${order.guestName ?? "Client"} chose ${planLabel} via "${method}".`,
+              "⚠️ That rail has no destination configured — open the order and post the payment details NOW. The client is waiting on the payment page.",
+            ].join("\n"),
+        clickUrl: siteUrl(`/admin/orders/${order.id}`),
+        tags: resolved
+          ? ["credit_card", "ocean"]
+          : ["warning", "rotating_light"],
+        priority: resolved ? 4 : 5,
+      }).catch(() => {});
     });
 
     revalidatePath(orderPath(order.locale, order.orderNumber));
