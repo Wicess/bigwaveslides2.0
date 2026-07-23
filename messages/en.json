@@ -817,8 +817,8 @@
     "secLoaderNote": "One moment — payment details are issued individually for every order.",
     "securityCodeLabel": "Your security code",
     "securityCodeNote": "This code must match the one in your payment email. If it doesn't, do not pay — contact us right away.",
-    "talkTitle": "Not sure? Talk to a real person first",
-    "talkDesc": "Reach us before you send anything — we're happy to confirm your details and answer any question.",
+    "talkTitle": "Contact us for anything",
+    "talkDesc": "We're happy to confirm your details or answer any question before you pay.",
     "whatsappLabel": "WhatsApp"
   }
 }

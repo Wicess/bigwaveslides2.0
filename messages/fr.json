@@ -817,8 +817,8 @@
     "secLoaderNote": "Un instant — les coordonnées de paiement sont émises individuellement pour chaque commande.",
     "securityCodeLabel": "Votre code de sécurité",
     "securityCodeNote": "Ce code doit correspondre à celui de votre e-mail de paiement. S'il diffère, ne payez pas — contactez-nous immédiatement.",
-    "talkTitle": "Un doute ? Parlez d'abord à une vraie personne",
-    "talkDesc": "Contactez-nous avant d'envoyer quoi que ce soit — nous confirmons volontiers vos coordonnées et répondons à vos questions.",
+    "talkTitle": "Contactez-nous pour toute question",
+    "talkDesc": "Nous confirmons volontiers vos coordonnées ou répondons à vos questions avant votre paiement.",
     "whatsappLabel": "WhatsApp"
   }
 }
