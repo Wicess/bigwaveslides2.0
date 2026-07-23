@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateOrder } from "@/server/actions/admin-orders";
 import { toast } from "@/components/ui/toaster";
-import { Select } from "@/components/ui/select";
+import { AdminSelect } from "@/components/admin/admin-select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
@@ -41,22 +41,27 @@ export function OrderControls({
 
   return (
     <div className="space-y-4">
-      <label className="block space-y-1.5">
+      <div className="space-y-1.5">
         <span className="text-sm font-medium">Order status</span>
-        <Select value={s} onChange={(e) => setS(e.target.value)}>
-          {ORDER_STATUS.map((o) => (
-            <option key={o} value={o}>{o}</option>
-          ))}
-        </Select>
-      </label>
-      <label className="block space-y-1.5">
+        <AdminSelect
+          value={s}
+          onChange={setS}
+          ariaLabel="Order status"
+          options={ORDER_STATUS.map((o) => ({ value: o, label: o }))}
+        />
+      </div>
+      <div className="space-y-1.5">
         <span className="text-sm font-medium">Payment status</span>
-        <Select value={p} onChange={(e) => setP(e.target.value)}>
-          {PAYMENT_STATUS.map((o) => (
-            <option key={o} value={o}>{o.replace(/_/g, " ")}</option>
-          ))}
-        </Select>
-      </label>
+        <AdminSelect
+          value={p}
+          onChange={setP}
+          ariaLabel="Payment status"
+          options={PAYMENT_STATUS.map((o) => ({
+            value: o,
+            label: o.replace(/_/g, " "),
+          }))}
+        />
+      </div>
       <label className="block space-y-1.5">
         <span className="text-sm font-medium">Invoice / internal note</span>
         <Textarea rows={3} value={note} onChange={(e) => setNote(e.target.value)} />

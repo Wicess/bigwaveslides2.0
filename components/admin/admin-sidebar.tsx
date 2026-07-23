@@ -389,7 +389,11 @@ export function AdminShell({
         {/* Content column — the only scroll container, fills the full width */}
         <div className="flex h-full min-w-0 flex-1 flex-col">
           <TopBar name={name} onOpenMenu={() => setOpen(true)} />
-          <main className="admin-scroll w-full flex-1 overflow-y-auto px-4 pt-4 pb-6 sm:px-6 lg:px-8 xl:px-10">
+          {/* overflow-x-hidden: entrance animations (admin-rise/slide) use
+              horizontal translateX transforms that would otherwise bleed past
+              the viewport edge on mobile and create a horizontal scroll that
+              cuts off content. Portaled popovers render to <body>, unaffected. */}
+          <main className="admin-scroll w-full flex-1 overflow-x-hidden overflow-y-auto px-4 pt-4 pb-6 sm:px-6 lg:px-8 xl:px-10">
             <div className="mx-auto h-full w-full max-w-[1700px]">
               {children}
             </div>

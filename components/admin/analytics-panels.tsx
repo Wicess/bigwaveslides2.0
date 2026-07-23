@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  ChevronDown,
   Monitor,
   Smartphone,
   Tablet,
@@ -11,6 +10,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AdminSelect } from "@/components/admin/admin-select";
 
 const n = (v: number) => v.toLocaleString("en-US");
 
@@ -70,21 +70,14 @@ export function AnalyticsPanels(data: Data) {
           ))}
         </div>
 
-        {/* Dropdown on small screens */}
-        <div className="relative lg:hidden">
-          <select
-            aria-label="Choose analytics view"
+        {/* Site-styled dropdown on small screens */}
+        <div className="w-40 shrink-0 lg:hidden">
+          <AdminSelect
+            ariaLabel="Choose analytics view"
             value={view}
-            onChange={(e) => setView(e.target.value as ViewId)}
-            className="h-10 appearance-none rounded-full border border-primary/40 bg-white pl-4 pr-9 text-sm font-semibold text-primary outline-none"
-          >
-            {VIEWS.map((v) => (
-              <option key={v.id} value={v.id}>
-                {v.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-primary" />
+            onChange={(v) => setView(v as ViewId)}
+            options={VIEWS.map((v) => ({ value: v.id, label: v.label }))}
+          />
         </div>
       </div>
 

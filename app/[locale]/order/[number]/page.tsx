@@ -14,7 +14,8 @@ import {
   effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
-import { loadPaymentMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
+import { loadEnabledMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
+import { orderSecurityCode } from "@/lib/security-code";
 import { quoteTerms, orderTerms, SETUP_REQUIREMENTS } from "@/lib/legal-terms";
 import { ANTI_SCAM_SHORT, ANTI_SCAM_SHORT_FR } from "@/lib/anti-scam";
 import { Container } from "@/components/ui/container";
@@ -90,13 +91,14 @@ export default async function OrderFlowPage({ params }: Props) {
     redirect(`/${locale}/order/${order.orderNumber}/payment`);
   }
 
-  // Show every payment option (owner labels merged over the defaults) — the
-  // buyer picks any; owner-configured rails send details instantly, the rest
-  // route through the manual assign flow.
-  const allMethods = await loadPaymentMethods();
-  const methods = (allMethods.length ? allMethods : DEFAULT_METHODS).map(
-    (m) => ({ method: m.method, label: m.label }),
-  );
+  // Only rails the owner has switched ON appear as payment options (a disabled
+  // method never shows). Falls back to defaults only if nothing is configured.
+  const enabled = await loadEnabledMethods();
+  const methods = (enabled.length ? enabled : DEFAULT_METHODS).map((m) => ({
+    method: m.method,
+    label: m.label,
+  }));
+  const securityCode = orderSecurityCode(order.orderNumber);
 
   const terms = isQuote
     ? quoteTerms(
@@ -439,6 +441,7 @@ export default async function OrderFlowPage({ params }: Props) {
                     : null
                 }
                 methods={methods}
+                securityCode={securityCode}
               />
             )}
           </div>

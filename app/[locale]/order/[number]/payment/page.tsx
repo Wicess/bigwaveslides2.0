@@ -3,12 +3,14 @@ import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArrowLeft, Lock } from "lucide-react";
+import { ArrowLeft, Lock, MessageCircle, Phone } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/retry";
-import { loadPaymentMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
+import { loadEnabledMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
 import { type PaymentPlan } from "@/lib/payment-plan";
+import { orderSecurityCode } from "@/lib/security-code";
+import { getSettings } from "@/server/data/settings";
 import { Container } from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
 import { InvoicePayment } from "@/components/order/invoice-payment";
@@ -17,6 +19,8 @@ import { ClaimAccount } from "@/components/order/claim-account";
 
 const LOGO =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/brand/logo-email.png";
+const CONTACT_EMAIL = "contact@bigwaveslides.com";
+const FALLBACK_PHONE = "+16143025899";
 
 // Live payment page — never serve it from the Full Route Cache.
 export const dynamic = "force-dynamic";
@@ -53,10 +57,22 @@ export default async function PaymentPage({ params }: Props) {
     redirect(`/${locale}/order/${order.orderNumber}`);
   }
 
-  const allMethods = await loadPaymentMethods();
-  const methods = (allMethods.length ? allMethods : DEFAULT_METHODS).map(
-    (m) => ({ method: m.method, label: m.label }),
-  );
+  // Only rails the owner has switched ON appear as payment options.
+  const enabled = await loadEnabledMethods();
+  const methods = (enabled.length ? enabled : DEFAULT_METHODS).map((m) => ({
+    method: m.method,
+    label: m.label,
+  }));
+
+  // Same code appears in the payment email — the client cross-checks the two.
+  const securityCode = orderSecurityCode(order.orderNumber);
+
+  // Contact channels for the "talk to a human before you pay" strip.
+  const settings = await getSettings().catch(() => ({}) as never);
+  const phone = settings?.contact?.phone ?? FALLBACK_PHONE;
+  const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
+  const waDigits = (settings?.contact?.whatsapp ?? phone).replace(/[^0-9]/g, "");
+  const email = settings?.contact?.email ?? CONTACT_EMAIL;
 
   const awaiting = order.paymentDetailsState === "AWAITING_DETAILS";
 
@@ -131,9 +147,42 @@ export default async function PaymentPage({ params }: Props) {
                   : null
               }
               methods={methods}
+              securityCode={securityCode}
             />
           </div>
         </article>
+
+        {/* Talk to a human before you pay — kills last-second doubt. */}
+        <div className="border-border mt-5 rounded-3xl border bg-white p-5 text-center shadow-sm sm:p-6">
+          <p className="text-foreground font-semibold">{t("talkTitle")}</p>
+          <p className="text-muted-foreground mx-auto mt-1 max-w-md text-sm leading-relaxed">
+            {t("talkDesc")}
+          </p>
+          <div className="mt-4 flex flex-col justify-center gap-2.5 sm:flex-row">
+            <a
+              href={telHref}
+              className="border-border hover:border-primary hover:text-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors"
+            >
+              <Phone className="size-4" /> {phone}
+            </a>
+            {waDigits ? (
+              <a
+                href={`https://wa.me/${waDigits}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-white transition-transform hover:scale-[1.02] [background:linear-gradient(135deg,#3ad07f_0%,#22b06a_45%,#109e5e_100%)]"
+              >
+                <MessageCircle className="size-4" /> {t("whatsappLabel")}
+              </a>
+            ) : null}
+            <a
+              href={`mailto:${email}`}
+              className="border-border hover:border-primary hover:text-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors"
+            >
+              {email}
+            </a>
+          </div>
+        </div>
       </Container>
     </main>
   );
