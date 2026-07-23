@@ -809,6 +809,16 @@
     "securedBadgeNote": "Cette page est surveillée en temps réel. Vos coordonnées de paiement personnalisées sont attribuées manuellement et apparaissent ici dès qu'elles sont prêtes.",
     "awaitBody": "Un instant, pour votre sécurité. Nous vous enverrons vos coordonnées de paiement ici et par courriel — vous les trouverez aussi dans votre compte.",
     "arrivedBannerDesc": "Envoyez le montant ci-dessous pour finaliser votre réservation, puis appuyez sur « J’ai payé ».",
-    "arrivedBannerDismiss": "Fermer"
+    "arrivedBannerDismiss": "Fermer",
+    "secLoaderTitle": "Sécurisation de votre canal de paiement",
+    "secLoaderStep1": "Vérification de votre facture",
+    "secLoaderStep2": "Ouverture d'un canal chiffré",
+    "secLoaderStep3": "Chargement de vos coordonnées de paiement",
+    "secLoaderNote": "Un instant — les coordonnées de paiement sont émises individuellement pour chaque commande.",
+    "securityCodeLabel": "Votre code de sécurité",
+    "securityCodeNote": "Ce code doit correspondre à celui de votre e-mail de paiement. S'il diffère, ne payez pas — contactez-nous immédiatement.",
+    "talkTitle": "Un doute ? Parlez d'abord à une vraie personne",
+    "talkDesc": "Contactez-nous avant d'envoyer quoi que ce soit — nous confirmons volontiers vos coordonnées et répondons à vos questions.",
+    "whatsappLabel": "WhatsApp"
   }
 }

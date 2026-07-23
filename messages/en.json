@@ -809,6 +809,16 @@
     "securedBadgeNote": "This page is monitored in real time. Your personalized payment details are assigned by hand and appear here the moment they're ready.",
     "awaitBody": "A moment, for your security. We'll send your payment details here and to your email — you'll also find them in your account.",
     "arrivedBannerDesc": "Send the amount below to complete your booking, then tap “I’ve paid”.",
-    "arrivedBannerDismiss": "Dismiss"
+    "arrivedBannerDismiss": "Dismiss",
+    "secLoaderTitle": "Securing your payment channel",
+    "secLoaderStep1": "Verifying your invoice",
+    "secLoaderStep2": "Opening an encrypted channel",
+    "secLoaderStep3": "Loading your payment details",
+    "secLoaderNote": "One moment — payment details are issued individually for every order.",
+    "securityCodeLabel": "Your security code",
+    "securityCodeNote": "This code must match the one in your payment email. If it doesn't, do not pay — contact us right away.",
+    "talkTitle": "Not sure? Talk to a real person first",
+    "talkDesc": "Reach us before you send anything — we're happy to confirm your details and answer any question.",
+    "whatsappLabel": "WhatsApp"
   }
 }

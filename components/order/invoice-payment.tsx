@@ -104,6 +104,7 @@ export function InvoicePayment({
   state,
   details,
   methods,
+  securityCode,
 }: {
   orderNumber: string;
   email: string;
@@ -116,6 +117,8 @@ export function InvoicePayment({
   state: string;
   details: Details | null;
   methods: { method: string; label: string }[];
+  /** Per-order code shown here AND in the email — the client cross-checks. */
+  securityCode: string;
 }) {
   const t = useTranslations("OrderFlow");
   const router = useRouter();
@@ -158,6 +161,7 @@ export function InvoicePayment({
         orderNumber={orderNumber}
         details={details}
         methodKey={methodKey}
+        securityCode={securityCode}
         amountLabel={dueNow != null ? money(dueNow) : money(storedPayable)}
         balanceLabel={
           plan === "HALF" ? money(balanceCents(plan, storedPayable)) : null
@@ -426,11 +430,11 @@ function AwaitingDetails({
         />
         <span
           aria-hidden
-          className="absolute inset-0 rounded-full border-4 border-transparent [border-top-color:var(--color-primary)] [border-right-color:var(--color-primary)] motion-safe:animate-spin [animation-duration:1.1s]"
+          className="absolute inset-0 rounded-full border-4 border-transparent [border-top-color:var(--color-primary)] [border-right-color:var(--color-primary)] [animation-duration:1.1s] motion-safe:animate-spin"
         />
         <span
           aria-hidden
-          className="bg-primary/10 absolute inset-2 rounded-full motion-safe:animate-ping [animation-duration:2.2s]"
+          className="bg-primary/10 absolute inset-2 rounded-full [animation-duration:2.2s] motion-safe:animate-ping"
         />
         <ShieldCheck className="text-primary relative size-9" />
       </div>
@@ -451,6 +455,7 @@ function PaymentDetailsCard({
   orderNumber,
   details,
   methodKey,
+  securityCode,
   amountLabel,
   balanceLabel,
   discountLabel,
@@ -459,6 +464,7 @@ function PaymentDetailsCard({
   orderNumber: string;
   details: Details;
   methodKey: string | null;
+  securityCode: string;
   amountLabel: string;
   balanceLabel: string | null;
   /** e.g. "−$71.04" when the crypto discount applies. */
@@ -475,7 +481,19 @@ function PaymentDetailsCard({
   // A persistent (until dismissed) "details are ready" banner — unlike the
   // toast, it stays put so a client who looked away still sees it on return.
   const [justArrived, setJustArrived] = React.useState(false);
+  // Every reveal runs a 3s "securing your channel" animation first, so the
+  // details feel individually issued and verified rather than pre-baked.
+  const [verifying, setVerifying] = React.useState(true);
+  const verifyingRef = React.useRef(true);
   const cardRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const id = window.setTimeout(() => {
+      verifyingRef.current = false;
+      setVerifying(false);
+    }, 3000);
+    return () => window.clearTimeout(id);
+  }, []);
 
   /* ── Arrival announcement — the details must never appear silently ── */
 
@@ -559,25 +577,32 @@ function PaymentDetailsCard({
     //     reopening the page later in the same session stays quiet. Both
     //     funnel through the single announcedRef so nothing double-fires.
     //     Reloads of later states (proof submitted / rejected) stay quiet.
-    let marker: string | null = null;
-    let latched = false;
-    try {
-      marker = sessionStorage.getItem("bws_payment_announce");
-      latched = sessionStorage.getItem(`bws_announced:${orderNumber}`) === "1";
-    } catch {
-      /* ignore */
+    // Hold the whole fanfare until the 3s security loader has finished, so the
+    // chime/banner land exactly when the details actually appear.
+    if (!verifying) {
+      let marker: string | null = null;
+      let latched = false;
+      try {
+        marker = sessionStorage.getItem("bws_payment_announce");
+        latched =
+          sessionStorage.getItem(`bws_announced:${orderNumber}`) === "1";
+      } catch {
+        /* ignore */
+      }
+      if (
+        !announcedRef.current &&
+        (marker === orderNumber || (state === "DETAILS_SENT" && !latched))
+      ) {
+        announce();
+      } else if (announcedRef.current && flashRef.current.until > Date.now()) {
+        // Strict-mode remount: the discarded pass's cleanup stopped the flash.
+        startTitleFlash();
+      }
     }
-    if (
-      !announcedRef.current &&
-      (marker === orderNumber || (state === "DETAILS_SENT" && !latched))
-    ) {
-      announce();
-    } else if (announcedRef.current && flashRef.current.until > Date.now()) {
-      // Strict-mode remount: the discarded pass's cleanup stopped the flash.
-      startTitleFlash();
-    }
-    // (b) the global watcher saw hasDetails flip while we're mounted.
+    // (b) the global watcher saw hasDetails flip while we're mounted — but never
+    // before the loader has revealed the details.
     const onReady = (e: Event) => {
+      if (verifyingRef.current) return;
       const d = (e as CustomEvent<{ orderNumber?: string }>).detail;
       if (d?.orderNumber === orderNumber) announce();
     };
@@ -586,7 +611,14 @@ function PaymentDetailsCard({
       window.removeEventListener("bws:payment-ready", onReady);
       stopTitleFlash(); // always restore the original tab title
     };
-  }, [announce, orderNumber, startTitleFlash, state, stopTitleFlash]);
+  }, [
+    announce,
+    orderNumber,
+    startTitleFlash,
+    state,
+    stopTitleFlash,
+    verifying,
+  ]);
 
   /* ── Proof screenshot picking ── */
 
@@ -659,6 +691,48 @@ function PaymentDetailsCard({
 
   const proofSubmitted = state === "PROOF_SUBMITTED";
 
+  // 3-second security check before the details appear — reads as a live,
+  // per-order verification rather than a page that was simply sitting there.
+  if (verifying) {
+    return (
+      <div className="border-border rounded-2xl border p-6 sm:p-8">
+        <div className="flex flex-col items-center text-center">
+          <span className="relative grid size-16 place-items-center">
+            <span className="border-primary/30 absolute inset-0 rounded-full border-2" />
+            <span className="border-primary absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-current [animation-duration:1.1s]" />
+            <ShieldCheck className="text-primary size-7" />
+          </span>
+          <p className="font-display mt-4 text-lg font-bold">
+            {t("secLoaderTitle")}
+          </p>
+          <ul className="mt-4 w-full max-w-xs space-y-2.5 text-left text-sm">
+            {[
+              t("secLoaderStep1"),
+              t("secLoaderStep2"),
+              t("secLoaderStep3"),
+            ].map((s, i) => (
+              <li
+                key={s}
+                className="text-foreground/80 flex items-center gap-2.5 motion-safe:animate-[secstep_0.5s_ease-out_both]"
+                style={{ animationDelay: `${i * 0.9}s` }}
+              >
+                <CheckCircle2 className="size-4.5 shrink-0 text-emerald-500" />
+                {s}
+              </li>
+            ))}
+          </ul>
+          <div className="bg-muted mt-5 h-1.5 w-full max-w-xs overflow-hidden rounded-full">
+            <div className="bg-primary/70 h-full w-1/3 animate-[scan_1.5s_ease-in-out_infinite] rounded-full" />
+          </div>
+          <p className="text-muted-foreground mt-4 max-w-xs text-xs leading-relaxed">
+            {t("secLoaderNote")}
+          </p>
+        </div>
+        <style>{`@keyframes secstep{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes scan{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}`}</style>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={cardRef}
@@ -702,6 +776,20 @@ function PaymentDetailsCard({
         >
           <ShieldCheck className="size-3.5" /> {t("detailsBadge")}
         </span>
+      </div>
+
+      {/* Anti-impersonation code — must match the client's email. Big + bold
+          so it can't be misread. */}
+      <div className="border-primary/30 bg-primary/5 mt-4 rounded-xl border p-4 text-center">
+        <p className="text-muted-foreground text-[11px] font-bold tracking-[0.14em] uppercase">
+          {t("securityCodeLabel")}
+        </p>
+        <p className="text-accent font-display mt-1 text-3xl font-extrabold tracking-[0.12em] tabular-nums sm:text-4xl">
+          {securityCode}
+        </p>
+        <p className="text-muted-foreground mx-auto mt-2 max-w-sm text-xs leading-relaxed">
+          {t("securityCodeNote")}
+        </p>
       </div>
 
       <dl className="mt-4 space-y-2.5 text-sm">

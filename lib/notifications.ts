@@ -11,6 +11,7 @@ import { formatPrice, formatDate } from "@/lib/format";
 import { notifyAdminWhatsApp } from "@/lib/whatsapp";
 import { notifyAdminNtfy } from "@/lib/ntfy";
 import { generateQuotePdf, type QuotePdfInput } from "@/lib/pdf/quote-pdf";
+import { orderSecurityCode } from "@/lib/security-code";
 import { env } from "@/lib/env";
 
 const CONTACT_EMAIL = "contact@bigwaveslides.com";
@@ -736,6 +737,11 @@ export async function sendPaymentDetailsEmail(
         plan === "HALF"
           ? `You've chosen the 50% deposit plan. Send ${formatPrice(due, o.locale)} now to reserve your date — the remaining ${formatPrice(balance, o.locale)} is due 48 hours before your event.`
           : `You've chosen to pay in full. Send ${formatPrice(due, o.locale)} to complete your booking.`,
+      securityCode: {
+        label: "Your security code",
+        value: orderSecurityCode(o.orderNumber),
+        note: "This must match the code shown on your secure payment page. If it doesn't, do not pay — contact us.",
+      },
       copyable: { label: "Send payment to", value: o.paymentDestination },
       quote: o.paymentInstructions ?? undefined,
       rows: [
@@ -805,42 +811,55 @@ export async function notifyProofSubmitted(o: OrderWithItems): Promise<void> {
   });
 }
 
-/** Owner verified the money arrived → the client's "you're booked" email. */
+/** Owner verified the money arrived → a clean, summarised receipt email:
+    big amount paid, then Total / Amount paid / Amount remaining (or Paid in
+    full). Doubles as the client's "you're booked" confirmation. */
 export async function sendPaymentConfirmedEmail(
   o: OrderWithItems,
 ): Promise<void> {
   if (!o.guestEmail) return;
-  const plan = (o.paymentPlan as PaymentPlan | null) ?? "FULL";
+  const money = (c: number) => formatPrice(c, o.locale);
   const payableTotal = effectiveTotalCents(o.totalCents, o.paymentMethodKey);
-  const balance = plan === "HALF" ? balanceCents(plan, payableTotal) : 0;
+  // Cumulative amount received (markOrderPaid has already added this payment).
+  const paid = o.amountPaidCents;
+  const remaining = Math.max(0, payableTotal - paid);
+  const paidInFull = remaining <= 0;
+  const paidOn = formatDate(o.paidAt ?? new Date(), o.locale);
+  const inv = o.invoiceNumber ?? o.orderNumber;
+
   await sendEmail({
     to: o.guestEmail,
     replyTo: CONTACT_EMAIL,
-    subject: `Payment received — you're booked (${o.invoiceNumber ?? o.orderNumber})`,
+    subject: `Receipt — ${money(paid)} paid (${inv})`,
     html: renderEmail({
       heading: "Payment received — you're booked! 🎉",
-      preheader:
-        "Your date is locked in. We'll be in touch before your event with delivery timing.",
-      intro:
-        balance > 0
-          ? `We've received your deposit — your date is officially reserved! The remaining balance of ${formatPrice(balance, o.locale)} is due 48 hours before your event${o.invoiceDueAt ? ` (${formatDate(o.invoiceDueAt, o.locale)})` : ""}. We'll reach out before your event to confirm delivery timing.`
-          : "We've received your payment in full — your booking is confirmed! We'll reach out before your event to confirm delivery timing. Nothing else is owed.",
+      preheader: paidInFull
+        ? "Paid in full — your booking is confirmed."
+        : `Deposit received — ${money(remaining)} due 48h before your event.`,
+      intro: paidInFull
+        ? "Thank you — here's your receipt. Your booking is confirmed and nothing else is owed. We'll reach out before your event to confirm delivery timing."
+        : "Thank you — here's your receipt. Your date is officially reserved; the remaining balance is due 48 hours before your event. We'll reach out before then to confirm delivery timing.",
+      receipt: { amount: money(paid), caption: `Paid ${paidOn}` },
       rows: [
-        { label: "Invoice", value: o.invoiceNumber ?? o.orderNumber },
+        { label: "Receipt for", value: inv },
+        {
+          label: "Payment method",
+          value: o.paymentMethodLabel ?? o.paymentMethodKey ?? "—",
+        },
         ...(o.eventDate
           ? [{ label: "Event date", value: formatDate(o.eventDate, o.locale) }]
           : []),
-        ...(balance > 0
-          ? [
-              {
-                label: "Balance remaining",
-                value: formatPrice(balance, o.locale),
-              },
-            ]
-          : []),
+        { label: "Order total", value: money(payableTotal) },
+        { label: "Amount paid", value: money(paid) },
+        {
+          label: paidInFull ? "Balance" : "Amount remaining",
+          value: paidInFull
+            ? "Paid in full"
+            : `${money(remaining)}${o.invoiceDueAt ? ` · due ${formatDate(o.invoiceDueAt, o.locale)}` : ""}`,
+        },
       ],
       cta: { label: "View your booking", url: siteUrl(orderPagePath(o)) },
-      outro: `${SCAM_OUTRO}`,
+      outro: SCAM_OUTRO,
     }),
   });
 }

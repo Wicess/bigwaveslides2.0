@@ -163,10 +163,29 @@ export function renderEmail(opts: {
   quote?: string;
   /** Prominent, select-to-copy value (e.g. a payment destination). */
   copyable?: { label: string; value: string };
+  /** Big bold anti-impersonation code the reader cross-checks with the site. */
+  securityCode?: { label: string; value: string; note: string };
+  /** Receipt-style hero: a large bold amount with a caption (e.g. "Paid …"). */
+  receipt?: { amount: string; caption: string };
   cta?: { label: string; url: string };
   outro?: string;
 }): string {
   const preheader = opts.preheader ?? opts.intro;
+
+  const receiptBlock = opts.receipt
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 18px"><tr><td>
+        <div style="color:#0f172a;font-size:38px;font-weight:800;line-height:1.1;letter-spacing:-0.02em">${escape(opts.receipt.amount)}</div>
+        <div style="color:#16a34a;font-size:13px;font-weight:700;margin-top:6px">${escape(opts.receipt.caption)}</div>
+      </td></tr></table>`
+    : "";
+
+  const securityCodeBlock = opts.securityCode
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0"><tr><td align="center" style="background:#eef6ff;border:1.5px solid #0099FF;border-radius:12px;padding:16px 18px">
+        <div style="color:#6b7280;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px">${escape(opts.securityCode.label)}</div>
+        <div style="color:#003366;font-size:34px;font-weight:800;letter-spacing:0.14em;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;line-height:1.2">${escape(opts.securityCode.value)}</div>
+        <div style="color:#6b7280;font-size:12px;line-height:1.5;margin-top:6px">${escape(opts.securityCode.note)}</div>
+      </td></tr></table>`
+    : "";
 
   const copyableBlock = opts.copyable
     ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0"><tr><td style="background:#f1f8ff;border:1.5px solid #0099FF;border-radius:12px;padding:16px 18px">
@@ -213,6 +232,8 @@ export function renderEmail(opts: {
         <tr><td style="padding:30px 32px">
           <h1 style="margin:0 0 10px;color:#0f172a;font-size:23px;line-height:1.25">${escape(opts.heading)}</h1>
           <p style="margin:0 0 8px;color:#374151;font-size:15px;line-height:1.65">${escape(opts.intro)}</p>
+          ${receiptBlock}
+          ${securityCodeBlock}
           ${copyableBlock}
           ${quoteBlock}
           ${rows ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #eef2f7;border-bottom:1px solid #eef2f7;margin:14px 0">${rows}</table>` : ""}
