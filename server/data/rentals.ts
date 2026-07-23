@@ -49,6 +49,25 @@ function orderForSort(
   }
 }
 
+/**
+ * "Best & most-rentable first" score, blending two things the request asked for:
+ *   • real demand — how often the slide is actually booked (weighted highest)
+ *     and ordered on this site.
+ *   • overall market reception — its rating, weighted by how many reviews back
+ *     it (a 5★ with 40 reviews outranks a lone 5★).
+ * Higher scores sort higher. New sites with little data fall back gracefully to
+ * rating then recency, and the ranking sharpens as real bookings accumulate.
+ */
+function popularityScore(p: {
+  ratingAvg: number;
+  ratingCount: number;
+  _count: { bookingItems: number; orderItems: number };
+}): number {
+  const demand = p._count.bookingItems * 3 + p._count.orderItems * 2;
+  const market = p.ratingAvg * Math.min(p.ratingCount, 25) * 0.3;
+  return demand + market;
+}
+
 /** Paginated rental catalog — only `RENTAL` and `BOTH` products. */
 export async function getRentalProducts(query: RentalQuery = {}) {
   const {
@@ -64,18 +83,66 @@ export async function getRentalProducts(query: RentalQuery = {}) {
     ...(category ? { category: { slug: category } } : {}),
   };
 
-  const [items, total] = await withRetry(() =>
-    Promise.all([
-      prisma.product.findMany({
-        where,
-        select: cardSelect,
-        orderBy: orderForSort(sort),
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-      }),
-      prisma.product.count({ where }),
-    ]),
-  ).catch(() => [[], 0] as const);
+  // Explicit sorts (newest / price / rating) stay DB-side and paginated.
+  if (sort !== "featured") {
+    const [items, total] = await withRetry(() =>
+      Promise.all([
+        prisma.product.findMany({
+          where,
+          select: cardSelect,
+          orderBy: orderForSort(sort),
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+        }),
+        prisma.product.count({ where }),
+      ]),
+    ).catch(() => [[], 0] as const);
+    return {
+      items,
+      total,
+      page,
+      pageSize,
+      pageCount: Math.max(1, Math.ceil(total / pageSize)),
+    };
+  }
+
+  // Default order = market + real demand. Rank the whole (small) catalog by the
+  // popularity score, then fetch just the page's cards in that order — two light
+  // queries that keep the card shape and pagination intact.
+  const ranking = await withRetry(() =>
+    prisma.product.findMany({
+      where,
+      select: {
+        id: true,
+        ratingAvg: true,
+        ratingCount: true,
+        createdAt: true,
+        _count: { select: { bookingItems: true, orderItems: true } },
+      },
+      take: 500,
+    }),
+  ).catch(() => []);
+
+  const orderedIds = [...ranking]
+    .sort(
+      (a, b) =>
+        popularityScore(b) - popularityScore(a) || +b.createdAt - +a.createdAt,
+    )
+    .map((p) => p.id);
+
+  const total = orderedIds.length;
+  const pageIds = orderedIds.slice((page - 1) * pageSize, page * pageSize);
+
+  const cards = await withRetry(() =>
+    prisma.product.findMany({
+      where: { id: { in: pageIds } },
+      select: cardSelect,
+    }),
+  ).catch(() => []);
+  const byId = new Map(cards.map((c) => [c.id, c]));
+  const items = pageIds
+    .map((id) => byId.get(id))
+    .filter((c): c is NonNullable<typeof c> => c !== undefined);
 
   return {
     items,
