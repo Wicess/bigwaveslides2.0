@@ -5,27 +5,46 @@ import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/analytics/client";
 
 /**
- * Records a PAGE_VIEW on every route change and a PAGE_LEAVE (with time spent)
- * when the visitor navigates away or hides the tab. Mounted once in the
- * storefront layout — admin routes are not tracked.
+ * Records PAGE_VIEW events for the storefront (admin routes are not tracked).
+ *
+ * Compute-frugal by design: writing a row to Postgres on *every* page view (and
+ * a matching PAGE_LEAVE) is what keeps a serverless DB pinned awake and drains
+ * a free-tier compute quota. So we:
+ *   - never record PAGE_LEAVE (time-on-page is low value and doubled the writes;
+ *     GA4/Clarity cover engagement),
+ *   - always record the FIRST view of a browser session (so every session and
+ *     its landing page is captured), then
+ *   - sample subsequent views at NEXT_PUBLIC_ANALYTICS_SAMPLE (default 0.15).
+ * Conversion events (add-to-cart, quote, order, …) are fired from their own
+ * components and are always recorded — they're rare and high-value.
  */
+const SAMPLE = (() => {
+  const raw = Number(process.env.NEXT_PUBLIC_ANALYTICS_SAMPLE);
+  return Number.isFinite(raw) && raw >= 0 && raw <= 1 ? raw : 0.15;
+})();
+
 export function AnalyticsTracker() {
   const pathname = usePathname();
-  const enteredAt = useRef<number>(Date.now());
-  const currentPath = useRef<string>(pathname);
+  // Guards against React StrictMode double-invoke firing two views per path.
+  const lastPath = useRef<string | null>(null);
 
-  // Page view on each route change (and a leave event for the previous page).
   useEffect(() => {
-    const prev = currentPath.current;
-    if (prev && prev !== pathname) {
-      trackEvent({
-        type: "PAGE_LEAVE",
-        path: prev,
-        durationMs: Date.now() - enteredAt.current,
-      });
+    if (lastPath.current === pathname) return;
+    lastPath.current = pathname;
+
+    // First view of this browser session is always recorded; the rest are
+    // sampled. sessionStorage is per-tab and clears when the tab closes, which
+    // matches "one landing view per session" closely enough.
+    let firstOfSession = false;
+    try {
+      firstOfSession = sessionStorage.getItem("bws_pv_seen") == null;
+      if (firstOfSession) sessionStorage.setItem("bws_pv_seen", "1");
+    } catch {
+      /* storage blocked — fall through to sampling */
     }
-    currentPath.current = pathname;
-    enteredAt.current = Date.now();
+
+    if (!firstOfSession && Math.random() >= SAMPLE) return;
+
     trackEvent({
       type: "PAGE_VIEW",
       path: pathname,
@@ -36,29 +55,6 @@ export function AnalyticsTracker() {
           : undefined,
     });
   }, [pathname]);
-
-  // Leave event when the tab is hidden or the page is being unloaded.
-  useEffect(() => {
-    const sendLeave = () => {
-      trackEvent(
-        {
-          type: "PAGE_LEAVE",
-          path: currentPath.current,
-          durationMs: Date.now() - enteredAt.current,
-        },
-        true,
-      );
-    };
-    const onVisibility = () => {
-      if (document.visibilityState === "hidden") sendLeave();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-    window.addEventListener("pagehide", onVisibility);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("pagehide", onVisibility);
-    };
-  }, []);
 
   return null;
 }

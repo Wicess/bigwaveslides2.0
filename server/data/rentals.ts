@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/retry";
@@ -68,8 +69,11 @@ function popularityScore(p: {
   return demand + market;
 }
 
-/** Paginated rental catalog — only `RENTAL` and `BOTH` products. */
-export async function getRentalProducts(query: RentalQuery = {}) {
+/** Paginated rental catalog — only `RENTAL` and `BOTH` products.
+    Cached (tag "products", 1h) so the dynamic /rent and /shop listing pages
+    don't read the DB on every request and let the serverless compute sleep;
+    admin product edits call revalidateTag("products") to refresh it. */
+async function fetchRentalProducts(query: RentalQuery = {}) {
   const {
     category,
     sort = "featured",
@@ -153,6 +157,12 @@ export async function getRentalProducts(query: RentalQuery = {}) {
   };
 }
 
+export const getRentalProducts = unstable_cache(
+  fetchRentalProducts,
+  ["rental-products"],
+  { tags: ["products"], revalidate: 3600 },
+);
+
 export type RentalListing = Awaited<ReturnType<typeof getRentalProducts>>;
 
 // The state/city SEO landing pages all display the same 8 featured rentals.
@@ -168,18 +178,23 @@ export function getLandingRentals(): Promise<RentalListing["items"]> {
   return landingRentalsPromise;
 }
 
-export async function getRentalBySlug(slug: string) {
-  return withRetry(() =>
-    prisma.product.findFirst({
-      where: { slug, status: "ACTIVE", type: { in: ["RENTAL", "BOTH"] } },
-      include: {
-        media: { orderBy: [{ isPrimary: "desc" }, { order: "asc" }] },
-        category: { select: { slug: true, name: true } },
-        _count: { select: { rentalUnits: { where: { isActive: true } } } },
-      },
-    }),
-  ).catch(() => null);
-}
+// Cached (tag "products", 1h) so product pages served on-demand don't hit the
+// DB per request; admin edits revalidate the "products" tag.
+export const getRentalBySlug = unstable_cache(
+  async (slug: string) =>
+    withRetry(() =>
+      prisma.product.findFirst({
+        where: { slug, status: "ACTIVE", type: { in: ["RENTAL", "BOTH"] } },
+        include: {
+          media: { orderBy: [{ isPrimary: "desc" }, { order: "asc" }] },
+          category: { select: { slug: true, name: true } },
+          _count: { select: { rentalUnits: { where: { isActive: true } } } },
+        },
+      }),
+    ).catch(() => null),
+  ["rental-by-slug"],
+  { tags: ["products"], revalidate: 3600 },
+);
 
 export type RentalDetail = NonNullable<
   Awaited<ReturnType<typeof getRentalBySlug>>

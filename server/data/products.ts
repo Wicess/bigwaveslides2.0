@@ -4,7 +4,12 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/retry";
 
-export type ShopSort = "featured" | "newest" | "price-asc" | "price-desc" | "rating";
+export type ShopSort =
+  | "featured"
+  | "newest"
+  | "price-asc"
+  | "price-desc"
+  | "rating";
 
 export type ShopQuery = {
   /** Filter to a single category slug. */
@@ -40,7 +45,9 @@ const cardSelect = {
   },
 } satisfies Prisma.ProductSelect;
 
-function orderForSort(sort: ShopSort): Prisma.ProductOrderByWithRelationInput[] {
+function orderForSort(
+  sort: ShopSort,
+): Prisma.ProductOrderByWithRelationInput[] {
   switch (sort) {
     case "newest":
       return [{ createdAt: "desc" }];
@@ -59,8 +66,11 @@ function orderForSort(sort: ShopSort): Prisma.ProductOrderByWithRelationInput[] 
 /**
  * Paginated, filtered shop listing. `SALE` and `BOTH` products surface in the
  * shop; pure `RENTAL` products live under /rent.
+ *
+ * Cached (tag "products", 1h) so the dynamic /shop listing doesn't read the DB
+ * on every request; admin product edits revalidate the "products" tag.
  */
-export async function getShopProducts(query: ShopQuery = {}) {
+async function fetchShopProducts(query: ShopQuery = {}) {
   const {
     category,
     q,
@@ -128,6 +138,12 @@ export async function getShopProducts(query: ShopQuery = {}) {
   };
 }
 
+export const getShopProducts = unstable_cache(
+  fetchShopProducts,
+  ["shop-products"],
+  { tags: ["products"], revalidate: 3600 },
+);
+
 export type ShopListing = Awaited<ReturnType<typeof getShopProducts>>;
 export type ShopCard = ShopListing["items"][number];
 
@@ -136,13 +152,17 @@ export type ShopCard = ShopListing["items"][number];
  * Falls back to a plain `contains` scan if the trigram extension/index is
  * unavailable (e.g. before the Phase 9 migration is applied).
  */
-export async function searchProductSlugs(q: string, limit = 12): Promise<string[]> {
+export async function searchProductSlugs(
+  q: string,
+  limit = 12,
+): Promise<string[]> {
   const term = q.trim();
   if (!term) return [];
 
   try {
-    const rows = await withRetry(() =>
-      prisma.$queryRaw<{ slug: string }[]>`
+    const rows = await withRetry(
+      () =>
+        prisma.$queryRaw<{ slug: string }[]>`
         SELECT slug
         FROM "Product"
         WHERE status = 'ACTIVE'
@@ -186,7 +206,9 @@ export async function searchProducts(q: string, limit = 8) {
       select: cardSelect,
     }),
   ).catch(() => []);
-  return [...items].sort((a, b) => slugs.indexOf(a.slug) - slugs.indexOf(b.slug));
+  return [...items].sort(
+    (a, b) => slugs.indexOf(a.slug) - slugs.indexOf(b.slug),
+  );
 }
 
 export const getProductCategories = unstable_cache(
@@ -220,7 +242,9 @@ export async function getProductBySlug(slug: string) {
   ).catch(() => null);
 }
 
-export type ProductDetail = NonNullable<Awaited<ReturnType<typeof getProductBySlug>>>;
+export type ProductDetail = NonNullable<
+  Awaited<ReturnType<typeof getProductBySlug>>
+>;
 
 export async function getRelatedProducts(
   productId: string,
@@ -252,7 +276,10 @@ export async function getProductSlugs() {
 }
 
 /** Featured active products for "you might also like" on the checkout page. */
-export async function getCheckoutSuggestions(excludeIds: string[] = [], take = 6) {
+export async function getCheckoutSuggestions(
+  excludeIds: string[] = [],
+  take = 6,
+) {
   return withRetry(() =>
     prisma.product.findMany({
       where: {
@@ -260,7 +287,11 @@ export async function getCheckoutSuggestions(excludeIds: string[] = [], take = 6
         ...(excludeIds.length ? { id: { notIn: excludeIds } } : {}),
       },
       select: cardSelect,
-      orderBy: [{ featured: "desc" }, { ratingAvg: "desc" }, { updatedAt: "desc" }],
+      orderBy: [
+        { featured: "desc" },
+        { ratingAvg: "desc" },
+        { updatedAt: "desc" },
+      ],
       take,
     }),
   ).catch(() => []);

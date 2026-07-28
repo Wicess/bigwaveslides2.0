@@ -10,7 +10,10 @@ import {
   needsGeoEnrichment,
   parseUserAgent,
 } from "@/lib/analytics/geo";
-import { visitorFingerprint, sessionFingerprint } from "@/lib/analytics/fingerprint";
+import {
+  visitorFingerprint,
+  sessionFingerprint,
+} from "@/lib/analytics/fingerprint";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,9 +23,11 @@ const SESSION_COOKIE = "bws_sid";
 const ONE_YEAR = 60 * 60 * 24 * 365;
 const SESSION_WINDOW = 60 * 30; // 30 min sliding session
 
+// PAGE_LEAVE is intentionally NOT accepted: it doubled the Postgres writes per
+// navigation for low-value time-on-page data and helped pin the serverless DB
+// awake. Any stale beacons from cached JS are dropped here.
 const ALLOWED: ReadonlySet<AnalyticsEventType> = new Set([
   "PAGE_VIEW",
-  "PAGE_LEAVE",
   "SESSION_START",
   "ADD_TO_CART",
   "REMOVE_FROM_CART",
@@ -41,7 +46,10 @@ export async function POST(req: NextRequest) {
   const res = new NextResponse(null, { status: 204 });
 
   try {
-    const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
+    const body = (await req.json().catch(() => ({}))) as Record<
+      string,
+      unknown
+    >;
     const type = body.type as AnalyticsEventType;
     if (!ALLOWED.has(type)) return res;
 
@@ -75,7 +83,9 @@ export async function POST(req: NextRequest) {
     const visitorKey = cookieVisitor ?? visitorFingerprint(userAgent, geo);
     const sessionKey =
       cookieSession ??
-      (cookieVisitor ? randomUUID() : sessionFingerprint(visitorKey, new Date()));
+      (cookieVisitor
+        ? randomUUID()
+        : sessionFingerprint(visitorKey, new Date()));
 
     res.cookies.set(VISITOR_COOKIE, visitorKey, {
       maxAge: ONE_YEAR,
