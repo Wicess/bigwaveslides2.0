@@ -44,6 +44,11 @@ import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
 import { productLd, faqLd, absoluteUrl } from "@/lib/structured-data";
 
+// ISR: serve the cached page (stale-while-revalidate) so it stays up even
+// when the serverless DB is asleep, and refreshes catalog data within the hour.
+export const revalidate = 3600;
+
+
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
