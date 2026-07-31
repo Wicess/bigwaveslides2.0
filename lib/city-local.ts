@@ -638,6 +638,816 @@ export const CITY_LOCAL: Record<string, CityLocal> = {
       "Minnetonka",
     ],
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // Wave 2 — real suburbs/neighborhoods for the second wave of metros.
+  // Same rule: only genuine, well-known places a local renter recognizes.
+  // ══════════════════════════════════════════════════════════════════
+
+  // ── California ──
+  "california/oakland": {
+    areas: [
+      "Berkeley",
+      "Alameda",
+      "Emeryville",
+      "San Leandro",
+      "Piedmont",
+      "Hayward",
+      "Richmond",
+      "Castro Valley",
+    ],
+  },
+  "california/bakersfield": {
+    areas: [
+      "Oildale",
+      "Rosedale",
+      "Shafter",
+      "Delano",
+      "Wasco",
+      "Arvin",
+      "Tehachapi",
+    ],
+  },
+  "california/anaheim": {
+    areas: [
+      "Fullerton",
+      "Orange",
+      "Garden Grove",
+      "Buena Park",
+      "Placentia",
+      "Yorba Linda",
+      "Brea",
+      "Cypress",
+    ],
+  },
+  "california/riverside": {
+    areas: [
+      "Moreno Valley",
+      "Corona",
+      "Jurupa Valley",
+      "Eastvale",
+      "Norco",
+      "Perris",
+      "Rubidoux",
+    ],
+  },
+  "california/santa-ana": {
+    areas: [
+      "Garden Grove",
+      "Tustin",
+      "Orange",
+      "Fountain Valley",
+      "Costa Mesa",
+      "Westminster",
+      "Irvine",
+    ],
+  },
+  "california/stockton": {
+    areas: [
+      "Lodi",
+      "Manteca",
+      "Tracy",
+      "Lathrop",
+      "Ripon",
+      "Escalon",
+      "Modesto",
+    ],
+  },
+  "california/chula-vista": {
+    areas: [
+      "National City",
+      "Bonita",
+      "Imperial Beach",
+      "Eastlake",
+      "Otay Ranch",
+      "San Ysidro",
+      "Coronado",
+    ],
+  },
+  "california/irvine": {
+    areas: [
+      "Tustin",
+      "Lake Forest",
+      "Newport Beach",
+      "Costa Mesa",
+      "Aliso Viejo",
+      "Laguna Hills",
+      "Mission Viejo",
+    ],
+  },
+
+  // ── Texas ──
+  "texas/arlington": {
+    areas: [
+      "Grand Prairie",
+      "Mansfield",
+      "Kennedale",
+      "Pantego",
+      "Euless",
+      "Bedford",
+      "Fort Worth",
+    ],
+  },
+  "texas/corpus-christi": {
+    areas: [
+      "Portland",
+      "Robstown",
+      "Aransas Pass",
+      "Ingleside",
+      "Kingsville",
+      "Rockport",
+      "Bishop",
+    ],
+  },
+  "texas/plano": {
+    areas: [
+      "Frisco",
+      "Allen",
+      "McKinney",
+      "Richardson",
+      "Murphy",
+      "Wylie",
+      "Carrollton",
+      "The Colony",
+    ],
+  },
+  "texas/lubbock": {
+    areas: [
+      "Wolfforth",
+      "Slaton",
+      "Shallowater",
+      "Idalou",
+      "New Deal",
+      "Ransom Canyon",
+    ],
+  },
+  "texas/laredo": {
+    areas: ["Rio Bravo", "El Cenizo", "United", "Del Mar"],
+  },
+  "texas/garland": {
+    areas: [
+      "Rowlett",
+      "Sachse",
+      "Mesquite",
+      "Richardson",
+      "Wylie",
+      "Plano",
+      "Sunnyvale",
+    ],
+  },
+  "texas/irving": {
+    areas: [
+      "Coppell",
+      "Grand Prairie",
+      "Farmers Branch",
+      "Euless",
+      "Grapevine",
+      "Bedford",
+    ],
+  },
+
+  // ── Florida ──
+  "florida/st-petersburg": {
+    areas: [
+      "Clearwater",
+      "Largo",
+      "Pinellas Park",
+      "Seminole",
+      "Gulfport",
+      "Dunedin",
+      "Tarpon Springs",
+      "Tampa",
+    ],
+  },
+  "florida/hialeah": {
+    areas: [
+      "Miami Lakes",
+      "Miami Springs",
+      "Hialeah Gardens",
+      "Opa-locka",
+      "Doral",
+      "Medley",
+      "Miami",
+    ],
+  },
+  "florida/fort-lauderdale": {
+    areas: [
+      "Plantation",
+      "Sunrise",
+      "Pompano Beach",
+      "Davie",
+      "Pembroke Pines",
+      "Hollywood",
+      "Coral Springs",
+      "Weston",
+    ],
+  },
+  "florida/tallahassee": {
+    areas: [
+      "Crawfordville",
+      "Havana",
+      "Quincy",
+      "Monticello",
+      "Woodville",
+      "Midway",
+    ],
+  },
+  "florida/cape-coral": {
+    areas: [
+      "Fort Myers",
+      "North Fort Myers",
+      "Lehigh Acres",
+      "Punta Gorda",
+      "Estero",
+      "Bonita Springs",
+      "Sanibel",
+    ],
+  },
+  "florida/port-st-lucie": {
+    areas: [
+      "Fort Pierce",
+      "Stuart",
+      "Jensen Beach",
+      "Palm City",
+      "Hobe Sound",
+      "Vero Beach",
+    ],
+  },
+
+  // ── Arizona ──
+  "arizona/chandler": {
+    areas: [
+      "Gilbert",
+      "Tempe",
+      "Mesa",
+      "Queen Creek",
+      "Ahwatukee",
+      "Sun Lakes",
+      "Scottsdale",
+    ],
+  },
+  "arizona/gilbert": {
+    areas: [
+      "Chandler",
+      "Mesa",
+      "Queen Creek",
+      "Tempe",
+      "Higley",
+      "Apache Junction",
+    ],
+  },
+  "arizona/scottsdale": {
+    areas: [
+      "Tempe",
+      "Paradise Valley",
+      "Fountain Hills",
+      "Mesa",
+      "Cave Creek",
+      "Carefree",
+      "Phoenix",
+    ],
+  },
+  "arizona/glendale": {
+    areas: [
+      "Peoria",
+      "Surprise",
+      "Sun City",
+      "Youngtown",
+      "Tolleson",
+      "Litchfield Park",
+      "Phoenix",
+    ],
+  },
+  "arizona/tempe": {
+    areas: [
+      "Mesa",
+      "Chandler",
+      "Scottsdale",
+      "Ahwatukee",
+      "Guadalupe",
+      "Phoenix",
+    ],
+  },
+
+  // ── Colorado ──
+  "colorado/colorado-springs": {
+    areas: [
+      "Fountain",
+      "Monument",
+      "Manitou Springs",
+      "Falcon",
+      "Security-Widefield",
+      "Woodland Park",
+      "Peyton",
+    ],
+  },
+  "colorado/aurora": {
+    areas: [
+      "Denver",
+      "Centennial",
+      "Parker",
+      "Englewood",
+      "Commerce City",
+      "Greenwood Village",
+    ],
+  },
+
+  // ── North Carolina ──
+  "north-carolina/greensboro": {
+    areas: [
+      "High Point",
+      "Burlington",
+      "Kernersville",
+      "Summerfield",
+      "Oak Ridge",
+      "Jamestown",
+      "Gibsonville",
+    ],
+  },
+  "north-carolina/durham": {
+    areas: [
+      "Chapel Hill",
+      "Cary",
+      "Morrisville",
+      "Hillsborough",
+      "Research Triangle Park",
+      "Raleigh",
+    ],
+  },
+  "north-carolina/winston-salem": {
+    areas: [
+      "Kernersville",
+      "Clemmons",
+      "Lewisville",
+      "Walkertown",
+      "King",
+      "Pfafftown",
+      "Rural Hall",
+    ],
+  },
+
+  // ── Ohio ──
+  "ohio/toledo": {
+    areas: [
+      "Sylvania",
+      "Maumee",
+      "Perrysburg",
+      "Oregon",
+      "Rossford",
+      "Holland",
+      "Waterville",
+    ],
+  },
+  "ohio/akron": {
+    areas: [
+      "Cuyahoga Falls",
+      "Stow",
+      "Barberton",
+      "Fairlawn",
+      "Tallmadge",
+      "Green",
+      "Hudson",
+      "Kent",
+    ],
+  },
+
+  // ── Tennessee ──
+  "tennessee/knoxville": {
+    areas: [
+      "Farragut",
+      "Maryville",
+      "Oak Ridge",
+      "Alcoa",
+      "Powell",
+      "Halls",
+      "Sevierville",
+    ],
+  },
+  "tennessee/chattanooga": {
+    areas: [
+      "East Ridge",
+      "Red Bank",
+      "Soddy-Daisy",
+      "Hixson",
+      "Ooltewah",
+      "Signal Mountain",
+      "Cleveland",
+    ],
+  },
+
+  // ── Nevada ──
+  "nevada/henderson": {
+    areas: [
+      "Las Vegas",
+      "Green Valley",
+      "Boulder City",
+      "Anthem",
+      "Paradise",
+      "Enterprise",
+    ],
+  },
+  "nevada/reno": {
+    areas: [
+      "Sparks",
+      "Carson City",
+      "Sun Valley",
+      "Spanish Springs",
+      "Cold Springs",
+      "Fernley",
+    ],
+  },
+
+  // ── Washington ──
+  "washington/spokane": {
+    areas: [
+      "Spokane Valley",
+      "Cheney",
+      "Liberty Lake",
+      "Airway Heights",
+      "Mead",
+      "Deer Park",
+    ],
+  },
+  "washington/tacoma": {
+    areas: [
+      "Lakewood",
+      "Puyallup",
+      "University Place",
+      "Federal Way",
+      "Gig Harbor",
+      "Fircrest",
+      "Bonney Lake",
+    ],
+  },
+
+  // ── Virginia ──
+  "virginia/richmond": {
+    areas: [
+      "Henrico",
+      "Chesterfield",
+      "Midlothian",
+      "Glen Allen",
+      "Mechanicsville",
+      "Short Pump",
+      "Petersburg",
+    ],
+  },
+  "virginia/norfolk": {
+    areas: [
+      "Virginia Beach",
+      "Chesapeake",
+      "Portsmouth",
+      "Suffolk",
+      "Hampton",
+      "Newport News",
+    ],
+  },
+  "virginia/chesapeake": {
+    areas: [
+      "Norfolk",
+      "Virginia Beach",
+      "Portsmouth",
+      "Suffolk",
+      "Hampton",
+      "Great Bridge",
+    ],
+  },
+
+  // ── New York ──
+  "new-york/rochester": {
+    areas: [
+      "Greece",
+      "Irondequoit",
+      "Henrietta",
+      "Brighton",
+      "Webster",
+      "Pittsford",
+      "Fairport",
+      "Penfield",
+    ],
+  },
+  "new-york/syracuse": {
+    areas: [
+      "Cicero",
+      "Clay",
+      "Camillus",
+      "DeWitt",
+      "Liverpool",
+      "Baldwinsville",
+      "Manlius",
+      "Fayetteville",
+    ],
+  },
+  "new-york/yonkers": {
+    areas: [
+      "Mount Vernon",
+      "New Rochelle",
+      "White Plains",
+      "Bronxville",
+      "Hastings-on-Hudson",
+      "Tuckahoe",
+    ],
+  },
+  "new-york/albany": {
+    areas: [
+      "Schenectady",
+      "Troy",
+      "Colonie",
+      "Guilderland",
+      "Bethlehem",
+      "Cohoes",
+      "Watervliet",
+    ],
+  },
+
+  // ── Georgia ──
+  "georgia/augusta": {
+    areas: [
+      "Martinez",
+      "Evans",
+      "Grovetown",
+      "North Augusta",
+      "Hephzibah",
+      "Fort Gordon",
+    ],
+  },
+  "georgia/columbus": {
+    areas: [
+      "Phenix City",
+      "Fort Benning",
+      "Fortson",
+      "Midland",
+      "Cataula",
+      "Upatoi",
+    ],
+  },
+  "georgia/savannah": {
+    areas: [
+      "Pooler",
+      "Garden City",
+      "Richmond Hill",
+      "Port Wentworth",
+      "Tybee Island",
+      "Bloomingdale",
+      "Hinesville",
+    ],
+  },
+
+  // ── Michigan ──
+  "michigan/grand-rapids": {
+    areas: [
+      "Wyoming",
+      "Kentwood",
+      "Walker",
+      "Grandville",
+      "Rockford",
+      "Cascade",
+      "East Grand Rapids",
+      "Ada",
+    ],
+  },
+
+  // ── Minnesota ──
+  "minnesota/saint-paul": {
+    areas: [
+      "Minneapolis",
+      "Maplewood",
+      "Roseville",
+      "West St. Paul",
+      "Woodbury",
+      "Eagan",
+      "Mendota Heights",
+      "Oakdale",
+    ],
+  },
+
+  // ── Kansas ──
+  "kansas/wichita": {
+    areas: [
+      "Derby",
+      "Andover",
+      "Haysville",
+      "Park City",
+      "Maize",
+      "Bel Aire",
+      "Goddard",
+      "Valley Center",
+    ],
+  },
+  "kansas/overland-park": {
+    areas: [
+      "Olathe",
+      "Lenexa",
+      "Shawnee",
+      "Leawood",
+      "Prairie Village",
+      "Merriam",
+      "Kansas City",
+    ],
+  },
+
+  // ── Nebraska ──
+  "nebraska/omaha": {
+    areas: [
+      "Bellevue",
+      "Papillion",
+      "La Vista",
+      "Elkhorn",
+      "Ralston",
+      "Gretna",
+      "Council Bluffs",
+    ],
+  },
+  "nebraska/lincoln": {
+    areas: ["Waverly", "Hickman", "Milford", "Seward", "Crete", "Roca"],
+  },
+
+  // ── New Jersey ──
+  "new-jersey/newark": {
+    areas: [
+      "East Orange",
+      "Irvington",
+      "Bloomfield",
+      "Belleville",
+      "Nutley",
+      "Kearny",
+      "Harrison",
+      "Orange",
+    ],
+  },
+  "new-jersey/jersey-city": {
+    areas: [
+      "Hoboken",
+      "Bayonne",
+      "Union City",
+      "Weehawken",
+      "Secaucus",
+      "North Bergen",
+      "Kearny",
+    ],
+  },
+
+  // ── Indiana / Kentucky ──
+  "indiana/fort-wayne": {
+    areas: [
+      "New Haven",
+      "Huntertown",
+      "Leo-Cedarville",
+      "Woodburn",
+      "Grabill",
+      "Auburn",
+    ],
+  },
+  "kentucky/lexington": {
+    areas: [
+      "Nicholasville",
+      "Georgetown",
+      "Richmond",
+      "Versailles",
+      "Winchester",
+      "Wilmore",
+      "Paris",
+    ],
+  },
+
+  // ── Louisiana ──
+  "louisiana/baton-rouge": {
+    areas: [
+      "Baker",
+      "Zachary",
+      "Central",
+      "Denham Springs",
+      "Gonzales",
+      "Prairieville",
+      "Port Allen",
+    ],
+  },
+  "louisiana/shreveport": {
+    areas: [
+      "Bossier City",
+      "Haughton",
+      "Benton",
+      "Blanchard",
+      "Greenwood",
+      "Stonewall",
+    ],
+  },
+
+  // ── Utah ──
+  "utah/salt-lake-city": {
+    areas: [
+      "West Valley City",
+      "Sandy",
+      "West Jordan",
+      "Murray",
+      "Draper",
+      "Millcreek",
+      "Holladay",
+      "South Jordan",
+    ],
+  },
+
+  // ── South Carolina ──
+  "south-carolina/charleston": {
+    areas: [
+      "Mount Pleasant",
+      "North Charleston",
+      "Summerville",
+      "Goose Creek",
+      "James Island",
+      "Hanahan",
+      "Folly Beach",
+    ],
+  },
+  "south-carolina/columbia": {
+    areas: [
+      "Lexington",
+      "West Columbia",
+      "Cayce",
+      "Irmo",
+      "Forest Acres",
+      "Blythewood",
+      "Chapin",
+    ],
+  },
+
+  // ── Alabama ──
+  "alabama/birmingham": {
+    areas: [
+      "Hoover",
+      "Vestavia Hills",
+      "Homewood",
+      "Mountain Brook",
+      "Bessemer",
+      "Trussville",
+      "Alabaster",
+      "Pelham",
+    ],
+  },
+  "alabama/montgomery": {
+    areas: ["Prattville", "Wetumpka", "Millbrook", "Pike Road", "Deatsville"],
+  },
+  "alabama/huntsville": {
+    areas: [
+      "Madison",
+      "Decatur",
+      "Athens",
+      "Meridianville",
+      "Hazel Green",
+      "Harvest",
+      "Owens Cross Roads",
+    ],
+  },
+
+  // ── Iowa / Arkansas / Mississippi / Oregon ──
+  "iowa/des-moines": {
+    areas: [
+      "West Des Moines",
+      "Ankeny",
+      "Urbandale",
+      "Johnston",
+      "Clive",
+      "Altoona",
+      "Waukee",
+      "Windsor Heights",
+    ],
+  },
+  "arkansas/little-rock": {
+    areas: [
+      "North Little Rock",
+      "Conway",
+      "Benton",
+      "Bryant",
+      "Sherwood",
+      "Jacksonville",
+      "Maumelle",
+      "Cabot",
+    ],
+  },
+  "mississippi/jackson": {
+    areas: [
+      "Clinton",
+      "Pearl",
+      "Ridgeland",
+      "Madison",
+      "Brandon",
+      "Flowood",
+      "Byram",
+      "Canton",
+    ],
+  },
+  "oregon/salem": {
+    areas: [
+      "Keizer",
+      "Turner",
+      "Independence",
+      "Monmouth",
+      "Dallas",
+      "Silverton",
+      "Stayton",
+      "Woodburn",
+    ],
+  },
 };
 
 /** Local detail for a city, or null if it isn't a filled-in priority metro. */
