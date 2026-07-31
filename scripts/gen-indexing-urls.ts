@@ -47,28 +47,42 @@ type Section = {
 };
 
 async function main() {
-  const [shop, rent, posts, blogCats, tags] = await Promise.all([
-    prisma.product.findMany({
-      where: { status: "ACTIVE", type: { in: ["SALE", "BOTH"] } },
-      select: { slug: true },
-      orderBy: { slug: "asc" },
-    }),
-    prisma.product.findMany({
-      where: { status: "ACTIVE", type: { in: ["RENTAL", "BOTH"] } },
-      select: { slug: true },
-      orderBy: { slug: "asc" },
-    }),
-    prisma.blogPost.findMany({
-      where: { status: "PUBLISHED" },
-      select: { slug: true },
-      orderBy: { slug: "asc" },
-    }),
-    prisma.blogCategory.findMany({
-      select: { slug: true },
-      orderBy: { slug: "asc" },
-    }),
-    prisma.tag.findMany({ select: { slug: true }, orderBy: { slug: "asc" } }),
-  ]);
+  // Neon serverless can cold-start and time out the first query — warm the
+  // connection with a few retries before firing the real (concurrent) queries.
+  for (let i = 0; i < 8; i++) {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      break;
+    } catch {
+      await new Promise((r) => setTimeout(r, 2500));
+    }
+  }
+
+  // Sequential (not Promise.all): a cold Neon connection can't reliably service
+  // several concurrent queries — run them one at a time.
+  const shop = await prisma.product.findMany({
+    where: { status: "ACTIVE", type: { in: ["SALE", "BOTH"] } },
+    select: { slug: true },
+    orderBy: { slug: "asc" },
+  });
+  const rent = await prisma.product.findMany({
+    where: { status: "ACTIVE", type: { in: ["RENTAL", "BOTH"] } },
+    select: { slug: true },
+    orderBy: { slug: "asc" },
+  });
+  const posts = await prisma.blogPost.findMany({
+    where: { status: "PUBLISHED" },
+    select: { slug: true },
+    orderBy: { slug: "asc" },
+  });
+  const blogCats = await prisma.blogCategory.findMany({
+    select: { slug: true },
+    orderBy: { slug: "asc" },
+  });
+  const tags = await prisma.tag.findMany({
+    select: { slug: true },
+    orderBy: { slug: "asc" },
+  });
 
   const sections: Section[] = [
     { title: "MAIN PAGES (en + fr)", paths: BILINGUAL_STATIC, locales: BOTH },
