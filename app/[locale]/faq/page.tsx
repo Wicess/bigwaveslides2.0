@@ -9,6 +9,7 @@ import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
+import { Button } from "@/components/ui/button";
 import { PhotoHero } from "@/components/ui/photo-hero";
 import { JsonLd } from "@/components/seo/json-ld";
 import { faqLd } from "@/lib/structured-data";
@@ -81,6 +82,34 @@ export default async function FaqPage({ params }: Props) {
               <ArrowRight className="text-primary size-5 shrink-0" />
             </Link>
           ) : null}
+
+          {/* Conversion CTA — turn high-intent FAQ traffic into bookings. */}
+          <div className="border-primary/20 bg-primary/5 mt-8 rounded-[var(--radius-lg)] border p-6 text-center sm:p-8">
+            <h2 className="font-display text-2xl font-bold">
+              {locale === "fr"
+                ? "Prêt à réserver votre glissade ?"
+                : "Ready to book your water slide?"}
+            </h2>
+            <p className="text-muted-foreground mx-auto mt-2 max-w-lg">
+              {locale === "fr"
+                ? "Vérifiez votre date gratuitement — livraison, installation et reprise incluses."
+                : "Check your date free — delivery, setup & pickup always included."}
+            </p>
+            <div className="mt-5 flex flex-wrap justify-center gap-3">
+              <Button asChild size="lg" variant="gradient">
+                <Link href="/rent">
+                  {locale === "fr"
+                    ? "Vérifier la disponibilité"
+                    : "Check availability"}
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href="/contact">
+                  {locale === "fr" ? "Obtenir un devis" : "Get a free quote"}
+                </Link>
+              </Button>
+            </div>
+          </div>
         </Container>
       </Section>
     </main>
