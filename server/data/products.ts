@@ -266,13 +266,16 @@ export async function getRelatedProducts(
   ).catch(() => []);
 }
 
+// Powers generateStaticParams for /shop/[slug]. Does NOT swallow errors on
+// purpose: a DB failure at build time should fail the build (Vercel keeps the
+// last good deploy) instead of shipping empty params that 404 every product.
 export async function getProductSlugs() {
   return withRetry(() =>
     prisma.product.findMany({
       where: { type: { in: ["SALE", "BOTH"] } },
       select: { slug: true },
     }),
-  ).catch(() => []);
+  );
 }
 
 /** Featured active products for "you might also like" on the checkout page. */

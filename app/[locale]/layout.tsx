@@ -21,6 +21,7 @@ import {
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getNavData, type NavData } from "@/server/data/navigation";
+import { getRatingSummary } from "@/server/data/home";
 import { LenisProvider } from "@/components/motion/lenis-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
@@ -124,6 +125,11 @@ export default async function LocaleLayout({
     services: [],
     settings: {},
   }));
+  // Real review aggregate → star ratings on the site-wide LocalBusiness schema.
+  const rating = await getRatingSummary().catch(() => ({
+    count: 0,
+    value: 4.9,
+  }));
   // `t` / `tc` are translator functions scoped to a namespace in the messages.
   const t = await getTranslations("Layout");
   const tc = await getTranslations("Common");
@@ -176,11 +182,15 @@ export default async function LocaleLayout({
         <Analytics />
         {/* JSON-LD: structured data that helps search engines understand the site. */}
         <JsonLd
-          data={organizationLd(navData.settings.contact, [
-            navData.settings.social?.instagram,
-            navData.settings.social?.facebook,
-            navData.settings.social?.tiktok,
-          ])}
+          data={organizationLd(
+            navData.settings.contact,
+            [
+              navData.settings.social?.instagram,
+              navData.settings.social?.facebook,
+              navData.settings.social?.tiktok,
+            ],
+            rating,
+          )}
         />
         <JsonLd data={websiteLd()} />
       </body>

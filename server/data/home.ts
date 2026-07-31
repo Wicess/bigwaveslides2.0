@@ -68,3 +68,20 @@ export const getHomeData = unstable_cache(
 );
 
 export type HomeData = Awaited<ReturnType<typeof getHomeData>>;
+
+/** Site-wide review aggregate for the LocalBusiness schema (star ratings in
+    search). Cached 1h; returns count 0 on error so no rating is ever faked. */
+export const getRatingSummary = unstable_cache(
+  async () => {
+    const s = await withRetry(() =>
+      prisma.product.aggregate({
+        where: { status: "ACTIVE", ratingCount: { gt: 0 } },
+        _sum: { ratingCount: true },
+        _avg: { ratingAvg: true },
+      }),
+    ).catch(() => null);
+    return { count: s?._sum.ratingCount ?? 0, value: s?._avg.ratingAvg ?? 4.9 };
+  },
+  ["rating-summary"],
+  { tags: ["products", "reviews"], revalidate: 3600 },
+);

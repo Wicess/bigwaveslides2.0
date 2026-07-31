@@ -220,11 +220,15 @@ export async function getRelatedRentals(
   ).catch(() => []);
 }
 
+// Powers generateStaticParams for /rent/[slug]. Intentionally does NOT swallow
+// errors: if the DB is unreachable at build time we want the build to FAIL so
+// Vercel keeps the last good deployment, rather than shipping a build with an
+// empty slug list that renders every product page as a 404/noindex.
 export async function getRentalSlugs() {
   return withRetry(() =>
     prisma.product.findMany({
       where: { type: { in: ["RENTAL", "BOTH"] } },
       select: { slug: true },
     }),
-  ).catch(() => []);
+  );
 }

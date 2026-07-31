@@ -18,7 +18,9 @@ const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 // build — telling Google all ~500 URLs "changed today" on every deploy is a
 // low-trust signal. Bump this when location/static content is meaningfully
 // revised; dynamic entries (products/posts) can carry their own dates later.
-const CONTENT_UPDATED = new Date("2026-07-10T00:00:00Z");
+// 2026-07-31: bumped after a site-wide content refresh + recovery from a DB
+// outage, to prompt Google to recrawl pages it saw erroring during downtime.
+const CONTENT_UPDATED = new Date("2026-07-31T00:00:00Z");
 
 // Fully-translated pages — indexed in BOTH locales (en + fr), with hreflang.
 const BILINGUAL_STATIC = [
@@ -38,7 +40,11 @@ const BILINGUAL_STATIC = [
 // English-only programmatic pages. Their French variants render English copy
 // (duplicates) and are `noindex`, so we keep them out of the sitemap entirely
 // and concentrate crawl budget on the pages that can actually rank.
-const EN_ONLY_STATIC = ["/water-slide-rentals", "/water-slides-for", "/answers"];
+const EN_ONLY_STATIC = [
+  "/water-slide-rentals",
+  "/water-slides-for",
+  "/answers",
+];
 
 // All 51 state hubs stay indexed (few, and genuine internal hubs). City pages
 // are trimmed to the wave-1 priority metros only — the rest are noindex until

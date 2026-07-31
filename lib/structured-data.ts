@@ -23,6 +23,8 @@ export function organizationLd(
   },
   /** Social profile URLs → `sameAs`, which helps Google build the brand entity. */
   sameAs?: (string | undefined)[],
+  /** Real review aggregate → `aggregateRating` (star ratings in rich results). */
+  rating?: { value: number; count: number },
 ): Json {
   const links = (sameAs ?? []).filter(Boolean) as string[];
   // Prefer a fully structured PostalAddress (city/state/ZIP); fall back to the
@@ -58,6 +60,17 @@ export function organizationLd(
     ...(contact?.phone ? { telephone: contact.phone } : {}),
     ...(address ? { address } : {}),
     ...(links.length ? { sameAs: links } : {}),
+    ...(rating && rating.count > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: Number(rating.value.toFixed(1)),
+            reviewCount: rating.count,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
   };
 }
 
@@ -75,7 +88,10 @@ export function localBusinessAreaLd(
 ): Json {
   const areaServed: Json[] = [];
   if (anchor) {
-    areaServed.push({ "@type": "City", name: `${anchor.city}, ${anchor.region}` });
+    areaServed.push({
+      "@type": "City",
+      name: `${anchor.city}, ${anchor.region}`,
+    });
   }
   areaServed.push({ "@type": "State", name: area });
   return {
