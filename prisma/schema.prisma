@@ -335,6 +335,10 @@ model Order {
   // as both the cents deducted and the whole-number % for display.
   loyaltyDiscountCents Int       @default(0)
   loyaltyDiscountPct   Int       @default(0)
+  // Promo code applied at checkout (e.g. "WAVE25") + the cents it took off.
+  // Not stacked with the loyalty discount — the larger of the two wins.
+  promoCode            String?
+  promoDiscountCents   Int       @default(0)
   totalCents       Int           @default(0)
   amountPaidCents  Int           @default(0)
   invoiceNote      String?

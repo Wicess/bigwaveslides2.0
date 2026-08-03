@@ -14,6 +14,7 @@ import {
   loyaltyDiscountCents as loyaltyDiscountCentsFor,
   loyaltyPct,
 } from "@/lib/loyalty";
+import { findPromo, promoDiscountCentsFor } from "@/lib/promo";
 import { cartUnitPrice } from "@/server/data/cart";
 import { upsertCustomerFromGuest } from "@/lib/customers";
 import { createCustomerSession } from "@/lib/customer-auth";
@@ -33,6 +34,7 @@ const schema = z.object({
   city: z.string().max(120).optional().or(z.literal("")),
   eventDate: z.string().optional().or(z.literal("")),
   notes: z.string().max(2000).optional().or(z.literal("")),
+  promoCode: z.string().max(40).optional().or(z.literal("")),
   locale: z.string().default("en"),
   website: z.string().optional(), // honeypot
 });
@@ -114,6 +116,7 @@ export async function createOrderRequest(
       const name = mode === "RENT" ? `${baseName} (Rental)` : baseName;
       return {
         productId: item.productId,
+        productSlug: item.product.slug,
         name,
         unitPriceCents: unit,
         quantity: item.quantity,
@@ -153,12 +156,40 @@ export async function createOrderRequest(
       subscribed: Boolean(subscriber),
       appInstalled: jar.get(APP_INSTALLED_COOKIE)?.value === "1",
     };
-    const loyaltyDiscountCents = loyaltyDiscountCentsFor(
+    let loyaltyDiscountCents = loyaltyDiscountCentsFor(
       subtotalCents,
       loyaltyFlags,
     );
-    const loyaltyDiscountPct = loyaltyPct(loyaltyFlags);
-    const totalCents = subtotalCents + deliveryFeeCents - loyaltyDiscountCents;
+    let loyaltyDiscountPct = loyaltyPct(loyaltyFlags);
+
+    // Promo code (entered at checkout). It discounts only its eligible product
+    // line(s) and does NOT stack with the loyalty discount — the larger of the
+    // two wins, so a subscriber using a code is never double-discounted.
+    const promo = findPromo(data.promoCode);
+    let promoDiscountCents = promo
+      ? promoDiscountCentsFor(
+          lines.map((l) => ({
+            productSlug: l.productSlug,
+            mode: l.mode,
+            quantity: l.quantity,
+            lineTotalCents: l.lineTotalCents,
+          })),
+          promo,
+        )
+      : 0;
+    let promoCode: string | null = null;
+    if (promo && promoDiscountCents > loyaltyDiscountCents) {
+      promoCode = promo.code; // promo wins → drop the loyalty discount
+      loyaltyDiscountCents = 0;
+      loyaltyDiscountPct = 0;
+    } else {
+      promoDiscountCents = 0; // loyalty (or no discount) wins
+    }
+    const totalCents =
+      subtotalCents +
+      deliveryFeeCents -
+      loyaltyDiscountCents -
+      promoDiscountCents;
 
     // Resolve the location the order is being placed from (IP-based, via edge
     // headers). Stored on the order so staff see where each request originated.
@@ -206,6 +237,8 @@ export async function createOrderRequest(
         deliveryFeeCents,
         loyaltyDiscountCents,
         loyaltyDiscountPct,
+        promoCode,
+        promoDiscountCents,
         totalCents,
         deliveryAddress:
           data.address || data.city
@@ -261,5 +294,50 @@ export async function createOrderRequest(
     return { ok: true, orderNumber: order.orderNumber };
   } catch {
     return { ok: false, error: "Something went wrong. Please try again." };
+  }
+}
+
+export type ApplyPromoResult =
+  | { ok: true; code: string; label: string; discountCents: number }
+  | { ok: false; error: string };
+
+/** Validate a promo code against the current cart and return the discount it
+    would apply — used for the live "Apply" preview on the checkout form. The
+    real discount is re-computed server-side at order creation. */
+export async function applyPromoToCart(
+  code: string,
+): Promise<ApplyPromoResult> {
+  const promo = findPromo(code);
+  if (!promo)
+    return { ok: false, error: "That code isn't valid or has expired." };
+  try {
+    const cartId = await getCartCookie();
+    if (!cartId) return { ok: false, error: "Your cart is empty." };
+    const cart = await prisma.cart.findFirst({
+      where: { id: cartId, status: "ACTIVE" },
+      include: { items: { include: { product: true } } },
+    });
+    if (!cart || cart.items.length === 0)
+      return { ok: false, error: "Your cart is empty." };
+
+    const lines = cart.items.map((item) => {
+      const mode = item.mode === "RENT" ? ("RENT" as const) : ("BUY" as const);
+      const unit = cartUnitPrice(item.product, mode);
+      return {
+        productSlug: item.product.slug,
+        mode,
+        quantity: item.quantity,
+        lineTotalCents: unit * item.quantity,
+      };
+    });
+    const discountCents = promoDiscountCentsFor(lines, promo);
+    if (discountCents <= 0)
+      return {
+        ok: false,
+        error: "This code doesn't apply to your cart yet.",
+      };
+    return { ok: true, code: promo.code, label: promo.label, discountCents };
+  } catch {
+    return { ok: false, error: "Couldn't check that code. Please try again." };
   }
 }

@@ -357,6 +357,15 @@ export default async function OrderFlowPage({ params }: Props) {
                       accent
                     />
                   ) : null}
+                  {order.promoDiscountCents ? (
+                    <BreakRow
+                      k={t("promoDiscountRow", {
+                        code: order.promoCode ?? "",
+                      })}
+                      v={`−${money(order.promoDiscountCents)}`}
+                      accent
+                    />
+                  ) : null}
                   {order.deliveryFeeCents ? (
                     <BreakRow
                       k={t("transportation")}

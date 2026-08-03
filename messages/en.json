@@ -379,6 +379,12 @@
     "notesPlaceholder": "Anything we should know? Surface type, access, timing…",
     "submit": "Request Quote",
     "submitting": "Preparing your quote…",
+    "promoLabel": "Have a promo code?",
+    "promoPlaceholder": "Enter code",
+    "promoApply": "Apply",
+    "promoApplied": "Code {code} applied 🎉",
+    "promoOn": "Code {code} applied",
+    "promoRemove": "Remove",
     "noPaymentNote": "No payment now — we’ll send a quote and payment details by email."
   },
   "Quote": {
@@ -809,6 +815,7 @@
     "depositNote": "30% of your total acts as a refundable deposit — fully refunded if you cancel at least 7 days before your event. Each rental day is one complete 24-hour period.",
     "agreeFirstHint": "Tick the box above to enable the accept button — it activates the moment you agree.",
     "cryptoApplied": "Discount applied — you save {amount}. New total: {total}.",
+    "promoDiscountRow": "Promo ({code})",
     "loyaltyDiscountRow": "Subscriber discount ({pct}%)",
     "cryptoDiscountRow": "Instant-pay discount",
     "secureBadge": "Secure page",

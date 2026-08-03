@@ -645,6 +645,8 @@ export function orderToPdfInput(
       deliveryCents: o.deliveryFeeCents || undefined,
       loyaltyDiscountCents: o.loyaltyDiscountCents || undefined,
       loyaltyDiscountPct: o.loyaltyDiscountPct || undefined,
+      promoDiscountCents: o.promoDiscountCents || undefined,
+      promoCode: o.promoCode || undefined,
       totalCents: o.totalCents,
     },
     locale: o.locale,

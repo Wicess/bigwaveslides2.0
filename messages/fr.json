@@ -379,6 +379,12 @@
     "notesPlaceholder": "Un détail à signaler ? Type de surface, accès, horaire…",
     "submit": "Demander un devis",
     "submitting": "Préparation de votre devis…",
+    "promoLabel": "Vous avez un code promo ?",
+    "promoPlaceholder": "Entrez le code",
+    "promoApply": "Appliquer",
+    "promoApplied": "Code {code} appliqué 🎉",
+    "promoOn": "Code {code} appliqué",
+    "promoRemove": "Retirer",
     "noPaymentNote": "Aucun paiement maintenant — nous enverrons un devis et les modalités par courriel."
   },
   "Quote": {
@@ -809,6 +815,7 @@
     "depositNote": "30 % de votre total constitue un dépôt remboursable — intégralement remboursé si vous annulez au moins 7 jours avant votre événement. Chaque jour de location est une période complète de 24 heures.",
     "agreeFirstHint": "Cochez la case ci-dessus pour activer le bouton d'acceptation — il s'active dès que vous acceptez.",
     "cryptoApplied": "Remise appliquée — vous économisez {amount}. Nouveau total : {total}.",
+    "promoDiscountRow": "Promo ({code})",
     "loyaltyDiscountRow": "Remise abonné ({pct} %)",
     "cryptoDiscountRow": "Remise paiement instantané",
     "secureBadge": "Page sécurisée",

@@ -326,6 +326,9 @@ export type QuotePdfInput = {
     /** Loyalty discount (subscriber / +app) deducted from the subtotal. */
     loyaltyDiscountCents?: number;
     loyaltyDiscountPct?: number;
+    /** Promo code discount (entered at checkout). */
+    promoDiscountCents?: number;
+    promoCode?: string;
     totalCents: number;
   };
   locale?: string;
@@ -507,6 +510,12 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
                 {t.loyaltyDiscountPct ? ` (${t.loyaltyDiscountPct}%)` : ""}
               </Text>
               <Text>−{money(t.loyaltyDiscountCents)}</Text>
+            </View>
+          ) : null}
+          {t.promoDiscountCents ? (
+            <View style={s.totalRow}>
+              <Text>Promo{t.promoCode ? ` (${t.promoCode})` : ""}</Text>
+              <Text>−{money(t.promoDiscountCents)}</Text>
             </View>
           ) : null}
           {t.deliveryCents ? (
