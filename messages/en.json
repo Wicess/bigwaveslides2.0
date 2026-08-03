@@ -823,6 +823,20 @@
     "securityCodeNote": "This code must match the one in your payment email. If it doesn't, do not pay — contact us right away.",
     "talkTitle": "Contact us for anything",
     "talkDesc": "We're happy to confirm your details or answer any question before you pay.",
-    "whatsappLabel": "WhatsApp"
+    "whatsappLabel": "WhatsApp",
+    "trustReviews": "from {count, plural, one {# review} other {# reviews}}",
+    "trustEvents": "5,000+ events delivered",
+    "trustInsuredLicensed": "Fully insured & sanitized",
+    "protectTitle": "Your booking is protected",
+    "protect1": "Only your deposit is due now — the balance isn't due until 48 hours before your event.",
+    "protect2": "Your deposit is fully refundable if you cancel at least 7 days before your event.",
+    "protect3": "No hidden fees — you pay exactly what's on your quote, nothing more.",
+    "protect4": "We confirm your payment quickly and email you a receipt.",
+    "officialTitle": "You're paying the real Big Wave Slides",
+    "official1": "These are our official business payment details.",
+    "official2": "Check the security code above matches the one in your email before you send anything.",
+    "official3": "We'll never ask you to send to a different handle or pay a different amount.",
+    "reviewsHeading": "Trusted by families & event pros",
+    "businessNote": "A real, registered US business — reach a person any time."
   }
 }

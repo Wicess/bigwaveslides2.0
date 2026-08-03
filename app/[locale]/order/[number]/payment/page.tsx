@@ -16,6 +16,7 @@ import { Link } from "@/i18n/navigation";
 import { InvoicePayment } from "@/components/order/invoice-payment";
 import { PendingOrderFlag } from "@/components/order/pending-order-flag";
 import { ClaimAccount } from "@/components/order/claim-account";
+import { PaymentTrust } from "@/components/order/payment-trust";
 
 const LOGO =
   "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/brand/logo-email.png";
@@ -71,7 +72,10 @@ export default async function PaymentPage({ params }: Props) {
   const settings = await getSettings().catch(() => ({}) as never);
   const phone = settings?.contact?.phone ?? FALLBACK_PHONE;
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
-  const waDigits = (settings?.contact?.whatsapp ?? phone).replace(/[^0-9]/g, "");
+  const waDigits = (settings?.contact?.whatsapp ?? phone).replace(
+    /[^0-9]/g,
+    "",
+  );
   const email = settings?.contact?.email ?? CONTACT_EMAIL;
 
   const awaiting = order.paymentDetailsState === "AWAITING_DETAILS";
@@ -97,7 +101,7 @@ export default async function PaymentPage({ params }: Props) {
 
         <article className="border-border overflow-hidden rounded-3xl border bg-white shadow-sm">
           {/* Premium secure-checkout header */}
-          <header className="[background:var(--gradient-deep)] px-6 py-6 text-white sm:px-8">
+          <header className="px-6 py-6 text-white [background:var(--gradient-deep)] sm:px-8">
             <div className="flex items-center justify-between gap-4">
               <Image
                 src={LOGO}
@@ -152,6 +156,10 @@ export default async function PaymentPage({ params }: Props) {
           </div>
         </article>
 
+        {/* Trust layer — real reviews, protection & official-account proof, so
+            paying a manual rail never feels like a leap of faith. */}
+        <PaymentTrust locale={locale} />
+
         {/* Talk to a human before you pay — kills last-second doubt. */}
         <div className="border-border mt-5 rounded-3xl border bg-white p-5 text-center shadow-sm sm:p-6">
           <p className="text-foreground font-semibold">{t("talkTitle")}</p>
@@ -170,7 +178,7 @@ export default async function PaymentPage({ params }: Props) {
                 href={`https://wa.me/${waDigits}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-white transition-transform hover:scale-[1.02] [background:linear-gradient(135deg,#3ad07f_0%,#22b06a_45%,#109e5e_100%)]"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-white transition-transform [background:linear-gradient(135deg,#3ad07f_0%,#22b06a_45%,#109e5e_100%)] hover:scale-[1.02]"
               >
                 <MessageCircle className="size-4" /> {t("whatsappLabel")}
               </a>

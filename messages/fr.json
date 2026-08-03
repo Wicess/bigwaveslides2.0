@@ -823,6 +823,20 @@
     "securityCodeNote": "Ce code doit correspondre à celui de votre e-mail de paiement. S'il diffère, ne payez pas — contactez-nous immédiatement.",
     "talkTitle": "Contactez-nous pour toute question",
     "talkDesc": "Nous confirmons volontiers vos coordonnées ou répondons à vos questions avant votre paiement.",
-    "whatsappLabel": "WhatsApp"
+    "whatsappLabel": "WhatsApp",
+    "trustReviews": "sur {count, plural, one {# avis} other {# avis}}",
+    "trustEvents": "Plus de 5 000 événements livrés",
+    "trustInsuredLicensed": "Entièrement assuré et désinfecté",
+    "protectTitle": "Votre réservation est protégée",
+    "protect1": "Seul votre acompte est dû maintenant — le solde n'est exigible que 48 heures avant votre événement.",
+    "protect2": "Votre acompte est entièrement remboursable si vous annulez au moins 7 jours avant votre événement.",
+    "protect3": "Aucuns frais cachés — vous payez exactement le montant de votre devis, rien de plus.",
+    "protect4": "Nous confirmons votre paiement rapidement et vous envoyons un reçu par e-mail.",
+    "officialTitle": "Vous payez le vrai Big Wave Slides",
+    "official1": "Ce sont nos coordonnées de paiement professionnelles officielles.",
+    "official2": "Vérifiez que le code de sécurité ci-dessus correspond à celui de votre e-mail avant d'envoyer quoi que ce soit.",
+    "official3": "Nous ne vous demanderons jamais d'envoyer à un autre identifiant ni de payer un montant différent.",
+    "reviewsHeading": "La confiance des familles et des pros de l'événementiel",
+    "businessNote": "Une entreprise américaine réelle et enregistrée — joignable à tout moment."
   }
 }
