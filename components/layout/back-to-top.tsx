@@ -35,7 +35,7 @@ export function BackToTop({ label }: { label: string }) {
       aria-hidden={!show}
       tabIndex={show ? 0 : -1}
       className={cn(
-        "bg-accent hover:bg-accent-light fixed right-6 bottom-6 z-50 grid size-11 place-items-center rounded-full text-white shadow-[var(--shadow-soft)] transition-all duration-300 ease-out",
+        "bg-accent hover:bg-accent-light fixed right-6 bottom-[calc(1.5rem+var(--explore-bar-h,0px))] z-50 grid size-11 place-items-center rounded-full text-white shadow-[var(--shadow-soft)] transition-all duration-300 ease-out sm:bottom-6",
         show
           ? "translate-y-0 scale-100 opacity-100"
           : "pointer-events-none translate-y-2.5 scale-90 opacity-0",

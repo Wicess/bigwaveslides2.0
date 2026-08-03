@@ -29,6 +29,7 @@ import { rentalFaqs } from "@/lib/product-faq";
 import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Stars } from "@/components/ui/stars";
 import { Link } from "@/i18n/navigation";
@@ -194,13 +195,14 @@ export default async function RentalDetailPage({ params }: Props) {
       <JsonLd data={faqLd(faqs)} />
       <Section spacing="compact" className="pt-6 sm:pt-10">
         <Container>
-          <nav className="text-muted-foreground mb-6 text-sm">
-            <Link href="/rent" className="hover:text-primary">
-              {t("breadcrumbRent")}
-            </Link>
-            <span className="px-2">/</span>
-            <span className="text-foreground">{name}</span>
-          </nav>
+          <Breadcrumbs
+            className="mb-6"
+            items={[
+              { label: t("breadcrumbHome"), href: "/" },
+              { label: t("breadcrumbRent"), href: "/rent" },
+              { label: name },
+            ]}
+          />
 
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
             {/* A — Gallery */}

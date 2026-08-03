@@ -30,6 +30,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { BackToTop } from "@/components/layout/back-to-top";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
+import { ExploreBar } from "@/components/layout/explore-bar";
 import { SubscribePopup } from "@/components/layout/subscribe-popup";
 import { Analytics } from "@/components/analytics";
 import { AnalyticsTracker } from "@/components/analytics/analytics-tracker";
@@ -172,6 +173,7 @@ export default async function LocaleLayout({
             label={t("whatsapp")}
           />
           <BackToTop label={t("backToTop")} />
+          <ExploreBar />
           <SubscribePopup locale={locale} />
           <Toaster />
           <AnalyticsTracker />

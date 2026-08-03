@@ -53,7 +53,11 @@
     "faq": "FAQ",
     "insured": "Fully insured",
     "clean": "Cleaned & inspected",
-    "onTime": "On-time delivery"
+    "onTime": "On-time delivery",
+    "exploreCity": "Your city",
+    "exploreSlides": "Slides",
+    "exploreQuote": "Free quote",
+    "exploreNav": "Explore the site"
   },
   "Product": {
     "perDay": "/day",
@@ -415,6 +419,7 @@
   },
   "RentalDetail": {
     "breadcrumbRent": "Rentals",
+    "breadcrumbHome": "Home",
     "about": "About this slide",
     "features": "Features",
     "capacity": "Capacity",
@@ -606,7 +611,10 @@
     "furtherReadingDesc": "Trusted, independent resources on water play and event safety.",
     "popularRentalsTitle": "Popular water slides",
     "serviceAreasTitle": "Water slide rentals near you",
-    "serviceAreasDesc": "We deliver across the USA — find your city."
+    "serviceAreasDesc": "We deliver across the USA — find your city.",
+    "keepExploring": "Keep exploring",
+    "readNext": "Read next",
+    "breadcrumbHome": "Home"
   },
   "Testimonials": {
     "eyebrow": "Testimonials",

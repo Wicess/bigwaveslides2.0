@@ -53,7 +53,11 @@
     "faq": "FAQ",
     "insured": "Entièrement assuré",
     "clean": "Nettoyé et inspecté",
-    "onTime": "Livraison à l'heure"
+    "onTime": "Livraison à l'heure",
+    "exploreCity": "Votre ville",
+    "exploreSlides": "Toboggans",
+    "exploreQuote": "Devis gratuit",
+    "exploreNav": "Explorer le site"
   },
   "Product": {
     "perDay": "/jour",
@@ -415,6 +419,7 @@
   },
   "RentalDetail": {
     "breadcrumbRent": "Location",
+    "breadcrumbHome": "Accueil",
     "about": "À propos de ce toboggan",
     "features": "Caractéristiques",
     "capacity": "Capacité",
@@ -606,7 +611,10 @@
     "furtherReadingDesc": "Des ressources fiables et indépendantes sur les jeux d'eau et la sécurité des événements.",
     "popularRentalsTitle": "Toboggans populaires",
     "serviceAreasTitle": "Location de toboggans près de chez vous",
-    "serviceAreasDesc": "Nous livrons partout aux États-Unis — trouvez votre ville."
+    "serviceAreasDesc": "Nous livrons partout aux États-Unis — trouvez votre ville.",
+    "keepExploring": "Continuez l'exploration",
+    "readNext": "À lire ensuite",
+    "breadcrumbHome": "Accueil"
   },
   "Testimonials": {
     "eyebrow": "Témoignages",

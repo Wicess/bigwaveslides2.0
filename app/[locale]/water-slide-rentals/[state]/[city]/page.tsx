@@ -33,6 +33,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { PhotoHero } from "@/components/ui/photo-hero";
 import { ProductCard } from "@/components/shop/product-card";
@@ -181,6 +182,15 @@ export default async function CityRentalPage({ params }: Props) {
 
       <Section spacing="compact" className="pt-10">
         <Container className="max-w-[84rem]">
+          <Breadcrumbs
+            className="mb-8"
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Water slide rentals", href: "/water-slide-rentals" },
+              { label: st.name, href: `/water-slide-rentals/${st.slug}` },
+              { label: name },
+            ]}
+          />
           {/* Two-column spread on large screens: the written copy on the
               left, the local-area + occasion chips on the right — so the
               write-up uses the full width instead of pooling in the center. */}

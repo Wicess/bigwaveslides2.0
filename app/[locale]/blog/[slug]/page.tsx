@@ -2,7 +2,16 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Clock, ArrowLeft, ArrowUpRight } from "lucide-react";
+import {
+  Clock,
+  ArrowLeft,
+  ArrowUpRight,
+  ArrowRight,
+  MapPin,
+  Waves,
+  BookOpen,
+  Sparkles,
+} from "lucide-react";
 import { routing } from "@/i18n/routing";
 import {
   getPostBySlug,
@@ -17,10 +26,10 @@ import { getExternalResources } from "@/lib/blog-resources";
 import { extractHeadings } from "@/lib/toc";
 import { serviceAreaLinks, hashSeed } from "@/lib/internal-links";
 import { getLandingRentals } from "@/server/data/rentals";
-import { MapPin } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PostCard } from "@/components/blog/post-card";
@@ -68,6 +77,7 @@ export default async function PostDetailPage({ params }: Props) {
   if (!post) notFound();
 
   const t = await getTranslations("Blog");
+  const tn = await getTranslations("Nav");
   const title = getLocalized(post.title, locale);
   const excerpt = getLocalized(post.excerpt, locale);
   const content = getLocalized(post.content, locale) || excerpt;
@@ -120,64 +130,6 @@ export default async function PostDetailPage({ params }: Props) {
       </div>
     </div>
   );
-
-  // Featured rentals → product pages (also complements the inline links the
-  // articles already carry, so every post reliably links the catalog).
-  const rentalsCard =
-    featured.length > 0 ? (
-      <div className="border-border bg-background rounded-2xl border p-6">
-        <h2 className="font-display text-base font-semibold">
-          {t("popularRentalsTitle")}
-        </h2>
-        <ul className="divide-border mt-3 divide-y">
-          {featured.map((p) => (
-            <li key={p.slug}>
-              <Link
-                href={`/rent/${p.slug}`}
-                className="group hover:text-primary flex items-center justify-between gap-3 py-2.5 text-sm font-semibold transition-colors"
-              >
-                <span className="min-w-0 truncate">
-                  {getLocalized(p.name, locale)}
-                </span>
-                <ArrowUpRight className="text-muted-foreground group-hover:text-primary size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <Link
-          href="/rent"
-          className="text-primary mt-3 inline-flex items-center gap-1 text-sm font-semibold hover:underline"
-        >
-          {t("ctaBrowse")} <ArrowUpRight className="size-3.5" />
-        </Link>
-      </div>
-    ) : null;
-
-  // Service areas → the location pages that already rank, so this post passes
-  // equity to them (and they, in turn, link back to guides like this one).
-  const areasCard =
-    areas.length > 0 ? (
-      <div className="border-border bg-background rounded-2xl border p-6">
-        <h2 className="font-display text-base font-semibold">
-          {t("serviceAreasTitle")}
-        </h2>
-        <p className="text-muted-foreground mt-1 text-xs">
-          {t("serviceAreasDesc")}
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {areas.map((a) => (
-            <Link
-              key={a.href}
-              href={a.href}
-              className="border-border bg-muted/40 hover:border-primary hover:text-primary inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
-            >
-              <MapPin className="text-primary size-3.5" />
-              {a.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-    ) : null;
 
   const resourcesCard =
     resources.length > 0 ? (
@@ -258,6 +210,15 @@ export default async function PostDetailPage({ params }: Props) {
         {/* ── Body: TOC rail · prose · sticky CTA rail ── */}
         <Section spacing="default">
           <Container className="max-w-[84rem]">
+            <Breadcrumbs
+              className="mb-6"
+              items={[
+                { label: t("breadcrumbHome"), href: "/" },
+                { label: tn("blog"), href: "/blog" },
+                { label: title },
+              ]}
+            />
+
             {/* Byline — refined, sits above the columns. */}
             <div className="border-border flex flex-wrap items-center gap-x-4 gap-y-3 border-b pb-6">
               {post.author?.avatar ? (
@@ -346,21 +307,19 @@ export default async function PostDetailPage({ params }: Props) {
                   </div>
                 ) : null}
 
-                {/* Mobile/tablet: CTA + cross-links stacked under the article. */}
+                {/* Mobile/tablet: quote CTA + further reading under the
+                    article. The main onward funnel is the full-width "Keep
+                    exploring" band below — seen the moment the reader finishes. */}
                 <div className="mt-10 space-y-6 lg:hidden">
                   {ctaCard}
-                  {rentalsCard}
-                  {areasCard}
                   {resourcesCard}
                 </div>
               </div>
 
-              {/* Right rail: sticky CTA + cross-links (desktop) */}
+              {/* Right rail: sticky CTA + further reading (desktop) */}
               <aside className="hidden lg:block">
                 <div className="sticky top-28 space-y-6">
                   {ctaCard}
-                  {rentalsCard}
-                  {areasCard}
                   {resourcesCard}
                 </div>
               </aside>
@@ -368,6 +327,102 @@ export default async function PostDetailPage({ params }: Props) {
           </Container>
         </Section>
       </article>
+
+      {/* Keep exploring — the primary onward funnel, full-width so it's the
+          first thing a reader (especially on mobile) meets when the article
+          ends. Directly targets the high blog bounce. */}
+      <Section spacing="compact" className="border-border bg-muted/30 border-t">
+        <Container className="max-w-[84rem]">
+          <SectionHeader title={t("keepExploring")} />
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {/* Browse the catalog */}
+            <Link
+              href="/rent"
+              className="group border-border bg-background hover:border-primary flex flex-col rounded-2xl border p-6 transition-colors"
+            >
+              <span className="bg-primary/10 text-primary grid size-11 place-items-center rounded-xl">
+                <Waves className="size-5" />
+              </span>
+              <h3 className="font-display mt-4 text-lg font-bold">
+                {t("popularRentalsTitle")}
+              </h3>
+              <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                {featured.length > 0
+                  ? featured
+                      .slice(0, 3)
+                      .map((p) => getLocalized(p.name, locale))
+                      .join(" · ")
+                  : t("ctaText")}
+              </p>
+              <span className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-semibold">
+                {t("ctaBrowse")}
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+
+            {/* Rentals near you */}
+            <div className="border-border bg-background flex flex-col rounded-2xl border p-6">
+              <span className="bg-primary/10 text-primary grid size-11 place-items-center rounded-xl">
+                <MapPin className="size-5" />
+              </span>
+              <h3 className="font-display mt-4 text-lg font-bold">
+                {t("serviceAreasTitle")}
+              </h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {areas.slice(0, 6).map((a) => (
+                  <Link
+                    key={a.href}
+                    href={a.href}
+                    className="border-border bg-muted/40 hover:border-primary hover:text-primary rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
+                  >
+                    {a.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Read next / free quote */}
+            {related[0] ? (
+              <Link
+                href={`/blog/${related[0].slug}`}
+                className="group border-border bg-background hover:border-primary flex flex-col rounded-2xl border p-6 transition-colors"
+              >
+                <span className="bg-primary/10 text-primary grid size-11 place-items-center rounded-xl">
+                  <BookOpen className="size-5" />
+                </span>
+                <p className="text-muted-foreground mt-4 text-[11px] font-bold tracking-[0.14em] uppercase">
+                  {t("readNext")}
+                </p>
+                <h3 className="font-display mt-1 text-lg leading-snug font-bold">
+                  {getLocalized(related[0].title, locale)}
+                </h3>
+                <span className="text-primary mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold">
+                  {t("ctaBrowse")}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            ) : (
+              <Link
+                href="/contact"
+                className="group flex flex-col justify-between rounded-2xl p-6 text-white [background:var(--gradient-wave)]"
+              >
+                <span className="grid size-11 place-items-center rounded-xl bg-white/15">
+                  <Sparkles className="size-5" />
+                </span>
+                <div className="mt-4">
+                  <h3 className="font-display text-lg font-bold">
+                    {t("ctaTitle")}
+                  </h3>
+                  <span className="mt-2 inline-flex items-center gap-1 text-sm font-semibold">
+                    {t("ctaQuote")}
+                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </div>
+              </Link>
+            )}
+          </div>
+        </Container>
+      </Section>
 
       {related.length > 0 ? (
         <Section className="border-border bg-muted/40 border-t">
