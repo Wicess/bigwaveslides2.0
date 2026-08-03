@@ -9,7 +9,7 @@ export type PaymentPlan = "HALF" | "FULL";
  * One source of truth — badges, rows, plan math and the PDF all read from here.
  */
 export const METHOD_DISCOUNT_RATES: Record<string, number> = {
-  crypto: 0.115,
+  crypto: 0.075,
   chime: 0.03,
 };
 

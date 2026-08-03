@@ -2,13 +2,18 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { getCartCookie, clearCartCookie } from "@/lib/cart-session";
 import { orderNumber } from "@/lib/ref-number";
 import { notifyOrderRequest } from "@/lib/notifications";
 import { getSettings } from "@/server/data/settings";
 import { TRANSPORT_CENTS } from "@/lib/pricing";
+import {
+  APP_INSTALLED_COOKIE,
+  loyaltyDiscountCents as loyaltyDiscountCentsFor,
+  loyaltyPct,
+} from "@/lib/loyalty";
 import { cartUnitPrice } from "@/server/data/cart";
 import { upsertCustomerFromGuest } from "@/lib/customers";
 import { createCustomerSession } from "@/lib/customer-auth";
@@ -130,7 +135,30 @@ export async function createOrderRequest(
     const settings = await getSettings().catch(() => ({}) as never);
     const transportOn = settings?.fees?.transportEnabled !== false; // default ON
     const deliveryFeeCents = transportOn ? TRANSPORT_CENTS : 0;
-    const totalCents = subtotalCents + deliveryFeeCents;
+
+    // Loyalty discount on the product subtotal only: 15% for newsletter
+    // subscribers, +5% ("for downloading the app") when this browser also has
+    // the installed app. Stacks with the pay-method discount applied later.
+    const jar = await cookies();
+    const subscriber = await prisma.newsletterSubscriber
+      .findFirst({
+        where: {
+          email: { equals: data.email, mode: "insensitive" },
+          status: "SUBSCRIBED",
+        },
+        select: { id: true },
+      })
+      .catch(() => null);
+    const loyaltyFlags = {
+      subscribed: Boolean(subscriber),
+      appInstalled: jar.get(APP_INSTALLED_COOKIE)?.value === "1",
+    };
+    const loyaltyDiscountCents = loyaltyDiscountCentsFor(
+      subtotalCents,
+      loyaltyFlags,
+    );
+    const loyaltyDiscountPct = loyaltyPct(loyaltyFlags);
+    const totalCents = subtotalCents + deliveryFeeCents - loyaltyDiscountCents;
 
     // Resolve the location the order is being placed from (IP-based, via edge
     // headers). Stored on the order so staff see where each request originated.
@@ -176,6 +204,8 @@ export async function createOrderRequest(
         quoteValidUntil: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
         subtotalCents,
         deliveryFeeCents,
+        loyaltyDiscountCents,
+        loyaltyDiscountPct,
         totalCents,
         deliveryAddress:
           data.address || data.city

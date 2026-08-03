@@ -14,6 +14,7 @@ import {
   visitorFingerprint,
   sessionFingerprint,
 } from "@/lib/analytics/fingerprint";
+import { APP_INSTALLED_COOKIE } from "@/lib/loyalty";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -38,6 +39,7 @@ const ALLOWED: ReadonlySet<AnalyticsEventType> = new Set([
   "QUOTE_REQUEST",
   "CONTACT",
   "NEWSLETTER_SUBSCRIBE",
+  "APP_INSTALL",
 ]);
 
 export async function POST(req: NextRequest) {
@@ -76,6 +78,28 @@ export async function POST(req: NextRequest) {
     const userAgent = req.headers.get("user-agent");
     const ua = parseUserAgent(userAgent);
 
+    // App installs: stamp the client's IP into the event (for the admin
+    // location monitor) and set the readable cookie that unlocks the +5% app
+    // discount at checkout, on this browser, for a year.
+    const clientMeta =
+      body.meta && typeof body.meta === "object"
+        ? (body.meta as Record<string, unknown>)
+        : null;
+    let meta = clientMeta;
+    if (type === "APP_INSTALL") {
+      meta = { ...(clientMeta ?? {}), ip: ipFromHeaders(req.headers) };
+      // Readable (not httpOnly) so the client can tell it's already recorded and
+      // skip duplicate posts; the server still reads it at checkout. It's only a
+      // loyalty flag — no security value.
+      res.cookies.set(APP_INSTALLED_COOKIE, "1", {
+        maxAge: ONE_YEAR,
+        httpOnly: false,
+        sameSite: "lax",
+        secure,
+        path: "/",
+      });
+    }
+
     // Identity: the visitor cookie is authoritative for real browsers. When it's
     // absent (bots, crawlers, privacy/cookie-cleared clients) fall back to a
     // stable fingerprint of user-agent + geo so identical/returning clients
@@ -110,10 +134,7 @@ export async function POST(req: NextRequest) {
       title: typeof body.title === "string" ? body.title : null,
       referrer: typeof body.referrer === "string" ? body.referrer : null,
       durationMs: typeof body.durationMs === "number" ? body.durationMs : null,
-      meta:
-        body.meta && typeof body.meta === "object"
-          ? (body.meta as Record<string, unknown>)
-          : null,
+      meta,
       geo,
       ua,
       userAgent,

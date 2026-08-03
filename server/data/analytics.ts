@@ -278,6 +278,57 @@ export async function getVisitorsList(
 }
 
 /** One visitor with their full session-by-session movement timeline. */
+/** App (PWA) installs with the installer's IP-derived location, for the admin
+    monitor. Newest first. */
+export async function getAppInstalls(limit = 200) {
+  return withRetry(async () => {
+    const [rows, total] = await Promise.all([
+      prisma.analyticsEvent.findMany({
+        where: { type: "APP_INSTALL" },
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        select: {
+          id: true,
+          createdAt: true,
+          meta: true,
+          visitor: {
+            select: {
+              id: true,
+              city: true,
+              region: true,
+              country: true,
+              countryCode: true,
+              device: true,
+              browser: true,
+              os: true,
+            },
+          },
+        },
+      }),
+      prisma.analyticsEvent.count({ where: { type: "APP_INSTALL" } }),
+    ]);
+    const installs = rows.map((r) => {
+      const meta = (r.meta ?? {}) as Record<string, unknown>;
+      return {
+        id: r.id,
+        createdAt: r.createdAt,
+        ip: typeof meta.ip === "string" ? meta.ip : null,
+        reason: typeof meta.reason === "string" ? meta.reason : null,
+        platform: typeof meta.platform === "string" ? meta.platform : null,
+        visitorId: r.visitor?.id ?? null,
+        city: r.visitor?.city ?? null,
+        region: r.visitor?.region ?? null,
+        country: r.visitor?.country ?? null,
+        countryCode: r.visitor?.countryCode ?? null,
+        device: r.visitor?.device ?? null,
+        browser: r.visitor?.browser ?? null,
+        os: r.visitor?.os ?? null,
+      };
+    });
+    return { installs, total };
+  }).catch(() => ({ installs: [], total: 0 }));
+}
+
 export async function getVisitorDetail(id: string) {
   return withRetry(async () => {
     const visitor = await prisma.visitor.findUnique({

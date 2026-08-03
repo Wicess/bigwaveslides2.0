@@ -42,6 +42,18 @@ export default async function AccountPage({ params }: Props) {
   setRequestLocale(locale);
   const money = (c: number) => formatPrice(c, locale);
   const op = (n: string) => `/${locale}/order/${n}`;
+  // Resume exactly where the client left off: an accepted quote with a chosen
+  // plan drops them straight onto the secure payment page; otherwise the order
+  // page (accept the quote / pick a plan). Unpaid only — paid orders just view.
+  const resume = (o: {
+    orderNumber: string;
+    stage: string;
+    paymentPlan: string | null;
+    paymentDetailsState: string;
+  }) =>
+    o.stage !== "QUOTE" && o.paymentPlan && o.paymentDetailsState !== "PAID"
+      ? `/${locale}/order/${o.orderNumber}/payment`
+      : op(o.orderNumber);
 
   const customer = await getCurrentCustomer();
 
@@ -144,7 +156,7 @@ export default async function AccountPage({ params }: Props) {
             {pending.map((o) => (
               <Link
                 key={o.id}
-                href={op(o.orderNumber)}
+                href={resume(o)}
                 className="border-primary/30 bg-primary/5 hover:border-primary group flex items-center justify-between gap-4 rounded-2xl border p-4 transition-colors"
               >
                 <span className="min-w-0">

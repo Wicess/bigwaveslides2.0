@@ -801,6 +801,7 @@
     "depositNote": "30 % de votre total constitue un dépôt remboursable — intégralement remboursé si vous annulez au moins 7 jours avant votre événement. Chaque jour de location est une période complète de 24 heures.",
     "agreeFirstHint": "Cochez la case ci-dessus pour activer le bouton d'acceptation — il s'active dès que vous acceptez.",
     "cryptoApplied": "Remise appliquée — vous économisez {amount}. Nouveau total : {total}.",
+    "loyaltyDiscountRow": "Remise abonné ({pct} %)",
     "cryptoDiscountRow": "Remise paiement instantané",
     "secureBadge": "Page sécurisée",
     "viewBreakdown": "Voir le détail des prix",

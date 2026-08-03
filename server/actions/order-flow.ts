@@ -142,7 +142,7 @@ export async function choosePaymentPlan(
     if (order.paymentDetailsState === "PAID")
       return { ok: false, error: "This invoice is already paid." };
 
-    // Crypto earns 11.5% off the whole invoice; every amount downstream
+    // Crypto earns 7.5% off the whole invoice; every amount downstream
     // (details, email, mark-paid) works from the discounted total.
     const payableCents = effectiveTotalCents(order.totalCents, method);
     const discountCents = cryptoDiscountCents(order.totalCents, method);

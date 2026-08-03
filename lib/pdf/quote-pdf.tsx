@@ -323,6 +323,9 @@ export type QuotePdfInput = {
     deliveryCents?: number;
     pickupCents?: number;
     depositCents?: number;
+    /** Loyalty discount (subscriber / +app) deducted from the subtotal. */
+    loyaltyDiscountCents?: number;
+    loyaltyDiscountPct?: number;
     totalCents: number;
   };
   locale?: string;
@@ -497,6 +500,15 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
             <Text>Subtotal</Text>
             <Text>{money(t.subtotalCents)}</Text>
           </View>
+          {t.loyaltyDiscountCents ? (
+            <View style={s.totalRow}>
+              <Text>
+                Subscriber discount
+                {t.loyaltyDiscountPct ? ` (${t.loyaltyDiscountPct}%)` : ""}
+              </Text>
+              <Text>−{money(t.loyaltyDiscountCents)}</Text>
+            </View>
+          ) : null}
           {t.deliveryCents ? (
             <View style={s.totalRow}>
               <Text>{TRANSPORT_LABEL}</Text>

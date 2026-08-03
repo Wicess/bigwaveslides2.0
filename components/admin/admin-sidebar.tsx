@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   BarChart3,
+  Download,
   Package,
   Boxes,
   ShoppingCart,
@@ -67,9 +68,7 @@ const GROUPS = [
   },
   {
     label: "Content",
-    items: [
-      { href: "/admin/blog", label: "Blog", icon: Newspaper },
-    ],
+    items: [{ href: "/admin/blog", label: "Blog", icon: Newspaper }],
   },
   {
     label: "Insights",
@@ -79,6 +78,11 @@ const GROUPS = [
         label: "Analytics",
         icon: BarChart3,
         exact: true,
+      },
+      {
+        href: "/admin/analytics/app-installs",
+        label: "App installs",
+        icon: Download,
       },
     ],
   },

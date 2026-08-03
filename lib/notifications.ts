@@ -573,6 +573,7 @@ import {
   amountDueCents,
   balanceCents,
   cryptoDiscountCents,
+  discountLabelFor,
   effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
@@ -642,6 +643,8 @@ export function orderToPdfInput(
     totals: {
       subtotalCents: o.subtotalCents,
       deliveryCents: o.deliveryFeeCents || undefined,
+      loyaltyDiscountCents: o.loyaltyDiscountCents || undefined,
+      loyaltyDiscountPct: o.loyaltyDiscountPct || undefined,
       totalCents: o.totalCents,
     },
     locale: o.locale,
@@ -745,7 +748,7 @@ export async function sendPaymentDetailsEmail(
         ...(discount
           ? [
               {
-                label: "Crypto discount (11.5%)",
+                label: `Instant-pay discount (${discountLabelFor(o.paymentMethodKey) ?? ""})`,
                 value: `−${formatPrice(discount, o.locale)}`,
               },
             ]

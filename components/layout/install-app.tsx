@@ -20,6 +20,8 @@ import * as React from "react";
 import Image from "next/image";
 import { useLocale } from "next-intl";
 import { Download, Share, SquarePlus, X, MoreVertical } from "lucide-react";
+import { trackEvent } from "@/lib/analytics/client";
+import { APP_INSTALLED_COOKIE } from "@/lib/loyalty";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -95,6 +97,7 @@ export function InstallApp({
   const [isIOS, setIsIOS] = React.useState(false);
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const deferredRef = React.useRef<BeforeInstallPromptEvent | null>(null);
+  const recordedRef = React.useRef(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -112,13 +115,38 @@ export function InstallApp({
         return false;
       }
     };
-    const compute = () =>
-      setStandalone(
+    // Record the install once (for the +5% app discount + the admin monitor).
+    // Guarded by a per-mount ref AND the server cookie, so it fires once per
+    // browser; it re-arms only after the cookie expires (a year).
+    const recordInstall = (reason: string) => {
+      if (
+        recordedRef.current ||
+        document.cookie.includes(`${APP_INSTALLED_COOKIE}=1`)
+      )
+        return;
+      recordedRef.current = true;
+      trackEvent({
+        type: "APP_INSTALL",
+        path: window.location.pathname,
+        meta: {
+          reason,
+          standalone:
+            mq.matches ||
+            (navigator as unknown as { standalone?: boolean }).standalone ===
+              true,
+          platform: navigator.platform,
+        },
+      });
+    };
+    const compute = () => {
+      const inApp =
         mq.matches ||
-          (navigator as unknown as { standalone?: boolean }).standalone ===
-            true ||
-          isInstalledFlag(),
-      );
+        (navigator as unknown as { standalone?: boolean }).standalone ===
+          true ||
+        isInstalledFlag();
+      setStandalone(inApp);
+      if (inApp) recordInstall("standalone");
+    };
     compute();
     mq.addEventListener?.("change", compute);
 
@@ -138,6 +166,7 @@ export function InstallApp({
             /* ignore */
           }
           setStandalone(true);
+          recordInstall("related-apps");
         }
       })
       .catch(() => {});
@@ -163,6 +192,7 @@ export function InstallApp({
       deferredRef.current = null;
       setStandalone(true);
       setSheetOpen(false);
+      recordInstall("appinstalled");
     };
     window.addEventListener("appinstalled", onInstalled);
 

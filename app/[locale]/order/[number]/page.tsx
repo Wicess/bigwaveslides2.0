@@ -348,6 +348,15 @@ export default async function OrderFlowPage({ params }: Props) {
               <Disclosure summary={t("viewBreakdown")}>
                 <dl className="space-y-1.5 text-sm">
                   <BreakRow k={t("subtotal")} v={money(order.subtotalCents)} />
+                  {order.loyaltyDiscountCents ? (
+                    <BreakRow
+                      k={t("loyaltyDiscountRow", {
+                        pct: order.loyaltyDiscountPct,
+                      })}
+                      v={`−${money(order.loyaltyDiscountCents)}`}
+                      accent
+                    />
+                  ) : null}
                   {order.deliveryFeeCents ? (
                     <BreakRow
                       k={t("transportation")}

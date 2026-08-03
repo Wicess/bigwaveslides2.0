@@ -12,7 +12,8 @@ export type ClientEventType =
   | "BOOKING_REQUEST"
   | "QUOTE_REQUEST"
   | "CONTACT"
-  | "NEWSLETTER_SUBSCRIBE";
+  | "NEWSLETTER_SUBSCRIBE"
+  | "APP_INSTALL";
 
 export type ClientEventPayload = {
   type: ClientEventType;
@@ -26,12 +27,18 @@ export type ClientEventPayload = {
 const ENDPOINT = "/api/track";
 
 /** Fire-and-forget analytics event. Uses sendBeacon on unload, fetch otherwise. */
-export function trackEvent(payload: ClientEventPayload, useBeacon = false): void {
+export function trackEvent(
+  payload: ClientEventPayload,
+  useBeacon = false,
+): void {
   if (typeof window === "undefined") return;
   try {
     const body = JSON.stringify(payload);
     if (useBeacon && typeof navigator !== "undefined" && navigator.sendBeacon) {
-      navigator.sendBeacon(ENDPOINT, new Blob([body], { type: "application/json" }));
+      navigator.sendBeacon(
+        ENDPOINT,
+        new Blob([body], { type: "application/json" }),
+      );
       return;
     }
     void fetch(ENDPOINT, {
