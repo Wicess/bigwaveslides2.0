@@ -69,7 +69,11 @@ export function PaymentRailsForm({ initial }: { initial: Rail[] }) {
       );
       if (res.ok) {
         setDirty(false);
-        toast.success("Payment methods saved.");
+        toast.success(
+          res.synced
+            ? `Payment methods saved · updated ${res.synced} pending order${res.synced === 1 ? "" : "s"}.`
+            : "Payment methods saved.",
+        );
       } else toast.error(res.error ?? "Couldn't save.");
     });
 
@@ -170,10 +174,12 @@ export function PaymentRailsForm({ initial }: { initial: Rail[] }) {
         })}
       </ul>
 
-      <div className="border-border/70 mt-2 flex items-center justify-between gap-3 border-t pt-5">
+      {/* Sticky save bar on mobile so it's always reachable without scrolling
+          to the bottom; a normal inline row on desktop. */}
+      <div className="border-border/70 bg-background/95 sticky bottom-0 z-10 mt-2 flex flex-col-reverse items-stretch gap-2 border-t pt-4 pb-[max(env(safe-area-inset-bottom),0.5rem)] backdrop-blur sm:static sm:flex-row sm:items-center sm:justify-between sm:pb-0 sm:backdrop-blur-none">
         <p
           className={cn(
-            "text-xs transition-opacity",
+            "text-center text-xs transition-opacity sm:text-left",
             dirty ? "text-primary-800 opacity-100" : "opacity-0",
           )}
           aria-hidden={!dirty}
@@ -185,6 +191,7 @@ export function PaymentRailsForm({ initial }: { initial: Rail[] }) {
           disabled={pending || !dirty}
           variant="gradient"
           size="lg"
+          className="w-full sm:w-auto"
         >
           {pending ? (
             <Loader2 className="size-4 animate-spin" />

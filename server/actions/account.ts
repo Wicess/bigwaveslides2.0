@@ -21,12 +21,12 @@ export async function claimAccountFromOrder(
   try {
     const order = await prisma.order.findUnique({
       where: { orderNumber },
-      select: { customerId: true },
+      select: { customerId: true, guestName: true },
     });
     if (!order?.customerId) return { ok: false };
     const current = await getCustomerId();
     if (current === order.customerId) return { ok: true };
-    await createCustomerSession(order.customerId);
+    await createCustomerSession(order.customerId, order.guestName ?? undefined);
     return { ok: true };
   } catch {
     return { ok: false };

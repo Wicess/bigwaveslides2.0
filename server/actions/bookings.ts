@@ -41,7 +41,11 @@ export async function createBookingRequest(
   input: z.input<typeof schema>,
 ): Promise<BookingResult> {
   if (input.website) {
-    return { ok: true, bookingNumber: bookingNumber(), contractNumber: contractNumber() };
+    return {
+      ok: true,
+      bookingNumber: bookingNumber(),
+      contractNumber: contractNumber(),
+    };
   }
 
   const parsed = schema.safeParse(input);
@@ -58,7 +62,11 @@ export async function createBookingRequest(
 
   try {
     const product = await prisma.product.findFirst({
-      where: { id: d.productId, status: "ACTIVE", type: { in: ["RENTAL", "BOTH"] } },
+      where: {
+        id: d.productId,
+        status: "ACTIVE",
+        type: { in: ["RENTAL", "BOTH"] },
+      },
       select: {
         id: true,
         name: true,
@@ -74,7 +82,8 @@ export async function createBookingRequest(
     if (!availability.available) {
       return {
         ok: false,
-        error: "Those dates are no longer available. Please choose other dates.",
+        error:
+          "Those dates are no longer available. Please choose other dates.",
       };
     }
 
@@ -147,7 +156,7 @@ export async function createBookingRequest(
     });
 
     // Sign this browser into the customer's account (passwordless, same device).
-    if (customerId) await createCustomerSession(customerId);
+    if (customerId) await createCustomerSession(customerId, d.name);
 
     await notifyBookingRequest({
       bookingNumber: created.bookingNumber,

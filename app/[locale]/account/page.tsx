@@ -66,7 +66,7 @@ export default async function AccountPage({ params }: Props) {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
               <Link
                 href={`/${locale}/rent`}
-                className="[background:var(--gradient-wave)] inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white"
+                className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white [background:var(--gradient-wave)]"
               >
                 Browse rentals <ArrowRight className="size-4" />
               </Link>
@@ -152,8 +152,10 @@ export default async function AccountPage({ params }: Props) {
                     {o.invoiceNumber ?? o.orderNumber}
                   </span>
                   <span className="text-muted-foreground text-xs">
-                    {payStateLabel(o.paymentDetailsState)} ·{" "}
-                    {formatDate(o.createdAt, locale)}
+                    {payStateLabel(o.paymentDetailsState)}
+                    {o.paymentMethodLabel
+                      ? ` · ${o.paymentMethodLabel}`
+                      : ""} · {formatDate(o.createdAt, locale)}
                   </span>
                 </span>
                 <span className="flex shrink-0 items-center gap-3">

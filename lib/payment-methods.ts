@@ -143,28 +143,24 @@ export async function savePaymentMethods(
   list: Array<Pick<PaymentMethod, "method" | "label"> & Partial<PaymentMethod>>,
 ): Promise<void> {
   for (const [i, m] of list.entries()) {
-    await prisma.paymentMethodConfig.upsert({
-      where: { method: m.method },
-      update: {
-        label: m.label,
-        destination: m.destination ?? "",
-        instructions: m.instructions ?? "",
-        network: m.network ?? null,
-        qrImageUrl: m.qrImageUrl ?? null,
-        enabled: m.enabled ?? false,
-        sortOrder: m.sortOrder ?? i,
-      },
-      create: {
-        method: m.method,
-        label: m.label,
-        destination: m.destination ?? "",
-        instructions: m.instructions ?? "",
-        network: m.network ?? null,
-        qrImageUrl: m.qrImageUrl ?? null,
-        enabled: m.enabled ?? false,
-        sortOrder: m.sortOrder ?? i,
-      },
-    });
+    const data = {
+      label: m.label,
+      destination: m.destination ?? "",
+      instructions: m.instructions ?? "",
+      network: m.network ?? null,
+      qrImageUrl: m.qrImageUrl ?? null,
+      enabled: m.enabled ?? false,
+      sortOrder: m.sortOrder ?? i,
+    };
+    // withRetry so the first write survives a cold (autosuspended) Neon DB
+    // instead of leaving the admin's Save button hanging.
+    await withRetry(() =>
+      prisma.paymentMethodConfig.upsert({
+        where: { method: m.method },
+        update: data,
+        create: { method: m.method, ...data },
+      }),
+    );
   }
 }
 

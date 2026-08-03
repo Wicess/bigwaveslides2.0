@@ -59,7 +59,8 @@ export async function createQuoteRequest(
         guestPhone: data.phone || null,
         status: "NEW",
         context: data.context,
-        eventDate: eventDate && !Number.isNaN(eventDate.getTime()) ? eventDate : null,
+        eventDate:
+          eventDate && !Number.isNaN(eventDate.getTime()) ? eventDate : null,
         message: data.message,
         locale: data.locale,
         ...(data.productId || data.productLabel
@@ -78,7 +79,7 @@ export async function createQuoteRequest(
     });
 
     // Sign this browser into the customer's account (passwordless, same device).
-    if (customerId) await createCustomerSession(customerId);
+    if (customerId) await createCustomerSession(customerId, data.name);
 
     await notifyQuoteRequest({
       quoteNumber: quote.quoteNumber,

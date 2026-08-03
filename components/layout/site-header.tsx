@@ -21,7 +21,6 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   Phone,
   ShoppingBag,
-  User,
   Menu,
   X,
   ChevronDown,
@@ -37,6 +36,7 @@ import { CartBadge } from "@/components/cart/cart-badge";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { OPEN_CART_EVENT } from "@/lib/cart-event";
 import { InstallApp } from "./install-app";
+import { AccountChip } from "./account-chip";
 import type { NavData } from "@/server/data/navigation";
 
 type Props = { locale: string; data: NavData };
@@ -218,9 +218,7 @@ export function SiteHeader({ locale, data }: Props) {
               <Phone className="size-4 sm:size-[18px]" />
             </IconChip>
 
-            <IconChip href="/account" label={t("account")}>
-              <User className="size-4 sm:size-[18px]" />
-            </IconChip>
+            <AccountChip label={t("account")} />
 
             <button
               type="button"

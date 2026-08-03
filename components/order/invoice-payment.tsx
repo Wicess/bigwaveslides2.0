@@ -123,7 +123,11 @@ export function InvoicePayment({
   const t = useTranslations("OrderFlow");
   const router = useRouter();
   const [pending, startTransition] = React.useTransition();
-  const [chosenPlan, setChosenPlan] = React.useState<PaymentPlan | null>(plan);
+  // Pre-select the 50% deposit — the lowest-friction way to lock the date — so
+  // an accepted quote lands one tap (pick a method) from paying instead of two.
+  const [chosenPlan, setChosenPlan] = React.useState<PaymentPlan | null>(
+    plan ?? "HALF",
+  );
   const [method, setMethod] = React.useState<string | null>(methodKey);
 
   const money = (c: number) => formatPrice(c, locale);

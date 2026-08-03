@@ -8,6 +8,8 @@ import { requirePermission, logActivity } from "@/lib/admin-auth";
 import {
   savePaymentMethods,
   buildInstructionsForMethod,
+  loadPaymentMethods,
+  resolvePaymentDetails,
 } from "@/lib/payment-methods";
 import {
   amountDueCents,
@@ -40,7 +42,7 @@ const railSchema = z.object({
 
 export async function savePaymentRails(
   input: unknown,
-): Promise<AdminActionResult> {
+): Promise<AdminActionResult & { synced?: number }> {
   const session = await requirePermission("settings.write");
   const parsed = z.array(railSchema).max(20).safeParse(input);
   if (!parsed.success) {
@@ -50,6 +52,11 @@ export async function savePaymentRails(
     };
   }
   try {
+    // Snapshot the rails as they were, so we only re-sync clients on rails that
+    // actually changed.
+    const before = await loadPaymentMethods();
+    const beforeByMethod = new Map(before.map((r) => [r.method, r]));
+
     await savePaymentMethods(
       parsed.data.map((m, i) => ({
         method: m.method,
@@ -62,16 +69,119 @@ export async function savePaymentRails(
         sortOrder: i,
       })),
     );
+
+    // Push the new details onto every not-yet-paid order that already chose a
+    // changed rail — so the client's invoice page + account reflect the new
+    // destination immediately (and they get an email if the destination moved,
+    // so they never pay to a stale address).
+    const synced = await resyncPendingOrdersForRails(
+      parsed.data,
+      beforeByMethod,
+    );
+
     await logActivity(session.id, "settings.update", {
       entityType: "PaymentMethodConfig",
-      summary: "Updated payment rails",
+      summary: `Updated payment rails${synced ? ` · re-synced ${synced} pending order(s)` : ""}`,
     });
     revalidatePath("/admin/settings/payments");
-    return { ok: true };
+    return { ok: true, synced };
   } catch (e) {
     console.error("[admin-payments] save rails", e);
     return { ok: false, error: "Couldn't save payment methods." };
   }
+}
+
+type SavedRail = z.infer<typeof railSchema>;
+
+/** Re-issue payment details on unpaid orders whose rail's details changed.
+    Returns how many orders were updated. */
+async function resyncPendingOrdersForRails(
+  rails: SavedRail[],
+  before: Map<
+    string,
+    {
+      destination: string;
+      instructions: string;
+      network: string | null;
+      qrImageUrl: string | null;
+      enabled: boolean;
+      label: string;
+    }
+  >,
+): Promise<number> {
+  const changed = rails.filter((m) => {
+    const o = before.get(m.method);
+    if (!o) return Boolean(m.enabled);
+    return (
+      (o.destination ?? "") !== (m.destination || "") ||
+      (o.instructions ?? "") !== (m.instructions || "") ||
+      (o.network ?? "") !== (m.network || "") ||
+      (o.qrImageUrl ?? "") !== (m.qrImageUrl || "") ||
+      o.enabled !== m.enabled ||
+      o.label !== m.label
+    );
+  });
+  if (changed.length === 0) return 0;
+
+  let synced = 0;
+  for (const rail of changed) {
+    const beforeDest = (before.get(rail.method)?.destination ?? "").trim();
+    // Only orders that are past checkout and NOT paid — leave PAID and
+    // PROOF_SUBMITTED (already paid to the old target, awaiting verification)
+    // untouched.
+    const affected = await prisma.order.findMany({
+      where: {
+        paymentMethodKey: rail.method,
+        paymentDetailsState: {
+          in: ["DETAILS_SENT", "AWAITING_DETAILS", "REJECTED"],
+        },
+      },
+      include: { items: true },
+    });
+    for (const order of affected) {
+      const plan = (order.paymentPlan as PaymentPlan | null) ?? "FULL";
+      const dueCents = amountDueCents(
+        plan,
+        effectiveTotalCents(order.totalCents, rail.method),
+      );
+      const resolved = await resolvePaymentDetails(rail.method, {
+        amountCents: dueCents,
+        orderNumber: order.invoiceNumber ?? order.orderNumber,
+        locale: order.locale,
+      });
+      const updated = await prisma.order.update({
+        where: { id: order.id },
+        data: resolved
+          ? {
+              paymentDetailsState: "DETAILS_SENT",
+              paymentMethodLabel: resolved.methodLabel,
+              paymentDestination: resolved.destination,
+              paymentInstructions: resolved.instructions,
+              paymentNetwork: resolved.network,
+              paymentQrUrl: resolved.qrImageUrl,
+            }
+          : // Rail was turned off or lost its destination → send it back to the
+            // owner to post details by hand.
+            { paymentDetailsState: "AWAITING_DETAILS" },
+        include: { items: true },
+      });
+      // Email the corrected details only when the client already had details
+      // AND the destination actually moved.
+      if (
+        resolved &&
+        order.paymentDetailsState === "DETAILS_SENT" &&
+        resolved.destination.trim() !== beforeDest
+      ) {
+        await sendPaymentDetailsEmail(updated, dueCents).catch((e) =>
+          console.error("[admin-payments] resync email failed", e),
+        );
+      }
+      revalidatePath(orderPublicPath(order.locale, order.orderNumber));
+      revalidatePath(`/admin/orders/${order.id}`);
+      synced++;
+    }
+  }
+  return synced;
 }
 
 /* ───────────── Per-order payment actions ───────────── */

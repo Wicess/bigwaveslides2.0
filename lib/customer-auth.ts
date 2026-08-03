@@ -20,6 +20,11 @@ import { prisma } from "@/lib/prisma";
  */
 
 export const CUSTOMER_COOKIE = "bws_customer";
+// Readable (NOT httpOnly) companion cookie holding just the customer's first
+// name. It lets the public navbar render a signed-in profile avatar without a
+// DB read or a dynamic render on every page — the identity/authorization still
+// lives entirely in the signed CUSTOMER_COOKIE above.
+export const CUSTOMER_NAME_COOKIE = "bws_name";
 const SESSION_DAYS = 365;
 
 function secret(): Uint8Array {
@@ -28,8 +33,14 @@ function secret(): Uint8Array {
   );
 }
 
-/** Issue (or refresh) the signed customer cookie on the current browser. */
-export async function createCustomerSession(customerId: string): Promise<void> {
+/** Issue (or refresh) the signed customer cookie on the current browser.
+    `displayName` avoids a DB read; when omitted we look the name up once (this
+    only runs at order/booking/quote placement or first cross-device claim, so
+    it's never a per-page-view cost). */
+export async function createCustomerSession(
+  customerId: string,
+  displayName?: string,
+): Promise<void> {
   const token = await new SignJWT({ kind: "customer" })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(customerId)
@@ -38,18 +49,36 @@ export async function createCustomerSession(customerId: string): Promise<void> {
     .sign(secret());
 
   const store = await cookies();
-  store.set(CUSTOMER_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
+  const cookieBase = {
+    sameSite: "lax" as const,
     secure: process.env.NODE_ENV === "production",
     path: "/",
     maxAge: SESSION_DAYS * 24 * 60 * 60,
+  };
+  store.set(CUSTOMER_COOKIE, token, { ...cookieBase, httpOnly: true });
+
+  // Companion display cookie (readable by the client navbar). Falls back to a
+  // single cheap lookup when the caller doesn't already have the name.
+  let name = displayName;
+  if (name === undefined) {
+    name =
+      (
+        await prisma.customer
+          .findUnique({ where: { id: customerId }, select: { name: true } })
+          .catch(() => null)
+      )?.name ?? "";
+  }
+  const first = (name ?? "").trim().split(/\s+/)[0] ?? "";
+  store.set(CUSTOMER_NAME_COOKIE, encodeURIComponent(first), {
+    ...cookieBase,
+    httpOnly: false,
   });
 }
 
 export async function destroyCustomerSession(): Promise<void> {
   const store = await cookies();
   store.delete(CUSTOMER_COOKIE);
+  store.delete(CUSTOMER_NAME_COOKIE);
 }
 
 /** The signed-in customer's id, or null. Verifies the cookie signature. */

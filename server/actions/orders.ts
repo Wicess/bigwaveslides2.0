@@ -194,7 +194,7 @@ export async function createOrderRequest(
     });
 
     // Sign this browser into the customer's account (passwordless, same device).
-    if (customerId) await createCustomerSession(customerId);
+    if (customerId) await createCustomerSession(customerId, data.name);
 
     // Mark cart converted and drop the session cookie.
     await prisma.cart.update({
