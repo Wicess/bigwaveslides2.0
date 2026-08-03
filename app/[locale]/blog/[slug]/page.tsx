@@ -15,6 +15,9 @@ import { optimizedSrc } from "@/lib/image-loader";
 import { formatDate } from "@/lib/format";
 import { getExternalResources } from "@/lib/blog-resources";
 import { extractHeadings } from "@/lib/toc";
+import { serviceAreaLinks, hashSeed } from "@/lib/internal-links";
+import { getLandingRentals } from "@/server/data/rentals";
+import { MapPin } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
@@ -79,6 +82,19 @@ export default async function PostDetailPage({ params }: Props) {
   const related = await getRelatedPosts(post.id, post.categoryId);
   const resources = getExternalResources(post.category?.slug);
 
+  // Internal links that tie this post into the rest of the site so equity flows
+  // both ways: a deterministic-per-post spread of ranking location pages, plus
+  // a few real rentals. Seeded by slug → same set every render (cache-safe).
+  const seed = hashSeed(post.slug);
+  const areas = serviceAreaLinks(seed, 6, 2);
+  const rentals = await getLandingRentals().catch(() => []);
+  const featured = rentals.length
+    ? Array.from(
+        { length: Math.min(4, rentals.length) },
+        (_, i) => rentals[(seed + i * 3) % rentals.length]!,
+      )
+    : [];
+
   // CTA + resources cards are reused in the sticky right rail (desktop) and
   // stacked under the article (mobile) — defined once here.
   const ctaCard = (
@@ -104,6 +120,64 @@ export default async function PostDetailPage({ params }: Props) {
       </div>
     </div>
   );
+
+  // Featured rentals → product pages (also complements the inline links the
+  // articles already carry, so every post reliably links the catalog).
+  const rentalsCard =
+    featured.length > 0 ? (
+      <div className="border-border bg-background rounded-2xl border p-6">
+        <h2 className="font-display text-base font-semibold">
+          {t("popularRentalsTitle")}
+        </h2>
+        <ul className="divide-border mt-3 divide-y">
+          {featured.map((p) => (
+            <li key={p.slug}>
+              <Link
+                href={`/rent/${p.slug}`}
+                className="group hover:text-primary flex items-center justify-between gap-3 py-2.5 text-sm font-semibold transition-colors"
+              >
+                <span className="min-w-0 truncate">
+                  {getLocalized(p.name, locale)}
+                </span>
+                <ArrowUpRight className="text-muted-foreground group-hover:text-primary size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <Link
+          href="/rent"
+          className="text-primary mt-3 inline-flex items-center gap-1 text-sm font-semibold hover:underline"
+        >
+          {t("ctaBrowse")} <ArrowUpRight className="size-3.5" />
+        </Link>
+      </div>
+    ) : null;
+
+  // Service areas → the location pages that already rank, so this post passes
+  // equity to them (and they, in turn, link back to guides like this one).
+  const areasCard =
+    areas.length > 0 ? (
+      <div className="border-border bg-background rounded-2xl border p-6">
+        <h2 className="font-display text-base font-semibold">
+          {t("serviceAreasTitle")}
+        </h2>
+        <p className="text-muted-foreground mt-1 text-xs">
+          {t("serviceAreasDesc")}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {areas.map((a) => (
+            <Link
+              key={a.href}
+              href={a.href}
+              className="border-border bg-muted/40 hover:border-primary hover:text-primary inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
+            >
+              <MapPin className="text-primary size-3.5" />
+              {a.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    ) : null;
 
   const resourcesCard =
     resources.length > 0 ? (
@@ -272,17 +346,21 @@ export default async function PostDetailPage({ params }: Props) {
                   </div>
                 ) : null}
 
-                {/* Mobile/tablet: CTA + resources stacked under the article. */}
+                {/* Mobile/tablet: CTA + cross-links stacked under the article. */}
                 <div className="mt-10 space-y-6 lg:hidden">
                   {ctaCard}
+                  {rentalsCard}
+                  {areasCard}
                   {resourcesCard}
                 </div>
               </div>
 
-              {/* Right rail: sticky CTA + further reading (desktop) */}
+              {/* Right rail: sticky CTA + cross-links (desktop) */}
               <aside className="hidden lg:block">
                 <div className="sticky top-28 space-y-6">
                   {ctaCard}
+                  {rentalsCard}
+                  {areasCard}
                   {resourcesCard}
                 </div>
               </aside>

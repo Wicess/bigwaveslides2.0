@@ -428,6 +428,8 @@
     "trustInsured": "Fully insured",
     "trustClean": "Sanitized before delivery",
     "trustDelivery": "Delivery & setup",
+    "availableAcrossUsa": "Available across the USA",
+    "planningGuides": "Planning guides",
     "relatedTitle": "Similar rentals",
     "pickDates": "Pick your event dates to see an instant quote.",
     "instantQuote": "Instant quote",
@@ -601,7 +603,10 @@
     "latestArticles": "Latest articles",
     "onThisPage": "On this page",
     "furtherReading": "Further reading",
-    "furtherReadingDesc": "Trusted, independent resources on water play and event safety."
+    "furtherReadingDesc": "Trusted, independent resources on water play and event safety.",
+    "popularRentalsTitle": "Popular water slides",
+    "serviceAreasTitle": "Water slide rentals near you",
+    "serviceAreasDesc": "We deliver across the USA — find your city."
   },
   "Testimonials": {
     "eyebrow": "Testimonials",

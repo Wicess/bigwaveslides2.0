@@ -7,6 +7,8 @@ import { routing } from "@/i18n/routing";
 import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
+import { getGuideLinks } from "@/server/data/blog";
+import { pickN } from "@/lib/internal-links";
 import { buildMetadata } from "@/lib/seo";
 import {
   localBusinessAreaLd,
@@ -33,7 +35,6 @@ import { JsonLd } from "@/components/seo/json-ld";
 // ISR: serve the cached page (stale-while-revalidate) so it stays up even
 // when the serverless DB is asleep, and refreshes catalog data within the hour.
 export const revalidate = 3600;
-
 
 type Props = { params: Promise<{ locale: string; state: string }> };
 
@@ -76,7 +77,10 @@ export default async function StateRentalPage({ params }: Props) {
   const loc = getStateBySlug(state);
   if (!loc) notFound();
 
-  const items = await getLandingRentals();
+  const [items, allGuides] = await Promise.all([
+    getLandingRentals(),
+    getGuideLinks().catch(() => []),
+  ]);
 
   const cityList = loc.cities.join(", ");
   const path = `/water-slide-rentals/${loc.slug}`;
@@ -102,6 +106,10 @@ export default async function StateRentalPage({ params }: Props) {
     items.length >= 3
       ? [0, 1, 2].map((i) => items[(seed + i * 3) % items.length]!)
       : [];
+
+  // Rotating blog guides — different per state — so this hub links into the
+  // blog and spreads ranking equity across the whole site.
+  const guides = pickN(allGuides, seed, 4);
 
   const faqs = [
     {
@@ -324,6 +332,29 @@ export default async function StateRentalPage({ params }: Props) {
           </div>
         </Container>
       </Section>
+
+      {/* Planning guides — links this state hub into the blog. */}
+      {guides.length > 0 ? (
+        <Section spacing="compact" className="border-border border-t">
+          <Container className="max-w-[84rem]">
+            <SectionHeader title={`Water slide rental guides & tips`} />
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {guides.map((g) => (
+                <Link
+                  key={g.slug}
+                  href={`/blog/${g.slug}`}
+                  className="border-border hover:border-primary group flex items-start justify-between gap-3 rounded-2xl border p-5 transition-colors"
+                >
+                  <span className="text-sm leading-snug font-semibold">
+                    {getLocalized(g.title, locale)}
+                  </span>
+                  <MapPin className="text-primary/70 size-4 shrink-0" />
+                </Link>
+              ))}
+            </div>
+          </Container>
+        </Section>
+      ) : null}
 
       {/* CTA + nearby states */}
       <Section

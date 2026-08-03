@@ -12,6 +12,8 @@ import {
   Truck,
   Weight,
   Maximize2,
+  MapPin,
+  ArrowUpRight,
 } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import {
@@ -19,6 +21,8 @@ import {
   getRelatedRentals,
   getRentalSlugs,
 } from "@/server/data/rentals";
+import { getGuideLinks } from "@/server/data/blog";
+import { serviceAreaLinks, pickN, hashSeed } from "@/lib/internal-links";
 import { getLocalized } from "@/lib/localized";
 import { buildMetadata, rentProductSeo, productKindLabel } from "@/lib/seo";
 import { rentalFaqs } from "@/lib/product-faq";
@@ -47,7 +51,6 @@ import { productLd, faqLd, absoluteUrl } from "@/lib/structured-data";
 // ISR: serve the cached page (stale-while-revalidate) so it stays up even
 // when the serverless DB is asleep, and refreshes catalog data within the hour.
 export const revalidate = 3600;
-
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -150,6 +153,12 @@ export default async function RentalDetailPage({ params }: Props) {
   ].filter(Boolean) as { icon: typeof Users; label: string; value: string }[];
 
   const related = await getRelatedRentals(product.id, product.categoryId);
+
+  // Internal links out to the ranking location pages + a couple of blog guides,
+  // seeded by slug so each product sends equity to a different mix.
+  const seed = hashSeed(product.slug);
+  const areas = serviceAreaLinks(seed, 8, 2);
+  const guides = pickN(await getGuideLinks().catch(() => []), seed, 3);
 
   const trust = [
     { icon: ShieldCheck, label: t("trustInsured") },
@@ -401,6 +410,58 @@ export default async function RentalDetailPage({ params }: Props) {
                   <ProductCard product={p} locale={locale} />
                 </Reveal>
               ))}
+            </div>
+          </Container>
+        </Section>
+      ) : null}
+
+      {/* Internal links: this product page sends equity to the ranking location
+          pages and a couple of guides, tying the catalog into the rest of the
+          site. */}
+      {areas.length > 0 || guides.length > 0 ? (
+        <Section spacing="compact" className="border-border border-t">
+          <Container>
+            <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
+              <div>
+                <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                  {t("availableAcrossUsa")}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {areas.map((a) => (
+                    <Link
+                      key={a.href}
+                      href={a.href}
+                      className="border-border bg-muted/40 hover:border-primary hover:text-primary inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
+                    >
+                      <MapPin className="text-primary size-3.5" />
+                      {a.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {guides.length > 0 ? (
+                <div>
+                  <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                    {t("planningGuides")}
+                  </p>
+                  <ul className="divide-border mt-3 divide-y">
+                    {guides.map((g) => (
+                      <li key={g.slug}>
+                        <Link
+                          href={`/blog/${g.slug}`}
+                          className="group hover:text-primary flex items-center justify-between gap-3 py-2.5 text-sm font-semibold transition-colors"
+                        >
+                          <span className="min-w-0">
+                            {getLocalized(g.title, locale)}
+                          </span>
+                          <ArrowUpRight className="text-muted-foreground group-hover:text-primary size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
             </div>
           </Container>
         </Section>

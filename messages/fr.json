@@ -428,6 +428,8 @@
     "trustInsured": "Entièrement assuré",
     "trustClean": "Désinfecté avant la livraison",
     "trustDelivery": "Livraison et installation",
+    "availableAcrossUsa": "Disponible partout aux États-Unis",
+    "planningGuides": "Guides de préparation",
     "relatedTitle": "Locations similaires",
     "pickDates": "Choisissez les dates de votre événement pour un devis instantané.",
     "instantQuote": "Devis instantané",
@@ -601,7 +603,10 @@
     "latestArticles": "Derniers articles",
     "onThisPage": "Sur cette page",
     "furtherReading": "Pour aller plus loin",
-    "furtherReadingDesc": "Des ressources fiables et indépendantes sur les jeux d'eau et la sécurité des événements."
+    "furtherReadingDesc": "Des ressources fiables et indépendantes sur les jeux d'eau et la sécurité des événements.",
+    "popularRentalsTitle": "Toboggans populaires",
+    "serviceAreasTitle": "Location de toboggans près de chez vous",
+    "serviceAreasDesc": "Nous livrons partout aux États-Unis — trouvez votre ville."
   },
   "Testimonials": {
     "eyebrow": "Témoignages",

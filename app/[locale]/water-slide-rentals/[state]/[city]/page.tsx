@@ -20,6 +20,8 @@ import { getCityContent } from "@/lib/city-content";
 import { getCityLocal } from "@/lib/city-local";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
+import { getGuideLinks } from "@/server/data/blog";
+import { pickN } from "@/lib/internal-links";
 import { buildMetadata } from "@/lib/seo";
 import {
   localBusinessAreaLd,
@@ -46,7 +48,6 @@ import { JsonLd } from "@/components/seo/json-ld";
 // ISR: serve the cached page (stale-while-revalidate) so it stays up even
 // when the serverless DB is asleep, and refreshes catalog data within the hour.
 export const revalidate = 3600;
-
 
 type Props = {
   params: Promise<{ locale: string; state: string; city: string }>;
@@ -109,7 +110,10 @@ export default async function CityRentalPage({ params }: Props) {
   if (!loc) notFound();
   const { name, state: st } = loc;
 
-  const items = await getLandingRentals();
+  const [items, allGuides] = await Promise.all([
+    getLandingRentals(),
+    getGuideLinks().catch(() => []),
+  ]);
 
   const path = `/water-slide-rentals/${st.slug}/${loc.slug}`;
   const canonical = absoluteUrl(locale, path);
@@ -137,6 +141,10 @@ export default async function CityRentalPage({ params }: Props) {
     items.length >= 3
       ? [0, 1, 2].map((i) => items[(seed + i * 3) % items.length]!)
       : [];
+
+  // A rotating handful of blog guides — different per city — so this ranking
+  // location page passes equity across the whole blog (and back to itself).
+  const guides = pickN(allGuides, seed, 4);
 
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
@@ -358,6 +366,30 @@ export default async function CityRentalPage({ params }: Props) {
           </div>
         </Container>
       </Section>
+
+      {/* Planning guides — links the ranking city page into the blog so equity
+          flows across the whole site. */}
+      {guides.length > 0 ? (
+        <Section spacing="compact" className="border-border border-t">
+          <Container className="max-w-[84rem]">
+            <SectionHeader title={`Water slide rental guides & tips`} />
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {guides.map((g) => (
+                <Link
+                  key={g.slug}
+                  href={`/blog/${g.slug}`}
+                  className="border-border hover:border-primary group flex items-start justify-between gap-3 rounded-2xl border p-5 transition-colors"
+                >
+                  <span className="text-sm leading-snug font-semibold">
+                    {getLocalized(g.title, locale)}
+                  </span>
+                  <PartyPopper className="text-primary/70 size-4 shrink-0" />
+                </Link>
+              ))}
+            </div>
+          </Container>
+        </Section>
+      ) : null}
 
       {/* CTA + sibling cities */}
       <Section

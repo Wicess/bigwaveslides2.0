@@ -125,6 +125,25 @@ export async function getPostSlugs() {
   ).catch(() => []);
 }
 
+/**
+ * Lightweight {slug, title} list of every published post, newest first.
+ * Cached (tag "blog") so the location pages can each link a rotating handful of
+ * guides without adding a per-page DB read — spreading internal-link equity
+ * from the ranking location pages across the whole blog.
+ */
+export const getGuideLinks = unstable_cache(
+  async () =>
+    withRetry(() =>
+      prisma.blogPost.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { publishedAt: "desc" },
+        select: { slug: true, title: true },
+      }),
+    ).catch(() => []),
+  ["guide-links"],
+  { tags: ["blog"], revalidate: 3600 },
+);
+
 export const getBlogCategories = unstable_cache(
   async () =>
     withRetry(() =>
