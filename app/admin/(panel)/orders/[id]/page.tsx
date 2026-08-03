@@ -143,6 +143,8 @@ export default async function AdminOrderDetail({ params }: Props) {
                 destination={order.paymentDestination}
                 proofTxId={order.proofTxId}
                 proofImageUrl={order.proofImageUrl}
+                proofNote={order.proofNote}
+                proofSubmittedAt={order.proofSubmittedAt?.toISOString() ?? null}
                 totalCents={order.totalCents}
                 methods={rails.map((m) => ({
                   method: m.method,

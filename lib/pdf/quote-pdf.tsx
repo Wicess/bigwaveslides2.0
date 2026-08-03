@@ -344,6 +344,10 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
   const isBooking = input.kind === "booking";
   const docType = input.docType ?? "invoice";
   const isQuote = docType === "quote";
+  // The live order invoice is kept short: important details + calculations
+  // only. Quotes and booking agreements stay full (that's where the terms are
+  // reviewed, agreed, and signed).
+  const slimInvoice = !isQuote && !isBooking;
   const t = input.totals;
   const r = input.rental ?? {};
   const partyWord = input.party ?? (isBooking ? "Renter" : "Buyer");
@@ -409,7 +413,9 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
           </View>
         </View>
 
-        {input.heroImageUrl ? (
+        {/* Hero image lives on the quote (the sales document). The order
+            invoice stays lean — no hero. */}
+        {!slimInvoice && input.heroImageUrl ? (
           <Image src={input.heroImageUrl} style={s.hero} />
         ) : null}
 
@@ -613,67 +619,105 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
           </>
         ) : null}
 
-        {/* Terms */}
-        <Text style={s.sectionTitle}>
-          {isQuote
-            ? "Quote Terms & Conditions"
-            : isBooking
-              ? "Rental Terms, Conditions & Company Policies"
-              : "Order Terms & Conditions"}
-        </Text>
-        {terms.map((c, i) => (
-          <Text style={s.clause} key={i}>
-            <Text style={s.clauseLead}>
-              {i + 1}. {c.t}{" "}
-            </Text>
-            {c.b}
-          </Text>
-        ))}
-
-        {/* Acceptance & signatures */}
-        <Text style={s.sectionTitle} wrap={false}>
-          Acceptance &amp; Signatures
-        </Text>
-        <Text style={s.ack}>
-          By {isQuote ? "accepting this Quote" : "signing below"}, the{" "}
-          {partyWord} confirms they have read, understood, and agree to this{" "}
-          {isQuote ? "Quote" : isBooking ? "Invoice & Agreement" : "Invoice"} in
-          full, including the Terms &amp; Conditions
-          {isBooking
-            ? ", Company Policies, assumption of risk, and indemnification"
-            : ""}{" "}
-          set out above.
-        </Text>
-        <View style={s.signRow} wrap={false}>
-          <View style={s.signCol}>
-            <Text style={[s.label, { marginBottom: 4 }]}>{partyWord}</Text>
-            <Text style={s.signName}>{input.customer.name}</Text>
-            <View style={s.signLineRow}>
-              <View style={s.signLineWide} />
-              <View style={s.signLineDate} />
-            </View>
-            <View style={s.signLineRow}>
-              <Text style={[s.signLabel, { flex: 2 }]}>Signature</Text>
-              <Text style={[s.signLabel, { flex: 1 }]}>Date</Text>
-            </View>
-          </View>
-          <View style={s.signCol}>
-            <Text style={[s.label, { marginBottom: 4 }]}>
-              For Big Wave Slides
-            </Text>
-            <Text style={s.signName}>Big Wave Slides</Text>
-            <View style={s.signLineRow}>
-              <View style={s.signLineWide} />
-              <View style={s.signLineDate} />
-            </View>
-            <View style={s.signLineRow}>
-              <Text style={[s.signLabel, { flex: 2 }]}>
-                Authorized signature
+        {slimInvoice ? (
+          <>
+            {/* Order invoice: a short key-terms summary instead of the full
+                clause list — the complete terms were shown and agreed when the
+                client accepted the quote. */}
+            <View style={s.scheduleBox} wrap={false}>
+              <Text style={s.label}>Key terms</Text>
+              <Text style={s.bullet}>
+                • Each rental day is one complete 24-hour period.
               </Text>
-              <Text style={[s.signLabel, { flex: 1 }]}>Date</Text>
+              <Text style={s.bullet}>
+                • {Math.round(DEPOSIT_RATE * 100)}% of your total is a
+                refundable deposit — fully refunded if you cancel at least{" "}
+                {REFUND_NOTICE_DAYS} days before your event.
+              </Text>
+              <Text style={s.bullet}>
+                • Any balance is due 48 hours before your event.
+              </Text>
+              <Text style={[s.payHint, { marginTop: 6, marginBottom: 0 }]}>
+                Full terms &amp; conditions: {SITE}/terms-of-service — agreed
+                when you accepted your quote.
+              </Text>
             </View>
-          </View>
-        </View>
+            <Text style={[s.ack, { marginTop: 12 }]}>
+              Choosing your payment plan and paying on your secure invoice page
+              {input.onlineUrl ? ` (${input.onlineUrl})` : ""} confirms your
+              acceptance of this invoice and its terms. Prefer paper? Sign and
+              return it to {CONTACT_EMAIL}.
+            </Text>
+          </>
+        ) : (
+          <>
+            {/* Terms — full clause list on quotes & booking agreements. */}
+            <Text style={s.sectionTitle}>
+              {isQuote
+                ? "Quote Terms & Conditions"
+                : isBooking
+                  ? "Rental Terms, Conditions & Company Policies"
+                  : "Order Terms & Conditions"}
+            </Text>
+            {terms.map((c, i) => (
+              <Text style={s.clause} key={i}>
+                <Text style={s.clauseLead}>
+                  {i + 1}. {c.t}{" "}
+                </Text>
+                {c.b}
+              </Text>
+            ))}
+
+            {/* Acceptance & signatures */}
+            <Text style={s.sectionTitle} wrap={false}>
+              Acceptance &amp; Signatures
+            </Text>
+            <Text style={s.ack}>
+              By {isQuote ? "accepting this Quote" : "signing below"}, the{" "}
+              {partyWord} confirms they have read, understood, and agree to this{" "}
+              {isQuote
+                ? "Quote"
+                : isBooking
+                  ? "Invoice & Agreement"
+                  : "Invoice"}{" "}
+              in full, including the Terms &amp; Conditions
+              {isBooking
+                ? ", Company Policies, assumption of risk, and indemnification"
+                : ""}{" "}
+              set out above.
+            </Text>
+            <View style={s.signRow} wrap={false}>
+              <View style={s.signCol}>
+                <Text style={[s.label, { marginBottom: 4 }]}>{partyWord}</Text>
+                <Text style={s.signName}>{input.customer.name}</Text>
+                <View style={s.signLineRow}>
+                  <View style={s.signLineWide} />
+                  <View style={s.signLineDate} />
+                </View>
+                <View style={s.signLineRow}>
+                  <Text style={[s.signLabel, { flex: 2 }]}>Signature</Text>
+                  <Text style={[s.signLabel, { flex: 1 }]}>Date</Text>
+                </View>
+              </View>
+              <View style={s.signCol}>
+                <Text style={[s.label, { marginBottom: 4 }]}>
+                  For Big Wave Slides
+                </Text>
+                <Text style={s.signName}>Big Wave Slides</Text>
+                <View style={s.signLineRow}>
+                  <View style={s.signLineWide} />
+                  <View style={s.signLineDate} />
+                </View>
+                <View style={s.signLineRow}>
+                  <Text style={[s.signLabel, { flex: 2 }]}>
+                    Authorized signature
+                  </Text>
+                  <Text style={[s.signLabel, { flex: 1 }]}>Date</Text>
+                </View>
+              </View>
+            </View>
+          </>
+        )}
 
         <Text style={s.returnNote}>
           {isQuote

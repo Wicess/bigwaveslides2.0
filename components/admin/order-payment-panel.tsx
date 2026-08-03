@@ -2,7 +2,15 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { BadgeCheck, Check, Loader2, Send, XCircle } from "lucide-react";
+import {
+  BadgeCheck,
+  Check,
+  Download,
+  ExternalLink,
+  Loader2,
+  Send,
+  XCircle,
+} from "lucide-react";
 import {
   postOrderPaymentDetails,
   markOrderPaid,
@@ -47,6 +55,8 @@ export function OrderPaymentPanel({
   destination,
   proofTxId,
   proofImageUrl,
+  proofNote,
+  proofSubmittedAt,
   totalCents,
   methods,
 }: {
@@ -59,6 +69,8 @@ export function OrderPaymentPanel({
   destination: string | null;
   proofTxId: string | null;
   proofImageUrl: string | null;
+  proofNote: string | null;
+  proofSubmittedAt: string | null;
   totalCents: number;
   methods: { method: string; label: string }[];
 }) {
@@ -181,31 +193,72 @@ export function OrderPaymentPanel({
         )}
       </div>
 
-      {/* Client's proof */}
-      {(proofTxId || proofImageUrl) && !paid ? (
+      {/* Client's proof — stays visible even after the invoice is marked paid,
+          so there's always a record to review or download. */}
+      {proofTxId || proofImageUrl || proofNote ? (
         <div className="border-border/70 mt-4 rounded-[var(--radius-sm)] border p-3.5">
-          <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
-            Client&apos;s proof of payment
-          </p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+              Client&apos;s proof of payment
+            </p>
+            {proofSubmittedAt ? (
+              <p className="text-muted-foreground text-[10px]">
+                {new Date(proofSubmittedAt).toLocaleString()}
+              </p>
+            ) : null}
+          </div>
+
           {proofTxId ? (
-            <p className="text-foreground/90 mt-1.5 font-mono text-xs">
-              {proofTxId}
+            <p className="mt-1.5">
+              <span className="text-muted-foreground text-[10px] tracking-wide uppercase">
+                Reference
+              </span>
+              <br />
+              <span className="text-foreground/90 font-mono text-xs break-all">
+                {proofTxId}
+              </span>
             </p>
           ) : null}
+
+          {proofNote ? (
+            <p className="bg-muted/50 text-foreground/80 mt-2 rounded-[var(--radius-sm)] p-2 text-xs whitespace-pre-line">
+              {proofNote}
+            </p>
+          ) : null}
+
           {proofImageUrl ? (
-            <a
-              href={proofImageUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-border mt-2 inline-block overflow-hidden rounded-[var(--radius-sm)] border transition-opacity hover:opacity-90"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={proofImageUrl}
-                alt="Payment proof screenshot uploaded by the client"
-                className="h-28 w-auto max-w-full object-cover"
-              />
-            </a>
+            <div className="mt-2.5">
+              {/* Full screenshot, uncropped, so amounts/names stay legible. */}
+              <a
+                href={proofImageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border-border bg-muted/30 block overflow-hidden rounded-[var(--radius-sm)] border transition-opacity hover:opacity-90"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={proofImageUrl}
+                  alt="Payment proof screenshot uploaded by the client"
+                  className="max-h-72 w-full object-contain"
+                />
+              </a>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <a
+                  href={proofImageUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border-border hover:bg-muted inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
+                >
+                  <ExternalLink className="size-3.5" /> Open full size
+                </a>
+                <a
+                  href={`/api/admin/proof/${orderId}`}
+                  className="border-border hover:bg-muted inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
+                >
+                  <Download className="size-3.5" /> Download
+                </a>
+              </div>
+            </div>
           ) : null}
         </div>
       ) : null}
