@@ -31,6 +31,7 @@ const settingsSchema = z.object({
   instagram: z.string().max(200).optional().or(z.literal("")),
   facebook: z.string().max(200).optional().or(z.literal("")),
   tiktok: z.string().max(200).optional().or(z.literal("")),
+  reviewsUrl: z.string().url().max(300).optional().or(z.literal("")),
 });
 
 const cents = (v?: string) =>
@@ -97,6 +98,7 @@ export async function saveSettings(
         instagram: d.instagram || "",
         facebook: d.facebook || "",
         tiktok: d.tiktok || "",
+        reviewsUrl: d.reviewsUrl?.trim() || "",
       },
     },
   ];

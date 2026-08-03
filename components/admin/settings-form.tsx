@@ -28,6 +28,7 @@ export type SettingsValues = {
   instagram: string;
   facebook: string;
   tiktok: string;
+  reviewsUrl: string;
 };
 
 function Field({
@@ -164,7 +165,11 @@ export function SettingsForm({ defaults }: { defaults: SettingsValues }) {
           <Group title="Fees">
             <div className="grid grid-cols-2 gap-3">
               <Field label="Delivery base ($)">
-                <Input type="number" step="0.01" {...register("deliveryBase")} />
+                <Input
+                  type="number"
+                  step="0.01"
+                  {...register("deliveryBase")}
+                />
               </Field>
               <Field label="Pickup ($)">
                 <Input type="number" step="0.01" {...register("pickup")} />
@@ -199,6 +204,18 @@ export function SettingsForm({ defaults }: { defaults: SettingsValues }) {
                 />
               </Field>
             </div>
+          </Group>
+
+          <Group
+            title="Reviews link"
+            hint="Google Business or Trustpilot URL. When set, the payment page shows a clickable “verified reviews” link — leave blank to hide it."
+          >
+            <Field label="Public reviews profile">
+              <Input
+                placeholder="https://g.page/r/… or https://trustpilot.com/review/…"
+                {...register("reviewsUrl")}
+              />
+            </Field>
           </Group>
         </div>
       </div>

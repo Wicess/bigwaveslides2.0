@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   MapPin,
   Building2,
+  ExternalLink,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { getRatingSummary } from "@/server/data/home";
@@ -32,10 +33,12 @@ export async function PaymentTrust({ locale }: { locale: string }) {
     .slice(0, 2);
 
   const c = settings?.contact ?? {};
-  const addressLine =
-    c.address ||
-    [c.addressLocality, c.addressRegion].filter(Boolean).join(", ") ||
-    "";
+  // Only surface an address when a real STREET has been set in admin — city/
+  // state alone isn't the legitimacy signal we want to imply.
+  const addressLine = c.streetAddress?.trim() ? c.address || "" : "";
+  // Turn the rating into external, checkable proof only when the owner has set
+  // a public reviews profile (Google/Trustpilot) in admin.
+  const reviewsUrl = settings?.social?.reviewsUrl?.trim() || "";
 
   const protect = [t("protect1"), t("protect2"), t("protect3"), t("protect4")];
   const official = [t("official1"), t("official2"), t("official3")];
@@ -44,21 +47,40 @@ export async function PaymentTrust({ locale }: { locale: string }) {
     <section className="border-border mt-5 overflow-hidden rounded-3xl border bg-white shadow-sm dark:bg-slate-950">
       {/* Confidence bar — real, verifiable facts, first. */}
       <div className="border-border/70 bg-muted/40 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 border-b px-6 py-4 text-center">
-        {rating.count > 0 ? (
-          <span className="inline-flex items-center gap-2">
-            <span className="inline-flex items-center gap-0.5 text-amber-500">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="size-4 fill-current" />
-              ))}
-            </span>
-            <span className="text-foreground text-sm font-bold">
-              {rating.value.toFixed(1)}
-            </span>
-            <span className="text-muted-foreground text-sm">
-              {t("trustReviews", { count: rating.count })}
-            </span>
-          </span>
-        ) : null}
+        {rating.count > 0
+          ? (() => {
+              const inner = (
+                <>
+                  <span className="inline-flex items-center gap-0.5 text-amber-500">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="size-4 fill-current" />
+                    ))}
+                  </span>
+                  <span className="text-foreground text-sm font-bold">
+                    {rating.value.toFixed(1)}
+                  </span>
+                  <span className="text-muted-foreground text-sm">
+                    {t("trustReviews", { count: rating.count })}
+                  </span>
+                  {reviewsUrl ? (
+                    <ExternalLink className="text-muted-foreground size-3.5" />
+                  ) : null}
+                </>
+              );
+              return reviewsUrl ? (
+                <a
+                  href={reviewsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="hover:text-primary inline-flex items-center gap-2 underline-offset-4 hover:underline"
+                >
+                  {inner}
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-2">{inner}</span>
+              );
+            })()
+          : null}
         <span className="text-foreground/85 inline-flex items-center gap-2 text-sm font-semibold">
           <BadgeCheck className="text-primary size-4" />
           {t("trustEvents")}

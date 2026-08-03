@@ -17,7 +17,15 @@ export type SiteSettings = {
     postalCode?: string;
     addressCountry?: string;
   };
-  social?: { instagram?: string; facebook?: string; tiktok?: string };
+  social?: {
+    instagram?: string;
+    facebook?: string;
+    tiktok?: string;
+    /** Public reviews profile (Google Business / Trustpilot). When set, the
+        payment page turns the rating into a clickable "verified reviews" link
+        for external, checkable proof. */
+    reviewsUrl?: string;
+  };
   hours?: { mon_fri?: string; sat?: string; sun?: string };
   fees?: {
     deliveryBaseCents?: number;

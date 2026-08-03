@@ -39,6 +39,7 @@ export default async function AdminSettingsPage() {
     instagram: social.instagram ?? "",
     facebook: social.facebook ?? "",
     tiktok: social.tiktok ?? "",
+    reviewsUrl: social.reviewsUrl ?? "",
   };
 
   return (
