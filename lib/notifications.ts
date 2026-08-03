@@ -552,15 +552,35 @@ export async function notifyNewsletterSignup(s: {
 
 /* ───────────────── Abandoned cart ───────────────── */
 
-export async function sendAbandonedCartReminder(email: string): Promise<void> {
+export async function sendAbandonedCartReminder(opts: {
+  email: string;
+  name?: string | null;
+  items: { name: string; quantity: number; mode: "BUY" | "RENT" }[];
+}): Promise<void> {
+  const first = (opts.name ?? "").trim().split(/\s+/)[0] || "";
+  const rows = opts.items.slice(0, 6).map((i) => ({
+    label: i.name,
+    value:
+      i.mode === "RENT"
+        ? `${i.quantity} ${i.quantity === 1 ? "day" : "days"}`
+        : `Qty ${i.quantity}`,
+  }));
   await sendEmail({
-    to: email,
-    subject: "You left something in your cart 🌊",
+    to: opts.email,
+    subject: first
+      ? `${first}, your cart's still waiting 🌊 (10% off inside)`
+      : "Your cart's still waiting 🌊 (10% off inside)",
     html: renderEmail({
-      heading: "Still thinking it over?",
+      heading: first
+        ? `Still want to make a splash, ${first}?`
+        : "Still want to make a splash?",
       intro:
-        "Your cart is waiting! Finish your request in a couple of clicks — no payment needed, we'll send you a personalized quote.",
-      cta: { label: "Return to your cart", url: siteUrl("/cart") },
+        "You left these in your cart. Come back and lock in your date — no payment now, we'll send a free, no-obligation quote. Here's 10% off to seal the deal.",
+      rows,
+      copyable: { label: "Your 10% comeback code", value: "COMEBACK10" },
+      cta: { label: "Finish my booking", url: siteUrl("/cart") },
+      outro:
+        "Enter COMEBACK10 at checkout for 10% off. Summer weekends fill fast — grab your date before it's gone.",
     }),
   });
 }

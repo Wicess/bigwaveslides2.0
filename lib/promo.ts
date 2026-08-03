@@ -27,6 +27,14 @@ export const PROMOS: Promo[] = [
     minRentDays: 2,
     expiresAt: "2026-09-30T23:59:59.000Z",
   },
+  {
+    // Sent automatically in the abandoned-cart recovery email — 10% off the
+    // whole cart, any product, to win the booking back.
+    code: "COMEBACK10",
+    label: "10% off your cart",
+    pct: 0.1,
+    expiresAt: "2026-12-31T23:59:59.000Z",
+  },
 ];
 
 /** Look up a live (non-expired) promo by code, case-insensitively. */
