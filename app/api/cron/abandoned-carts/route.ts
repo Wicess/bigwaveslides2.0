@@ -6,9 +6,14 @@ import { getLocalized } from "@/lib/localized";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Headroom for the email loop — well within the Vercel Hobby (free) cap of 60s.
+export const maxDuration = 60;
 
 // Carts idle longer than this are considered abandoned.
 const IDLE_HOURS = 24;
+// Safe batch per run so the email loop always finishes inside the time limit;
+// any overflow is picked up by the next daily run (still reminderSentAt = null).
+const BATCH = 80;
 
 /**
  * Abandoned-cart recovery sweep. Finds stale ACTIVE carts that still hold items
@@ -51,7 +56,7 @@ export async function GET(request: Request) {
           },
         },
       },
-      take: 200,
+      take: BATCH,
     });
 
     if (stale.length === 0) {
