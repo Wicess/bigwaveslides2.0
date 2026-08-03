@@ -8,7 +8,7 @@ import { getCartCookie, clearCartCookie } from "@/lib/cart-session";
 import { orderNumber } from "@/lib/ref-number";
 import { notifyOrderRequest } from "@/lib/notifications";
 import { getSettings } from "@/server/data/settings";
-import { TRANSPORT_CENTS, taxCentsFor } from "@/lib/pricing";
+import { TRANSPORT_CENTS } from "@/lib/pricing";
 import { cartUnitPrice } from "@/server/data/cart";
 import { upsertCustomerFromGuest } from "@/lib/customers";
 import { createCustomerSession } from "@/lib/customer-auth";
@@ -126,12 +126,11 @@ export async function createOrderRequest(
 
     const subtotalCents = items.reduce((n, i) => n + i.lineTotalCents, 0);
 
-    // Flat $30 transportation (owner-toggleable) + FL sales tax on top.
+    // Flat $30 transportation (owner-toggleable). No sales tax is charged.
     const settings = await getSettings().catch(() => ({}) as never);
     const transportOn = settings?.fees?.transportEnabled !== false; // default ON
     const deliveryFeeCents = transportOn ? TRANSPORT_CENTS : 0;
-    const taxCents = taxCentsFor(subtotalCents + deliveryFeeCents);
-    const totalCents = subtotalCents + deliveryFeeCents + taxCents;
+    const totalCents = subtotalCents + deliveryFeeCents;
 
     // Resolve the location the order is being placed from (IP-based, via edge
     // headers). Stored on the order so staff see where each request originated.
@@ -177,7 +176,6 @@ export async function createOrderRequest(
         quoteValidUntil: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
         subtotalCents,
         deliveryFeeCents,
-        taxCents,
         totalCents,
         deliveryAddress:
           data.address || data.city
@@ -224,7 +222,6 @@ export async function createOrderRequest(
       })),
       subtotalCents,
       deliveryFeeCents,
-      taxCents,
       totalCents,
       eventDate: data.eventDate || undefined,
       locale: data.locale,

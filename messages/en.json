@@ -793,7 +793,6 @@
     "paidTitle": "Payment received — you're booked! 🎉",
     "paidBody": "Your date is locked in. We'll reach out before your event with delivery timing. Get ready to make a splash!",
     "transportation": "Transportation",
-    "tax": "FL sales tax (6.5%)",
     "depositNote": "30% of your total acts as a refundable deposit — fully refunded if you cancel at least 7 days before your event. Each rental day is one complete 24-hour period.",
     "agreeFirstHint": "Tick the box above to enable the accept button — it activates the moment you agree.",
     "cryptoApplied": "Discount applied — you save {amount}. New total: {total}.",

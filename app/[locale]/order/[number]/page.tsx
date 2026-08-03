@@ -354,9 +354,6 @@ export default async function OrderFlowPage({ params }: Props) {
                       v={money(order.deliveryFeeCents)}
                     />
                   ) : null}
-                  {order.taxCents ? (
-                    <BreakRow k={t("tax")} v={money(order.taxCents)} />
-                  ) : null}
                   {discount ? (
                     <BreakRow
                       k={t("cryptoDiscountRow")}

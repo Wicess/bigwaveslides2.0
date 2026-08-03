@@ -79,7 +79,6 @@ export type OrderEmailInput = {
   }[];
   subtotalCents: number;
   deliveryFeeCents?: number;
-  taxCents?: number;
   totalCents: number;
   /** Event date entered at checkout (yyyy-mm-dd) — printed on the invoice. */
   eventDate?: string;
@@ -135,7 +134,6 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
     totals: {
       subtotalCents: o.subtotalCents,
       deliveryCents: o.deliveryFeeCents || undefined,
-      taxCents: o.taxCents || undefined,
       totalCents: o.totalCents,
     },
     locale: o.locale,
@@ -644,7 +642,6 @@ export function orderToPdfInput(
     totals: {
       subtotalCents: o.subtotalCents,
       deliveryCents: o.deliveryFeeCents || undefined,
-      taxCents: o.taxCents || undefined,
       totalCents: o.totalCents,
     },
     locale: o.locale,

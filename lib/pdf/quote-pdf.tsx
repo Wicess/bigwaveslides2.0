@@ -12,7 +12,6 @@ import { formatPrice } from "@/lib/format";
 import { ANTI_SCAM_HEADING, ANTI_SCAM_BODY } from "@/lib/anti-scam";
 import { amountDueCents, balanceCents } from "@/lib/payment-plan";
 import {
-  TAX_LABEL,
   TRANSPORT_LABEL,
   DEPOSIT_RATE,
   REFUND_NOTICE_DAYS,
@@ -324,7 +323,6 @@ export type QuotePdfInput = {
     deliveryCents?: number;
     pickupCents?: number;
     depositCents?: number;
-    taxCents?: number;
     totalCents: number;
   };
   locale?: string;
@@ -509,12 +507,6 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
             <View style={s.totalRow}>
               <Text>Refundable deposit</Text>
               <Text>{money(t.depositCents)}</Text>
-            </View>
-          ) : null}
-          {t.taxCents ? (
-            <View style={s.totalRow}>
-              <Text>{TAX_LABEL}</Text>
-              <Text>{money(t.taxCents)}</Text>
             </View>
           ) : null}
           <View style={s.grandRow}>
