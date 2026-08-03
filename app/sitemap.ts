@@ -20,7 +20,9 @@ const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 // revised; dynamic entries (products/posts) can carry their own dates later.
 // 2026-07-31: bumped after a site-wide content refresh + recovery from a DB
 // outage, to prompt Google to recrawl pages it saw erroring during downtime.
-const CONTENT_UPDATED = new Date("2026-07-31T00:00:00Z");
+// 2026-08-03: refreshed again after the internal-linking, navigation and
+// new-blog updates — nudge Google to recrawl the improved pages.
+const CONTENT_UPDATED = new Date("2026-08-03T00:00:00Z");
 
 // Fully-translated pages — indexed in BOTH locales (en + fr), with hreflang.
 const BILINGUAL_STATIC = [
