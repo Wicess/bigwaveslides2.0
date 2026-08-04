@@ -607,16 +607,19 @@ function orderPagePath(o: OrderWithItems): string {
 }
 
 /** Build the PDF input for an order at its current stage. */
-export function orderToPdfInput(
+export async function orderToPdfInput(
   o: OrderWithItems,
   docType: "quote" | "invoice",
-): QuotePdfInput {
+): Promise<QuotePdfInput> {
   const addr = (o.deliveryAddress ?? {}) as { address?: string; city?: string };
   const eventLocation =
     [addr.address, addr.city].filter(Boolean).join(", ") || undefined;
+  const settings = await getSettings().catch((): SiteSettings => ({}));
+  const manualMode = settings.payment?.manualInvoiceMode === true;
   return {
     kind: "order",
     docType,
+    manualMode,
     number:
       docType === "invoice"
         ? (o.invoiceNumber ?? o.orderNumber)
@@ -681,7 +684,7 @@ export async function sendInvoiceIssuedEmails(
   const inv = o.invoiceNumber ?? o.orderNumber;
   let attachments: EmailAttachment[] = [];
   try {
-    const pdf = await generateQuotePdf(orderToPdfInput(o, "invoice"));
+    const pdf = await generateQuotePdf(await orderToPdfInput(o, "invoice"));
     attachments = [
       { filename: `Big-Wave-Slides-Invoice-${inv}.pdf`, content: pdf },
     ];

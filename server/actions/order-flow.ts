@@ -15,7 +15,11 @@ import {
   effectiveTotalCents,
   type PaymentPlan,
 } from "@/lib/payment-plan";
-import { resolvePaymentDetails } from "@/lib/payment-methods";
+import {
+  resolvePaymentDetails,
+  loadPaymentMethods,
+} from "@/lib/payment-methods";
+import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { formatPrice } from "@/lib/format";
 import { notifyAdminNtfy } from "@/lib/ntfy";
 import { siteUrl } from "@/lib/email";
@@ -148,11 +152,22 @@ export async function choosePaymentPlan(
     const discountCents = cryptoDiscountCents(order.totalCents, method);
     const dueCents = amountDueCents(plan as PaymentPlan, payableCents);
     const reference = order.invoiceNumber ?? order.orderNumber;
-    const resolved = await resolvePaymentDetails(method, {
-      amountCents: dueCents,
-      orderNumber: reference,
-      locale: order.locale,
-    });
+
+    // Manual invoice mode: never reveal details on-site. The client keeps their
+    // chosen plan + method, but the destination is sent by the owner (email /
+    // phone / WhatsApp) — so we skip resolving it and go straight to AWAITING.
+    const settings = await getSettings().catch((): SiteSettings => ({}));
+    const manualMode = settings.payment?.manualInvoiceMode === true;
+
+    const rails = await loadPaymentMethods();
+    const railLabel = rails.find((r) => r.method === method)?.label ?? method;
+    const resolved = manualMode
+      ? null
+      : await resolvePaymentDetails(method, {
+          amountCents: dueCents,
+          orderNumber: reference,
+          locale: order.locale,
+        });
 
     const updated = await prisma.order.update({
       where: { id: order.id },
@@ -160,10 +175,11 @@ export async function choosePaymentPlan(
         paymentPlan: plan,
         paymentPlanAt: new Date(),
         paymentMethodKey: method,
+        // Store the method label either way so the client sees what they picked.
+        paymentMethodLabel: resolved?.methodLabel ?? railLabel,
         ...(resolved
           ? {
               paymentDetailsState: "DETAILS_SENT",
-              paymentMethodLabel: resolved.methodLabel,
               paymentDestination: resolved.destination,
               paymentInstructions: resolved.instructions,
               paymentNetwork: resolved.network,
@@ -192,22 +208,32 @@ export async function choosePaymentPlan(
       await notifyAdminNtfy({
         title: resolved
           ? `💳 ${order.orderNumber} — ${planLabel} via ${resolved.methodLabel}`
-          : `⚠️ ${order.orderNumber} NEEDS payment details`,
+          : manualMode
+            ? `📨 ${order.orderNumber} — send ${railLabel} details`
+            : `⚠️ ${order.orderNumber} NEEDS payment details`,
         message: resolved
           ? [
               `${order.guestName ?? "Client"} chose ${planLabel}${discountNote}.`,
               `✅ ${resolved.methodLabel} details auto-sent (${resolved.destination}).`,
               "Watch for the payment, then mark the invoice paid.",
             ].join("\n")
-          : [
-              `${order.guestName ?? "Client"} chose ${planLabel} via "${method}".`,
-              "⚠️ That rail has no destination configured — open the order and post the payment details NOW. The client is waiting on the payment page.",
-            ].join("\n"),
+          : manualMode
+            ? [
+                `${order.guestName ?? "Client"} chose ${planLabel} via ${railLabel}.`,
+                `Manual mode — reach out with the ${railLabel} payment details via their email/phone/WhatsApp.`,
+                `Invoice ${reference} · ${order.guestEmail ?? ""}${order.guestPhone ? ` · ${order.guestPhone}` : ""}`,
+              ].join("\n")
+            : [
+                `${order.guestName ?? "Client"} chose ${planLabel} via "${method}".`,
+                "⚠️ That rail has no destination configured — open the order and post the payment details NOW. The client is waiting on the payment page.",
+              ].join("\n"),
         clickUrl: siteUrl(`/admin/orders/${order.id}`),
         tags: resolved
           ? ["credit_card", "ocean"]
-          : ["warning", "rotating_light"],
-        priority: resolved ? 4 : 5,
+          : manualMode
+            ? ["envelope", "ocean"]
+            : ["warning", "rotating_light"],
+        priority: resolved ? 4 : manualMode ? 4 : 5,
       }).catch(() => {});
     });
 

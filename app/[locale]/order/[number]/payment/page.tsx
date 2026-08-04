@@ -77,6 +77,7 @@ export default async function PaymentPage({ params }: Props) {
     "",
   );
   const email = settings?.contact?.email ?? CONTACT_EMAIL;
+  const manualMode = settings?.payment?.manualInvoiceMode === true;
 
   const awaiting = order.paymentDetailsState === "AWAITING_DETAILS";
 
@@ -88,7 +89,7 @@ export default async function PaymentPage({ params }: Props) {
       <PendingOrderFlag
         orderNumber={order.orderNumber}
         email={order.guestEmail ?? ""}
-        active={awaiting}
+        active={!manualMode && awaiting}
       />
       <Container className="max-w-xl">
         <Link
@@ -152,6 +153,10 @@ export default async function PaymentPage({ params }: Props) {
               }
               methods={methods}
               securityCode={securityCode}
+              manualMode={manualMode}
+              invoiceId={order.invoiceNumber ?? order.orderNumber}
+              methodLabel={order.paymentMethodLabel}
+              contactPhone={phone}
             />
           </div>
         </article>

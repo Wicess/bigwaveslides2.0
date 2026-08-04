@@ -306,6 +306,9 @@ export type QuotePdfInput = {
   paymentPlan?: "HALF" | "FULL";
   /** Public page where the client can accept/pay online. */
   onlineUrl?: string;
+  /** Manual invoice mode — details are sent by the owner (email/phone/WhatsApp),
+      not shown on-site; swaps the "only pay on-site/official email" wording. */
+  manualMode?: boolean;
   heroImageUrl?: string;
   customer: { name: string; email: string; phone?: string; address?: string };
   rental?: {
@@ -604,11 +607,21 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         {!isQuote ? (
           <View style={s.payBox} wrap={false}>
             <Text style={s.label}>Preferred payment method</Text>
-            <Text style={s.payHint}>
-              Pick your plan and method on your secure invoice page
-              {input.onlineUrl ? ` (${input.onlineUrl})` : ""} — the exact
-              payment details appear there and are emailed to you instantly.
-            </Text>
+            {input.manualMode ? (
+              <Text style={s.payHint}>
+                Pick your plan and method on your secure invoice page
+                {input.onlineUrl ? ` (${input.onlineUrl})` : ""}. We'll then
+                send your payment details by email, phone, or WhatsApp — always
+                check the Invoice ID we give you matches this one before you
+                pay.
+              </Text>
+            ) : (
+              <Text style={s.payHint}>
+                Pick your plan and method on your secure invoice page
+                {input.onlineUrl ? ` (${input.onlineUrl})` : ""} — the exact
+                payment details appear there and are emailed to you instantly.
+              </Text>
+            )}
             <View style={s.payRow}>
               {["Zelle", "Apple Pay", "Chime", "Cash App"].map((m) => (
                 <View style={s.payOpt} key={m}>
@@ -620,11 +633,18 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
           </View>
         ) : null}
 
-        {/* Anti-impersonation warning — the trust anchor on payable docs. */}
+        {/* Anti-impersonation warning — the trust anchor on payable docs. In
+            manual mode we verify by Invoice ID (payment details arrive by
+            email/phone/WhatsApp), so the "on-site/official-email only" wording
+            is swapped out. */}
         {!isQuote ? (
           <View style={s.warnBox} wrap={false}>
             <Text style={s.warnTitle}>⚠ {ANTI_SCAM_HEADING}</Text>
-            <Text style={s.warnBody}>{ANTI_SCAM_BODY}</Text>
+            <Text style={s.warnBody}>
+              {input.manualMode
+                ? "We'll send your payment details privately by email, phone, or WhatsApp. Before paying, always check that the Invoice ID we give you matches the one on this invoice — do not pay if they don't match. Unsure? Call us first."
+                : ANTI_SCAM_BODY}
+            </Text>
           </View>
         ) : null}
 

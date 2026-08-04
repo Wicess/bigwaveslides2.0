@@ -853,6 +853,19 @@
     "official2": "Vérifiez que le code de sécurité ci-dessus correspond à celui de votre e-mail avant d'envoyer quoi que ce soit.",
     "official3": "Nous ne vous demanderons jamais d'envoyer à un autre identifiant ni de payer un montant différent.",
     "reviewsHeading": "La confiance des familles et des pros de l'événementiel",
-    "businessNote": "Une entreprise américaine réelle et enregistrée — joignable à tout moment."
+    "businessNote": "Une entreprise américaine réelle et enregistrée — joignable à tout moment.",
+    "manualTitle": "Votre facture est confirmée",
+    "manualBadge": "En attente de paiement",
+    "invoiceIdLabel": "Votre identifiant de facture",
+    "invoiceIdNote": "Ne payez que lorsque l'identifiant de facture que nous vous envoyons correspond exactement à celui-ci.",
+    "yourMethod": "paiement",
+    "manualBody": "Nous vous enverrons vos coordonnées de paiement {method} à {email}.",
+    "manualReach": "Nous pourrons aussi vous joindre par téléphone ou WhatsApp pour confirmer votre réservation.",
+    "manualReachPhone": "Nous pourrons aussi vous joindre par téléphone ou WhatsApp au {phone} pour confirmer votre réservation.",
+    "manualVerifyTitle": "Avant de payer",
+    "manualVerifyBody": "Ne payez pas si l'identifiant de facture que nous vous envoyons ne correspond pas à celui ci-dessus. Nous vous contacterons via l'e-mail ou le téléphone que vous avez fournis.",
+    "continueManual": "Confirmer et obtenir mon identifiant",
+    "noAutoChargeManual": "Nous ne prélevons jamais automatiquement. Après avoir choisi une méthode, nous vous enverrons vos coordonnées de paiement en privé par e-mail, téléphone ou WhatsApp — vérifiez toujours que l'identifiant de facture correspond avant de payer.",
+    "manualAntiScamShort": "Nous vous enverrons vos coordonnées de paiement en privé par e-mail, téléphone ou WhatsApp. Vérifiez toujours que l'identifiant de facture correspond avant de payer."
   }
 }

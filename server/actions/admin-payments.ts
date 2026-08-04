@@ -407,3 +407,43 @@ export async function setTransportEnabled(
     return { ok: false, error: "Couldn't update the transportation fee." };
   }
 }
+
+/* ───────────── Manual-invoice mode toggle ───────────── */
+
+const manualModeSchema = z.object({ enabled: z.boolean() });
+
+/** Toggle "manual invoice" mode. When ON, payment details are never revealed
+    on-site — the client picks a plan + method, then sees their Invoice ID and
+    instructions, and the owner sends the details by email / phone / WhatsApp. */
+export async function setManualInvoiceMode(
+  input: z.input<typeof manualModeSchema>,
+): Promise<AdminActionResult> {
+  const session = await requirePermission("settings.write");
+  const parsed = manualModeSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "Invalid data." };
+  try {
+    const existing = await prisma.siteSetting.findUnique({
+      where: { key: "payment" },
+    });
+    const payment =
+      existing && typeof existing.value === "object" && existing.value !== null
+        ? (existing.value as Record<string, unknown>)
+        : {};
+    const value = { ...payment, manualInvoiceMode: parsed.data.enabled };
+    await prisma.siteSetting.upsert({
+      where: { key: "payment" },
+      update: { value },
+      create: { key: "payment", group: "payment", value },
+    });
+    revalidateTag("settings");
+    await logActivity(session.id, "settings.update", {
+      entityType: "SiteSetting",
+      summary: `Manual invoice mode ${parsed.data.enabled ? "enabled" : "disabled"}`,
+    });
+    revalidatePath("/admin/settings/payments");
+    return { ok: true };
+  } catch (e) {
+    console.error("[admin-payments] manual mode toggle", e);
+    return { ok: false, error: "Couldn't update manual invoice mode." };
+  }
+}

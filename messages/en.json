@@ -853,6 +853,19 @@
     "official2": "Check the security code above matches the one in your email before you send anything.",
     "official3": "We'll never ask you to send to a different handle or pay a different amount.",
     "reviewsHeading": "Trusted by families & event pros",
-    "businessNote": "A real, registered US business — reach a person any time."
+    "businessNote": "A real, registered US business — reach a person any time.",
+    "manualTitle": "Your invoice is confirmed",
+    "manualBadge": "Awaiting payment",
+    "invoiceIdLabel": "Your Invoice ID",
+    "invoiceIdNote": "Only pay once the Invoice ID we send you matches this one exactly.",
+    "yourMethod": "payment",
+    "manualBody": "We'll send your {method} payment details to {email}.",
+    "manualReach": "We may also reach you by phone or WhatsApp to confirm your booking.",
+    "manualReachPhone": "We may also reach you by phone or WhatsApp at {phone} to confirm your booking.",
+    "manualVerifyTitle": "Before you pay",
+    "manualVerifyBody": "Do not pay if the Invoice ID we send you doesn't match the one above. We'll contact you using the email or phone you provided.",
+    "continueManual": "Confirm & get my Invoice ID",
+    "noAutoChargeManual": "We never charge you automatically. After you pick a method, we'll send your payment details privately by email, phone, or WhatsApp — always check the Invoice ID matches before you pay.",
+    "manualAntiScamShort": "We'll send your payment details privately by email, phone, or WhatsApp. Always check the Invoice ID matches before paying."
   }
 }

@@ -35,6 +35,12 @@ export type SiteSettings = {
     /** $30 transportation line on quotes/invoices — owner can toggle it off. */
     transportEnabled?: boolean;
   };
+  payment?: {
+    /** When ON, payment details are NOT revealed on-site. After the client
+        picks a plan + method they see their Invoice ID + instructions; the
+        owner reaches out with the details (email / phone / WhatsApp). */
+    manualInvoiceMode?: boolean;
+  };
 };
 
 export const getSettings = unstable_cache(

@@ -18,6 +18,7 @@ import { loadEnabledMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
 import { orderSecurityCode } from "@/lib/security-code";
 import { quoteTerms, orderTerms, SETUP_REQUIREMENTS } from "@/lib/legal-terms";
 import { ANTI_SCAM_SHORT, ANTI_SCAM_SHORT_FR } from "@/lib/anti-scam";
+import { getSettings } from "@/server/data/settings";
 import { Container } from "@/components/ui/container";
 import { QuoteActions } from "@/components/order/quote-actions";
 import { InvoicePayment } from "@/components/order/invoice-payment";
@@ -99,6 +100,11 @@ export default async function OrderFlowPage({ params }: Props) {
     label: m.label,
   }));
   const securityCode = orderSecurityCode(order.orderNumber);
+
+  // Manual invoice mode — details are sent by the owner, never shown on-site.
+  const settings = await getSettings().catch(() => ({}) as never);
+  const manualMode = settings?.payment?.manualInvoiceMode === true;
+  const contactPhone = settings?.contact?.phone ?? CONTACT_PHONE;
 
   const terms = isQuote
     ? quoteTerms(
@@ -400,7 +406,11 @@ export default async function OrderFlowPage({ params }: Props) {
             {/* Anti-scam — one calm line, full wording is on the PDF */}
             <p className="text-muted-foreground flex items-start gap-2 text-xs leading-relaxed">
               <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
-              {locale === "fr" ? ANTI_SCAM_SHORT_FR : ANTI_SCAM_SHORT}
+              {manualMode
+                ? t("manualAntiScamShort")
+                : locale === "fr"
+                  ? ANTI_SCAM_SHORT_FR
+                  : ANTI_SCAM_SHORT}
             </p>
 
             {/* Setup + Terms — collapsed, professional disclosures */}
@@ -457,6 +467,10 @@ export default async function OrderFlowPage({ params }: Props) {
                 }
                 methods={methods}
                 securityCode={securityCode}
+                manualMode={manualMode}
+                invoiceId={docNumber}
+                methodLabel={order.paymentMethodLabel}
+                contactPhone={contactPhone}
               />
             )}
           </div>

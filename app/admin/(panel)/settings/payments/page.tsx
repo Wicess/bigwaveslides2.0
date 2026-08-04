@@ -5,6 +5,7 @@ import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminCard, Reveal } from "@/components/admin/admin-ui";
 import { PaymentRailsForm } from "@/components/admin/payment-rails-form";
 import { TransportToggle } from "@/components/admin/transport-toggle";
+import { ManualInvoiceToggle } from "@/components/admin/manual-invoice-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,7 @@ export default async function AdminPaymentsSettingsPage() {
   const methods = await loadPaymentMethods();
   const settings = await getSettings().catch(() => ({}) as never);
   const transportOn = settings?.fees?.transportEnabled !== false;
+  const manualMode = settings?.payment?.manualInvoiceMode === true;
 
   return (
     <div>
@@ -24,6 +26,11 @@ export default async function AdminPaymentsSettingsPage() {
       <Reveal>
         <AdminCard className="mb-5 p-5">
           <TransportToggle initial={transportOn} />
+        </AdminCard>
+      </Reveal>
+      <Reveal delay={0.03}>
+        <AdminCard className="mb-5 p-5">
+          <ManualInvoiceToggle initial={manualMode} />
         </AdminCard>
       </Reveal>
       <Reveal delay={0.05}>

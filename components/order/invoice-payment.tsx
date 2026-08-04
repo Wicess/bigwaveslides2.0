@@ -105,6 +105,10 @@ export function InvoicePayment({
   details,
   methods,
   securityCode,
+  manualMode = false,
+  invoiceId,
+  methodLabel,
+  contactPhone,
 }: {
   orderNumber: string;
   email: string;
@@ -119,6 +123,14 @@ export function InvoicePayment({
   methods: { method: string; label: string }[];
   /** Per-order code shown here AND in the email — the client cross-checks. */
   securityCode: string;
+  /** Manual invoice mode — details are sent by the owner, never shown on-site. */
+  manualMode?: boolean;
+  /** The Invoice ID the client verifies against (manual mode). */
+  invoiceId?: string;
+  /** Chosen method's label (manual mode display). */
+  methodLabel?: string | null;
+  /** Contact phone for the manual-mode "we'll reach you" line. */
+  contactPhone?: string | null;
 }) {
   const t = useTranslations("OrderFlow");
   const router = useRouter();
@@ -151,6 +163,26 @@ export function InvoicePayment({
         </p>
         <p className="mt-1 text-sm leading-relaxed">{t("paidBody")}</p>
       </div>
+    );
+  }
+
+  // Manual invoice mode: once a plan + method are chosen, we never reveal
+  // details on-site — the client verifies against their Invoice ID and the
+  // owner sends the details by email / phone / WhatsApp.
+  if (manualMode && plan) {
+    return (
+      <ManualInvoiceNotice
+        orderNumber={orderNumber}
+        invoiceId={invoiceId ?? orderNumber}
+        methodLabel={methodLabel ?? details?.label ?? methodKey ?? ""}
+        email={email}
+        phone={contactPhone ?? null}
+        amountLabel={dueNow != null ? money(dueNow) : money(storedPayable)}
+        balanceLabel={
+          plan === "HALF" ? money(balanceCents(plan, storedPayable)) : null
+        }
+        state={state}
+      />
     );
   }
 
@@ -346,10 +378,10 @@ export function InvoicePayment({
         ) : (
           <CreditCard className="size-4" />
         )}
-        {t("getPaymentDetails")}
+        {manualMode ? t("continueManual") : t("getPaymentDetails")}
       </Button>
       <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
-        {t("noAutoCharge")}
+        {manualMode ? t("noAutoChargeManual") : t("noAutoCharge")}
       </p>
     </div>
   );
@@ -934,6 +966,199 @@ function Row({ k, children }: { k: string; children: React.ReactNode }) {
     <div className="flex items-baseline justify-between gap-4">
       <dt className="text-muted-foreground shrink-0">{k}</dt>
       <dd className="min-w-0 text-right">{children}</dd>
+    </div>
+  );
+}
+
+/* ───────── Manual invoice mode: no on-site details, verify by Invoice ID ───────── */
+
+function ManualInvoiceNotice({
+  orderNumber,
+  invoiceId,
+  methodLabel,
+  email,
+  phone,
+  amountLabel,
+  balanceLabel,
+  state,
+}: {
+  orderNumber: string;
+  invoiceId: string;
+  methodLabel: string;
+  email: string;
+  phone: string | null;
+  amountLabel: string;
+  balanceLabel: string | null;
+  state: string;
+}) {
+  const t = useTranslations("OrderFlow");
+  const router = useRouter();
+  const [pending, startTransition] = React.useTransition();
+  const [txId, setTxId] = React.useState("");
+  const [proofFile, setProofFile] = React.useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
+  const proofSubmitted = state === "PROOF_SUBMITTED";
+
+  React.useEffect(
+    () => () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    },
+    [previewUrl],
+  );
+
+  const pickFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    e.target.value = "";
+    if (!f) return;
+    if (f.size > 8 * 1024 * 1024) {
+      toast.error(t("proofFileTooLarge"));
+      return;
+    }
+    setProofFile(f);
+    setPreviewUrl(URL.createObjectURL(f));
+  };
+
+  const submitProof = () =>
+    startTransition(async () => {
+      let proofImageUrl: string | undefined;
+      if (proofFile) {
+        try {
+          const fd = new FormData();
+          fd.append("file", proofFile);
+          fd.append("orderNumber", orderNumber);
+          const up = await uploadProofScreenshot(fd);
+          if (up.ok && up.url) proofImageUrl = up.url;
+          else
+            toast.error(t("proofUploadFailed"), {
+              description: t("proofUploadFailedDesc"),
+            });
+        } catch {
+          toast.error(t("proofUploadFailed"), {
+            description: t("proofUploadFailedDesc"),
+          });
+        }
+      }
+      const res = await submitPaymentProof({
+        orderNumber,
+        txId: txId || undefined,
+        proofImageUrl,
+      });
+      if (res.ok) {
+        toast.success(t("proofToast"));
+        router.refresh();
+      } else toast.error(res.error ?? "Something went wrong.");
+    });
+
+  return (
+    <div className="border-border rounded-2xl border p-5 sm:p-6">
+      <div className="flex items-center justify-between gap-3">
+        <p className="font-display min-w-0 text-lg font-bold">
+          {t("manualTitle")}
+        </p>
+        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+          <ShieldCheck className="size-3.5" /> {t("manualBadge")}
+        </span>
+      </div>
+
+      {/* Invoice ID — the anchor the client checks against whatever we send. */}
+      <div className="border-primary/30 bg-primary/5 mt-4 rounded-xl border p-4 text-center">
+        <p className="text-muted-foreground text-[11px] font-bold tracking-[0.14em] uppercase">
+          {t("invoiceIdLabel")}
+        </p>
+        <p className="text-accent font-display mt-1 text-2xl font-extrabold tracking-[0.08em] break-all sm:text-3xl">
+          {invoiceId}
+        </p>
+        <p className="text-muted-foreground mx-auto mt-2 max-w-sm text-xs leading-relaxed">
+          {t("invoiceIdNote")}
+        </p>
+      </div>
+
+      <dl className="mt-4 space-y-2.5 text-sm">
+        <Row k={t("amountDueNow")}>
+          <span className="text-primary font-display text-xl font-bold">
+            {amountLabel}
+          </span>
+        </Row>
+        {balanceLabel ? (
+          <Row k={t("balanceBeforeSetup")}>{balanceLabel}</Row>
+        ) : null}
+        {methodLabel ? <Row k={t("method")}>{methodLabel}</Row> : null}
+      </dl>
+
+      {/* How the details arrive */}
+      <p className="border-primary/20 bg-primary/5 mt-4 rounded-xl border p-3.5 text-sm leading-relaxed">
+        {t("manualBody", { method: methodLabel || t("yourMethod"), email })}{" "}
+        {phone ? t("manualReachPhone", { phone }) : t("manualReach")}
+      </p>
+
+      {/* Verify by Invoice ID — the trust anchor (replaces on-site-only copy). */}
+      <div className="mt-3 rounded-xl border border-amber-300 bg-amber-50 p-3.5 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+        <p className="font-semibold">{t("manualVerifyTitle")}</p>
+        <p className="mt-1 leading-relaxed">{t("manualVerifyBody")}</p>
+      </div>
+
+      {/* Proof — the client can confirm once they've paid. */}
+      {proofSubmitted ? (
+        <div className="mt-5 rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-sm text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200">
+          <p className="font-semibold">{t("proofPendingTitle")}</p>
+          <p className="mt-1 leading-relaxed">{t("proofPendingBody")}</p>
+        </div>
+      ) : (
+        <div className="border-border mt-5 border-t pt-4">
+          <p className="text-sm font-semibold">{t("proofTitle")}</p>
+          <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+            <Input
+              value={txId}
+              onChange={(e) => setTxId(e.target.value)}
+              placeholder={t("proofPlaceholder")}
+              className="min-w-0 sm:max-w-xs"
+            />
+            <Button variant="gradient" disabled={pending} onClick={submitProof}>
+              {pending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <BadgeCheck className="size-4" />
+              )}
+              {t("proofCta")}
+            </Button>
+          </div>
+          {previewUrl && proofFile ? (
+            <div className="border-border mt-2.5 flex min-w-0 items-center gap-2.5 rounded-xl border p-2 sm:max-w-xs">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={previewUrl}
+                alt=""
+                className="size-11 shrink-0 rounded-lg border object-cover"
+              />
+              <span className="text-muted-foreground min-w-0 flex-1 truncate text-xs">
+                {proofFile.name}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setProofFile(null);
+                  setPreviewUrl(null);
+                }}
+                aria-label={t("proofRemoveImage")}
+                className="text-muted-foreground hover:text-foreground shrink-0 p-1"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+          ) : (
+            <label className="border-border text-muted-foreground hover:border-primary hover:text-primary mt-2.5 flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 text-sm font-medium transition-colors sm:w-auto sm:justify-start">
+              <ImagePlus className="size-4 shrink-0" />
+              {t("proofScreenshotCta")}
+              <input
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                onChange={pickFile}
+              />
+            </label>
+          )}
+        </div>
+      )}
     </div>
   );
 }
