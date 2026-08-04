@@ -77,7 +77,7 @@ export default async function PaymentPage({ params }: Props) {
     "",
   );
   const email = settings?.contact?.email ?? CONTACT_EMAIL;
-  const manualMode = settings?.payment?.manualInvoiceMode === true;
+  const manualMode = settings?.payment?.manualInvoiceMode !== false;
 
   const awaiting = order.paymentDetailsState === "AWAITING_DETAILS";
 

@@ -157,7 +157,7 @@ export async function choosePaymentPlan(
     // chosen plan + method, but the destination is sent by the owner (email /
     // phone / WhatsApp) — so we skip resolving it and go straight to AWAITING.
     const settings = await getSettings().catch((): SiteSettings => ({}));
-    const manualMode = settings.payment?.manualInvoiceMode === true;
+    const manualMode = settings.payment?.manualInvoiceMode !== false;
 
     const rails = await loadPaymentMethods();
     const railLabel = rails.find((r) => r.method === method)?.label ?? method;

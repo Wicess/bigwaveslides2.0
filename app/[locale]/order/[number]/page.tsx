@@ -103,7 +103,7 @@ export default async function OrderFlowPage({ params }: Props) {
 
   // Manual invoice mode — details are sent by the owner, never shown on-site.
   const settings = await getSettings().catch(() => ({}) as never);
-  const manualMode = settings?.payment?.manualInvoiceMode === true;
+  const manualMode = settings?.payment?.manualInvoiceMode !== false;
   const contactPhone = settings?.contact?.phone ?? CONTACT_PHONE;
 
   const terms = isQuote

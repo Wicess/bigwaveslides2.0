@@ -615,7 +615,7 @@ export async function orderToPdfInput(
   const eventLocation =
     [addr.address, addr.city].filter(Boolean).join(", ") || undefined;
   const settings = await getSettings().catch((): SiteSettings => ({}));
-  const manualMode = settings.payment?.manualInvoiceMode === true;
+  const manualMode = settings.payment?.manualInvoiceMode !== false;
   return {
     kind: "order",
     docType,

@@ -36,9 +36,10 @@ export type SiteSettings = {
     transportEnabled?: boolean;
   };
   payment?: {
-    /** When ON, payment details are NOT revealed on-site. After the client
-        picks a plan + method they see their Invoice ID + instructions; the
-        owner reaches out with the details (email / phone / WhatsApp). */
+    /** Manual invoice mode — DEFAULT ON (unset = on). When on, payment details
+        are NOT revealed on-site: after the client picks a plan + method they
+        see their Invoice ID + instructions, and the owner reaches out with the
+        details (email / phone / WhatsApp). Set false to use the on-site reveal. */
     manualInvoiceMode?: boolean;
   };
 };

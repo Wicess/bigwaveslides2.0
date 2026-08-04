@@ -14,7 +14,7 @@ export default async function AdminPaymentsSettingsPage() {
   const methods = await loadPaymentMethods();
   const settings = await getSettings().catch(() => ({}) as never);
   const transportOn = settings?.fees?.transportEnabled !== false;
-  const manualMode = settings?.payment?.manualInvoiceMode === true;
+  const manualMode = settings?.payment?.manualInvoiceMode !== false;
 
   return (
     <div>
