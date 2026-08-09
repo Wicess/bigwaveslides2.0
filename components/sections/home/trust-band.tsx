@@ -14,7 +14,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { optimizedSrc } from "@/lib/image-loader";
 
 // Base URL of the R2 bucket folder that holds the partner logo images.
-const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/partners";
+const R2 = "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/partners";
 // List of logo file names. The .map() below turns each one into a full URL
 // (e.g. "https://.../partners/33679843.jpg") so we can drop them straight
 // into <img src=...>.

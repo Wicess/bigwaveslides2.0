@@ -9,7 +9,7 @@ import { Section } from "@/components/ui/section";
 import { PhotoHero } from "@/components/ui/photo-hero";
 
 const PRIVACY_HERO =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -26,13 +26,17 @@ export default async function PrivacyPage({ params }: Props) {
 
   return (
     <main>
-      <PhotoHero image={PRIVACY_HERO} title={data.title} description={data.intro} />
+      <PhotoHero
+        image={PRIVACY_HERO}
+        title={data.title}
+        description={data.intro}
+      />
       <Section spacing="compact" className="bg-muted/30 pb-16">
         <Container className="max-w-3xl space-y-8">
           {data.sections.map((s) => (
             <section key={s.heading}>
               <h2 className="text-xl font-semibold">{s.heading}</h2>
-              <p className="mt-2 text-muted-foreground">{s.body}</p>
+              <p className="text-muted-foreground mt-2">{s.body}</p>
             </section>
           ))}
         </Container>

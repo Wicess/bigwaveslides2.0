@@ -14,7 +14,7 @@ import { Reveal } from "@/components/motion/reveal";
 type Props = { params: Promise<{ locale: string }> };
 
 const HERO =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -48,7 +48,7 @@ export default async function UseCasesHubPage({ params }: Props) {
       <Section spacing="compact" className="pt-10">
         <Container className="max-w-[84rem]">
           <Reveal className="max-w-3xl">
-            <p className="text-lg leading-relaxed text-muted-foreground">
+            <p className="text-muted-foreground text-lg leading-relaxed">
               From backyard birthdays to school field days and company picnics,
               Big Wave Slides has a fully-insured water slide sized for your
               event — delivered and set up anywhere in the country.
@@ -60,12 +60,12 @@ export default async function UseCasesHubPage({ params }: Props) {
               <Reveal key={u.slug} delay={(i % 3) * 0.05}>
                 <Link
                   href={`/water-slides-for/${u.slug}`}
-                  className="group flex h-full flex-col rounded-2xl border border-border bg-background p-5 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]"
+                  className="group border-border bg-background hover:border-primary/40 flex h-full flex-col rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)]"
                 >
-                  <h2 className="font-display text-lg font-semibold transition-colors group-hover:text-primary">
+                  <h2 className="font-display group-hover:text-primary text-lg font-semibold transition-colors">
                     {u.name}
                   </h2>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
                     {u.heroDescription}
                   </p>
                 </Link>

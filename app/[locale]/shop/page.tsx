@@ -10,7 +10,7 @@ import { PhotoHero } from "@/components/ui/photo-hero";
 import { ShopView } from "@/components/shop/shop-view";
 
 const SHOP_HERO_IMAGE =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552076322-pu88b6-custom-builds.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/services/1782552076322-pu88b6-custom-builds.jpg";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Props = {

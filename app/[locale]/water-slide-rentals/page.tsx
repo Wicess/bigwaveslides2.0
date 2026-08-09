@@ -35,7 +35,7 @@ type Props = { params: Promise<{ locale: string }> };
 export const revalidate = 3600;
 
 const HERO =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479234273-ipwk85-overview-dream-space-water-park-chongqing-china-photo01-2048x1277.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782479234273-ipwk85-overview-dream-space-water-park-chongqing-china-photo01-2048x1277.jpg";
 
 const REGIONS = ["Northeast", "Midwest", "South", "West"] as const;
 
@@ -124,10 +124,11 @@ export default async function LocationsHubPage({ params }: Props) {
         <Container className="max-w-[84rem]">
           <Reveal className="max-w-3xl">
             <p className="text-muted-foreground text-lg leading-relaxed">
-              Looking for a water slide rental near you? Big Wave Slides delivers
-              to 50+ major metros and every U.S. state — commercial-grade slides,
-              delivered, set up, sanitized, and fully insured. Pick your city
-              below or check your date to book in under a minute.
+              Looking for a water slide rental near you? Big Wave Slides
+              delivers to 50+ major metros and every U.S. state —
+              commercial-grade slides, delivered, set up, sanitized, and fully
+              insured. Pick your city below or check your date to book in under
+              a minute.
             </p>
             {/* Trust row */}
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">

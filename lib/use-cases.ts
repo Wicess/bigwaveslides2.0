@@ -21,7 +21,7 @@ export type UseCase = {
   hero: string;
 };
 
-const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev";
+const R2 = "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev";
 
 export const USE_CASES: UseCase[] = [
   {

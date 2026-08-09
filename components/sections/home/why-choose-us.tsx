@@ -27,7 +27,7 @@ import { MediaImage } from "@/components/ui/media-image";
 import { EASE_OUT } from "@/components/motion/variants";
 
 const WHY_IMAGE =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/why/trusted.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/why/trusted.jpg";
 
 // Easing curve for the count-up animation. Given progress "x" from 0 to 1, it
 // returns an eased 0..1 value that starts fast and slows down near the end,
@@ -118,7 +118,7 @@ export function WhyChooseUs() {
         };
 
   return (
-    <section className="bg-gradient-to-b from-white via-primary-50/50 to-white py-10 sm:py-14 lg:py-16">
+    <section className="via-primary-50/50 bg-gradient-to-b from-white to-white py-10 sm:py-14 lg:py-16">
       <Container className="max-w-[96rem]">
         {/* The split card. On large screens it's a 2-column grid where the
             image column is wider (1.55fr) than the stats column (1fr). */}
@@ -140,13 +140,13 @@ export function WhyChooseUs() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/10" />
 
             <div className="relative">
-              <h2 className="max-w-md font-display text-3xl font-bold leading-[1.1] tracking-tight drop-shadow-[0_3px_14px_rgba(0,0,0,0.55)] sm:text-4xl">
+              <h2 className="font-display max-w-md text-3xl leading-[1.1] font-bold tracking-tight drop-shadow-[0_3px_14px_rgba(0,0,0,0.55)] sm:text-4xl">
                 {t("whyTitle")}
               </h2>
               <Button
                 asChild
                 size="lg"
-                className="mt-6 bg-white text-accent shadow-lg transition-transform duration-200 hover:-translate-y-0.5 hover:bg-white/90"
+                className="text-accent mt-6 bg-white shadow-lg transition-transform duration-200 hover:-translate-y-0.5 hover:bg-white/90"
               >
                 <Link href="/rent">
                   {t("ctaRentNow")} <ArrowRight className="size-4" />
@@ -159,18 +159,24 @@ export function WhyChooseUs() {
               so the two halves meet in the middle. */}
           <motion.div
             {...slide(48)}
-            className="flex flex-col justify-center gap-7 bg-gradient-to-br from-primary-50 to-white p-7 sm:p-9 lg:p-10"
+            className="from-primary-50 flex flex-col justify-center gap-7 bg-gradient-to-br to-white p-7 sm:p-9 lg:p-10"
           >
-            <p className="max-w-sm text-pretty text-base leading-relaxed text-muted-foreground">
+            <p className="text-muted-foreground max-w-sm text-base leading-relaxed text-pretty">
               {t("trustServing")}
             </p>
             <div className="grid grid-cols-2 gap-x-6 gap-y-7">
               {stats.map((s) => (
                 <div key={s.label} className="group/stat">
-                  <p className="font-display text-4xl font-bold text-accent transition-transform duration-300 group-hover/stat:scale-105 sm:text-5xl">
-                    <Counter to={s.to} suffix={s.suffix} decimals={s.decimals} />
+                  <p className="font-display text-accent text-4xl font-bold transition-transform duration-300 group-hover/stat:scale-105 sm:text-5xl">
+                    <Counter
+                      to={s.to}
+                      suffix={s.suffix}
+                      decimals={s.decimals}
+                    />
                   </p>
-                  <p className="mt-1.5 text-sm text-muted-foreground">{s.label}</p>
+                  <p className="text-muted-foreground mt-1.5 text-sm">
+                    {s.label}
+                  </p>
                 </div>
               ))}
             </div>

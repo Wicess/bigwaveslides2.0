@@ -40,7 +40,7 @@ export const revalidate = 3600;
 type Props = { params: Promise<{ locale: string; state: string }> };
 
 const HERO =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
 
 export function generateStaticParams() {
   return US_STATES.map((s) => ({ state: s.slug }));

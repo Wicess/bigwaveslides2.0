@@ -383,7 +383,7 @@ function PanelCta({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={optimizedSrc(
-          "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/hero/aquaforms.jpg",
+          "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/hero/aquaforms.jpg",
           640,
         )}
         alt=""

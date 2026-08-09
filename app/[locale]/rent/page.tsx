@@ -13,7 +13,7 @@ import { PhotoHero } from "@/components/ui/photo-hero";
 import { ProductCard } from "@/components/shop/product-card";
 
 const RENT_HERO_IMAGE =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/services/1782552093459-u6mqiy-event-rentals.jpg";
 import { Pagination } from "@/components/shop/pagination";
 import { Reveal } from "@/components/motion/reveal";
 import { buildMetadata } from "@/lib/seo";

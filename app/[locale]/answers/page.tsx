@@ -17,7 +17,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 type Props = { params: Promise<{ locale: string }> };
 
 const HERO =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -62,7 +62,7 @@ export default async function AnswersPage({ params }: Props) {
         description="Clear, straight answers to the questions renters ask most — cost, space and setup, safety, weather, and booking. Big Wave Slides delivers nationwide from $199/day, fully insured."
       />
 
-      <Section spacing="compact" className="pb-16 pt-10">
+      <Section spacing="compact" className="pt-10 pb-16">
         <Container className="max-w-3xl">
           <Reveal>
             <p className="text-muted-foreground text-lg leading-relaxed">
@@ -83,7 +83,7 @@ export default async function AnswersPage({ params }: Props) {
                 <Reveal>
                   <h2
                     id={`${cat.slug}-heading`}
-                    className="text-primary flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em]"
+                    className="text-primary flex items-center gap-3 text-sm font-semibold tracking-[0.18em] uppercase"
                   >
                     <span className="bg-primary/40 h-px w-8" />
                     {cat.title}

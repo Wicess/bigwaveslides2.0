@@ -16,7 +16,7 @@ import { optimizedSrc } from "@/lib/image-loader";
 // Background photo, served from Cloudflare R2 (CDN) rather than /public so the
 // large image loads quickly and stays out of the app bundle.
 const CTA_BG =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/featured/serengeti.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/featured/serengeti.jpg";
 
 export async function FinalCta() {
   const t = await getTranslations("Home");

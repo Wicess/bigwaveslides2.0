@@ -76,25 +76,25 @@ const TEAM: { name: string; role: string; image: string }[] = [
     name: "Marcus Reed",
     role: "Founder & CEO",
     image:
-      "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/team/1782624097442-0xajff-marcus.jpg",
+      "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/team/1782624097442-0xajff-marcus.jpg",
   },
   {
     name: "Daniela Cruz",
     role: "Operations Lead",
     image:
-      "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/team/1782624096502-4tq4jm-daniela.jpg",
+      "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/team/1782624096502-4tq4jm-daniela.jpg",
   },
   {
     name: "Tyrone Walsh",
     role: "Head of Safety",
     image:
-      "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/team/1782624098761-ae6zut-tyrone.jpg",
+      "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/team/1782624098761-ae6zut-tyrone.jpg",
   },
   {
     name: "Aisha Bennett",
     role: "Customer Care",
     image:
-      "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/team/1782624094683-yklqrn-aisha.jpg",
+      "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/team/1782624094683-yklqrn-aisha.jpg",
   },
 ];
 
@@ -109,7 +109,7 @@ export default async function AboutPage({ params }: Props) {
     <main>
       {/* Hero — centered animated title (shared PhotoHero). */}
       <PhotoHero
-        image="https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/about/1782501611506-twt9il-aquaforms-1800-island-waterpark-at-showboat-atlantic-city-usa-photo14-1536x1006.jpg"
+        image="https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/about/1782501611506-twt9il-aquaforms-1800-island-waterpark-at-showboat-atlantic-city-usa-photo14-1536x1006.jpg"
         title={t("title")}
         description={t("intro")}
       />

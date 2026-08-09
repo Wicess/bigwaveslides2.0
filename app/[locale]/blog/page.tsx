@@ -4,12 +4,19 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/seo";
-import { getPosts, getBlogCategories, getPopularTags } from "@/server/data/blog";
+import {
+  getPosts,
+  getBlogCategories,
+  getPopularTags,
+} from "@/server/data/blog";
 import { PageHeader } from "@/components/ui/page-header";
 import { BlogView } from "@/components/blog/blog-view";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams };
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: SearchParams;
+};
 
 // ISR: surface admin content edits on the live site within this window.
 export const revalidate = 600;
@@ -62,7 +69,7 @@ export default async function BlogPage({ params, searchParams }: Props) {
         description={t("desc")}
         align="center"
         overlapHeader
-        backgroundImage="https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782479234273-ipwk85-overview-dream-space-water-park-chongqing-china-photo01-2048x1277.jpg"
+        backgroundImage="https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782479234273-ipwk85-overview-dream-space-water-park-chongqing-china-photo01-2048x1277.jpg"
       />
       <BlogView
         locale={locale}

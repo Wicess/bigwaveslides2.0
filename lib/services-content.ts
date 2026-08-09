@@ -32,7 +32,7 @@ export type ServiceItem = {
 
 export type ServiceGroup = { key: string; label: LT; items: ServiceItem[] };
 
-const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev";
+const R2 = "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev";
 
 // Hover clips (uploaded to R2 from images/Videos).
 const VID = {
@@ -65,7 +65,10 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Notre service le plus populaire. Nous apportons des toboggans premium, fraîchement désinfectés, directement chez vous pour les anniversaires, fêtes à la piscine, remises de diplômes et réunions de famille. Vous choisissez le toboggan; nous nous occupons de la livraison, de l'installation professionnelle et du démontage.\n\nChaque location est entièrement assurée et installée par une équipe formée — il ne vous reste plus qu'à inviter vos convives et prendre une serviette.",
         ),
         highlights: [
-          l("Delivery, pro setup & takedown", "Livraison, installation et démontage"),
+          l(
+            "Delivery, pro setup & takedown",
+            "Livraison, installation et démontage",
+          ),
           l("Cleaned & sanitized units", "Unités nettoyées et désinfectées"),
           l("Wet or dry options", "Options mouillées ou sèches"),
           l("Fully insured", "Entièrement assuré"),
@@ -77,7 +80,10 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         icon: "building",
         image: `${R2}/services/1782552074294-bmchk4-corporate-community-events.jpg`,
         video: VID.hailuo,
-        title: l("Corporate & Community Events", "Événements d'entreprise et communautaires"),
+        title: l(
+          "Corporate & Community Events",
+          "Événements d'entreprise et communautaires",
+        ),
         tagline: l(
           "Company picnics, festivals, and municipal celebrations people actually remember.",
           "Pique-niques d'entreprise, festivals et fêtes municipales dont on se souvient vraiment.",
@@ -87,19 +93,28 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Transformez un événement ordinaire en moment fort de l'année. Nous fournissons des toboggans à grande capacité et plusieurs unités pour les journées familiales d'entreprise, les événements de reconnaissance, les collectes de fonds et les festivals — dimensionnés à votre foule pour des files courtes.\n\nNous coordonnons toute la logistique : emplacement, eau et électricité, préposés sur place, et l'assurance et la documentation exigées par les lieux et les municipalités.",
         ),
         highlights: [
-          l("High-capacity & multi-unit setups", "Installations à grande capacité et multi-unités"),
+          l(
+            "High-capacity & multi-unit setups",
+            "Installations à grande capacité et multi-unités",
+          ),
           l("Crowd-flow planning", "Planification du flux de foule"),
           l("On-site attendants available", "Préposés sur place disponibles"),
           l("Permit & insurance support", "Soutien permis et assurance"),
         ],
-        cta: { kind: "quote", label: l("Plan your event", "Planifier votre événement") },
+        cta: {
+          kind: "quote",
+          label: l("Plan your event", "Planifier votre événement"),
+        },
       },
       {
         slug: "school-camp-church",
         icon: "school",
         image: `${R2}/services/1782552119390-i5m17c-school-camp-church.jpg`,
         video: VID.kids,
-        title: l("School, Camp & Church Events", "Écoles, camps et événements paroissiaux"),
+        title: l(
+          "School, Camp & Church Events",
+          "Écoles, camps et événements paroissiaux",
+        ),
         tagline: l(
           "Safe, insured, age-appropriate fun for field days, camps, and congregations.",
           "Du plaisir sûr, assuré et adapté à l'âge pour journées sportives, camps et communautés.",
@@ -111,10 +126,16 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         highlights: [
           l("Age-grouped slide selection", "Sélection par groupe d'âge"),
           l("Trained on-site supervision", "Supervision formée sur place"),
-          l("Insurance certificates on request", "Certificats d'assurance sur demande"),
+          l(
+            "Insurance certificates on request",
+            "Certificats d'assurance sur demande",
+          ),
           l("Flexible scheduling", "Horaires flexibles"),
         ],
-        cta: { kind: "quote", label: l("Request a quote", "Demander un devis") },
+        cta: {
+          kind: "quote",
+          label: l("Request a quote", "Demander un devis"),
+        },
       },
     ],
   },
@@ -137,12 +158,18 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Vous utilisez un toboggan souvent ? L'achat peut être plus judicieux. Nous vendons des toboggans et combos gonflables de qualité commerciale — les mêmes unités durables et certifiées que celles de notre flotte de location — aux associations, camps, écoles, églises et exploitants.\n\nDites-nous comment vous l'utiliserez et nous recommanderons le bon modèle, puis nous gérons la commande, la livraison et la première installation pour bien démarrer.",
         ),
         highlights: [
-          l("Commercial-grade, certified units", "Unités certifiées de qualité commerciale"),
+          l(
+            "Commercial-grade, certified units",
+            "Unités certifiées de qualité commerciale",
+          ),
           l("Guidance on the right model", "Conseils sur le bon modèle"),
           l("Delivery & first setup", "Livraison et première installation"),
           l("Warranty-backed", "Garantie incluse"),
         ],
-        cta: { kind: "shop", label: l("Shop water slides", "Magasiner les toboggans") },
+        cta: {
+          kind: "shop",
+          label: l("Shop water slides", "Magasiner les toboggans"),
+        },
       },
       {
         slug: "custom-builds",
@@ -167,7 +194,10 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           l("Manufacturing & installation", "Fabrication et installation"),
           l("Commissioning & maintenance", "Mise en service et entretien"),
         ],
-        cta: { kind: "quote", label: l("Start your project", "Lancer votre projet") },
+        cta: {
+          kind: "quote",
+          label: l("Start your project", "Lancer votre projet"),
+        },
       },
     ],
   },
@@ -180,7 +210,10 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         icon: "truck",
         image: `${R2}/services/1782552087460-pj161e-delivery-installation.jpg`,
         video: VID.friendsA,
-        title: l("Delivery, Installation & Anchoring", "Livraison, installation et ancrage"),
+        title: l(
+          "Delivery, Installation & Anchoring",
+          "Livraison, installation et ancrage",
+        ),
         tagline: l(
           "Professional, by-the-book setup — every anchor, every time.",
           "Une installation professionnelle et rigoureuse — chaque ancrage, à chaque fois.",
@@ -195,14 +228,20 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           l("Water & power hookup", "Raccordement eau et électricité"),
           l("Pre-use safety inspection", "Inspection de sécurité avant usage"),
         ],
-        cta: { kind: "quote", label: l("Request a quote", "Demander un devis") },
+        cta: {
+          kind: "quote",
+          label: l("Request a quote", "Demander un devis"),
+        },
       },
       {
         slug: "maintenance-inspection",
         icon: "wrench",
         image: `${R2}/services/1782552113063-v32fls-maintenance-inspection.jpg`,
         video: VID.hailuo,
-        title: l("Maintenance, Inspection & Repair", "Entretien, inspection et réparation"),
+        title: l(
+          "Maintenance, Inspection & Repair",
+          "Entretien, inspection et réparation",
+        ),
         tagline: l(
           "Keep your investment safe, clean, and ready season after season.",
           "Gardez votre investissement sûr, propre et prêt, saison après saison.",
@@ -213,18 +252,30 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         ),
         highlights: [
           l("Deep clean & sanitize", "Nettoyage et désinfection en profondeur"),
-          l("Seam, blower & anchor checks", "Vérif. coutures, souffleurs et ancrages"),
+          l(
+            "Seam, blower & anchor checks",
+            "Vérif. coutures, souffleurs et ancrages",
+          ),
           l("Fast repairs", "Réparations rapides"),
-          l("Documented inspection reports", "Rapports d'inspection documentés"),
+          l(
+            "Documented inspection reports",
+            "Rapports d'inspection documentés",
+          ),
         ],
-        cta: { kind: "quote", label: l("Request a quote", "Demander un devis") },
+        cta: {
+          kind: "quote",
+          label: l("Request a quote", "Demander un devis"),
+        },
       },
       {
         slug: "event-staffing",
         icon: "shield",
         image: `${R2}/services/1782552095056-no8wig-event-staffing.jpg`,
         video: VID.kids,
-        title: l("Event Staffing & On-Site Safety", "Personnel d'événement et sécurité sur place"),
+        title: l(
+          "Event Staffing & On-Site Safety",
+          "Personnel d'événement et sécurité sur place",
+        ),
         tagline: l(
           "Trained attendants so you can enjoy the day instead of lifeguarding it.",
           "Des préposés formés pour profiter de la journée au lieu de la surveiller.",
@@ -237,12 +288,20 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           l("Trained, friendly attendants", "Préposés formés et accueillants"),
           l("Rider rules & age grouping", "Règles et regroupement par âge"),
           l("Line & rotation management", "Gestion des files et rotations"),
-          l("Weather-watch & safety calls", "Veille météo et décisions de sécurité"),
+          l(
+            "Weather-watch & safety calls",
+            "Veille météo et décisions de sécurité",
+          ),
         ],
-        cta: { kind: "quote", label: l("Request a quote", "Demander un devis") },
+        cta: {
+          kind: "quote",
+          label: l("Request a quote", "Demander un devis"),
+        },
       },
     ],
   },
 ];
 
-export const ALL_SERVICES: ServiceItem[] = SERVICE_GROUPS.flatMap((g) => g.items);
+export const ALL_SERVICES: ServiceItem[] = SERVICE_GROUPS.flatMap(
+  (g) => g.items,
+);

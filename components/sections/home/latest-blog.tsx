@@ -28,14 +28,18 @@ type Post = {
 };
 
 // Base URL of the R2 storage folder holding our blog cover images.
-const R2 = "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog";
+const R2 = "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog";
 /**
  * Hand-picked water-slide cover images (stored in R2), one per card position.
  * BLOG_IMAGES[0] is used for the first card, [1] for the second, and so on.
  * Using a fixed list keeps the section looking polished regardless of which
  * posts come back from the database.
  */
-const BLOG_IMAGES = [`${R2}/backyard.jpg`, `${R2}/choose.jpg`, `${R2}/aqua.webp`];
+const BLOG_IMAGES = [
+  `${R2}/backyard.jpg`,
+  `${R2}/choose.jpg`,
+  `${R2}/aqua.webp`,
+];
 
 /**
  * The shape of a single wavy line, written in SVG path syntax. "Q" and "T" are
@@ -103,11 +107,29 @@ function WaveDivider() {
   return (
     <div aria-hidden className="relative h-12 w-full overflow-hidden sm:h-16">
       {/* Back line: faintest, slowest. */}
-      <WaveLine color="#00d4ff" width={2} opacity={0.35} duration="20s" top="10px" />
+      <WaveLine
+        color="#00d4ff"
+        width={2}
+        opacity={0.35}
+        duration="20s"
+        top="10px"
+      />
       {/* Middle line. */}
-      <WaveLine color="#0099ff" width={2.5} opacity={0.6} duration="15s" top="2px" />
+      <WaveLine
+        color="#0099ff"
+        width={2.5}
+        opacity={0.6}
+        duration="15s"
+        top="2px"
+      />
       {/* Front line: boldest, fastest. */}
-      <WaveLine color="#33abff" width={3} opacity={0.9} duration="11s" top="-4px" />
+      <WaveLine
+        color="#33abff"
+        width={3}
+        opacity={0.9}
+        duration="11s"
+        top="-4px"
+      />
     </div>
   );
 }
@@ -123,14 +145,14 @@ export async function LatestBlog({
   if (posts.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden bg-muted">
+    <section className="bg-muted relative overflow-hidden">
       <WaveDivider />
 
-      <Container className="pb-12 pt-6 sm:pb-16 sm:pt-8 lg:pb-20">
+      <Container className="pt-6 pb-12 sm:pt-8 sm:pb-16 lg:pb-20">
         {/* Centered header */}
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-balance text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">
+            <h2 className="text-3xl leading-[1.1] font-bold tracking-tight text-balance sm:text-4xl lg:text-5xl">
               {t("blogTitle")}
             </h2>
           </div>
@@ -154,7 +176,7 @@ export async function LatestBlog({
                 */}
                 <Link
                   href={`/blog/${p.slug}`}
-                  className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-border/60 shadow-[0_2px_12px_rgba(16,24,40,0.05)] transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[var(--shadow-soft)]"
+                  className="group ring-border/60 flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-[0_2px_12px_rgba(16,24,40,0.05)] ring-1 transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[var(--shadow-soft)]"
                 >
                   <div className="relative overflow-hidden">
                     {/* Cover image. On card hover it slowly zooms to 110%. */}
@@ -170,7 +192,7 @@ export async function LatestBlog({
                     ) : null}
                     {/* Category badge, shown only if the post has a category. */}
                     {p.category ? (
-                      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-primary-700 shadow-sm backdrop-blur">
+                      <span className="text-primary-700 absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold shadow-sm backdrop-blur">
                         {getLocalized(p.category.name, locale)}
                       </span>
                     ) : null}
@@ -181,7 +203,7 @@ export async function LatestBlog({
 
                   <div className="flex flex-1 flex-col p-6">
                     {/* Meta row: estimated reading time and (if set) publish date. */}
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <div className="text-muted-foreground flex items-center gap-2 text-xs">
                       <Clock className="size-3.5" />
                       {p.readingMinutes} min
                       {p.publishedAt ? (
@@ -191,15 +213,15 @@ export async function LatestBlog({
                         </>
                       ) : null}
                     </div>
-                    <h3 className="mt-3 text-lg font-bold leading-snug tracking-tight transition-colors group-hover:text-primary">
+                    <h3 className="group-hover:text-primary mt-3 text-lg leading-snug font-bold tracking-tight transition-colors">
                       {getLocalized(p.title, locale)}
                     </h3>
-                    <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    <p className="text-muted-foreground mt-2 line-clamp-2 flex-1 text-sm leading-relaxed">
                       {getLocalized(p.excerpt, locale)}
                     </p>
                     {/* "Read more" call-to-action. On hover the arrow nudges
                         right to hint that the card is clickable. */}
-                    <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700">
+                    <span className="text-primary-700 mt-5 inline-flex items-center gap-1.5 text-sm font-semibold">
                       {t("readMore")}
                       <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
                     </span>

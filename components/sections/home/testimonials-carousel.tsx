@@ -28,7 +28,7 @@ import { optimizedSrc } from "@/lib/image-loader";
 
 // Background image (hosted on Cloudflare R2) shown behind the reviews.
 const BG =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/categories/pool.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/categories/pool.jpg";
 const DESKTOP_COUNT = 4; // how many cards the desktop grid shows at once.
 const SWAP_MS = 3200; // desktop: how often (ms) one card is swapped out.
 const MOBILE_MS = 4500; // mobile: how often (ms) the carousel auto-advances.

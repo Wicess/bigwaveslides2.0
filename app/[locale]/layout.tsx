@@ -145,7 +145,7 @@ export default async function LocaleLayout({
             these resource hints into <head>. */}
         <link
           rel="preconnect"
-          href="https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev"
+          href="https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev"
           crossOrigin=""
         />
         <link rel="preconnect" href="https://wsrv.nl" crossOrigin="" />

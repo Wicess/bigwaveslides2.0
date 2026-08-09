@@ -15,7 +15,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { faqLd } from "@/lib/structured-data";
 
 const FAQ_HERO =
-  "https://pub-ca1791fe88d8410aaf549be7c465c708.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg";
+  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg";
 
 type Props = { params: Promise<{ locale: string }> };
 
