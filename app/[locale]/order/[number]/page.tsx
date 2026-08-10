@@ -29,7 +29,6 @@ import { cn } from "@/lib/utils";
 const LOGO =
   "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
 const CONTACT_EMAIL = "contact@bigwavesslides.com";
-const CONTACT_PHONE = "+1 (614) 302-5899";
 
 // Live order-status page — never serve it from the Full Route Cache.
 export const dynamic = "force-dynamic";
@@ -104,7 +103,9 @@ export default async function OrderFlowPage({ params }: Props) {
   // Manual invoice mode — details are sent by the owner, never shown on-site.
   const settings = await getSettings().catch(() => ({}) as never);
   const manualMode = settings?.payment?.manualInvoiceMode !== false;
-  const contactPhone = settings?.contact?.phone ?? CONTACT_PHONE;
+  // Null when unset — downstream components hide the phone rather than showing
+  // a hardcoded number the admin panel doesn't control.
+  const contactPhone = settings?.contact?.phone?.trim() || null;
 
   const terms = isQuote
     ? quoteTerms(
@@ -476,7 +477,8 @@ export default async function OrderFlowPage({ params }: Props) {
           </div>
 
           <footer className="border-border text-muted-foreground border-t px-6 py-4 text-center text-xs sm:px-10">
-            Big Wave Slides · {CONTACT_EMAIL} · {CONTACT_PHONE}
+            Big Wave Slides · {CONTACT_EMAIL}
+            {contactPhone ? ` · ${contactPhone}` : ""}
           </footer>
         </article>
       </Container>

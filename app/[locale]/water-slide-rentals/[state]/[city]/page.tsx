@@ -21,6 +21,7 @@ import { getCityLocal } from "@/lib/city-local";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
 import { getGuideLinks } from "@/server/data/blog";
+import { getSettings } from "@/server/data/settings";
 import { pickN } from "@/lib/internal-links";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -153,9 +154,20 @@ export default async function CityRentalPage({ params }: Props) {
     { icon: Truck, label: "Delivery & setup included" },
   ];
 
+  // Contact comes from Settings → Contact so schema only advertises a phone
+  // once one is actually configured (and shown) on the site.
+  const settings = await getSettings().catch(() => ({}) as never);
+
   return (
     <main>
-      <JsonLd data={localBusinessAreaLd(place, canonical)} />
+      <JsonLd
+        data={localBusinessAreaLd(
+          place,
+          canonical,
+          undefined,
+          settings?.contact,
+        )}
+      />
       <JsonLd
         data={breadcrumbLd([
           {

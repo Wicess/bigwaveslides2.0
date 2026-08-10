@@ -41,8 +41,6 @@ import type { NavData } from "@/server/data/navigation";
 
 type Props = { locale: string; data: NavData };
 
-const FALLBACK_PHONE = "+16143025899";
-
 export function SiteHeader({ locale, data }: Props) {
   const t = useTranslations("Layout");
   const tn = useTranslations("Nav");
@@ -65,10 +63,12 @@ export function SiteHeader({ locale, data }: Props) {
 
   // Small helper: picks the right-language string from a localized value.
   const loc = (v: unknown) => getLocalized(v, locale);
-  // Use the configured contact phone if present, otherwise fall back to a default.
-  const phone = data.settings.contact?.phone ?? FALLBACK_PHONE;
+  // The call button is driven entirely by Settings → Contact. With no number
+  // configured it is hidden rather than dialing a hardcoded fallback; set the
+  // phone in the admin panel and it reappears everywhere on the next request.
+  const phone = data.settings.contact?.phone?.trim() || null;
   // Build a "tel:" link, stripping everything except digits and a leading "+".
-  const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
+  const telHref = phone ? `tel:${phone.replace(/[^+\d]/g, "")}` : null;
 
   return (
     // `sticky top-0` keeps this header pinned to the top of the viewport as the
@@ -213,10 +213,13 @@ export function SiteHeader({ locale, data }: Props) {
             <InstallApp variant="chip" />
 
             {/* Phone link uses `external` so IconChip renders a plain <a> for the
-                tel: URL instead of the locale-aware <Link>. */}
-            <IconChip href={telHref} label={t("call")} external>
-              <Phone className="size-4 sm:size-[18px]" />
-            </IconChip>
+                tel: URL instead of the locale-aware <Link>. Omitted entirely
+                when no contact phone is configured. */}
+            {telHref ? (
+              <IconChip href={telHref} label={t("call")} external>
+                <Phone className="size-4 sm:size-[18px]" />
+              </IconChip>
+            ) : null}
 
             <AccountChip label={t("account")} />
 

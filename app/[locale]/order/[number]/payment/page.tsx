@@ -21,7 +21,6 @@ import { PaymentTrust } from "@/components/order/payment-trust";
 const LOGO =
   "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
 const CONTACT_EMAIL = "contact@bigwavesslides.com";
-const FALLBACK_PHONE = "+16143025899";
 
 // Live payment page — never serve it from the Full Route Cache.
 export const dynamic = "force-dynamic";
@@ -70,12 +69,12 @@ export default async function PaymentPage({ params }: Props) {
 
   // Contact channels for the "talk to a human before you pay" strip.
   const settings = await getSettings().catch(() => ({}) as never);
-  const phone = settings?.contact?.phone ?? FALLBACK_PHONE;
-  const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
-  const waDigits = (settings?.contact?.whatsapp ?? phone).replace(
-    /[^0-9]/g,
-    "",
-  );
+  // Both channels are driven by Settings → Contact; each is hidden until its
+  // number is configured, rather than falling back to a hardcoded one. Email is
+  // always present, so the strip never ends up with no way to reach a human.
+  const phone = settings?.contact?.phone?.trim() || null;
+  const telHref = phone ? `tel:${phone.replace(/[^+\d]/g, "")}` : null;
+  const waDigits = (settings?.contact?.whatsapp ?? "").replace(/[^0-9]/g, "");
   const email = settings?.contact?.email ?? CONTACT_EMAIL;
   const manualMode = settings?.payment?.manualInvoiceMode !== false;
 
@@ -172,12 +171,14 @@ export default async function PaymentPage({ params }: Props) {
             {t("talkDesc")}
           </p>
           <div className="mt-4 flex flex-col justify-center gap-2.5 sm:flex-row">
-            <a
-              href={telHref}
-              className="border-border hover:border-primary hover:text-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors"
-            >
-              <Phone className="size-4" /> {phone}
-            </a>
+            {telHref ? (
+              <a
+                href={telHref}
+                className="border-border hover:border-primary hover:text-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors"
+              >
+                <Phone className="size-4" /> {phone}
+              </a>
+            ) : null}
             {waDigits ? (
               <a
                 href={`https://wa.me/${waDigits}`}

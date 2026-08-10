@@ -145,7 +145,6 @@ function stripHtml(html: string): string {
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 const CONTACT_EMAIL = "contact@bigwavesslides.com";
-const CONTACT_PHONE = "+1 (614) 302-5899";
 // Hosted on R2 CDN so it renders in email clients independently of site deploys.
 const EMAIL_LOGO =
   "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
@@ -169,6 +168,9 @@ export function renderEmail(opts: {
   receipt?: { amount: string; caption: string };
   cta?: { label: string; url: string };
   outro?: string;
+  /** Contact phone for the footer. Omitted when unset, so emails never print a
+      number that Settings → Contact doesn't currently publish on the site. */
+  phone?: string | null;
 }): string {
   const preheader = opts.preheader ?? opts.intro;
 
@@ -244,8 +246,11 @@ export function renderEmail(opts: {
           <p style="margin:0 0 4px;color:#475569;font-size:13px;font-weight:600">Big Wave Slides</p>
           <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6">
             <a href="mailto:${CONTACT_EMAIL}" style="color:#0099FF;text-decoration:none">${CONTACT_EMAIL}</a>
-            &nbsp;·&nbsp;
-            <a href="tel:+16143025899" style="color:#0099FF;text-decoration:none">${CONTACT_PHONE}</a>
+            ${
+              opts.phone?.trim()
+                ? `&nbsp;·&nbsp;<a href="tel:${escape(opts.phone.replace(/[^+\d]/g, ""))}" style="color:#0099FF;text-decoration:none">${escape(opts.phone)}</a>`
+                : ""
+            }
             ${siteLink}
           </p>
         </td></tr>

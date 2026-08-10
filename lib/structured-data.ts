@@ -3,8 +3,9 @@ import { env } from "@/lib/env";
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const NAME = "Big Wave Slides";
 // Real business facts (match lib/email.ts + site settings) — shown in rich
-// results, so keep them in lockstep with the NAP used everywhere else.
-const PHONE = "+1 (614) 302-5899";
+// results, so keep them in lockstep with the NAP used everywhere else. The
+// phone deliberately has no constant here: it comes from Settings → Contact so
+// schema never advertises a number the site itself doesn't show.
 const EMAIL = "contact@bigwavesslides.com";
 const PRICE_RANGE = "$199 - $550";
 
@@ -85,6 +86,7 @@ export function localBusinessAreaLd(
   area: string,
   url: string,
   anchor?: { city: string; region: string },
+  contact?: { phone?: string },
 ): Json {
   const areaServed: Json[] = [];
   if (anchor) {
@@ -102,7 +104,7 @@ export function localBusinessAreaLd(
     logo: `${SITE}/icon.png`,
     image: `${SITE}/icon.png`,
     priceRange: PRICE_RANGE,
-    telephone: PHONE,
+    ...(contact?.phone?.trim() ? { telephone: contact.phone } : {}),
     email: EMAIL,
     // Ties every location page back to the one real business entity / HQ.
     provider: { "@type": "LocalBusiness", "@id": `${SITE}/#business` },

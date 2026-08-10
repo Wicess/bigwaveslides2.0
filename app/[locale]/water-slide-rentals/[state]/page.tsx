@@ -8,6 +8,7 @@ import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
 import { getGuideLinks } from "@/server/data/blog";
+import { getSettings } from "@/server/data/settings";
 import { pickN } from "@/lib/internal-links";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -137,13 +138,19 @@ export default async function StateRentalPage({ params }: Props) {
     { icon: Truck, label: "Delivery & setup included" },
   ];
 
+  // Contact comes from Settings → Contact so schema only advertises a phone
+  // once one is actually configured (and shown) on the site.
+  const settings = await getSettings().catch(() => ({}) as never);
+
   return (
     <main>
       <JsonLd
-        data={localBusinessAreaLd(loc.name, canonical, {
-          city: anchor,
-          region: loc.abbr,
-        })}
+        data={localBusinessAreaLd(
+          loc.name,
+          canonical,
+          { city: anchor, region: loc.abbr },
+          settings?.contact,
+        )}
       />
       <JsonLd
         data={breadcrumbLd([
