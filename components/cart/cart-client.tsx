@@ -7,7 +7,6 @@ import {
   Plus,
   Trash2,
   ShoppingBag,
-  CheckCircle2,
   ArrowLeft,
   Truck,
 } from "lucide-react";
@@ -50,7 +49,6 @@ export function CartClient({
   const t = useTranslations("Cart");
   const router = useRouter();
   const [lines, setLines] = useState<CartLine[]>(cart.lines);
-  const [orderNumber, setOrderNumber] = useState<string | null>(null);
   const [addingId, setAddingId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
@@ -137,38 +135,6 @@ export function CartClient({
       }
     });
   };
-
-  // ── Success ──────────────────────────────────────────────
-  if (orderNumber) {
-    return (
-      <Card className="mx-auto max-w-xl p-8 text-center sm:p-10">
-        <CheckCircle2 className="text-primary mx-auto size-14" />
-        <h2 className="mt-4 text-2xl font-bold">{t("successTitle")}</h2>
-        <p className="text-muted-foreground mt-2">{t("successBody")}</p>
-        <p className="bg-muted mt-4 inline-block rounded-full px-4 py-2 font-mono text-sm font-semibold">
-          {t("orderRef")}: {orderNumber}
-        </p>
-        <p className="bg-primary-50 text-foreground/80 mx-auto mt-5 max-w-md rounded-2xl p-4 text-sm leading-relaxed">
-          {t("successReachOut")}{" "}
-          <a
-            href="mailto:contact@bigwavesslides.com"
-            className="text-primary font-semibold hover:underline"
-          >
-            contact@bigwavesslides.com
-          </a>
-          .
-        </p>
-        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-          <Button asChild variant="gradient">
-            <Link href={`/order/${orderNumber}`}>{t("viewQuote")}</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/shop">{t("keepShopping")}</Link>
-          </Button>
-        </div>
-      </Card>
-    );
-  }
 
   // ── Empty ────────────────────────────────────────────────
   if (lines.length === 0) {
@@ -381,10 +347,12 @@ export function CartClient({
                     type: "ORDER_REQUEST",
                     meta: { orderNumber: num, itemCount: count, subtotalCents },
                   });
-                  setOrderNumber(num);
+                  // Straight to the quote. There is no interstitial "request
+                  // received" card: the client reads the quote and accepts it
+                  // on that page, which issues the invoice.
                   setLines([]);
                   notifyChange();
-                  router.refresh();
+                  router.push(`/order/${num}`);
                 }}
               />
             </div>
