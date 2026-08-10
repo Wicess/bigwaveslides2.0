@@ -3,7 +3,6 @@ import {
   ShieldCheck,
   BadgeCheck,
   CheckCircle2,
-  MapPin,
   Building2,
   ExternalLink,
 } from "lucide-react";
@@ -32,10 +31,6 @@ export async function PaymentTrust({ locale }: { locale: string }) {
     .filter((x) => x.quote && x.authorName)
     .slice(0, 2);
 
-  const c = settings?.contact ?? {};
-  // Only surface an address when a real STREET has been set in admin — city/
-  // state alone isn't the legitimacy signal we want to imply.
-  const addressLine = c.streetAddress?.trim() ? c.address || "" : "";
   // Turn the rating into external, checkable proof only when the owner has set
   // a public reviews profile (Google/Trustpilot) in admin.
   const reviewsUrl = settings?.social?.reviewsUrl?.trim() || "";
@@ -164,18 +159,15 @@ export async function PaymentTrust({ locale }: { locale: string }) {
           </div>
         ) : null}
 
-        {/* Real business identity — a registered, reachable US company. */}
+        {/* Real business identity — a registered, reachable US company. No
+            street address: this is a delivery-only operation with no public
+            counter, so a postal line here implies a storefront that customers
+            could turn up to. */}
         <div className="border-border/70 mt-6 flex flex-wrap items-center gap-x-5 gap-y-1.5 border-t pt-5 text-xs">
           <span className="text-foreground inline-flex items-center gap-1.5 font-semibold">
             <Building2 className="text-primary size-3.5" />
             Big Wave Slides
           </span>
-          {addressLine ? (
-            <span className="text-muted-foreground inline-flex items-center gap-1.5">
-              <MapPin className="size-3.5" />
-              {addressLine}
-            </span>
-          ) : null}
           <span className="text-muted-foreground">{t("businessNote")}</span>
         </div>
       </div>
