@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
+import { buildMetadata } from "@/lib/seo";
 import { getApprovedTestimonials } from "@/server/data/testimonials";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
@@ -16,8 +17,19 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as AppLocale, namespace: "Testimonials" });
-  return { title: t("title"), description: t("desc") };
+  const t = await getTranslations({
+    locale: locale as AppLocale,
+    namespace: "Testimonials",
+  });
+  // buildMetadata (not a bare object) so the page gets its self-referencing
+  // canonical + en/fr/x-default hreflang — it ships in the sitemap in both
+  // locales, and without alternates Google treats them as duplicates.
+  return buildMetadata({
+    locale,
+    path: "/testimonials",
+    title: t("title"),
+    description: t("desc"),
+  });
 }
 
 export default async function TestimonialsPage({ params }: Props) {
@@ -30,12 +42,16 @@ export default async function TestimonialsPage({ params }: Props) {
 
   return (
     <main>
-      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("desc")}
+      />
 
       <Section spacing="compact" className="pt-8">
         <Container>
           {testimonials.length === 0 ? (
-            <p className="text-center text-muted-foreground">{t("empty")}</p>
+            <p className="text-muted-foreground text-center">{t("empty")}</p>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {testimonials.map((item, i) => (

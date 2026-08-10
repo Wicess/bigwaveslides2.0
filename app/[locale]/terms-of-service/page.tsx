@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { TERMS, pickLocale } from "@/lib/legal-content";
+import { buildMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { PhotoHero } from "@/components/ui/photo-hero";
@@ -15,7 +16,15 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return { title: TERMS[pickLocale(locale)].title };
+  const data = TERMS[pickLocale(locale)];
+  // See testimonials/page.tsx — buildMetadata supplies the canonical and
+  // hreflang alternates this sitemap-listed, bilingual page needs.
+  return buildMetadata({
+    locale,
+    path: "/terms-of-service",
+    title: data.title,
+    description: data.intro,
+  });
 }
 
 export default async function TermsPage({ params }: Props) {

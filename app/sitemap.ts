@@ -8,7 +8,6 @@ import {
   getBlogCategories,
   getPopularTags,
 } from "@/server/data/blog";
-import { getProductCategories } from "@/server/data/products";
 import { US_STATES, getPriorityCities } from "@/lib/locations";
 import { USE_CASES } from "@/lib/use-cases";
 
@@ -58,22 +57,23 @@ const CITY_PATHS = getPriorityCities().map(
 const USE_CASE_PATHS = USE_CASES.map((u) => `/water-slides-for/${u.slug}`);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, rentals, posts, productCats, blogCats, tags] =
-    await Promise.all([
-      getProductSlugs().catch(() => []),
-      getRentalSlugs().catch(() => []),
-      getPostSlugs().catch(() => []),
-      getProductCategories().catch(() => []),
-      getBlogCategories().catch(() => []),
-      getPopularTags().catch(() => []),
-    ]);
+  const [products, rentals, posts, blogCats, tags] = await Promise.all([
+    getProductSlugs().catch(() => []),
+    getRentalSlugs().catch(() => []),
+    getPostSlugs().catch(() => []),
+    getBlogCategories().catch(() => []),
+    getPopularTags().catch(() => []),
+  ]);
 
   const bilingualPaths = [
     ...BILINGUAL_STATIC,
     ...products.map((p) => `/shop/${p.slug}`),
     ...rentals.map((p) => `/rent/${p.slug}`),
     ...posts.map((p) => `/blog/${p.slug}`),
-    ...productCats.map((c) => `/shop?category=${c.slug}`),
+    // NOTE: /shop?category=… is deliberately NOT listed. Those pages
+    // self-canonicalise to /shop, and Google drops non-canonical sitemap
+    // entries as "Alternate page with proper canonical tag" while still
+    // spending crawl budget on them. indexing-urls.txt already excludes them.
     ...blogCats.map((c) => `/blog/category/${c.slug}`),
     ...tags.map((t) => `/blog/tag/${t.slug}`),
   ];
