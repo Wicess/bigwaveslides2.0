@@ -4,7 +4,7 @@
 // at /<key>.txt (public/) so search engines can verify ownership.
 //
 // IMPORTANT: NEXT_PUBLIC_SITE_URL must be the canonical host that serves the key
-// file WITHOUT a redirect (e.g. https://bigwaveslides.com if the apex is your
+// file WITHOUT a redirect (e.g. https://bigwavesslides.com if the apex is your
 // primary Vercel domain). If the host redirects (apex⇄www), IndexNow can't
 // verify the key.
 import { routing } from "@/i18n/routing";
@@ -37,7 +37,9 @@ export async function submitToIndexNow(urls: string[]): Promise<void> {
       cache: "no-store",
     });
     if (!res.ok) {
-      console.error(`IndexNow returned ${res.status} for ${urls.length} URL(s)`);
+      console.error(
+        `IndexNow returned ${res.status} for ${urls.length} URL(s)`,
+      );
     }
   } catch (err) {
     console.error("IndexNow submit failed:", err);

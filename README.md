@@ -28,7 +28,7 @@ This platform does **not** process payments online. All orders, bookings, and qu
 
 ## 🚀 Deploying to production
 
-See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for the complete, copy‑paste launch guide — Neon, Cloudflare R2, Hostinger SMTP, Vercel env vars + cron, domain setup at `bigwaveslides.com`, migration/seed, and a pre‑launch checklist.
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for the complete, copy‑paste launch guide — Neon, Cloudflare R2, Hostinger SMTP, Vercel env vars + cron, domain setup at `bigwavesslides.com`, migration/seed, and a pre‑launch checklist.
 
 Quality gates: `npm run typecheck && npm run lint && npm run test`.
 

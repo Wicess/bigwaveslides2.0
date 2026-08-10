@@ -20,7 +20,7 @@ import { PaymentTrust } from "@/components/order/payment-trust";
 
 const LOGO =
   "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
-const CONTACT_EMAIL = "contact@bigwaveslides.com";
+const CONTACT_EMAIL = "contact@bigwavesslides.com";
 const FALLBACK_PHONE = "+16143025899";
 
 // Live payment page — never serve it from the Full Route Cache.

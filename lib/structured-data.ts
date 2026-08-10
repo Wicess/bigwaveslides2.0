@@ -5,7 +5,7 @@ const NAME = "Big Wave Slides";
 // Real business facts (match lib/email.ts + site settings) — shown in rich
 // results, so keep them in lockstep with the NAP used everywhere else.
 const PHONE = "+1 (614) 302-5899";
-const EMAIL = "contact@bigwaveslides.com";
+const EMAIL = "contact@bigwavesslides.com";
 const PRICE_RANGE = "$199 - $550";
 
 type Json = Record<string, unknown>;

@@ -25,9 +25,9 @@ import {
 
 const LOGO =
   "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
-const CONTACT_EMAIL = "contact@bigwaveslides.com";
+const CONTACT_EMAIL = "contact@bigwavesslides.com";
 const CONTACT_PHONE = "+1 (614) 302-5899";
-const SITE = "bigwaveslides.com";
+const SITE = "bigwavesslides.com";
 
 const C = {
   ink: "#0f172a",

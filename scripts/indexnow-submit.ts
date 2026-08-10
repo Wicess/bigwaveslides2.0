@@ -2,9 +2,13 @@
 // One-shot bulk submit of every live URL to IndexNow (Bing/Yandex/etc.).
 // Reads the production sitemap, extracts all <loc> URLs, and submits them.
 // Run:  dotenv -e .env.local -- tsx scripts/indexnow-submit.ts
-//   or: SITE=https://bigwaveslides.com tsx scripts/indexnow-submit.ts
+//   or: SITE=https://bigwavesslides.com tsx scripts/indexnow-submit.ts
 const KEY = "a6c8a198654f4812ae52d2692674c8a2";
-const SITE = (process.env.SITE ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bigwaveslides.com").replace(/\/$/, "");
+const SITE = (
+  process.env.SITE ??
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://www.bigwavesslides.com"
+).replace(/\/$/, "");
 
 async function main() {
   const host = new URL(SITE).host;
@@ -24,11 +28,20 @@ async function main() {
     const res = await fetch("https://api.indexnow.org/indexnow", {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({ host, key: KEY, keyLocation: `${SITE}/${KEY}.txt`, urlList }),
+      body: JSON.stringify({
+        host,
+        key: KEY,
+        keyLocation: `${SITE}/${KEY}.txt`,
+        urlList,
+      }),
     });
-    console.log(`  batch ${i / BATCH + 1}: ${res.status} ${res.statusText} (${urlList.length} URLs)`);
+    console.log(
+      `  batch ${i / BATCH + 1}: ${res.status} ${res.statusText} (${urlList.length} URLs)`,
+    );
   }
-  console.log("Done. (200/202 = accepted; 403 = key file not reachable at the host.)");
+  console.log(
+    "Done. (200/202 = accepted; 403 = key file not reachable at the host.)",
+  );
 }
 
 main().catch((e) => {

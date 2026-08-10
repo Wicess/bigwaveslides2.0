@@ -17,7 +17,7 @@ function getTransport(): Transporter | null {
 }
 
 export const FROM =
-  env.SMTP_FROM ?? "Big Wave Slides <contact@bigwaveslides.com>";
+  env.SMTP_FROM ?? "Big Wave Slides <contact@bigwavesslides.com>";
 
 export type SendResult = { ok: boolean; skipped?: boolean; error?: string };
 
@@ -144,7 +144,7 @@ function stripHtml(html: string): string {
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-const CONTACT_EMAIL = "contact@bigwaveslides.com";
+const CONTACT_EMAIL = "contact@bigwavesslides.com";
 const CONTACT_PHONE = "+1 (614) 302-5899";
 // Hosted on R2 CDN so it renders in email clients independently of site deploys.
 const EMAIL_LOGO =

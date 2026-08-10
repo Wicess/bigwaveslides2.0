@@ -14,7 +14,7 @@ import { generateQuotePdf, type QuotePdfInput } from "@/lib/pdf/quote-pdf";
 import { orderSecurityCode } from "@/lib/security-code";
 import { env } from "@/lib/env";
 
-const CONTACT_EMAIL = "contact@bigwaveslides.com";
+const CONTACT_EMAIL = "contact@bigwavesslides.com";
 
 // Always-on admin recipients (in addition to the settings email + env extras).
 // These monitored inboxes guarantee delivery even if the contact@ self-send
@@ -410,7 +410,7 @@ export async function notifyContact(c: {
   subject?: string;
   message: string;
 }): Promise<void> {
-  const supportEmail = "contact@bigwaveslides.com";
+  const supportEmail = "contact@bigwavesslides.com";
 
   await sendEmail({
     to: c.email,

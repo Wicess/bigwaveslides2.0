@@ -2,7 +2,7 @@
  * set-admin-password.ts — rotate an admin user's password.
  *
  *   npm run admin:set-password -- <email> "<new password (min 10 chars)>"
- *   e.g. npm run admin:set-password -- admin@bigwaveslides.com "S0me-Str0ng-Pass!"
+ *   e.g. npm run admin:set-password -- admin@bigwavesslides.com "S0me-Str0ng-Pass!"
  *
  * Use this to replace the seeded default password. Tip: clear your shell history
  * afterwards (the password is passed as an argument).

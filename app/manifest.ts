@@ -27,7 +27,7 @@ export default function manifest(): MetadataRoute.Manifest {
     related_applications: [
       {
         platform: "webapp",
-        url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bigwaveslides.com"}/manifest.webmanifest`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bigwavesslides.com"}/manifest.webmanifest`,
       },
     ],
     icons: [

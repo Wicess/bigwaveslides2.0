@@ -99,7 +99,7 @@
 - `db:seed` → ✓ complete; `db:check` count table confirms all rows
 - `npm run typecheck` ✓ · `npm run lint` ✓ · `npm run build` ✓
 
-**Decisions:** Prisma 7 (current major) requires URLs in `prisma.config.ts` + a driver adapter — adopted `@prisma/adapter-pg`. Localized CMS text stored as `{en,fr}` Json. Seed images are placeholders (picsum) — replaced with curated water media on R2 in Phase 5. Admin login seeded: `admin@bigwaveslides.com` / `BigWave!2026` (change before launch).
+**Decisions:** Prisma 7 (current major) requires URLs in `prisma.config.ts` + a driver adapter — adopted `@prisma/adapter-pg`. Localized CMS text stored as `{en,fr}` Json. Seed images are placeholders (picsum) — replaced with curated water media on R2 in Phase 5. Admin login seeded: `admin@bigwavesslides.com` / `BigWave!2026` (change before launch).
 
 ---
 
@@ -305,7 +305,7 @@
 - `typecheck` ✓ · `lint` ✓ · every mutating action calls `requirePermission(...)` server-side and writes an `ActivityLog`
 - Full `next build` not completed locally (cold three.js compile; same since Phase 7); no compile/type errors surfaced.
 
-**Decisions / notes:** Admin is **not localized** (English UI) per the sitemap — no i18n overhead. Admin auth is intentionally **separate** from customer auth (different cookie, same `NEXTAUTH_SECRET`) so customers can never reach `/admin`. Seeded super-admin: `admin@bigwaveslides.com` / `BigWave!2026` (change before launch). Product media management (gallery/variations upload) and category editing/delete are deferred to **Phase 16** (CRM/content/governance), along with customers, blog/events admin, testimonials/reviews moderation, media library, settings, users/roles, and activity log views. Email notifications on status changes land in Phase 17.
+**Decisions / notes:** Admin is **not localized** (English UI) per the sitemap — no i18n overhead. Admin auth is intentionally **separate** from customer auth (different cookie, same `NEXTAUTH_SECRET`) so customers can never reach `/admin`. Seeded super-admin: `admin@bigwavesslides.com` / `BigWave!2026` (change before launch). Product media management (gallery/variations upload) and category editing/delete are deferred to **Phase 16** (CRM/content/governance), along with customers, blog/events admin, testimonials/reviews moderation, media library, settings, users/roles, and activity log views. Email notifications on status changes land in Phase 17.
 
 ---
 
@@ -380,10 +380,10 @@
 ## Phase 20 — Deployment & Production Launch ✅
 
 **Delivered:**
-- **`DEPLOYMENT.md`** — end-to-end launch playbook: Neon, Cloudflare R2, Hostinger SMTP, secret generation, Vercel import + env vars, `prisma migrate deploy` + seed, domain setup for **bigwaveslides.com**, admin first-login lock-down, optional WhatsApp/analytics, a copy-paste env block, and a pre-launch checklist
+- **`DEPLOYMENT.md`** — end-to-end launch playbook: Neon, Cloudflare R2, Hostinger SMTP, secret generation, Vercel import + env vars, `prisma migrate deploy` + seed, domain setup for **bigwavesslides.com**, admin first-login lock-down, optional WhatsApp/analytics, a copy-paste env block, and a pre-launch checklist
 - **`vercel.json`** — hourly **cron** for the abandoned-cart sweep; the route is now a `GET` so Vercel Cron (which sends `Authorization: Bearer $CRON_SECRET`) can trigger it
 - **`.env.example`** rewritten for production (adds `R2_ENDPOINT`, `CRON_SECRET`, `WHATSAPP_VERIFY_TOKEN`, prod URLs/notes)
-- Contact defaults set to **contact@bigwaveslides.com** (email `FROM`, seed settings); README points to the deploy guide
+- Contact defaults set to **contact@bigwavesslides.com** (email `FROM`, seed settings); README points to the deploy guide
 
 **Verification:**
 - `typecheck` ✓ · `lint` ✓ · `test` ✓ (23/23)

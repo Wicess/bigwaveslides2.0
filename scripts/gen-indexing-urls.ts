@@ -19,7 +19,7 @@ const { PrismaClient } = pkg;
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
-const BASE = "https://www.bigwaveslides.com";
+const BASE = "https://www.bigwavesslides.com";
 const BOTH = ["en", "fr"] as const;
 const EN = ["en"] as const;
 
@@ -38,7 +38,11 @@ const BILINGUAL_STATIC = [
   "/terms-of-service",
 ];
 // English-only programmatic pages (their /fr twins are noindexed duplicates).
-const EN_ONLY_STATIC = ["/water-slide-rentals", "/water-slides-for", "/answers"];
+const EN_ONLY_STATIC = [
+  "/water-slide-rentals",
+  "/water-slides-for",
+  "/answers",
+];
 
 type Section = {
   title: string;

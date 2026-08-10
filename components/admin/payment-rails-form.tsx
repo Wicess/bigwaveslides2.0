@@ -126,7 +126,7 @@ export function PaymentRailsForm({ initial }: { initial: Rail[] }) {
                     placeholder={
                       r.method === "crypto"
                         ? "Wallet address"
-                        : "e.g. pay@bigwaveslides.com or $bigwave"
+                        : "e.g. pay@bigwavesslides.com or $bigwave"
                     }
                     className="mt-1.5"
                   />

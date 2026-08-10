@@ -21,7 +21,7 @@ Big Wave Slides rents commercial-grade inflatable water slides, bounce houses, a
 
 - Commercial inflatable water slides and bounce houses for sale
 - Pricing is quote-based, with nationwide delivery
-- See: https://www.bigwaveslides.com/en/shop
+- See: https://www.bigwavesslides.com/en/shop
 
 ## How booking works
 
@@ -29,11 +29,11 @@ Big Wave Slides rents commercial-grade inflatable water slides, bounce houses, a
 2. We confirm availability, delivery window, and the exact price.
 3. Pay offline once confirmed — there is no online checkout.
 
-Request a quote: https://www.bigwaveslides.com/en/contact
+Request a quote: https://www.bigwavesslides.com/en/contact
 
 ## Contact
 
-- Email: contact@bigwaveslides.com
+- Email: contact@bigwavesslides.com
 - Phone: +1 (614) 302-5899
 - Service area: all 50 U.S. states
 

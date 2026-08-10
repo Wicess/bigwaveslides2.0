@@ -18,7 +18,7 @@ const EnvSchema = z.object({
     .default("development"),
   // Canonical site URL. Normalised so every absolute URL we emit (canonical,
   // hreflang, sitemap, OG, robots, JSON-LD) uses the SAME host Google Search
-  // Console is verified on — www. The apex (bigwaveslides.com) 308-redirects to
+  // Console is verified on — www. The apex (bigwavesslides.com) 308-redirects to
   // www in production, so canonicals MUST be www or GSC sees a redirect and
   // won't index them. Forcing it here means it's right even if the deployed env
   // var is the apex. Trailing slash is stripped via `.origin`.
@@ -29,8 +29,8 @@ const EnvSchema = z.object({
     .transform((raw) => {
       try {
         const u = new URL(raw);
-        if (u.hostname === "bigwaveslides.com") {
-          u.hostname = "www.bigwaveslides.com";
+        if (u.hostname === "bigwavesslides.com") {
+          u.hostname = "www.bigwavesslides.com";
         }
         return u.origin;
       } catch {

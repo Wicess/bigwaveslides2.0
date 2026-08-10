@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   },
   // Search-engine ownership verification (Google Search Console + Bing).
   verification: {
-    google: "EiaEaBxPwPlkg1Q-kchHGk0G47tnHzV55VN85wQAf1I",
+    google: "WYcoBF1TYbRFo5hYautyiggnHft64nHSJbzQSQwCLS0",
     other: { "msvalidate.01": "A8C9495020F192A25CD68B7F02D73D38" },
   },
   // iOS home-screen app behavior (Add to Home Screen). "default" keeps a

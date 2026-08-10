@@ -24,7 +24,11 @@ const PERMISSIONS: { key: string; label: string; group: string }[] = [
   { key: "product.write", label: "Edit products", group: "Catalog" },
   { key: "product.delete", label: "Delete products", group: "Catalog" },
   { key: "category.write", label: "Edit categories", group: "Catalog" },
-  { key: "inventory.write", label: "Manage rental inventory", group: "Inventory" },
+  {
+    key: "inventory.write",
+    label: "Manage rental inventory",
+    group: "Inventory",
+  },
   { key: "booking.read", label: "View bookings", group: "Bookings" },
   { key: "booking.confirm", label: "Confirm bookings", group: "Bookings" },
   { key: "order.read", label: "View orders", group: "Orders" },
@@ -36,7 +40,11 @@ const PERMISSIONS: { key: string; label: string; group: string }[] = [
   { key: "blog.publish", label: "Publish blog posts", group: "Content" },
   { key: "event.write", label: "Manage events", group: "Content" },
   { key: "service.write", label: "Manage services", group: "Content" },
-  { key: "testimonial.moderate", label: "Moderate testimonials", group: "Content" },
+  {
+    key: "testimonial.moderate",
+    label: "Moderate testimonials",
+    group: "Content",
+  },
   { key: "review.moderate", label: "Moderate reviews", group: "Content" },
   { key: "customer.read", label: "View customers (CRM)", group: "CRM" },
   { key: "customer.write", label: "Edit customers (CRM)", group: "CRM" },
@@ -119,11 +127,11 @@ async function seedRbac() {
   });
   const passwordHash = await bcrypt.hash("BigWave!2026", 10);
   await prisma.adminUser.upsert({
-    where: { email: "admin@bigwaveslides.com" },
+    where: { email: "admin@bigwavesslides.com" },
     update: { roleId: superRole?.id },
     create: {
       name: "Big Wave Admin",
-      email: "admin@bigwaveslides.com",
+      email: "admin@bigwavesslides.com",
       passwordHash,
       roleId: superRole?.id,
     },
@@ -236,7 +244,10 @@ const PRODUCTS: ProductSeed[] = [
     sku: "BWS-BC2L",
     category: "slip-n-slides",
     type: "RENTAL",
-    name: L("Blue Crush Double Lane Slip & Slide", "Tapis glissant double voie Blue Crush"),
+    name: L(
+      "Blue Crush Double Lane Slip & Slide",
+      "Tapis glissant double voie Blue Crush",
+    ),
     shortDescription: L(
       "Race a friend down two slick lanes into a cushioned splash pool.",
       "Affrontez un ami sur deux voies glissantes vers un bassin moelleux.",
@@ -372,7 +383,10 @@ async function seedProducts(categoryMap: Map<string, string>) {
         powerRequired: "1x 110V outlet (blower included)",
         features: [
           L("Commercial-grade vinyl", "Vinyle de qualité commerciale"),
-          L("Safety netting & soft landing", "Filets de sécurité et atterrissage moelleux"),
+          L(
+            "Safety netting & soft landing",
+            "Filets de sécurité et atterrissage moelleux",
+          ),
           L("Fully insured & inspected", "Entièrement assuré et inspecté"),
         ],
         searchText: `${p.name.en} ${p.shortDescription.en} ${p.sku}`,
@@ -437,14 +451,96 @@ async function seedProducts(categoryMap: Map<string, string>) {
 // Mirrors lib/services-content.ts (the single /services page). The DB copy
 // powers the header mega-menu and footer links, which anchor to /services#slug.
 const SERVICES = [
-  { slug: "event-rentals", cat: "EVENT", t: L("Backyard & Party Rentals", "Locations pour fêtes et jardins"), s: L("Birthdays, pool days, and backyard blowouts — delivered and set up.", "Anniversaires, journées piscine et fêtes de jardin — livrés et installés.") },
-  { slug: "corporate-community-events", cat: "EVENT", t: L("Corporate & Community Events", "Événements d'entreprise et communautaires"), s: L("Picnics, festivals, and municipal celebrations.", "Pique-niques, festivals et fêtes municipales.") },
-  { slug: "school-camp-church", cat: "EVENT", t: L("School, Camp & Church Events", "Écoles, camps et événements paroissiaux"), s: L("Safe, insured, age-appropriate fun.", "Du plaisir sûr, assuré et adapté à l'âge.") },
-  { slug: "water-slide-sales", cat: "INSTALL", t: L("Water Slide Sales", "Vente de toboggans"), s: L("Own commercial-grade slides built to last.", "Possédez des toboggans de qualité commerciale.") },
-  { slug: "custom-builds", cat: "INSTALL", t: L("Custom Water Slide & Waterpark Construction", "Construction sur mesure de parcs aquatiques"), s: L("We design and build permanent attractions and waterparks.", "Nous concevons et construisons des attractions permanentes.") },
-  { slug: "delivery-installation", cat: "INSTALL", t: L("Delivery, Installation & Anchoring", "Livraison, installation et ancrage"), s: L("Professional, by-the-book setup every time.", "Une installation professionnelle et rigoureuse.") },
-  { slug: "maintenance-inspection", cat: "MAINTENANCE", t: L("Maintenance, Inspection & Repair", "Entretien, inspection et réparation"), s: L("Keep your investment safe and ready.", "Gardez votre investissement sûr et prêt.") },
-  { slug: "event-staffing", cat: "SUPPORT", t: L("Event Staffing & On-Site Safety", "Personnel d'événement et sécurité"), s: L("Trained attendants who run the attraction for you.", "Des préposés formés qui opèrent l'attraction pour vous.") },
+  {
+    slug: "event-rentals",
+    cat: "EVENT",
+    t: L("Backyard & Party Rentals", "Locations pour fêtes et jardins"),
+    s: L(
+      "Birthdays, pool days, and backyard blowouts — delivered and set up.",
+      "Anniversaires, journées piscine et fêtes de jardin — livrés et installés.",
+    ),
+  },
+  {
+    slug: "corporate-community-events",
+    cat: "EVENT",
+    t: L(
+      "Corporate & Community Events",
+      "Événements d'entreprise et communautaires",
+    ),
+    s: L(
+      "Picnics, festivals, and municipal celebrations.",
+      "Pique-niques, festivals et fêtes municipales.",
+    ),
+  },
+  {
+    slug: "school-camp-church",
+    cat: "EVENT",
+    t: L(
+      "School, Camp & Church Events",
+      "Écoles, camps et événements paroissiaux",
+    ),
+    s: L(
+      "Safe, insured, age-appropriate fun.",
+      "Du plaisir sûr, assuré et adapté à l'âge.",
+    ),
+  },
+  {
+    slug: "water-slide-sales",
+    cat: "INSTALL",
+    t: L("Water Slide Sales", "Vente de toboggans"),
+    s: L(
+      "Own commercial-grade slides built to last.",
+      "Possédez des toboggans de qualité commerciale.",
+    ),
+  },
+  {
+    slug: "custom-builds",
+    cat: "INSTALL",
+    t: L(
+      "Custom Water Slide & Waterpark Construction",
+      "Construction sur mesure de parcs aquatiques",
+    ),
+    s: L(
+      "We design and build permanent attractions and waterparks.",
+      "Nous concevons et construisons des attractions permanentes.",
+    ),
+  },
+  {
+    slug: "delivery-installation",
+    cat: "INSTALL",
+    t: L(
+      "Delivery, Installation & Anchoring",
+      "Livraison, installation et ancrage",
+    ),
+    s: L(
+      "Professional, by-the-book setup every time.",
+      "Une installation professionnelle et rigoureuse.",
+    ),
+  },
+  {
+    slug: "maintenance-inspection",
+    cat: "MAINTENANCE",
+    t: L(
+      "Maintenance, Inspection & Repair",
+      "Entretien, inspection et réparation",
+    ),
+    s: L(
+      "Keep your investment safe and ready.",
+      "Gardez votre investissement sûr et prêt.",
+    ),
+  },
+  {
+    slug: "event-staffing",
+    cat: "SUPPORT",
+    t: L(
+      "Event Staffing & On-Site Safety",
+      "Personnel d'événement et sécurité",
+    ),
+    s: L(
+      "Trained attendants who run the attraction for you.",
+      "Des préposés formés qui opèrent l'attraction pour vous.",
+    ),
+  },
 ] as const;
 
 async function seedServices() {
@@ -588,7 +684,10 @@ async function seedEvents() {
     {
       slug: "summer-splash-festival-2026",
       title: L("Summer Splash Festival 2026", "Festival Summer Splash 2026"),
-      excerpt: L("A day of slides, music, and sunshine.", "Une journée de toboggans, musique et soleil."),
+      excerpt: L(
+        "A day of slides, music, and sunshine.",
+        "Une journée de toboggans, musique et soleil.",
+      ),
       status: "UPCOMING" as const,
       startAt: daysFromNow(45),
       featured: true,
@@ -597,15 +696,24 @@ async function seedEvents() {
     {
       slug: "schools-out-pool-bash",
       title: L("School's Out Pool Bash", "Fête de fin d'année à la piscine"),
-      excerpt: L("Celebrate the last bell with a splash.", "Célébrez la dernière sonnerie en beauté."),
+      excerpt: L(
+        "Celebrate the last bell with a splash.",
+        "Célébrez la dernière sonnerie en beauté.",
+      ),
       status: "UPCOMING" as const,
       startAt: daysFromNow(20),
       registrationEnabled: true,
     },
     {
       slug: "big-wave-community-day-2025",
-      title: L("Big Wave Community Day 2025", "Journée communautaire Big Wave 2025"),
-      excerpt: L("Last year's free neighborhood splash day.", "Notre journée aquatique gratuite de l'an dernier."),
+      title: L(
+        "Big Wave Community Day 2025",
+        "Journée communautaire Big Wave 2025",
+      ),
+      excerpt: L(
+        "Last year's free neighborhood splash day.",
+        "Notre journée aquatique gratuite de l'an dernier.",
+      ),
       status: "PAST" as const,
       startAt: daysFromNow(-120),
       featured: false,
@@ -643,11 +751,67 @@ async function seedTestimonials() {
   if (count > 0) return;
   await prisma.testimonial.createMany({
     data: [
-      { authorName: "Maria G.", authorRole: "Parent", rating: 5, quote: L("Best birthday ever — the kids are still talking about it!", "Le plus bel anniversaire — les enfants en parlent encore !"), status: "APPROVED", featured: true, order: 0 },
-      { authorName: "Pastor James", authorRole: "Community Church", organization: "Grace Fellowship", rating: 5, quote: L("Punctual, professional, and spotless. Highly recommended.", "Ponctuel, professionnel et impeccable. Vivement recommandé."), status: "APPROVED", featured: true, order: 1 },
-      { authorName: "Coach Daniels", authorRole: "Lincoln Elementary", rating: 5, quote: L("Our field day was a massive hit thanks to Big Wave.", "Notre journée sportive fut un grand succès grâce à Big Wave."), status: "APPROVED", featured: false, order: 2 },
-      { authorName: "The Reynolds Family", rating: 5, quote: L("Setup and pickup were effortless. We just had fun.", "Installation et reprise sans effort. On a juste profité."), status: "APPROVED", featured: false, order: 3 },
-      { authorName: "Hotel Azure", authorRole: "Events Manager", organization: "Hotel Azure", rating: 4, quote: L("Our guests loved the poolside slides all summer.", "Nos clients ont adoré les toboggans tout l'été."), status: "APPROVED", featured: false, order: 4 },
+      {
+        authorName: "Maria G.",
+        authorRole: "Parent",
+        rating: 5,
+        quote: L(
+          "Best birthday ever — the kids are still talking about it!",
+          "Le plus bel anniversaire — les enfants en parlent encore !",
+        ),
+        status: "APPROVED",
+        featured: true,
+        order: 0,
+      },
+      {
+        authorName: "Pastor James",
+        authorRole: "Community Church",
+        organization: "Grace Fellowship",
+        rating: 5,
+        quote: L(
+          "Punctual, professional, and spotless. Highly recommended.",
+          "Ponctuel, professionnel et impeccable. Vivement recommandé.",
+        ),
+        status: "APPROVED",
+        featured: true,
+        order: 1,
+      },
+      {
+        authorName: "Coach Daniels",
+        authorRole: "Lincoln Elementary",
+        rating: 5,
+        quote: L(
+          "Our field day was a massive hit thanks to Big Wave.",
+          "Notre journée sportive fut un grand succès grâce à Big Wave.",
+        ),
+        status: "APPROVED",
+        featured: false,
+        order: 2,
+      },
+      {
+        authorName: "The Reynolds Family",
+        rating: 5,
+        quote: L(
+          "Setup and pickup were effortless. We just had fun.",
+          "Installation et reprise sans effort. On a juste profité.",
+        ),
+        status: "APPROVED",
+        featured: false,
+        order: 3,
+      },
+      {
+        authorName: "Hotel Azure",
+        authorRole: "Events Manager",
+        organization: "Hotel Azure",
+        rating: 4,
+        quote: L(
+          "Our guests loved the poolside slides all summer.",
+          "Nos clients ont adoré les toboggans tout l'été.",
+        ),
+        status: "APPROVED",
+        featured: false,
+        order: 4,
+      },
     ],
   });
 }
@@ -655,12 +819,38 @@ async function seedTestimonials() {
 // ───────────────────────── Site Settings ─────────────────────────
 async function seedSettings() {
   const SETTINGS = [
-    { key: "contact", group: "contact", value: { email: "contact@bigwaveslides.com", phone: "+1 (614) 302-5899", whatsapp: "16143025899", address: "123 Riverside Ave, Springfield, USA" } },
-    { key: "fees", group: "fees", value: { deliveryBaseCents: 4900, pickupCents: 2900, freeRadiusMiles: 15, perMileCents: 250 } },
+    {
+      key: "contact",
+      group: "contact",
+      value: {
+        email: "contact@bigwavesslides.com",
+        phone: "+1 (614) 302-5899",
+        whatsapp: "16143025899",
+        address: "123 Riverside Ave, Springfield, USA",
+      },
+    },
+    {
+      key: "fees",
+      group: "fees",
+      value: {
+        deliveryBaseCents: 4900,
+        pickupCents: 2900,
+        freeRadiusMiles: 15,
+        perMileCents: 250,
+      },
+    },
     // Empty by default — admin adds real profile links in Settings, which
     // activates the (otherwise inactive) footer social icons.
-    { key: "social", group: "social", value: { instagram: "", facebook: "", tiktok: "" } },
-    { key: "hours", group: "general", value: { mon_fri: "8:00–18:00", sat: "8:00–20:00", sun: "10:00–16:00" } },
+    {
+      key: "social",
+      group: "social",
+      value: { instagram: "", facebook: "", tiktok: "" },
+    },
+    {
+      key: "hours",
+      group: "general",
+      value: { mon_fri: "8:00–18:00", sat: "8:00–20:00", sun: "10:00–16:00" },
+    },
   ];
   for (const s of SETTINGS) {
     await prisma.siteSetting.upsert({

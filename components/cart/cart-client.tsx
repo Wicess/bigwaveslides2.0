@@ -151,10 +151,10 @@ export function CartClient({
         <p className="bg-primary-50 text-foreground/80 mx-auto mt-5 max-w-md rounded-2xl p-4 text-sm leading-relaxed">
           {t("successReachOut")}{" "}
           <a
-            href="mailto:contact@bigwaveslides.com"
+            href="mailto:contact@bigwavesslides.com"
             className="text-primary font-semibold hover:underline"
           >
-            contact@bigwaveslides.com
+            contact@bigwavesslides.com
           </a>
           .
         </p>

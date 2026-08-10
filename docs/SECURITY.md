@@ -55,7 +55,7 @@ WAF + Bot Management** and **Attack Challenge Mode** from the project dashboard.
 
 1. **Change the seeded default password immediately** (it's public in the repo):
    ```bash
-   npm run admin:set-password -- admin@bigwaveslides.com "<a-strong-password>"
+   npm run admin:set-password -- admin@bigwavesslides.com "<a-strong-password>"
    ```
    Then clear your shell history.
 2. Keep admin accounts to the minimum; deactivate ones you don't use (Users page).
