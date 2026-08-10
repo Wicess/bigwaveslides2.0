@@ -3,6 +3,19 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
+// Whatever host R2_PUBLIC_URL points at is a legitimate image source. Derived
+// rather than hardcoded so moving the bucket behind a custom domain (e.g.
+// media.bigwavesslides.com) is a one-value env change, not a code edit. The
+// literal **.r2.dev stays so existing rows still render mid-migration —
+// see scripts/rehost-images.ts for rewriting stored URLs.
+const r2Hostname = (() => {
+  try {
+    return new URL(process.env.R2_PUBLIC_URL ?? "").hostname;
+  } catch {
+    return null;
+  }
+})();
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -15,6 +28,9 @@ const nextConfig: NextConfig = {
     loaderFile: "./lib/image-loader.ts",
     remotePatterns: [
       { protocol: "https", hostname: "**.r2.dev" },
+      ...(r2Hostname && !r2Hostname.endsWith(".r2.dev")
+        ? [{ protocol: "https" as const, hostname: r2Hostname }]
+        : []),
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "images.pexels.com" },
       { protocol: "https", hostname: "picsum.photos" },
