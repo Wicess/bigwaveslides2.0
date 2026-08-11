@@ -63,7 +63,12 @@ export async function POST(req: NextRequest) {
     let geo = geoFromHeaders(req.headers);
     // Expand region/state names worldwide via IP when edge headers only give a
     // code (US/CA are already expanded). Cached per-IP; best-effort.
-    if (needsGeoEnrichment(geo)) {
+    //
+    // Also run it for a first-time visitor even when geo is already complete:
+    // the lookup carries the datacenter flag, and `device` is only written when
+    // the Visitor row is created, so this is the one chance to classify them.
+    const firstTimeVisitor = !cookieVisitor;
+    if (needsGeoEnrichment(geo) || firstTimeVisitor) {
       const enriched = await geoFromIp(ipFromHeaders(req.headers));
       if (enriched) {
         geo = {
@@ -72,11 +77,17 @@ export async function POST(req: NextRequest) {
           region: enriched.region ?? geo.region,
           regionCode: enriched.regionCode ?? geo.regionCode,
           city: enriched.city ?? geo.city,
+          datacenter: enriched.datacenter,
         };
       }
     }
     const userAgent = req.headers.get("user-agent");
-    const ua = parseUserAgent(userAgent);
+    const parsedUa = parseUserAgent(userAgent);
+    // A crawler on a stock Chrome UA still runs from a cloud range — trust the
+    // IP over the string it chose to send.
+    const ua = geo.datacenter
+      ? { ...parsedUa, device: "BOT" as const }
+      : parsedUa;
 
     // App installs: stamp the client's IP into the event (for the admin
     // location monitor) and set the readable cookie that unlocks the +5% app

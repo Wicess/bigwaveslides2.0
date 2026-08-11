@@ -6,27 +6,79 @@ import type { DeviceType } from "@prisma/client";
 
 /** Full US state names keyed by USPS code (+ DC / territories). */
 const US_STATES: Record<string, string> = {
-  AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California",
-  CO: "Colorado", CT: "Connecticut", DE: "Delaware", FL: "Florida", GA: "Georgia",
-  HI: "Hawaii", ID: "Idaho", IL: "Illinois", IN: "Indiana", IA: "Iowa",
-  KS: "Kansas", KY: "Kentucky", LA: "Louisiana", ME: "Maine", MD: "Maryland",
-  MA: "Massachusetts", MI: "Michigan", MN: "Minnesota", MS: "Mississippi",
-  MO: "Missouri", MT: "Montana", NE: "Nebraska", NV: "Nevada", NH: "New Hampshire",
-  NJ: "New Jersey", NM: "New Mexico", NY: "New York", NC: "North Carolina",
-  ND: "North Dakota", OH: "Ohio", OK: "Oklahoma", OR: "Oregon", PA: "Pennsylvania",
-  RI: "Rhode Island", SC: "South Carolina", SD: "South Dakota", TN: "Tennessee",
-  TX: "Texas", UT: "Utah", VT: "Vermont", VA: "Virginia", WA: "Washington",
-  WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming", DC: "District of Columbia",
-  PR: "Puerto Rico", GU: "Guam", VI: "U.S. Virgin Islands", AS: "American Samoa",
+  AL: "Alabama",
+  AK: "Alaska",
+  AZ: "Arizona",
+  AR: "Arkansas",
+  CA: "California",
+  CO: "Colorado",
+  CT: "Connecticut",
+  DE: "Delaware",
+  FL: "Florida",
+  GA: "Georgia",
+  HI: "Hawaii",
+  ID: "Idaho",
+  IL: "Illinois",
+  IN: "Indiana",
+  IA: "Iowa",
+  KS: "Kansas",
+  KY: "Kentucky",
+  LA: "Louisiana",
+  ME: "Maine",
+  MD: "Maryland",
+  MA: "Massachusetts",
+  MI: "Michigan",
+  MN: "Minnesota",
+  MS: "Mississippi",
+  MO: "Missouri",
+  MT: "Montana",
+  NE: "Nebraska",
+  NV: "Nevada",
+  NH: "New Hampshire",
+  NJ: "New Jersey",
+  NM: "New Mexico",
+  NY: "New York",
+  NC: "North Carolina",
+  ND: "North Dakota",
+  OH: "Ohio",
+  OK: "Oklahoma",
+  OR: "Oregon",
+  PA: "Pennsylvania",
+  RI: "Rhode Island",
+  SC: "South Carolina",
+  SD: "South Dakota",
+  TN: "Tennessee",
+  TX: "Texas",
+  UT: "Utah",
+  VT: "Vermont",
+  VA: "Virginia",
+  WA: "Washington",
+  WV: "West Virginia",
+  WI: "Wisconsin",
+  WY: "Wyoming",
+  DC: "District of Columbia",
+  PR: "Puerto Rico",
+  GU: "Guam",
+  VI: "U.S. Virgin Islands",
+  AS: "American Samoa",
   MP: "Northern Mariana Islands",
 };
 
 /** Full Canadian province/territory names keyed by code. */
 const CA_PROVINCES: Record<string, string> = {
-  AB: "Alberta", BC: "British Columbia", MB: "Manitoba", NB: "New Brunswick",
-  NL: "Newfoundland and Labrador", NS: "Nova Scotia", NT: "Northwest Territories",
-  NU: "Nunavut", ON: "Ontario", PE: "Prince Edward Island", QC: "Quebec",
-  SK: "Saskatchewan", YT: "Yukon",
+  AB: "Alberta",
+  BC: "British Columbia",
+  MB: "Manitoba",
+  NB: "New Brunswick",
+  NL: "Newfoundland and Labrador",
+  NS: "Nova Scotia",
+  NT: "Northwest Territories",
+  NU: "Nunavut",
+  ON: "Ontario",
+  PE: "Prince Edward Island",
+  QC: "Quebec",
+  SK: "Saskatchewan",
+  YT: "Yukon",
 };
 
 /** ISO-3166-1 alpha-2 country code → English country name. */
@@ -59,7 +111,18 @@ export type GeoInfo = {
   region: string | null;
   regionCode: string | null;
   city: string | null;
+  /**
+   * IP belongs to a hosting/cloud provider rather than a consumer ISP. Crawlers
+   * and preview bots increasingly ship a stock Chrome user-agent, so the UA is
+   * no longer enough to spot them — but they still run from AWS/GCP/Azure
+   * ranges, which is what this flags. Undefined when unknown.
+   */
+  datacenter?: boolean;
 };
+
+/** Cloud/hosting ASNs & orgs — matched against the provider's org/ASN string. */
+const HOSTING_ORG =
+  /\b(amazon|aws|google|gcp|microsoft|azure|digitalocean|linode|akamai|fastly|cloudflare|ovh|hetzner|vultr|scaleway|oracle|alibaba|tencent|leaseweb|contabo|rackspace|equinix|choopa|quadranet|hostinger|godaddy|namecheap|datacamp|m247|zscaler)\b/i;
 
 /** Pull and expand geo from a request's edge headers. */
 export function geoFromHeaders(headers: Headers): GeoInfo {
@@ -87,13 +150,15 @@ function safeDecode(value: string): string {
 /** True when geo is missing or the region is still an unexpanded code. */
 export function needsGeoEnrichment(geo: GeoInfo): boolean {
   if (!geo.country) return true;
-  if (geo.regionCode && (!geo.region || geo.region === geo.regionCode)) return true;
+  if (geo.regionCode && (!geo.region || geo.region === geo.regionCode))
+    return true;
   return false;
 }
 
 function isPublicIp(ip: string | null | undefined): ip is string {
   if (!ip) return false;
-  if (ip === "::1" || ip.startsWith("127.") || ip.startsWith("10.")) return false;
+  if (ip === "::1" || ip.startsWith("127.") || ip.startsWith("10."))
+    return false;
   if (ip.startsWith("192.168.") || ip.startsWith("172.")) return false;
   return true;
 }
@@ -107,7 +172,9 @@ const ipCache = new Map<string, GeoInfo>();
  * tracking and checkout never break. Edge headers only spell out US/CA states,
  * so this expands region names worldwide (e.g. Cameroon).
  */
-export async function geoFromIp(ip: string | null | undefined): Promise<GeoInfo | null> {
+export async function geoFromIp(
+  ip: string | null | undefined,
+): Promise<GeoInfo | null> {
   if (!isPublicIp(ip)) return null;
   const cached = ipCache.get(ip);
   if (cached) return cached;
@@ -138,18 +205,24 @@ async function fromIpapiCo(ip: string): Promise<GeoInfo | null> {
   if (!d || d.error) return null;
   const country = (d.country_name as string) ?? null;
   if (!country) return null;
+  // ipapi.co has no explicit hosting flag; the org/ASN string is the next-best
+  // signal (e.g. "AS15169 Google LLC" for a Council Bluffs crawler).
+  const org = `${(d.org as string) ?? ""} ${(d.asn as string) ?? ""}`.trim();
   return {
     country,
     countryCode: ((d.country_code as string) ?? "").toUpperCase() || null,
     region: (d.region as string) ?? null,
     regionCode: ((d.region_code as string) ?? "").toUpperCase() || null,
     city: (d.city as string) ?? null,
+    ...(org ? { datacenter: HOSTING_ORG.test(org) } : {}),
   };
 }
 
 async function fromIpApiCom(ip: string): Promise<GeoInfo | null> {
+  // `hosting` is ip-api's datacenter/colo flag and `proxy` covers VPN/proxy
+  // exits — both free-tier fields, so this costs nothing extra.
   const d = await fetchJson(
-    `http://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,country,countryCode,regionName,region,city`,
+    `http://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,country,countryCode,regionName,region,city,hosting,proxy,org,as`,
   );
   if (!d || d.status !== "success") return null;
   const country = (d.country as string) ?? null;
@@ -160,6 +233,10 @@ async function fromIpApiCom(ip: string): Promise<GeoInfo | null> {
     region: (d.regionName as string) ?? null, // full name, e.g. "Littoral"
     regionCode: ((d.region as string) ?? "").toUpperCase() || null,
     city: (d.city as string) ?? null,
+    datacenter:
+      d.hosting === true ||
+      d.proxy === true ||
+      HOSTING_ORG.test(`${(d.org as string) ?? ""} ${(d.as as string) ?? ""}`),
   };
 }
 
@@ -184,7 +261,11 @@ export function parseUserAgent(ua?: string | null): UaInfo {
   const s = ua.toLowerCase();
 
   let device: DeviceType = "DESKTOP";
-  if (/bot|crawl|spider|slurp|bingpreview|facebookexternalhit|headless/.test(s)) {
+  if (
+    /bot|crawl|spider|slurp|bingpreview|facebookexternalhit|headless|phantomjs|puppeteer|playwright|selenium|lighthouse|pagespeed|gtmetrix|pingdom|uptimerobot|statuscake|monitoring|curl|wget|python-requests|httpx|axios|node-fetch|go-http-client|java\/|okhttp|libwww|scrapy|preview|fetcher|validator|whatsapp|telegrambot|discordbot|slackbot|embedly|quora link|vercelbot|ahrefs|semrush|mj12|dotbot|petalbot|yandex|baidu|sogou|duckduck/.test(
+      s,
+    )
+  ) {
     device = "BOT";
   } else if (/ipad|tablet|playbook|silk|(android(?!.*mobile))/.test(s)) {
     device = "TABLET";
