@@ -151,22 +151,29 @@ export async function Hero({
           </div>
         </Reveal>
 
-        {/* Social proof: star rating + review count, for trust. */}
-        <Reveal y={16} delay={0.35}>
-          <div
-            className="mt-8 flex items-center justify-center gap-3"
-            // Drop-shadow keeps the stars/text readable over the photo.
-            style={{ filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.55))" }}
-          >
-            <Stars rating={rating} />
-            <span className="text-sm text-white/90">
-              <span className="font-semibold text-white">
-                {rating.toFixed(1)}
-              </span>{" "}
-              · {t("trustReviews", { count: reviewCount })}
-            </span>
-          </div>
-        </Reveal>
+        {/* Social proof: star rating + review count, for trust.
+            Rendered ONLY when real approved reviews exist. A star rating with no
+            reviews behind it is a fabricated trust signal — the count here is a
+            rollup of approved Review rows (see scripts/sync-product-ratings.ts),
+            so when it is 0 the whole block is omitted rather than showing "4.9
+            · 0 reviews" or, worse, an invented number. */}
+        {reviewCount > 0 ? (
+          <Reveal y={16} delay={0.35}>
+            <div
+              className="mt-8 flex items-center justify-center gap-3"
+              // Drop-shadow keeps the stars/text readable over the photo.
+              style={{ filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.55))" }}
+            >
+              <Stars rating={rating} />
+              <span className="text-sm text-white/90">
+                <span className="font-semibold text-white">
+                  {rating.toFixed(1)}
+                </span>{" "}
+                · {t("trustReviews", { count: reviewCount })}
+              </span>
+            </div>
+          </Reveal>
+        ) : null}
       </Container>
     </section>
   );

@@ -95,13 +95,17 @@ export async function ProductCard({
           </h3>
         </Link>
 
-        {/* Rating on its own line. */}
-        <span className="mt-2 flex items-center gap-1.5">
-          <Stars rating={product.ratingAvg} size="size-3.5" />
-          <span className="text-muted-foreground text-xs">
-            ({product.ratingCount})
+        {/* Rating on its own line — only once a product has real approved
+            reviews. An empty five-star row reading "(0)" is worse than no row
+            at all, and a filled one with nothing behind it is a fabrication. */}
+        {product.ratingCount > 0 ? (
+          <span className="mt-2 flex items-center gap-1.5">
+            <Stars rating={product.ratingAvg} size="size-3.5" />
+            <span className="text-muted-foreground text-xs">
+              ({product.ratingCount})
+            </span>
           </span>
-        </span>
+        ) : null}
 
         {/* Price on its OWN line so it never truncates on narrow mobile cards —
             hero price with a quiet struck-through compare-at beside it. */}

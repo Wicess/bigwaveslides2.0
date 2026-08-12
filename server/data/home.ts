@@ -56,7 +56,10 @@ export const getHomeData = unstable_cache(
       posts,
       stats: {
         reviewCount: stats._sum.ratingCount ?? 0,
-        ratingAvg: stats._avg.ratingAvg ?? 4.9,
+        // 0, not 4.9 — an empty aggregate means "no reviews yet", and defaulting
+        // it to a flattering score invents one. The hero hides the whole rating
+        // block when reviewCount is 0.
+        ratingAvg: stats._avg.ratingAvg ?? 0,
       },
     };
   },
@@ -80,7 +83,7 @@ export const getRatingSummary = unstable_cache(
         _avg: { ratingAvg: true },
       }),
     ).catch(() => null);
-    return { count: s?._sum.ratingCount ?? 0, value: s?._avg.ratingAvg ?? 4.9 };
+    return { count: s?._sum.ratingCount ?? 0, value: s?._avg.ratingAvg ?? 0 };
   },
   ["rating-summary"],
   { tags: ["products", "reviews"], revalidate: 3600 },

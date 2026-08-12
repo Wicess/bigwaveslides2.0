@@ -17,6 +17,7 @@
     "db:seed": "dotenv -e .env.local -- tsx prisma/seed.ts",
     "db:merge-visitors": "dotenv -e .env.local -- tsx scripts/merge-duplicate-visitors.ts",
     "db:seed-blog": "dotenv -e .env.local -- tsx scripts/seed-blog.ts",
+    "db:sync-ratings": "dotenv -e .env.local -- tsx scripts/sync-product-ratings.ts",
     "gen:indexing-urls": "dotenv -e .env.local -- tsx scripts/gen-indexing-urls.ts",
     "media:rehost": "dotenv -e .env.local -- tsx scripts/rehost-images.ts",
     "admin:set-password": "dotenv -e .env.local -- tsx scripts/set-admin-password.ts",

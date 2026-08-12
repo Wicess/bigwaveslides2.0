@@ -6,6 +6,31 @@
 export type UseCaseFaq = { q: string; a: string };
 export type UseCaseBenefit = { title: string; body: string };
 
+/**
+ * Marks a use case as tied to a specific point in the calendar.
+ *
+ * October — not July — is the busiest month in this industry: fall festivals,
+ * trunk-or-treats, school carnivals and harvest fairs, all booked three to four
+ * weeks ahead. That lead time is the strongest call to action the business has,
+ * so seasonal pages state the booking deadline outright instead of the generic
+ * "summer weekends book fast" line the warm-weather pages use.
+ *
+ * It also keeps these pages from becoming the thing they'd otherwise be — the
+ * summer copy with "fall" swapped in. The planning notes below are what actually
+ * differs about running an inflatable in October, and they're specific enough
+ * per event type that no two of these pages read the same.
+ */
+export type UseCaseSeason = {
+  /** Ribbon label above the hero, e.g. "October event". */
+  label: string;
+  /** The booking-deadline sentence. */
+  deadline: string;
+  /** Catalog heading — these events are usually run dry, not wet. */
+  catalogHeading: string;
+  /** What's genuinely different about planning THIS event. */
+  planning: string[];
+};
+
 export type UseCase = {
   slug: string;
   /** Plural label, e.g. "Birthday Parties". */
@@ -19,6 +44,8 @@ export type UseCase = {
   benefits: UseCaseBenefit[];
   faqs: UseCaseFaq[];
   hero: string;
+  /** Present only on calendar-bound pages. See UseCaseSeason. */
+  season?: UseCaseSeason;
 };
 
 const R2 = "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev";
@@ -415,6 +442,421 @@ export const USE_CASES: UseCase[] = [
       },
     ],
     hero: `${R2}/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg`,
+  },
+
+  // ───────────────────────── Fall season (Sept–Nov) ─────────────────────────
+  // October is the single busiest month for inflatable rentals, and those
+  // bookings are placed three to four weeks out — so this cluster has to be
+  // live and indexed by the start of September to catch any of it. Every page
+  // here leads with the dry-slide angle, because a wet slide run dry is the
+  // same unit in cooler weather and that's what these events actually book.
+
+  {
+    slug: "fall-festivals",
+    name: "Fall Festivals",
+    phrase: "fall festival",
+    heroTitle: "Fall Festival Inflatable Rentals",
+    heroDescription:
+      "Slides, combos and bounce houses for community fall festivals — delivered, set up, and run dry for cool-weather crowds. Book three to four weeks out; October weekends fill first.",
+    intro:
+      "A fall festival lives or dies on how long families stay, and an inflatable is the single easiest way to hold a crowd on site for an extra hour. Big Wave Slides delivers commercial-grade slides, combo units and bounce houses to community festivals across the country, sets them up and anchors them, and collects them when the last pumpkin's gone. Every wet slide in our fleet runs perfectly dry in autumn weather — same unit, no hose, no cold kids — so you get the same headline attraction the summer events had. Most festivals book six to seven pieces; tell us your footprint and expected headcount and we'll size the mix for you.",
+    keywords: [
+      "fall festival inflatable rentals",
+      "fall festival rentals",
+      "inflatable rentals for fall festival",
+      "community fall festival bounce house",
+      "fall carnival inflatable rental",
+    ],
+    benefits: [
+      {
+        title: "Run dry, not cold",
+        body: "Our slides operate wet or dry. In autumn we set them up dry, so you keep the big-slide draw without anyone getting soaked in 55°F weather.",
+      },
+      {
+        title: "Sized for a crowd, not a backyard",
+        body: "Festival attendance is lumpy. Dual-lane slides and multi-play combos move two to four times the riders per hour of a single-lane unit, which is what keeps a queue from becoming the story.",
+      },
+      {
+        title: "One vendor, one invoice",
+        body: "Book the whole inflatable mix through us instead of coordinating three suppliers on the same morning. One delivery window, one certificate of insurance, one contact.",
+      },
+    ],
+    faqs: [
+      {
+        q: "When should we book for an October fall festival?",
+        a: "Three to four weeks out at minimum. October is the busiest month of the year for inflatable rentals, and the last two weekends before Halloween are the first dates to go. If your festival is in October, book in early September.",
+      },
+      {
+        q: "Is it too cold in the fall for a water slide?",
+        a: "Not if you run it dry — which is what nearly every autumn booking does. The unit is identical; we just skip the water hookup. Dry setup also means no wet ground, no towels, and a much shorter changeover at the end of the day.",
+      },
+      {
+        q: "How many inflatables does a typical fall festival need?",
+        a: "Most festivals run six to seven attractions in total. A common mix is one large slide as the anchor, one or two bounce houses or combos for younger kids, and an obstacle course or interactive unit for the older ones. We'll recommend a mix from your expected headcount.",
+      },
+      {
+        q: "Can you set up on grass, gravel or a parking lot?",
+        a: "All three. Grass is anchored with stakes; hard surfaces are ballasted with sandbags or water barrels, which we bring. Tell us the surface when you book so the crew arrives with the right anchoring.",
+      },
+      {
+        q: "What happens if it rains on our festival date?",
+        a: "Tell us as early as you can. We'd rather move your date than have you run an event in weather that isn't safe for inflatables — high wind is the real limit, not light rain. We'll go through the specifics when we confirm your booking.",
+      },
+    ],
+    hero: `${R2}/blog/1782484415828-npyn0m-serengeti-springs-098.jpg`,
+    season: {
+      label: "October event",
+      deadline:
+        "October dates book out through September. For an October festival, request your quote by early September.",
+      catalogHeading: "Popular units for fall festivals — all available dry",
+      planning: [
+        "Confirm your surface — grass takes stakes, asphalt takes ballast, and the crew needs to know which before it loads.",
+        "Budget 20–30 ft of clear length per slide plus clearance on all sides, and keep the footprint away from overhead lines and tree limbs.",
+        "Every inflatable needs a power source within about 100 ft; generators are fine but tell us the amperage.",
+        "Autumn dark comes early — if your festival runs past 6pm, plan lighting over the inflatable area.",
+        "Ask for the certificate of insurance early if your venue, parish or city requires one; it often takes longer to route than the booking itself.",
+      ],
+    },
+  },
+
+  {
+    slug: "trunk-or-treat",
+    name: "Trunk-or-Treat Events",
+    phrase: "trunk-or-treat",
+    heroTitle: "Trunk-or-Treat Inflatable Rentals",
+    heroDescription:
+      "Bounce houses and dry slides for church and school trunk-or-treats — anchored for asphalt, set up before dusk, and gone before you lock the lot.",
+    intro:
+      "Trunk-or-treat is a parking-lot event, and that changes almost everything about how an inflatable gets installed. Big Wave Slides sets up on hard surfaces with ballast rather than stakes, works around the car line rather than through it, and schedules delivery so the unit is inflated and safety-checked before the first family arrives — not while they're queuing. The events are short, usually two to three hours around dusk, so we build the setup and strike window around your actual run time instead of a standard all-day rental.",
+    keywords: [
+      "trunk or treat inflatable rentals",
+      "trunk or treat bounce house rental",
+      "church trunk or treat rentals",
+      "trunk or treat attractions",
+      "halloween church event rentals",
+    ],
+    benefits: [
+      {
+        title: "Anchored for asphalt",
+        body: "You can't stake a parking lot. We arrive with sandbags and water ballast rated for the unit, so nothing is improvised on the day.",
+      },
+      {
+        title: "Set up around the car line",
+        body: "Trunk-or-treat layouts are built around parked vehicles. We'll place the inflatable so it doesn't break your traffic flow or block the fire lane.",
+      },
+      {
+        title: "Built for a short evening window",
+        body: "Most trunk-or-treats run two to three hours. We deliver and inflate ahead of your start and strike straight after, so the lot is clear the same night.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Can you set up an inflatable on a parking lot?",
+        a: "Yes, and it's most of what we do in October. Hard surfaces are anchored with sandbags or water barrels instead of stakes — we bring them. We'll also lay protection under the unit so the vinyl isn't dragged across the asphalt.",
+      },
+      {
+        q: "Our trunk-or-treat is only two hours. Do we pay for a full day?",
+        a: "Tell us your run time when you request a quote. Short evening events are the norm for trunk-or-treat and we'll price the window you actually need rather than a default full-day rate.",
+      },
+      {
+        q: "It gets dark during our event — is that a problem?",
+        a: "Only if the inflatable area is unlit. The unit itself is fine after dark, but riders and the attendant need to see the entry, steps and landing. Plan a light on the inflatable, or tell us and we'll advise on placement near your existing lot lighting.",
+      },
+      {
+        q: "Do you carry insurance for a church event?",
+        a: "Yes, we're fully insured and can provide a certificate of insurance naming your church or school. Request it when you book — routing it through a parish office or district can take longer than the booking itself.",
+      },
+      {
+        q: "Can kids use it in costume?",
+        a: "Capes, masks and long trailing costumes are the usual hazards on any inflatable. We recommend a costume-off rule at the steps, with a bin for masks and accessories. Shoes off as always.",
+      },
+    ],
+    hero: `${R2}/blog/1782484390938-cu27zd-overview-domaine-les-landes-de-gascogne-center-parcs-beauziac-france-photo01-768x575.jpg`,
+    season: {
+      label: "Late October",
+      deadline:
+        "The last two weekends before Halloween are the busiest dates of our year. Book by the last week of September.",
+      catalogHeading: "Units that work on a parking lot, set up dry",
+      planning: [
+        "Measure the pad, not the lot — you need the unit's footprint plus clearance on every side, clear of the fire lane.",
+        "Hard surface means ballast, not stakes. Confirm asphalt vs. grass when you book.",
+        "Give us a delivery window that lands before your first family, not at your start time.",
+        "Light the inflatable area if your event runs past dusk, which in late October means before 7pm.",
+        "Set a costume rule at the steps: no masks, capes or long trailing fabric on the unit.",
+      ],
+    },
+  },
+
+  {
+    slug: "school-carnivals",
+    name: "School Carnivals",
+    phrase: "school carnival",
+    heroTitle: "School Carnival & Fall Field Day Rentals",
+    heroDescription:
+      "Inflatables for PTA carnivals, fall field days and school fundraisers — insured for districts, invoiced on a PO, and sized to move a whole grade level.",
+    intro:
+      "School events are a throughput problem before they're an entertainment problem: you have a fixed number of minutes and a fixed number of students, and the schedule only works if the line keeps moving. Big Wave Slides supplies dual-lane slides, obstacle courses and multi-play combos chosen for riders-per-hour rather than height, and we handle the paperwork side that PTAs and district offices actually get stuck on — certificates of insurance naming the district, W-9s, and invoicing against a purchase order rather than a card at the door.",
+    keywords: [
+      "school carnival inflatable rentals",
+      "fall field day rentals",
+      "school fundraiser bounce house rental",
+      "PTA carnival rentals",
+      "school event inflatable rental",
+    ],
+    benefits: [
+      {
+        title: "Chosen for throughput",
+        body: "A dual-lane slide clears a class in half the time of a single lane. We size the mix from your student count and your rotation length, so no group spends its slot in a queue.",
+      },
+      {
+        title: "District paperwork handled",
+        body: "Certificate of insurance naming the district, W-9, and invoicing against a PO. We've done the routing before and won't hold up your approval.",
+      },
+      {
+        title: "Set up before first bell",
+        body: "We schedule installation ahead of the school day so nothing is being inflated while students are arriving, and strike after dismissal.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Can you invoice our school or PTA on a purchase order?",
+        a: "Yes. We invoice schools and districts on a PO and can supply a W-9 up front. No online payment is required at any point — every booking is a request, quoted and invoiced.",
+      },
+      {
+        q: "Can you provide a certificate of insurance naming our district?",
+        a: "Yes, and you should ask for it as soon as you book. Districts commonly require the COI before they'll approve the event, and their own routing usually takes longer than ours.",
+      },
+      {
+        q: "How many students can one inflatable handle in an hour?",
+        a: "It depends on the unit and your supervision ratio, but a dual-lane slide moves roughly twice what a single lane does, and an obstacle course runs continuously rather than one-at-a-time. Give us your headcount and rotation length and we'll tell you how many units the schedule needs.",
+      },
+      {
+        q: "Do you set up on a school field or a blacktop?",
+        a: "Either. Fields are staked; blacktop and courts are ballasted with sandbags we bring. Let us know which when you book, and flag any sprinkler heads or irrigation lines on a field.",
+      },
+      {
+        q: "Who supervises the inflatable during the event?",
+        a: "We set up, anchor and safety-check the unit and brief your staff on safe operation. Supervision during the event is by your staff or volunteers, as with any station — we'll tell you the recommended ratio for the unit you book.",
+      },
+    ],
+    hero: `${R2}/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg`,
+    season: {
+      label: "Fall term",
+      deadline:
+        "Fall carnival dates cluster in October and compete with every festival in your area. Book three to four weeks ahead, and start the COI paperwork the same week.",
+      catalogHeading: "High-throughput units for school events",
+      planning: [
+        "Start the certificate of insurance request immediately — district approval, not availability, is what usually delays school bookings.",
+        "Work out riders-per-hour from your student count and rotation length before choosing units.",
+        "Flag sprinkler heads and irrigation lines if we're staking into a field.",
+        "Book the delivery window before the school day starts, not at the event time.",
+        "Confirm whether payment runs through a PO — we invoice rather than take payment at the door.",
+      ],
+    },
+  },
+
+  {
+    slug: "halloween-parties",
+    name: "Halloween Parties",
+    phrase: "Halloween party",
+    heroTitle: "Halloween Inflatable Rentals",
+    heroDescription:
+      "Dry slides, bounce houses and combos for Halloween parties and neighbourhood events — delivered and set up for evening run times, in costume-safe layouts.",
+    intro:
+      "Halloween bookings are the tightest of the year: everyone wants the same Friday and Saturday, and there are only two of them. Big Wave Slides delivers commercial-grade inflatables for home, HOA and neighbourhood Halloween parties, set up dry for evening weather and laid out with the specific hazards of the night in mind — costumes, low light, and a crowd that arrives all at once rather than trickling in. If you're holding a party on the weekend before Halloween, the practical deadline to book is late September.",
+    keywords: [
+      "halloween inflatable rentals",
+      "halloween bounce house rental",
+      "halloween party rentals",
+      "spooky inflatable rental",
+      "halloween slide rental",
+    ],
+    benefits: [
+      {
+        title: "Set up dry for October nights",
+        body: "Same slides, no water. A dry setup means no wet ground underfoot after dark and nothing for costumes to soak up.",
+      },
+      {
+        title: "Laid out for low light",
+        body: "We'll place the unit so the steps and landing sit inside your existing lighting, which is the part people forget until it's dark.",
+      },
+      {
+        title: "Booked around the two big nights",
+        body: "The weekends either side of the 31st are the busiest dates we run. Get your date in early and we'll hold the unit you actually want.",
+      },
+    ],
+    faqs: [
+      {
+        q: "When do Halloween rentals sell out?",
+        a: "The weekend before Halloween is typically gone by the end of September, and Halloween night itself goes first. If your date is fixed, request the quote as early as you can — it costs nothing to hold it.",
+      },
+      {
+        q: "Is it warm enough for an inflatable at the end of October?",
+        a: "For a dry setup, yes — in most of the country an October evening is comfortable for a dry slide or bounce house. Wet setups are a Sun Belt option at that point in the year; everywhere else we'd recommend running dry.",
+      },
+      {
+        q: "Are costumes safe on an inflatable?",
+        a: "With one rule: nothing that trails or covers the eyes. Masks, capes, long skirts and anything with a tail should come off at the steps. Shoes off as always, and socks on if the surface is cold.",
+      },
+      {
+        q: "Can you deliver in the evening?",
+        a: "We deliver and inflate ahead of your start time, then strike after. Tell us your run time and we'll build the window around it rather than a default full-day rental.",
+      },
+      {
+        q: "Do you have Halloween-themed units?",
+        a: "Our fleet is themed to water and adventure rather than Halloween specifically, and for most parties the slide is the attraction regardless. Tell us the look you're after and we'll tell you honestly what's a fit — and what isn't.",
+      },
+    ],
+    hero: `${R2}/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg`,
+    season: {
+      label: "31 October",
+      deadline:
+        "Halloween night and the weekend before it are the first dates to sell out. Late September is the practical deadline.",
+      catalogHeading: "Dry-setup units for Halloween night",
+      planning: [
+        "Lock the date first — the unit can be swapped later, the Saturday before Halloween cannot.",
+        "Plan for dark by 6:30pm and light the steps and landing, not just the party.",
+        "Set a costume rule at the entry: no masks, capes or trailing fabric on the unit.",
+        "Run dry unless you're in the Sun Belt; October evenings elsewhere are too cool for a wet setup.",
+        "Have a wind plan — it's the one condition that closes an inflatable, and late October is gustier than August.",
+      ],
+    },
+  },
+
+  {
+    slug: "harvest-festivals",
+    name: "Harvest Festivals",
+    phrase: "harvest festival",
+    heroTitle: "Harvest Festival & Pumpkin Patch Rentals",
+    heroDescription:
+      "Multi-day inflatable rentals for pumpkin patches, corn mazes and harvest weekends — priced by the weekend, installed on uneven farm ground.",
+    intro:
+      "Pumpkin patches and harvest festivals don't run for an afternoon; they run for weekends on end, on ground that was a field six weeks ago. That makes them a different rental from a backyard party in almost every respect — the pricing is by the weekend or the season rather than the day, the anchoring has to account for soft and uneven ground, and the unit has to keep working through a month of daily use. Big Wave Slides handles multi-day and multi-weekend placements, and we'll be straight with you about which units hold up to that kind of run and which don't.",
+    keywords: [
+      "harvest festival rentals",
+      "pumpkin patch inflatable rentals",
+      "corn maze attraction rentals",
+      "multi day inflatable rental",
+      "fall attraction rental for farms",
+    ],
+    benefits: [
+      {
+        title: "Priced by the weekend, not the day",
+        body: "Multi-day and multi-weekend placements are quoted as a run, not as repeated single-day rentals. For a season-long patch that's a materially different number.",
+      },
+      {
+        title: "Anchored for field ground",
+        body: "Soft, uneven and freshly-mown ground needs longer stakes and a levelled pad. We survey the placement before install rather than discovering it on the morning.",
+      },
+      {
+        title: "Built to run all season",
+        body: "A unit that sees daily use for six weeks isn't the same spec as one that does a two-hour birthday. We'll steer you to commercial-grade units that will still look right in week five.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Can we rent an inflatable for the whole pumpkin patch season?",
+        a: "Yes — multi-weekend and season-long placements are quoted as a run rather than as day rentals, which is usually far better value. Tell us your open dates and we'll price the whole period.",
+      },
+      {
+        q: "Can you set up on a field or uneven ground?",
+        a: "In most cases, with preparation. We need a reasonably level pad clear of stubble, rocks and ruts, and soft ground takes longer stakes. Send photos of the intended spot with your enquiry and we'll tell you what it needs before the crew arrives.",
+      },
+      {
+        q: "Who maintains the unit over a long placement?",
+        a: "We'll agree that up front. For long runs we schedule check-ins, and your team handles daily inflation, deflation in high wind, and keeping the surface clear. It's all set out in the booking.",
+      },
+      {
+        q: "What happens in high wind on a farm site?",
+        a: "Open farm ground is windier than a suburban yard, and wind is the condition that closes an inflatable — not rain. Long placements need a named person on site who can deflate the unit when it picks up. We'll cover the threshold when you book.",
+      },
+      {
+        q: "Is there power at the placement?",
+        a: "That's the question to answer before anything else. Every unit needs a blower running continuously within about 100 ft. Generators are fine — tell us the amperage available and we'll confirm it's enough.",
+      },
+    ],
+    hero: `${R2}/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg`,
+    season: {
+      label: "September–November",
+      deadline:
+        "Season-long placements are planned in August and early September, well before the patch opens. Enquire as early as you can.",
+      catalogHeading: "Units suited to multi-weekend placements",
+      planning: [
+        "Confirm continuous power at the placement — a blower runs the entire time the unit is up.",
+        "Send photos of the intended ground; stubble, ruts and slope all change the install.",
+        "Name the person on site who can deflate the unit when wind picks up.",
+        "Quote the whole run at once — weekend and season pricing is not the day rate multiplied out.",
+        "Agree the check-in schedule up front for anything longer than a single weekend.",
+      ],
+    },
+  },
+
+  {
+    slug: "corporate-fall-family-day",
+    name: "Corporate Fall Family Days",
+    phrase: "corporate fall family day",
+    heroTitle: "Corporate Fall Family Day Rentals",
+    heroDescription:
+      "Inflatables for employee appreciation days and company family events — invoiced to the business, insured for your venue, and staffed around a workday schedule.",
+    intro:
+      "A company family day has a guest list that runs from toddlers to grandparents, a venue that usually belongs to someone else, and a finance process that needs an invoice rather than a card. Big Wave Slides handles all three. We supply a mix that gives the under-tens somewhere to burn an afternoon and gives the older kids something worth queueing for, we deal directly with venue and facilities teams on insurance and access, and we invoice the business on standard terms with no online payment at any stage.",
+    keywords: [
+      "corporate family day rentals",
+      "employee appreciation event rentals",
+      "company picnic inflatable rentals",
+      "corporate event bounce house rental",
+      "business family day attractions",
+    ],
+    benefits: [
+      {
+        title: "Invoiced to the business",
+        body: "Quote, PO if you use them, invoice on terms. Nothing is paid online and nobody has to expense a card payment on the day.",
+      },
+      {
+        title: "Venue and facilities handled",
+        body: "Most corporate events are on a leased or third-party site. We deal with the venue directly on certificates of insurance, access times and load-in.",
+      },
+      {
+        title: "A mix that covers every age",
+        body: "Family day guest lists are wide. We'll build a mix so the four-year-olds and the twelve-year-olds both have somewhere to go, rather than one unit that half the guests are too old for.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Can you invoice our company rather than take payment online?",
+        a: "That's how every booking works here — nothing is paid on the site. You get a quote, we confirm the booking, and we invoice. We'll work to a PO if your finance team uses them.",
+      },
+      {
+        q: "Our venue needs a certificate of insurance. Can you provide one?",
+        a: "Yes, naming the venue and your company as required. Request it as soon as the date is set; venue and facilities teams often take longer to approve it than the booking takes to make.",
+      },
+      {
+        q: "Can you work around a venue's load-in window?",
+        a: "Yes. Corporate sites usually have fixed access times and a loading route rather than a driveway. Send us the venue contact and we'll agree the window with them directly.",
+      },
+      {
+        q: "Do you have anything for adults, not just children?",
+        a: "The larger dual-lane slides carry adult riders, and they're consistently the most-used unit at family days for exactly that reason. Tell us the expected adult split and we'll factor it into the mix.",
+      },
+      {
+        q: "How far ahead should a corporate family day book?",
+        a: "Further than you'd think, because the approval chain is longer than the booking. Four to six weeks is comfortable; in October, make it six — you're competing with every school and church event in the area for the same weekends.",
+      },
+    ],
+    hero: `${R2}/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg`,
+    season: {
+      label: "Autumn schedule",
+      deadline:
+        "October weekends are contested by every school and church event in your area. Allow six weeks, most of which is approvals rather than availability.",
+      catalogHeading: "Units that work for a mixed-age guest list",
+      planning: [
+        "Start the certificate of insurance with the venue the week you set the date.",
+        "Confirm the load-in window and route — corporate sites rarely allow a straight drive-up.",
+        "Give us the adult/child split so the mix isn't sized for one and wasted on the other.",
+        "Confirm whether finance needs a PO before the invoice is raised.",
+        "Check power at the placement; conference and event venues often meter outdoor outlets separately.",
+      ],
+    },
   },
 ];
 

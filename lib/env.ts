@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { canonicalSiteUrl } from "@/lib/site";
 
 /**
  * Typed, validated environment variables.
@@ -18,25 +19,16 @@ const EnvSchema = z.object({
     .default("development"),
   // Canonical site URL. Normalised so every absolute URL we emit (canonical,
   // hreflang, sitemap, OG, robots, JSON-LD) uses the SAME host Google Search
-  // Console is verified on — www. The apex (bigwavesslides.com) 308-redirects to
-  // www in production, so canonicals MUST be www or GSC sees a redirect and
-  // won't index them. Forcing it here means it's right even if the deployed env
-  // var is the apex. Trailing slash is stripped via `.origin`.
+  // Console is verified on — www. Both the apex and the one-'s' alias domain
+  // fold into it (see lib/site.ts), so a deployment that still carries an alias
+  // in its env var cannot publish a second set of self-canonicalising URLs.
+  // Trailing slash is stripped via `.origin`; localhost and preview hosts pass
+  // through untouched.
   NEXT_PUBLIC_SITE_URL: z
     .string()
     .url()
     .default("http://localhost:3000")
-    .transform((raw) => {
-      try {
-        const u = new URL(raw);
-        if (u.hostname === "bigwavesslides.com") {
-          u.hostname = "www.bigwavesslides.com";
-        }
-        return u.origin;
-      } catch {
-        return raw.replace(/\/+$/, "");
-      }
-    }),
+    .transform(canonicalSiteUrl),
 
   // Database (Phase 4)
   DATABASE_URL: z.string().optional(),

@@ -2,7 +2,14 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { ShieldCheck, Sparkles, Truck, Check } from "lucide-react";
+import {
+  ShieldCheck,
+  Sparkles,
+  Truck,
+  Check,
+  CalendarClock,
+  ClipboardList,
+} from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { USE_CASES, getUseCaseBySlug } from "@/lib/use-cases";
 import { getRentalProducts } from "@/server/data/rentals";
@@ -32,7 +39,6 @@ import { JsonLd } from "@/components/seo/json-ld";
 // when the serverless DB is asleep, and refreshes catalog data within the hour.
 export const revalidate = 3600;
 
-
 type Props = { params: Promise<{ locale: string; useCase: string }> };
 
 export function generateStaticParams() {
@@ -46,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     // Use-case pages render English copy; keep the French duplicates unindexed.
-    noindex: locale !== routing.defaultLocale,
+    enOnly: true,
     path: `/water-slides-for/${uc.slug}`,
     title: uc.heroTitle,
     description: uc.heroDescription,
@@ -72,8 +78,10 @@ export default async function UseCasePage({ params }: Props) {
   const path = `/water-slides-for/${uc.slug}`;
   const canonical = absoluteUrl(locale, path);
 
-  // Other use cases for internal linking.
+  // Other use cases for internal linking, grouped by season.
   const others = USE_CASES.filter((u) => u.slug !== uc.slug);
+  const seasonalOthers = others.filter((u) => u.season);
+  const yearRoundOthers = others.filter((u) => !u.season);
 
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
@@ -115,6 +123,26 @@ export default async function UseCasePage({ params }: Props) {
             </p>
           </Reveal>
 
+          {/* Booking deadline. On a seasonal page this is the strongest CTA we
+              have: these events are booked 3–4 weeks out against a fixed date,
+              so the scarcity is real and stating it plainly outperforms a
+              generic "request a quote". */}
+          {uc.season ? (
+            <Reveal className="mt-6 max-w-3xl" delay={0.05}>
+              <div className="border-primary/30 bg-primary/5 flex gap-3 rounded-2xl border p-5">
+                <CalendarClock className="text-primary mt-0.5 size-5 shrink-0" />
+                <div>
+                  <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+                    {uc.season.label}
+                  </p>
+                  <p className="mt-1 leading-relaxed font-medium">
+                    {uc.season.deadline}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ) : null}
+
           {/* Benefits */}
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {uc.benefits.map((b, i) => (
@@ -144,6 +172,29 @@ export default async function UseCasePage({ params }: Props) {
               );
             })}
           </ul>
+
+          {/* Planning checklist. Specific to THIS event type — parking-lot
+              ballast, district COI routing, farm-ground power — which is what
+              keeps these pages from being one template with the season's name
+              swapped in, and what makes them worth citing. */}
+          {uc.season ? (
+            <Reveal className="mt-10 max-w-3xl">
+              <h2 className="font-display flex items-center gap-2 text-xl font-semibold">
+                <ClipboardList className="text-primary size-5" />
+                Before you book a {uc.phrase}
+              </h2>
+              <ul className="mt-4 space-y-3">
+                {uc.season.planning.map((item) => (
+                  <li key={item} className="flex gap-3">
+                    <Check className="text-primary mt-1 size-4 shrink-0" />
+                    <span className="text-muted-foreground leading-relaxed">
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ) : null}
         </Container>
       </Section>
 
@@ -155,7 +206,10 @@ export default async function UseCasePage({ params }: Props) {
         >
           <Container className="max-w-[84rem]">
             <SectionHeader
-              title={`Popular slides for ${uc.name.toLowerCase()}`}
+              title={
+                uc.season?.catalogHeading ??
+                `Popular slides for ${uc.name.toLowerCase()}`
+              }
             />
             <div className="mt-8 grid grid-cols-1 gap-x-4 gap-y-8 min-[440px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {items.map((p, i) => (
@@ -235,21 +289,35 @@ export default async function UseCasePage({ params }: Props) {
             </div>
           </div>
 
-          <div className="mt-10">
-            <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-              Water slides for every occasion
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {others.map((u) => (
-                <Link
-                  key={u.slug}
-                  href={`/water-slides-for/${u.slug}`}
-                  className="border-border bg-background hover:border-primary hover:text-primary rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors"
-                >
-                  {u.name}
-                </Link>
+          {/* Internal links, split by season rather than dumped in one list, so
+              the fall pages read as a cluster to crawlers and so a visitor
+              planning an October event sees the other October pages first. */}
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
+            {(
+              [
+                ["Fall & Halloween events", seasonalOthers],
+                ["Water slides for every occasion", yearRoundOthers],
+              ] as const
+            )
+              .filter(([, list]) => list.length > 0)
+              .map(([heading, list]) => (
+                <div key={heading}>
+                  <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                    {heading}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {list.map((u) => (
+                      <Link
+                        key={u.slug}
+                        href={`/water-slides-for/${u.slug}`}
+                        className="border-border bg-background hover:border-primary hover:text-primary rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors"
+                      >
+                        {u.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               ))}
-            </div>
           </div>
         </Container>
       </Section>

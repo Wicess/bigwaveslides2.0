@@ -217,7 +217,13 @@ type ProductSeed = {
   ageRange?: string;
   featured?: boolean;
   rentalUnits?: number;
-  rating?: { avg: number; count: number };
+  // NOTE: there is deliberately no `rating` field here. Seeded star ratings are
+  // invented reviews: they flow into Product.ratingAvg/ratingCount and out again
+  // as `aggregateRating` in the Product and LocalBusiness JSON-LD, telling Google
+  // about reviews no customer ever left. Google's review-snippet guidelines make
+  // self-serving ratings ineligible for stars anyway, so the markup buys nothing
+  // while carrying real manual-action risk. Ratings are now derived ONLY from
+  // approved Review rows — see scripts/sync-product-ratings.ts.
 };
 
 const PRODUCTS: ProductSeed[] = [
@@ -237,7 +243,6 @@ const PRODUCTS: ProductSeed[] = [
     ageRange: "5+",
     featured: true,
     rentalUnits: 3,
-    rating: { avg: 4.9, count: 64 },
   },
   {
     slug: "blue-crush-double-lane",
@@ -257,7 +262,6 @@ const PRODUCTS: ProductSeed[] = [
     capacity: 2,
     ageRange: "6+",
     rentalUnits: 2,
-    rating: { avg: 4.8, count: 41 },
   },
   {
     slug: "castle-splash-combo",
@@ -275,7 +279,6 @@ const PRODUCTS: ProductSeed[] = [
     ageRange: "3+",
     featured: true,
     rentalUnits: 2,
-    rating: { avg: 5.0, count: 28 },
   },
   {
     slug: "cyclone-22ft-drop",
@@ -293,7 +296,6 @@ const PRODUCTS: ProductSeed[] = [
     ageRange: "8+",
     featured: true,
     rentalUnits: 1,
-    rating: { avg: 4.7, count: 33 },
   },
   {
     slug: "aqualoop-commercial-pool-slide",
@@ -307,7 +309,6 @@ const PRODUCTS: ProductSeed[] = [
     ),
     salePriceCents: 1299900,
     ageRange: "All ages",
-    rating: { avg: 4.9, count: 12 },
   },
   {
     slug: "riptide-fiberglass-flume",
@@ -322,7 +323,6 @@ const PRODUCTS: ProductSeed[] = [
     salePriceCents: 2499900,
     featured: true,
     ageRange: "All ages",
-    rating: { avg: 5.0, count: 7 },
   },
   {
     slug: "lagoon-kids-splash-pad",
@@ -340,7 +340,6 @@ const PRODUCTS: ProductSeed[] = [
     capacity: 6,
     ageRange: "2+",
     rentalUnits: 2,
-    rating: { avg: 4.8, count: 19 },
   },
 ];
 
@@ -355,8 +354,9 @@ async function seedProducts(categoryMap: Map<string, string>) {
         dailyRateCents: p.dailyRateCents ?? null,
         depositCents: p.depositCents ?? null,
         featured: p.featured ?? false,
-        ratingAvg: p.rating?.avg ?? 0,
-        ratingCount: p.rating?.count ?? 0,
+        // Never seeded. Recomputed from approved Review rows.
+        ratingAvg: 0,
+        ratingCount: 0,
         status: "ACTIVE",
         categoryId: categoryMap.get(p.category) ?? null,
       },
@@ -391,8 +391,9 @@ async function seedProducts(categoryMap: Map<string, string>) {
         ],
         searchText: `${p.name.en} ${p.shortDescription.en} ${p.sku}`,
         featured: p.featured ?? false,
-        ratingAvg: p.rating?.avg ?? 0,
-        ratingCount: p.rating?.count ?? 0,
+        // Never seeded. Recomputed from approved Review rows.
+        ratingAvg: 0,
+        ratingCount: 0,
         categoryId: categoryMap.get(p.category) ?? null,
         media: {
           create: [
@@ -413,20 +414,10 @@ async function seedProducts(categoryMap: Map<string, string>) {
             },
           ],
         },
-        reviews:
-          p.rating && p.rating.count > 0
-            ? {
-                create: [
-                  {
-                    authorName: "Jessica M.",
-                    rating: 5,
-                    title: "Made our party!",
-                    body: "Spotless, on time, and the kids did not want to leave. Booking again next summer.",
-                    status: "APPROVED",
-                  },
-                ],
-              }
-            : undefined,
+        // No seeded reviews. An invented "Jessica M. — 5 stars" row is a fake
+        // customer review: it renders on the product page as real social proof
+        // and feeds the aggregateRating markup. Reviews are only ever created by
+        // real customers through the review form and approved in the admin panel.
       },
     });
 
@@ -747,73 +738,17 @@ async function seedEvents() {
 
 // ───────────────────────── Testimonials ─────────────────────────
 async function seedTestimonials() {
-  const count = await prisma.testimonial.count();
-  if (count > 0) return;
-  await prisma.testimonial.createMany({
-    data: [
-      {
-        authorName: "Maria G.",
-        authorRole: "Parent",
-        rating: 5,
-        quote: L(
-          "Best birthday ever — the kids are still talking about it!",
-          "Le plus bel anniversaire — les enfants en parlent encore !",
-        ),
-        status: "APPROVED",
-        featured: true,
-        order: 0,
-      },
-      {
-        authorName: "Pastor James",
-        authorRole: "Community Church",
-        organization: "Grace Fellowship",
-        rating: 5,
-        quote: L(
-          "Punctual, professional, and spotless. Highly recommended.",
-          "Ponctuel, professionnel et impeccable. Vivement recommandé.",
-        ),
-        status: "APPROVED",
-        featured: true,
-        order: 1,
-      },
-      {
-        authorName: "Coach Daniels",
-        authorRole: "Lincoln Elementary",
-        rating: 5,
-        quote: L(
-          "Our field day was a massive hit thanks to Big Wave.",
-          "Notre journée sportive fut un grand succès grâce à Big Wave.",
-        ),
-        status: "APPROVED",
-        featured: false,
-        order: 2,
-      },
-      {
-        authorName: "The Reynolds Family",
-        rating: 5,
-        quote: L(
-          "Setup and pickup were effortless. We just had fun.",
-          "Installation et reprise sans effort. On a juste profité.",
-        ),
-        status: "APPROVED",
-        featured: false,
-        order: 3,
-      },
-      {
-        authorName: "Hotel Azure",
-        authorRole: "Events Manager",
-        organization: "Hotel Azure",
-        rating: 4,
-        quote: L(
-          "Our guests loved the poolside slides all summer.",
-          "Nos clients ont adoré les toboggans tout l'été.",
-        ),
-        status: "APPROVED",
-        featured: false,
-        order: 4,
-      },
-    ],
-  });
+  // Deliberately seeds nothing.
+  //
+  // This used to create five APPROVED testimonials from invented people —
+  // "Maria G.", "Pastor James", "Coach Daniels" — which the homepage carousel
+  // and /testimonials render as real customer endorsements. Fabricated
+  // endorsements are a trust and FTC problem well before they are an SEO one,
+  // and Google's spam policies treat manufactured trust signals as exactly that.
+  //
+  // Real testimonials are submitted by customers and approved in
+  // Admin → Testimonials. Until there are some, the sections stay empty, which
+  // is the honest state for a business with no reviews yet.
 }
 
 // ───────────────────────── Site Settings ─────────────────────────
