@@ -29,7 +29,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : "Commercial Water Slides for Sale | Buy Inflatable Slides",
     description: fr
       ? "Achetez des glissades d'eau gonflables commerciales conçues pour la location et la revente — robustes, livraison nationale. Parcourez nos glissades à vendre et demandez un devis."
-      : "Buy commercial inflatable water slides built for rentals and resale — heavy-duty, with nationwide delivery. Browse our water slides for sale and request a price quote.",
+      : "Buy commercial inflatable water slides built for rentals and resale — heavy-duty, nationwide US delivery. Browse slides for sale and request a quote.",
+    og: {
+      eyebrow: "For sale",
+      subtitle: "Commercial-grade inflatables built for rentals and resale",
+      badge: "US delivery",
+      price: "Request a price quote",
+    },
     keywords: [
       "commercial water slides for sale",
       "buy inflatable water slides",

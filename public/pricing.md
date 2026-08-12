@@ -9,6 +9,16 @@ Big Wave Slides rents commercial-grade inflatable water slides, bounce houses, a
 - Larger or commercial-size units: quote-based
 - Included in every rental: delivery, professional setup + anchoring, sanitizing before delivery, full insurance, and pickup
 
+## Bounce house & combo pricing (per day)
+
+Bounce houses run dry, so they are booked year-round and can be set up indoors as well as outdoors.
+
+- Starting price: $159/day
+- Themed castle bouncers: about $229–$285/day
+- Bounce-and-slide combo units: about $269–$550/day
+- Included in every rental: delivery, professional setup + anchoring, sanitizing before delivery, full insurance, and pickup
+- See: https://www.bigwavesslides.com/en/bounce-house-rentals
+
 ## Delivery fees
 
 - Base delivery fee: $49
@@ -35,6 +45,8 @@ Request a quote: https://www.bigwavesslides.com/en/contact
 
 - Email: contact@bigwavesslides.com
 - Phone: +1 (614) 302-5899
-- Service area: all 50 U.S. states
+- Service area: all 50 U.S. states (United States only — no international delivery)
+- Headquarters: Dallas, Texas
+- Currency: USD
 
-_Prices are typical ranges and are confirmed per booking via a free quote. Last updated: 2026-07-06._
+_Prices are typical ranges in U.S. dollars, confirmed per booking via a free quote. Big Wave Slides operates in the United States only (all 50 states). Last updated: 2026-08-12._

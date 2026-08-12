@@ -23,7 +23,7 @@ export const getNavData = unstable_cache(
           select: { slug: true, title: true, category: true },
         }),
         prisma.siteSetting.findMany({
-          where: { key: { in: ["contact", "social"] } },
+          where: { key: { in: ["contact", "social", "hours"] } },
           select: { key: true, value: true },
         }),
       ]),
@@ -44,6 +44,8 @@ export const getNavData = unstable_cache(
         addressCountry?: string;
       };
       social?: { instagram?: string; facebook?: string; tiktok?: string };
+      /** Opening hours → OpeningHoursSpecification on the LocalBusiness schema. */
+      hours?: { mon_fri?: string; sat?: string; sun?: string };
     };
 
     return { categories, rentals, services, settings };

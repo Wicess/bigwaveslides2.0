@@ -34,10 +34,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: "/rent",
     title: fr
       ? "Location de glissades d'eau dès 199 $/jour — livrées & installées"
-      : "Water Slide Rentals from $199/day — Delivered, Set Up & Insured",
+      : "Water Slide Rentals from $199/Day — Delivered & Insured",
     description: fr
       ? "Louez des glissades d'eau gonflables et châteaux gonflables près de chez vous dès 199 $/jour — livraison, installation et assurance comprises pour anniversaires, fêtes de piscine, écoles et églises. Devis gratuit."
-      : "Rent inflatable water slides & bounce houses near you from $199/day — delivered, set up & fully insured for birthday parties, pool parties, school & church events. Get a free rental quote.",
+      : "Rent inflatable water slides & bounce houses near you from $199/day — delivered, set up & fully insured for birthdays, pools, schools & churches.",
+    og: {
+      eyebrow: "Rent",
+      subtitle: "Water slides, bounce houses & combos — delivered and insured",
+      badge: "Free quote",
+      price: "From $199/day",
+    },
     keywords: [
       "water slide rentals",
       "inflatable water slide rentals",

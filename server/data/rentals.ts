@@ -178,6 +178,56 @@ export function getLandingRentals(): Promise<RentalListing["items"]> {
   return landingRentalsPromise;
 }
 
+/**
+ * The dry-play catalog behind /bounce-house-rentals — bounce houses and the
+ * bounce-and-slide combos, ranked most-bookable first.
+ *
+ * These landing pages must NOT show the same eight water slides the
+ * /water-slide-rentals pages show. Two page families over the same cities with
+ * an identical product grid is exactly the near-duplicate signal Google's
+ * scaled-content systems act on; a genuinely different catalog is what makes
+ * them two pages instead of one page twice.
+ */
+export const BOUNCE_CATEGORY_SLUGS = ["bounce-houses", "combo-units"] as const;
+
+async function fetchBounceHouseRentals() {
+  const cards = await withRetry(() =>
+    prisma.product.findMany({
+      where: {
+        status: "ACTIVE",
+        type: { in: ["RENTAL", "BOTH"] },
+        category: { slug: { in: [...BOUNCE_CATEGORY_SLUGS] } },
+      },
+      select: cardSelect,
+      orderBy: [
+        { featured: "desc" },
+        { ratingAvg: "desc" },
+        { ratingCount: "desc" },
+      ],
+      take: 12,
+    }),
+  ).catch(() => [] as RentalListing["items"]);
+  return cards;
+}
+
+export const getBounceHouseRentals = unstable_cache(
+  fetchBounceHouseRentals,
+  ["bounce-house-rentals"],
+  { tags: ["products"], revalidate: 3600 },
+);
+
+// Same process-wide memo trick as getLandingRentals: pre-rendering hundreds of
+// bounce-house location pages should hit the database once, not once per page.
+let landingBouncePromise: Promise<RentalListing["items"]> | null = null;
+export function getLandingBounceHouses(): Promise<RentalListing["items"]> {
+  if (!landingBouncePromise) {
+    landingBouncePromise = getBounceHouseRentals()
+      .then((items) => items.slice(0, 8))
+      .catch(() => [] as RentalListing["items"]);
+  }
+  return landingBouncePromise;
+}
+
 // Cached (tag "products", 1h) so product pages served on-demand don't hit the
 // DB per request; admin edits revalidate the "products" tag.
 export const getRentalBySlug = unstable_cache(

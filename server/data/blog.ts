@@ -144,6 +144,27 @@ export const getGuideLinks = unstable_cache(
   { tags: ["blog"], revalidate: 3600 },
 );
 
+export type GuideLink = Awaited<ReturnType<typeof getGuideLinks>>[number];
+
+/**
+ * Process-wide memo of {@link getGuideLinks} for the programmatic location
+ * pages, which all render the same rotating guide list.
+ *
+ * `unstable_cache` alone is not enough during `next build`: the prerender runs
+ * across several worker processes, each starting with a cold cache, so a
+ * thousand-plus location pages still open a thousand-plus connections and
+ * exhaust the Neon pool (`max: 10`) — the build then dies with a wall of
+ * "Invalid prisma.blogPost.findMany() invocation". Same trick, and same reason,
+ * as `getLandingRentals` in server/data/rentals.ts.
+ */
+let guideLinksPromise: Promise<GuideLink[]> | null = null;
+export function getGuideLinksOnce(): Promise<GuideLink[]> {
+  if (!guideLinksPromise) {
+    guideLinksPromise = getGuideLinks().catch(() => [] as GuideLink[]);
+  }
+  return guideLinksPromise;
+}
+
 export const getBlogCategories = unstable_cache(
   async () =>
     withRetry(() =>

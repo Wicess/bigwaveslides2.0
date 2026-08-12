@@ -13,10 +13,58 @@ function abs(locale: string, path: string): string {
   return `${SITE}/${locale}${path === "/" ? "" : path}`;
 }
 
+/**
+ * hreflang codes, deliberately region-qualified for English.
+ *
+ * The business sells and delivers **only in the United States**, so the English
+ * pages are annotated `en-US` rather than a bare `en`. A bare `en` invites every
+ * English-speaking market on earth (UK, IE, AU, NZ, ZA, IN, NG, PH…) to be
+ * served these pages; `en-US` tells Google plainly that this content is for US
+ * searchers. `x-default` still points at the English page so anyone outside the
+ * declared markets lands somewhere sensible instead of nowhere.
+ *
+ * Search Console's old International Targeting tool is gone (retired 2022), so
+ * hreflang + on-page signals (USD prices, US phone/address, state pages) are
+ * now the ONLY way to declare country targeting on a gTLD like .com.
+ */
+export const HREFLANG: Record<string, string> = { en: "en-US", fr: "fr" };
+
+/** Build the hreflang alternates map (self-referencing + x-default). */
+export function hreflangAlternates(path: string): Record<string, string> {
+  const languages: Record<string, string> = {};
+  for (const l of routing.locales) languages[HREFLANG[l] ?? l] = abs(l, path);
+  languages["x-default"] = abs(routing.defaultLocale, path);
+  return languages;
+}
+
+/**
+ * Extra art-direction for the generated Open Graph card. Ignored when the page
+ * has a real photo (a product shot always beats a generated card).
+ */
+export type OgParams = {
+  /** Small caps label above the headline, e.g. "Houston, TX". */
+  eyebrow?: string;
+  /** One-line supporting sentence under the headline. */
+  subtitle?: string;
+  /** Pill in the top-right, e.g. "Delivered nationwide". */
+  badge?: string;
+  /** Price hook rendered in the footer strip, e.g. "From $199/day". */
+  price?: string;
+};
+
 /** Real product/post image when we have one, else a branded dynamic OG card. */
-function ogImageUrl(title: string, image?: string | null): string {
+function ogImageUrl(
+  title: string,
+  image?: string | null,
+  og?: OgParams,
+): string {
   if (image) return image;
-  return `${SITE}/api/og?title=${encodeURIComponent(title)}`;
+  const q = new URLSearchParams({ title });
+  if (og?.eyebrow) q.set("eyebrow", og.eyebrow);
+  if (og?.subtitle) q.set("subtitle", og.subtitle);
+  if (og?.badge) q.set("badge", og.badge);
+  if (og?.price) q.set("price", og.price);
+  return `${SITE}/api/og?${q.toString()}`;
 }
 
 export type SeoInput = {
@@ -27,10 +75,32 @@ export type SeoInput = {
   description: string;
   /** Absolute image URL (product/post photo). Falls back to dynamic OG. */
   image?: string | null;
+  /** Art direction for the generated OG card (unused when `image` is set). */
+  og?: OgParams;
   type?: "website" | "article";
   keywords?: string[];
-  /** Set true for cart/checkout/thank-you style pages. */
+  /**
+   * Keep the page out of the index while leaving it crawlable and followable —
+   * used for the non-priority city pages, which are real pages we simply don't
+   * want competing for terms the domain can't win yet.
+   */
   noindex?: boolean;
+  /**
+   * True when only the default-locale version is real content — the
+   * programmatic pages (locations, occasions, answers) whose French routes
+   * render the same English copy.
+   *
+   * Does two things that must always travel together:
+   *   1. noindexes every non-default locale, and
+   *   2. drops hreflang entirely.
+   *
+   * (2) is the part that's easy to miss. Declaring `hreflang="fr"` toward a
+   * page that is itself `noindex` is a contradiction: Google is told a French
+   * alternate exists, follows it, finds "don't index me", and discards the
+   * whole cluster — so the English page's annotations are wasted too. A page
+   * with one real version should simply declare no alternates.
+   */
+  enOnly?: boolean;
 };
 
 /**
@@ -81,8 +151,8 @@ export function rentProductSeo(
       ? `Location ${name} — livrée, installée et assurée`
       : `Rent the ${name} — Delivered, Set Up & Insured`,
     description: fr
-      ? `Louez ${name}, une ${kind}${priceHook} — livraison, installation, désinfection et assurance comprises pour anniversaires, fêtes de piscine, écoles, églises et événements. Devis gratuit, réservez votre date.`
-      : `Rent the ${name} ${kind}${priceHook} — delivered, set up, sanitized and fully insured for birthdays, pool parties, school, church and community events. Get a free quote and book your date today.`,
+      ? `Louez ${name}, une ${kind}${priceHook} — livraison, installation, désinfection et assurance comprises. Devis gratuit, réservez votre date.`
+      : `Rent the ${name} ${kind}${priceHook} — delivered, set up, sanitized and fully insured for birthdays, pool parties, school and church events. Free quote.`,
     keywords: fr
       ? [
           `location ${name}`,
@@ -119,10 +189,10 @@ export function saleProductSeo(
   return {
     title: fr
       ? `${name} à vendre — ${kind} commerciale`
-      : `Buy the ${name} — Commercial ${kind.replace(/^inflatable /, "")} for Sale`,
+      : `${name} for Sale — Commercial ${kind.replace(/^inflatable /, "")}`,
     description: fr
-      ? `Achetez ${name}, une ${kind} commerciale${priceHook} — qualité robuste conçue pour la location et la revente, livraison partout aux États-Unis. Parcourez nos gonflables à vendre et demandez un devis.`
-      : `Buy the ${name} commercial ${kind}${priceHook} — heavy-duty, built for rentals and resale, with nationwide delivery. Perfect for starting or growing a rental business. Request a price quote.`,
+      ? `Achetez ${name}, une ${kind} commerciale${priceHook} — robuste, conçue pour la location et la revente, livraison partout aux États-Unis. Devis sur demande.`
+      : `Buy the ${name} commercial ${kind}${priceHook} — heavy-duty, built for rentals and resale, delivered anywhere in the USA. Request a price quote.`,
     keywords: fr
       ? [
           `${name} à vendre`,
@@ -172,22 +242,25 @@ export function buildMetadata({
   title,
   description,
   image,
+  og,
   type = "website",
   keywords,
   noindex,
+  enOnly,
 }: SeoInput): Metadata {
   const canonical = abs(locale, path);
-  const languages: Record<string, string> = {};
-  for (const l of routing.locales) languages[l] = abs(l, path);
-  languages["x-default"] = abs(routing.defaultLocale, path);
-
-  const img = ogImageUrl(title, image);
+  const img = ogImageUrl(title, image, og);
+  const hidden =
+    noindex || (enOnly === true && locale !== routing.defaultLocale);
 
   return {
     title,
     description,
     ...(keywords && keywords.length ? { keywords } : {}),
-    alternates: { canonical, languages },
+    alternates: {
+      canonical,
+      ...(enOnly ? {} : { languages: hreflangAlternates(path) }),
+    },
     openGraph: {
       title,
       description,
@@ -203,6 +276,31 @@ export function buildMetadata({
       description,
       images: [img],
     },
-    ...(noindex ? { robots: { index: false, follow: false } } : {}),
+    ...(hidden
+      ? // `noindex, follow` — NOT `nofollow`. Every page that reaches this
+        // branch (a non-priority city, a French duplicate) is still a real,
+        // linked page in the site graph: it lists products, guides and sibling
+        // locations. `nofollow` would stop link equity flowing through those
+        // links to the pages we *do* want to rank, which is the opposite of
+        // what a de-indexed hub page is for. Genuinely private areas
+        // (/cart, /checkout, /account, /admin) are blocked in robots.ts instead.
+        { robots: { index: false, follow: true } }
+      : {
+          // Let Google show the biggest image thumbnail and an unlimited-length
+          // snippet. Without `max-snippet:-1` Google caps the text it may quote,
+          // which directly limits what AI Overviews and other answer engines can
+          // lift from the page — the single cheapest AEO/GEO win available.
+          robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+              index: true,
+              follow: true,
+              "max-video-preview": -1,
+              "max-image-preview": "large",
+              "max-snippet": -1,
+            },
+          },
+        }),
   };
 }

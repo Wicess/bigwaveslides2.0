@@ -7,8 +7,8 @@ import { routing } from "@/i18n/routing";
 import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
-import { getGuideLinks } from "@/server/data/blog";
-import { getSettings } from "@/server/data/settings";
+import { getGuideLinksOnce } from "@/server/data/blog";
+import { getSettingsOnce } from "@/server/data/settings";
 import { pickN } from "@/lib/internal-links";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -56,10 +56,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     // French location pages render English content (duplicates) — keep them out
     // of the index; English state hubs stay indexable.
-    noindex: locale !== routing.defaultLocale,
+    enOnly: true,
     path: `/water-slide-rentals/${loc.slug}`,
-    title: `Water Slide Rentals in ${loc.name} from $199/Day — Delivered & Insured`,
-    description: `Rent inflatable water slides & bounce houses across ${loc.name} from $199/day — delivered, set up & fully insured in ${cities3} & statewide. Check your date free — summer weekends book fast.`,
+    title: `Water Slide Rentals in ${loc.name} — From $199/Day`,
+    description: `Water slide & bounce house rentals across ${loc.name} from $199/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,
+    og: {
+      eyebrow: loc.name,
+      subtitle: "Delivered, set up & fully insured statewide",
+      badge: "Free quote",
+      price: "From $199/day",
+    },
     keywords: [
       `water slide rentals ${loc.name}`,
       `inflatable water slide rental ${loc.name}`,
@@ -81,7 +87,7 @@ export default async function StateRentalPage({ params }: Props) {
 
   const [items, allGuides] = await Promise.all([
     getLandingRentals(),
-    getGuideLinks().catch(() => []),
+    getGuideLinksOnce(),
   ]);
 
   const cityList = loc.cities.join(", ");
@@ -140,7 +146,7 @@ export default async function StateRentalPage({ params }: Props) {
 
   // Contact comes from Settings → Contact so schema only advertises a phone
   // once one is actually configured (and shown) on the site.
-  const settings = await getSettings().catch(() => ({}) as never);
+  const settings = await getSettingsOnce();
 
   return (
     <main>
@@ -396,7 +402,9 @@ export default async function StateRentalPage({ params }: Props) {
                 variant="outline"
                 className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
               >
-                <Link href="/rent">Browse rentals</Link>
+                <Link href={`/bounce-house-rentals/${loc.slug}`}>
+                  Bounce houses in {loc.name}
+                </Link>
               </Button>
             </div>
           </div>

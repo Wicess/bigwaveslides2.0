@@ -42,10 +42,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: "/",
     title: fr
       ? "Location de glissades d'eau dès 199 $/jour — livrées & assurées"
-      : "Water Slide Rentals Near You from $199/Day — Delivered & Insured",
+      : "Water Slide Rentals Near You, USA — From $199/Day",
     description: fr
       ? "Louez ou achetez des glissades d'eau gonflables partout aux États-Unis dès 199 $/jour — livraison, installation et assurance comprises. Devis gratuit en quelques minutes — les week-ends d'été partent vite !"
-      : "Rent or buy inflatable water slides anywhere in the USA from $199/day — delivery, setup & full insurance all included. Free quote in minutes. Summer weekends book fast — check your date today!",
+      : "Rent or buy inflatable water slides anywhere in the USA from $199/day — delivery, setup & insurance included. Free quote in minutes; summer books fast.",
+    og: {
+      eyebrow: "Nationwide USA",
+      subtitle: "Delivered, set up, sanitized & fully insured — free quote",
+      badge: "All 50 states",
+      price: "From $199/day",
+    },
     keywords: fr
       ? [
           "location glissade d'eau",
@@ -75,7 +81,11 @@ const FALLBACK: HomeData = {
   services: [],
   testimonials: [],
   posts: [],
-  stats: { reviewCount: 1200, ratingAvg: 4.9 },
+  // Zero, not a flattering guess. This fallback renders whenever the DB read
+  // fails, and a hardcoded "1,200 reviews · 4.9" would then be shown to every
+  // visitor as real social proof for reviews that don't exist. The hero omits
+  // the rating block entirely at 0.
+  stats: { reviewCount: 0, ratingAvg: 0 },
 };
 
 export default async function HomePage({ params }: Props) {

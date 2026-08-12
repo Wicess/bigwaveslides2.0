@@ -56,3 +56,21 @@ export const getSettings = unstable_cache(
   ["site-settings"],
   { tags: ["settings"], revalidate: 3600 },
 );
+
+/**
+ * Process-wide memo of {@link getSettings} for the programmatic location pages.
+ *
+ * Every location page reads settings only to put the business phone into its
+ * LocalBusiness schema — one identical row, fetched once per page across
+ * thousands of pages. `unstable_cache` doesn't dedupe this during `next build`
+ * (each prerender worker starts cold), which is enough on its own to exhaust
+ * the Neon connection pool and fail the build. See `getLandingRentals` in
+ * server/data/rentals.ts for the same pattern.
+ */
+let settingsPromise: Promise<SiteSettings> | null = null;
+export function getSettingsOnce(): Promise<SiteSettings> {
+  if (!settingsPromise) {
+    settingsPromise = getSettings().catch(() => ({}) as SiteSettings);
+  }
+  return settingsPromise;
+}

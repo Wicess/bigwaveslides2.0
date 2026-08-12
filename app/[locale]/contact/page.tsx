@@ -21,6 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: fr
       ? "Demandez un devis gratuit de location ou d'achat de glissade d'eau. Indiquez votre date, lieu et type d'événement — réponse en quelques heures. Réservez dès aujourd'hui."
       : "Request a free water slide rental or purchase quote. Tell us your date, location and event — we reply within hours. Book your inflatable water slide today.",
+    og: {
+      eyebrow: "Free quote",
+      subtitle: "Tell us your date, city and event — we reply within hours",
+      badge: "No obligation",
+      price: "From $199/day",
+    },
     keywords: [
       "water slide rental quote",
       "book water slide online",
@@ -37,7 +43,10 @@ export default async function ContactPage({ params }: Props) {
 
   const settings = await getSettings().catch((): SiteSettings => ({}));
   const contact = settings.contact ?? {};
-  const whatsappDigits = (contact.whatsapp ?? contact.phone ?? "").replace(/\D/g, "");
+  const whatsappDigits = (contact.whatsapp ?? contact.phone ?? "").replace(
+    /\D/g,
+    "",
+  );
 
   return (
     <main>

@@ -53,13 +53,14 @@ export const metadata: Metadata = {
   title: {
     // Keyword-first, brand-free: an unknown brand in every title wastes the
     // most valuable SEO space. Pages set their own complete titles, so the
-    // template is a pass-through (no automatic brand suffix).
-    default:
-      "Water Slide Rentals from $199/Day & Inflatable Water Slides for Sale | USA",
+    // template is a pass-through (no automatic brand suffix). Kept under ~60
+    // characters so Google renders it whole instead of truncating or (worse)
+    // rewriting it with its own guess.
+    default: "Water Slide Rentals Near You — From $199/Day, USA",
     template: "%s",
   },
   description:
-    "Rent or buy inflatable water slides across the USA from $199/day — delivered, set up, and fully insured for birthday parties, pool parties, and events. Get a free water slide rental quote.",
+    "Rent or buy inflatable water slides anywhere in the USA from $199/day — delivered, set up, sanitized and fully insured. Get a free quote in minutes.",
   openGraph: {
     type: "website",
     siteName: "Big Wave Slides",
@@ -68,6 +69,22 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     images: ["/api/og"],
+  },
+  // Site-wide crawl defaults. `max-snippet:-1` lifts Google's cap on how much
+  // text it may quote from a page — which is exactly the text AI Overviews and
+  // other answer engines draw on — and `max-image-preview:large` unlocks the
+  // full-size thumbnail in both blue-link and AI results. Pages that need to be
+  // hidden set their own `robots` via buildMetadata({ noindex: true }).
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   // Search-engine ownership verification (Google Search Console + Bing).
   verification: {
@@ -137,8 +154,13 @@ export default async function LocaleLayout({
   const year = new Date().getFullYear();
 
   return (
-    // `lang` is set per locale so screen readers and search engines know the language.
-    <html lang={locale}>
+    // `lang` is set per locale so screen readers and search engines know the
+    // language. English is region-qualified to `en-US`: the company sells and
+    // delivers only in the United States, and a bare `en` reads as "English,
+    // anywhere". Bing in particular leans on <html lang> for country targeting
+    // (it treats hreflang as only a weak signal), so this is a real geo lever
+    // and not just an accessibility nicety.
+    <html lang={locale === "en" ? "en-US" : locale}>
       <body className="min-h-dvh antialiased">
         {/* Speed: warm up connections to the image hosts (R2 CDN + wsrv resizer)
             so the first images don't pay full DNS+TLS latency. React hoists
@@ -192,6 +214,7 @@ export default async function LocaleLayout({
               navData.settings.social?.tiktok,
             ],
             rating,
+            navData.settings.hours,
           )}
         />
         <JsonLd data={websiteLd()} />

@@ -78,10 +78,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return buildMetadata({
     locale,
+    // English-only hub: the French route renders this same English copy, so it
+    // is a pure duplicate. The sitemap already excludes it (EN_ONLY_STATIC) —
+    // this is the matching page-level signal, without which Google can still
+    // discover /fr/water-slide-rentals by crawling the locale switcher and
+    // index a second copy of the page competing with the original.
+    enOnly: true,
     path: "/water-slide-rentals",
     title: "Water Slide Rentals Near You from $199/Day — All 50 States",
+    og: {
+      eyebrow: "All 50 states",
+      subtitle: "Find your city, check your date, book in minutes",
+      badge: "Nationwide",
+      price: "From $199/day",
+    },
     description:
-      "Rent premium inflatable water slides & bounce houses from $199/day — delivered, set up, sanitized & fully insured across all 50 U.S. states. Find your city, check your date free, and book before summer weekends fill.",
+      "Water slide & bounce house rentals from $199/day in all 50 states — delivered, set up, sanitized & insured. Find your city and check your date free.",
     keywords: [
       "water slide rentals",
       "water slide rental near me",

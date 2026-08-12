@@ -7,9 +7,55 @@ const NAME = "Big Wave Slides";
 // phone deliberately has no constant here: it comes from Settings → Contact so
 // schema never advertises a number the site itself doesn't show.
 const EMAIL = "contact@bigwavesslides.com";
-const PRICE_RANGE = "$199 - $550";
+// Spans the WHOLE rentable catalog, not just the water slides: the cheapest
+// unit is the Lil' Splash Junior at $149/day and the dearest the Mega Waterpark
+// Combo at $550. The bounce-house pages advertise "From $159/day", so a range
+// starting at $199 would have contradicted the visible price on those pages —
+// and markup that disagrees with the page is what a rich-results spam check
+// looks for. Keep this in step with the real daily rates in the database.
+const PRICE_RANGE = "$149 - $550";
 
 type Json = Record<string, unknown>;
+
+/** Opening hours as stored in Settings → Hours ("8:00–18:00", en-dash). */
+export type BusinessHours = {
+  mon_fri?: string;
+  sat?: string;
+  sun?: string;
+};
+
+const HOUR_DAYS: Record<keyof BusinessHours, string[]> = {
+  mon_fri: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+  sat: ["Saturday"],
+  sun: ["Sunday"],
+};
+
+/**
+ * Turn the admin's free-text hours into `OpeningHoursSpecification`. Google
+ * wants 24-hour `HH:MM`, so a range that doesn't parse is skipped rather than
+ * emitted malformed — bad structured data is worse than none.
+ */
+function openingHours(hours: BusinessHours): Json[] {
+  const out: Json[] = [];
+  for (const [key, days] of Object.entries(HOUR_DAYS) as [
+    keyof BusinessHours,
+    string[],
+  ][]) {
+    const raw = hours[key]?.trim();
+    if (!raw) continue;
+    // Accept "8:00–18:00", "8:00-18:00" and "08:00 — 18:00".
+    const m = raw.match(/^(\d{1,2}:\d{2})\s*[–—-]\s*(\d{1,2}:\d{2})$/);
+    if (!m) continue;
+    const pad = (t: string) => (t.length === 4 ? `0${t}` : t);
+    out.push({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: days,
+      opens: pad(m[1]!),
+      closes: pad(m[2]!),
+    });
+  }
+  return out;
+}
 
 export function organizationLd(
   contact?: {
@@ -26,6 +72,8 @@ export function organizationLd(
   sameAs?: (string | undefined)[],
   /** Real review aggregate → `aggregateRating` (star ratings in rich results). */
   rating?: { value: number; count: number },
+  /** Settings → Hours, emitted as OpeningHoursSpecification when parseable. */
+  hours?: BusinessHours,
 ): Json {
   const links = (sameAs ?? []).filter(Boolean) as string[];
   // Prefer a fully structured PostalAddress (city/state/ZIP); fall back to the
@@ -55,12 +103,33 @@ export function organizationLd(
     logo: `${SITE}/icon.png`,
     image: `${SITE}/icon.png`,
     priceRange: PRICE_RANGE,
-    // Nationwide delivery across the United States.
+    // ── United-States-only trading signals ────────────────────────────────
+    // Google retired Search Console's International Targeting tool in 2022, so
+    // on a .com there is no switch that says "this business is American". These
+    // properties are the replacement: taken together (US-only service area, USD
+    // pricing, US English, a US postal address and phone) they let Google infer
+    // the country far more confidently than hreflang can on its own.
     areaServed: { "@type": "Country", name: "United States" },
+    currenciesAccepted: "USD",
+    knowsLanguage: "en-US",
     ...(contact?.email ? { email: contact.email } : {}),
     ...(contact?.phone ? { telephone: contact.phone } : {}),
     ...(address ? { address } : {}),
     ...(links.length ? { sameAs: links } : {}),
+    // A ContactPoint that is itself scoped to the US and to American English.
+    ...(contact?.phone || contact?.email
+      ? {
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "sales",
+            areaServed: "US",
+            availableLanguage: ["en-US"],
+            ...(contact.phone ? { telephone: contact.phone } : {}),
+            ...(contact.email ? { email: contact.email } : {}),
+          },
+        }
+      : {}),
+    ...(hours ? { openingHoursSpecification: openingHours(hours) } : {}),
     ...(rating && rating.count > 0
       ? {
           aggregateRating: {
@@ -83,10 +152,27 @@ export function organizationLd(
  * the site-wide Organization schema).
  */
 export function localBusinessAreaLd(
+  /** The STATE this page serves — emitted as `areaServed: {"@type":"State"}`. */
   area: string,
   url: string,
   anchor?: { city: string; region: string },
   contact?: { phone?: string },
+  /**
+   * What this location page is about, woven into the business name. Defaults to
+   * water slides (the original page family); the bounce-house pages pass their
+   * own so the schema doesn't advertise "Water Slide Rentals in Texas" on a page
+   * about bounce houses — a mismatch between markup and visible content is
+   * exactly what a structured-data spam check looks for.
+   */
+  service = "Water Slide Rentals",
+  /**
+   * What the business NAME says it serves. Defaults to `area` (correct for a
+   * state hub). A city page passes "Houston, TX" so the name stays local while
+   * `areaServed` still types Houston as a City inside the State of Texas —
+   * previously a city page emitted `{"@type":"State","name":"Houston, TX"}`,
+   * which labels a city as a state.
+   */
+  nameArea?: string,
 ): Json {
   const areaServed: Json[] = [];
   if (anchor) {
@@ -99,7 +185,7 @@ export function localBusinessAreaLd(
   return {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
-    name: `${NAME} — Water Slide Rentals in ${area}`,
+    name: `${NAME} — ${service} in ${nameArea ?? area}`,
     url,
     logo: `${SITE}/icon.png`,
     image: `${SITE}/icon.png`,

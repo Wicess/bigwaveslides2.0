@@ -24,12 +24,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     // English-only content resource — keep the French duplicate unindexed.
-    noindex: locale !== routing.defaultLocale,
+    enOnly: true,
     path: "/answers",
-    title:
-      "Water Slide Rental Questions & Answers — Cost, Setup, Safety & Booking",
+    title: "Water Slide Rental Questions Answered — Cost, Space & Power",
     description:
-      "Straight answers to the most-asked water slide rental questions: how much it costs, how much space you need, water and power requirements, safety, weather, and how booking works. Nationwide delivery from $199/day.",
+      "Straight answers on water slide rental cost, space, water and power needs, safety, weather and booking. Nationwide US delivery from $199/day.",
+    og: {
+      eyebrow: "Answers",
+      subtitle: "Cost, space, water, power, safety, weather and booking",
+      badge: "25 answers",
+      price: "From $199/day",
+    },
     keywords: [
       "water slide rental questions",
       "how much does a water slide rental cost",

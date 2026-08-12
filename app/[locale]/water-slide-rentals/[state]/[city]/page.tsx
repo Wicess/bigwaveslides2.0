@@ -20,8 +20,8 @@ import { getCityContent } from "@/lib/city-content";
 import { getCityLocal } from "@/lib/city-local";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
-import { getGuideLinks } from "@/server/data/blog";
-import { getSettings } from "@/server/data/settings";
+import { getGuideLinksOnce } from "@/server/data/blog";
+import { getSettingsOnce } from "@/server/data/settings";
 import { pickN } from "@/lib/internal-links";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -76,17 +76,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const loc = getCity(state, city);
   if (!loc) return {};
   const { name, state: st } = loc;
-  // Only wave-1 priority metros (in the default locale) are indexable; every
-  // other city page — and all French location pages (English duplicates) — is
-  // noindexed so Google spends its crawl budget on the pages that can rank.
-  const noindex =
-    locale !== routing.defaultLocale || !isPriorityCity(st.slug, loc.slug);
+  // Only wave-1 priority metros are indexable; the rest stay crawlable and
+  // linked (so they still pass equity and still serve a visitor who lands on
+  // one) but out of the index, so crawl budget goes to the pages that can rank.
+  // `enOnly` separately handles the French duplicates AND suppresses hreflang.
+  const noindex = !isPriorityCity(st.slug, loc.slug);
   return buildMetadata({
     locale,
+    enOnly: true,
     noindex,
     path: `/water-slide-rentals/${st.slug}/${loc.slug}`,
-    title: `Water Slide Rentals in ${name}, ${st.abbr} from $199/Day — Delivered & Insured`,
-    description: `Rent inflatable water slides & bounce houses in ${name}, ${st.abbr} from $199/day — delivered, set up, sanitized & fully insured. Check your date free — summer weekends in ${name} book fast.`,
+    // Kept inside Google's ~60-character render width so the city — the whole
+    // reason this page exists — never gets truncated away. The old title ran to
+    // 83 characters, which meant "…from $199/Day — Delivered & Insured" was cut
+    // and Google was free to rewrite the title with its own guess.
+    title: `Water Slide Rentals in ${name}, ${st.abbr} — From $199/Day`,
+    description: `Water slide & bounce house rentals in ${name}, ${st.abbr} from $199/day — delivered, set up, sanitized & insured. Free quote in minutes.`,
+    og: {
+      eyebrow: `${name}, ${st.abbr}`,
+      subtitle: "Delivered, set up, sanitized & fully insured",
+      badge: "Free quote",
+      price: "From $199/day",
+    },
     keywords: [
       `water slide rentals in ${name} ${st.abbr}`,
       `water slide rental ${name}`,
@@ -114,7 +125,7 @@ export default async function CityRentalPage({ params }: Props) {
 
   const [items, allGuides] = await Promise.all([
     getLandingRentals(),
-    getGuideLinks().catch(() => []),
+    getGuideLinksOnce(),
   ]);
 
   const path = `/water-slide-rentals/${st.slug}/${loc.slug}`;
@@ -156,16 +167,18 @@ export default async function CityRentalPage({ params }: Props) {
 
   // Contact comes from Settings → Contact so schema only advertises a phone
   // once one is actually configured (and shown) on the site.
-  const settings = await getSettings().catch(() => ({}) as never);
+  const settings = await getSettingsOnce();
 
   return (
     <main>
       <JsonLd
         data={localBusinessAreaLd(
-          place,
+          st.name,
           canonical,
-          undefined,
+          { city: name, region: st.abbr },
           settings?.contact,
+          "Water Slide Rentals",
+          place,
         )}
       />
       <JsonLd
@@ -437,7 +450,9 @@ export default async function CityRentalPage({ params }: Props) {
                 variant="outline"
                 className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
               >
-                <Link href="/rent">Browse rentals</Link>
+                <Link href={`/bounce-house-rentals/${st.slug}/${loc.slug}`}>
+                  Bounce houses in {name}
+                </Link>
               </Button>
             </div>
           </div>

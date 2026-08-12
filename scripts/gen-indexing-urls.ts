@@ -40,6 +40,7 @@ const BILINGUAL_STATIC = [
 // English-only programmatic pages (their /fr twins are noindexed duplicates).
 const EN_ONLY_STATIC = [
   "/water-slide-rentals",
+  "/bounce-house-rentals",
   "/water-slides-for",
   "/answers",
 ];
@@ -100,6 +101,18 @@ async function main() {
       title: "PRIORITY CITIES (en)",
       paths: getPriorityCities().map(
         (c) => `/water-slide-rentals/${c.state.slug}/${c.slug}`,
+      ),
+      locales: EN,
+    },
+    {
+      title: "BOUNCE HOUSE STATES (en)",
+      paths: US_STATES.map((s) => `/bounce-house-rentals/${s.slug}`),
+      locales: EN,
+    },
+    {
+      title: "BOUNCE HOUSE PRIORITY CITIES (en)",
+      paths: getPriorityCities().map(
+        (c) => `/bounce-house-rentals/${c.state.slug}/${c.slug}`,
       ),
       locales: EN,
     },

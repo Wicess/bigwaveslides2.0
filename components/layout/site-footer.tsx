@@ -69,6 +69,10 @@ export async function SiteFooter({
     { href: "/rent", label: tn("rent") },
     { href: "/shop", label: tn("shop") },
     { href: "/water-slide-rentals", label: "Service Areas" },
+    // Sitewide entry point into the bounce-house family. A programmatic page
+    // set that is only reachable from its own sitemap is an orphan cluster —
+    // Google crawls it far more slowly and passes it almost no equity.
+    { href: "/bounce-house-rentals", label: "Bounce House Rentals" },
     { href: "/water-slides-for", label: "Occasions" },
     { href: "/blog", label: tn("blog") },
     { href: "/about", label: tn("about") },
