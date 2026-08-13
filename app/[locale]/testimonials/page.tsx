@@ -22,8 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     namespace: "Testimonials",
   });
   // buildMetadata (not a bare object) so the page gets its self-referencing
-  // canonical + en/fr/x-default hreflang — it ships in the sitemap in both
-  // locales, and without alternates Google treats them as duplicates.
+  // canonical and the site-wide robots directives — it ships in the sitemap.
   return buildMetadata({
     locale,
     path: "/testimonials",
