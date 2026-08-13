@@ -4,7 +4,14 @@ import { getAdminContacts } from "@/server/data/admin-cms";
 import { formatDate } from "@/lib/format";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { ContactStatus } from "@/components/admin/contact-status";
-import { AdminCard, Avatar, CountPill, EmptyState, Reveal, Toolbar } from "@/components/admin/admin-ui";
+import {
+  AdminCard,
+  Avatar,
+  CountPill,
+  EmptyState,
+  Reveal,
+  Toolbar,
+} from "@/components/admin/admin-ui";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +29,7 @@ export default async function AdminContactsPage() {
 
       <Toolbar>
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold text-foreground">Messages</h2>
+          <h2 className="text-foreground text-sm font-semibold">Messages</h2>
           <CountPill>{contacts.length}</CountPill>
         </div>
       </Toolbar>
@@ -47,18 +54,22 @@ export default async function AdminContactsPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div className="min-w-0">
-                        <p className="font-semibold text-foreground">{c.name}</p>
+                        <p className="text-foreground font-semibold">
+                          {c.name}
+                        </p>
                         <a
                           href={`mailto:${c.email}`}
-                          className="text-sm text-primary hover:underline"
+                          className="text-primary text-sm hover:underline"
                         >
                           {c.email}
                         </a>
                       </div>
                       <ContactStatus id={c.id} status={c.status} />
                     </div>
-                    <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
-                      {c.subject ? <span className="font-medium">{c.subject}</span> : null}
+                    <p className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
+                      {c.subject ? (
+                        <span className="font-medium">{c.subject}</span>
+                      ) : null}
                       <span>{formatDate(c.createdAt, "en")}</span>
                       {c.phone ? (
                         <span className="inline-flex items-center gap-1">
@@ -66,7 +77,7 @@ export default async function AdminContactsPage() {
                         </span>
                       ) : null}
                     </p>
-                    <p className="mt-3 whitespace-pre-line rounded-2xl bg-muted/50 p-3.5 text-sm leading-relaxed text-foreground/80">
+                    <p className="bg-muted/50 text-foreground/80 mt-3 rounded-2xl p-3.5 text-sm leading-relaxed whitespace-pre-line">
                       {c.message}
                     </p>
                   </div>

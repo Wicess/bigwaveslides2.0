@@ -23,16 +23,12 @@ export const revalidate = 600;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/blog",
-    title: fr
-      ? "Guide des glissades d'eau — location, achat & idées de fête"
-      : "Water Slide Rental Guides, Buying Tips & Party Ideas",
-    description: fr
-      ? "Conseils pour louer ou acheter des glissades d'eau gonflables, idées de fêtes, sécurité et planification d'événements — par les experts de la glissade."
-      : "Expert guides on renting and buying inflatable water slides, plus party planning ideas, safety tips and event inspiration for your next water slide event.",
+    title: "Water Slide Rental Guides, Buying Tips & Party Ideas",
+    description:
+      "Expert guides on renting and buying inflatable water slides, plus party planning ideas, safety tips and event inspiration for your next water slide event.",
     keywords: [
       "water slide rental guide",
       "inflatable water slide tips",

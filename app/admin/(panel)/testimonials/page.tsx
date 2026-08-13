@@ -7,7 +7,14 @@ import { Stars } from "@/components/ui/stars";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { TestimonialButtons } from "@/components/admin/moderation-buttons";
-import { AdminCard, Avatar, CountPill, EmptyState, Reveal, Toolbar } from "@/components/admin/admin-ui";
+import {
+  AdminCard,
+  Avatar,
+  CountPill,
+  EmptyState,
+  Reveal,
+  Toolbar,
+} from "@/components/admin/admin-ui";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +32,9 @@ export default async function AdminTestimonialsPage() {
 
       <Toolbar>
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold text-foreground">All testimonials</h2>
+          <h2 className="text-foreground text-sm font-semibold">
+            All testimonials
+          </h2>
           <CountPill>{items.length}</CountPill>
         </div>
       </Toolbar>
@@ -47,25 +56,33 @@ export default async function AdminTestimonialsPage() {
                   <Avatar name={t.authorName} />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-semibold text-foreground">{t.authorName}</span>
+                      <span className="text-foreground font-semibold">
+                        {t.authorName}
+                      </span>
                       <Stars rating={t.rating} size="size-3.5" />
-                      <StatusBadge status={t.status} locale="en" />
+                      <StatusBadge status={t.status} />
                       {t.featured ? (
-                        <span className="rounded-full bg-primary-50 px-2 py-0.5 text-[11px] font-bold text-primary">
+                        <span className="bg-primary-50 text-primary rounded-full px-2 py-0.5 text-[11px] font-bold">
                           ★ Featured
                         </span>
                       ) : null}
                     </div>
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      {[t.authorRole, t.organization].filter(Boolean).join(" · ")}
+                    <p className="text-muted-foreground mt-0.5 text-xs">
+                      {[t.authorRole, t.organization]
+                        .filter(Boolean)
+                        .join(" · ")}
                       {t.authorRole || t.organization ? " · " : ""}
                       {formatDate(t.createdAt, "en")}
                     </p>
-                    <p className="mt-2 text-sm italic leading-relaxed text-foreground/80">
+                    <p className="text-foreground/80 mt-2 text-sm leading-relaxed italic">
                       “{getLocalized(t.quote, "en")}”
                     </p>
                     <div className="mt-3.5">
-                      <TestimonialButtons id={t.id} status={t.status} featured={t.featured} />
+                      <TestimonialButtons
+                        id={t.id}
+                        status={t.status}
+                        featured={t.featured}
+                      />
                     </div>
                   </div>
                 </div>

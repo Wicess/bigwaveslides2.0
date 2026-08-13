@@ -45,7 +45,7 @@ export default async function AdminQuotesPage({ searchParams }: Props) {
 
       <Toolbar>
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold text-foreground">All quotes</h2>
+          <h2 className="text-foreground text-sm font-semibold">All quotes</h2>
           <CountPill>{quotes.length}</CountPill>
         </div>
         <FilterSelect
@@ -75,7 +75,7 @@ export default async function AdminQuotesPage({ searchParams }: Props) {
               {/* Desktop table */}
               <div className="hidden overflow-x-auto md:block">
                 <table className="w-full text-sm">
-                  <thead className="border-b border-border bg-muted/50">
+                  <thead className="border-border bg-muted/50 border-b">
                     <tr>
                       <Th>Quote</Th>
                       <Th>Customer</Th>
@@ -85,40 +85,46 @@ export default async function AdminQuotesPage({ searchParams }: Props) {
                       <Th className="text-right">Actions</Th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border/70">
+                  <tbody className="divide-border/70 divide-y">
                     {quotes.map((q) => (
-                      <tr key={q.id} className="group transition-colors hover:bg-primary-50/40">
+                      <tr
+                        key={q.id}
+                        className="group hover:bg-primary-50/40 transition-colors"
+                      >
                         <td className="px-5 py-3.5">
                           <Link
                             href={`/admin/quotes/${q.id}`}
-                            className="inline-flex rounded-lg bg-muted px-2 py-1 font-mono text-xs font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-white"
+                            className="bg-muted text-primary group-hover:bg-primary inline-flex rounded-lg px-2 py-1 font-mono text-xs font-bold transition-colors group-hover:text-white"
                           >
                             {q.quoteNumber}
                           </Link>
                         </td>
                         <td className="px-5 py-3.5">
                           <span className="flex items-center gap-3">
-                            <Avatar name={q.guestName ?? q.guestEmail} className="size-9" />
+                            <Avatar
+                              name={q.guestName ?? q.guestEmail}
+                              className="size-9"
+                            />
                             <span className="min-w-0">
-                              <span className="block truncate font-semibold text-foreground">
+                              <span className="text-foreground block truncate font-semibold">
                                 {q.guestName ?? "—"}
                               </span>
-                              <span className="block truncate text-xs text-muted-foreground">
+                              <span className="text-muted-foreground block truncate text-xs">
                                 {q.guestEmail}
                               </span>
                             </span>
                           </span>
                         </td>
                         <td className="px-5 py-3.5">
-                          <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+                          <span className="bg-muted text-muted-foreground rounded-full px-2.5 py-1 text-xs font-semibold">
                             {q.context}
                           </span>
                         </td>
-                        <td className="whitespace-nowrap px-5 py-3.5 text-muted-foreground">
+                        <td className="text-muted-foreground px-5 py-3.5 whitespace-nowrap">
                           {formatDate(q.createdAt, "en")}
                         </td>
                         <td className="px-5 py-3.5">
-                          <StatusBadge status={q.status} locale="en" />
+                          <StatusBadge status={q.status} />
                         </td>
                         <td className="px-5 py-3.5">
                           <div className="flex justify-end">
@@ -141,29 +147,37 @@ export default async function AdminQuotesPage({ searchParams }: Props) {
               </div>
 
               {/* Mobile cards */}
-              <ul className="divide-y divide-border/70 md:hidden">
+              <ul className="divide-border/70 divide-y md:hidden">
                 {quotes.map((q) => (
                   <li key={q.id}>
-                    <Link href={`/admin/quotes/${q.id}`} className="block p-4 active:bg-primary-50/40">
+                    <Link
+                      href={`/admin/quotes/${q.id}`}
+                      className="active:bg-primary-50/40 block p-4"
+                    >
                       <div className="flex items-center justify-between gap-3">
-                        <span className="inline-flex rounded-lg bg-muted px-2 py-1 font-mono text-xs font-bold text-primary">
+                        <span className="bg-muted text-primary inline-flex rounded-lg px-2 py-1 font-mono text-xs font-bold">
                           {q.quoteNumber}
                         </span>
-                        <StatusBadge status={q.status} locale="en" />
+                        <StatusBadge status={q.status} />
                       </div>
                       <div className="mt-3 flex items-center gap-3">
-                        <Avatar name={q.guestName ?? q.guestEmail} className="size-9" />
+                        <Avatar
+                          name={q.guestName ?? q.guestEmail}
+                          className="size-9"
+                        />
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-semibold text-foreground">
+                          <span className="text-foreground block truncate text-sm font-semibold">
                             {q.guestName ?? "—"}
                           </span>
-                          <span className="block truncate text-xs text-muted-foreground">
+                          <span className="text-muted-foreground block truncate text-xs">
                             {q.guestEmail}
                           </span>
                         </span>
-                        <span className="shrink-0 text-right text-xs text-muted-foreground">
+                        <span className="text-muted-foreground shrink-0 text-right text-xs">
                           <span className="block">{q.context}</span>
-                          <span className="block">{formatDate(q.createdAt, "en")}</span>
+                          <span className="block">
+                            {formatDate(q.createdAt, "en")}
+                          </span>
                         </span>
                       </div>
                     </Link>

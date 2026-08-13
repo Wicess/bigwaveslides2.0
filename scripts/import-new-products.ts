@@ -19,7 +19,9 @@ const prisma = new PrismaClient({
 const accountId = process.env.R2_ACCOUNT_ID;
 const r2 = new S3Client({
   region: "auto",
-  endpoint: process.env.R2_ENDPOINT ?? (accountId ? `https://${accountId}.r2.cloudflarestorage.com` : undefined),
+  endpoint:
+    process.env.R2_ENDPOINT ??
+    (accountId ? `https://${accountId}.r2.cloudflarestorage.com` : undefined),
   credentials: {
     accessKeyId: process.env.R2_ACCESS_KEY_ID ?? "",
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY ?? "",
@@ -27,7 +29,10 @@ const r2 = new S3Client({
 });
 const PUBLIC_BASE = (process.env.R2_PUBLIC_URL ?? "").replace(/\/$/, "");
 const DIR = path.join(process.cwd(), "images", "Products");
-const L = (en: string, fr: string) => ({ en, fr });
+// French was retired (English-only site) — the second argument is
+// ignored so the hundreds of existing call sites keep compiling while
+// no new `fr` half is ever written to the database.
+const L = (en: string, _fr?: string) => ({ en });
 
 async function upload(file: string): Promise<string> {
   const key = `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file
@@ -46,10 +51,22 @@ async function upload(file: string): Promise<string> {
 }
 
 // New categories to ensure exist (slug → bilingual name + order).
-const CATEGORIES: { slug: string; name: { en: string; fr: string }; order: number }[] = [
+const CATEGORIES: {
+  slug: string;
+  name: { en: string };
+  order: number;
+}[] = [
   { slug: "combo-units", name: L("Combo units", "Combinés"), order: 5 },
-  { slug: "bounce-houses", name: L("Bounce houses", "Châteaux gonflables"), order: 6 },
-  { slug: "party-attractions", name: L("Party attractions", "Attractions de fête"), order: 7 },
+  {
+    slug: "bounce-houses",
+    name: L("Bounce houses", "Châteaux gonflables"),
+    order: 6,
+  },
+  {
+    slug: "party-attractions",
+    name: L("Party attractions", "Attractions de fête"),
+    order: 7,
+  },
 ];
 
 type NewProduct = {
@@ -66,9 +83,9 @@ type NewProduct = {
   powerRequired: string;
   ratingAvg: number;
   ratingCount: number;
-  shortDescription: { en: string; fr: string };
-  description: { en: string; fr: string };
-  features: { en: string; fr: string }[];
+  shortDescription: { en: string };
+  description: { en: string };
+  features: { en: string }[];
   images: string[]; // first = primary
 };
 
@@ -97,9 +114,15 @@ const PRODUCTS: NewProduct[] = [
     ),
     features: [
       L("Dual racing lanes", "Deux couloirs de course"),
-      L("Long slip-lane into splash pool", "Long couloir glissant vers pataugeoire"),
+      L(
+        "Long slip-lane into splash pool",
+        "Long couloir glissant vers pataugeoire",
+      ),
       L("Tropical palm-tree theme", "Thème tropical palmiers"),
-      L("Cleaned & sanitized before delivery", "Nettoyée et désinfectée avant livraison"),
+      L(
+        "Cleaned & sanitized before delivery",
+        "Nettoyée et désinfectée avant livraison",
+      ),
     ],
     images: [
       "photo_2026-06-28_07-30-42.jpg",
@@ -132,7 +155,10 @@ const PRODUCTS: NewProduct[] = [
     features: [
       L("Dual racing lanes", "Deux couloirs de course"),
       L("Eye-catching marble finish", "Finition marbre éclatante"),
-      L("Front slip-lane & splash pool", "Couloir glissant avant et pataugeoire"),
+      L(
+        "Front slip-lane & splash pool",
+        "Couloir glissant avant et pataugeoire",
+      ),
       L("Pro setup & anchoring included", "Installation et ancrage pro inclus"),
     ],
     images: ["photo_2026-06-28_07-32-43.jpg", "photo_2026-06-28_07-32-52.jpg"],
@@ -163,7 +189,10 @@ const PRODUCTS: NewProduct[] = [
       L("Shimmering blue marble finish", "Finition marbre bleu scintillant"),
       L("Curved lane into splash pool", "Couloir incurvé vers pataugeoire"),
       L("Tropical palm-tree theme", "Thème tropical palmiers"),
-      L("Cleaned & sanitized before delivery", "Nettoyée et désinfectée avant livraison"),
+      L(
+        "Cleaned & sanitized before delivery",
+        "Nettoyée et désinfectée avant livraison",
+      ),
     ],
     images: ["photo_2026-06-29_11-28-52.jpg", "photo_2026-06-29_11-28-59.jpg"],
   },
@@ -223,7 +252,10 @@ const PRODUCTS: NewProduct[] = [
       L("Friendly whale character", "Personnage baleine sympathique"),
       L("Gentle dual lanes for all ages", "Couloirs doux pour tous les âges"),
       L("Oversized splash pool", "Piscine surdimensionnée"),
-      L("Great for toddlers & daycares", "Idéale pour tout-petits et garderies"),
+      L(
+        "Great for toddlers & daycares",
+        "Idéale pour tout-petits et garderies",
+      ),
     ],
     images: ["photo_2026-06-28_07-40-22.jpg"],
   },
@@ -432,7 +464,10 @@ const PRODUCTS: NewProduct[] = [
       L("Trained operator included", "Opérateur formé inclus"),
       L("Adjustable speed for all ages", "Vitesse réglable pour tous les âges"),
       L("Cushioned inflatable arena", "Arène gonflable rembourrée"),
-      L("Fairs, festivals & corporate events", "Foires, festivals et événements d'entreprise"),
+      L(
+        "Fairs, festivals & corporate events",
+        "Foires, festivals et événements d'entreprise",
+      ),
     ],
     images: ["photo_2026-06-28_07-49-04.jpg", "photo_2026-06-28_07-49-09.jpg"],
   },
@@ -453,14 +488,24 @@ async function main() {
     catIds.set(c.slug, row.id);
   }
   // Existing categories we reference.
-  for (const slug of ["tall-slides", "backyard-slides", "racing-slides", "toddler-slides"]) {
-    const row = await prisma.productCategory.findUnique({ where: { slug }, select: { id: true } });
+  for (const slug of [
+    "tall-slides",
+    "backyard-slides",
+    "racing-slides",
+    "toddler-slides",
+  ]) {
+    const row = await prisma.productCategory.findUnique({
+      where: { slug },
+      select: { id: true },
+    });
     if (row) catIds.set(slug, row.id);
   }
 
   // 2) Create each product + upload its images.
   for (const p of PRODUCTS) {
-    console.log(`\n• ${p.name} (${p.images.length} image${p.images.length > 1 ? "s" : ""})`);
+    console.log(
+      `\n• ${p.name} (${p.images.length} image${p.images.length > 1 ? "s" : ""})`,
+    );
     const urls: string[] = [];
     for (const file of p.images) {
       const url = await upload(file);
@@ -521,7 +566,10 @@ async function main() {
         productId: product.id,
         type: "IMAGE" as const,
         url,
-        alt: L(`${p.name} inflatable water slide`, `Glissade d'eau gonflable ${p.name}`),
+        alt: L(
+          `${p.name} inflatable water slide`,
+          `Glissade d'eau gonflable ${p.name}`,
+        ),
         order: i,
         isPrimary: i === 0,
       })),
@@ -529,7 +577,9 @@ async function main() {
   }
 
   const total = await prisma.product.count();
-  console.log(`\n✅ Done. ${PRODUCTS.length} products imported. Catalog now has ${total} products.`);
+  console.log(
+    `\n✅ Done. ${PRODUCTS.length} products imported. Catalog now has ${total} products.`,
+  );
   await prisma.$disconnect();
 }
 

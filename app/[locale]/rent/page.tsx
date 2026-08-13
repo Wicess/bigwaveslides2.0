@@ -28,16 +28,12 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/rent",
-    title: fr
-      ? "Location de glissades d'eau dès 199 $/jour — livrées & installées"
-      : "Water Slide Rentals from $199/Day — Delivered & Insured",
-    description: fr
-      ? "Louez des glissades d'eau gonflables et châteaux gonflables près de chez vous dès 199 $/jour — livraison, installation et assurance comprises pour anniversaires, fêtes de piscine, écoles et églises. Devis gratuit."
-      : "Rent inflatable water slides & bounce houses near you from $199/day — delivered, set up & fully insured for birthdays, pools, schools & churches.",
+    title: "Water Slide Rentals from $199/Day — Delivered & Insured",
+    description:
+      "Rent inflatable water slides & bounce houses near you from $199/day — delivered, set up & fully insured for birthdays, pools, schools & churches.",
     og: {
       eyebrow: "Rent",
       subtitle: "Water slides, bounce houses & combos — delivered and insured",

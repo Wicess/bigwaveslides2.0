@@ -53,7 +53,7 @@ export default async function AdminBlogPage({ searchParams }: Props) {
 
       <Toolbar>
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold text-foreground">All posts</h2>
+          <h2 className="text-foreground text-sm font-semibold">All posts</h2>
           <CountPill>{posts.length}</CountPill>
         </div>
         <FilterSelect
@@ -87,7 +87,7 @@ export default async function AdminBlogPage({ searchParams }: Props) {
               {/* Desktop table */}
               <div className="hidden overflow-x-auto md:block">
                 <table className="w-full text-sm">
-                  <thead className="border-b border-border bg-muted/50">
+                  <thead className="border-border bg-muted/50 border-b">
                     <tr>
                       <Th>Title</Th>
                       <Th>Author</Th>
@@ -96,22 +96,30 @@ export default async function AdminBlogPage({ searchParams }: Props) {
                       <Th className="text-right">Actions</Th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border/70">
+                  <tbody className="divide-border/70 divide-y">
                     {posts.map((p) => {
                       const live = p.status === "PUBLISHED";
                       return (
-                        <tr key={p.id} className="group transition-colors hover:bg-primary-50/40">
+                        <tr
+                          key={p.id}
+                          className="group hover:bg-primary-50/40 transition-colors"
+                        >
                           <td className="px-5 py-3.5">
-                            <Link href={`/admin/blog/${p.id}`} className="flex items-center gap-3">
+                            <Link
+                              href={`/admin/blog/${p.id}`}
+                              className="flex items-center gap-3"
+                            >
                               <IconChip icon={Newspaper} />
                               <span className="min-w-0">
                                 <span className="flex items-center gap-2">
-                                  <span className="truncate font-semibold text-foreground group-hover:text-primary">
+                                  <span className="text-foreground group-hover:text-primary truncate font-semibold">
                                     {getLocalized(p.title, "en")}
                                   </span>
-                                  {p.featured ? <Badge variant="secondary">Featured</Badge> : null}
+                                  {p.featured ? (
+                                    <Badge variant="secondary">Featured</Badge>
+                                  ) : null}
                                 </span>
-                                <span className="block truncate text-xs text-muted-foreground">
+                                <span className="text-muted-foreground block truncate text-xs">
                                   {p.category?.name
                                     ? getLocalized(p.category.name, "en")
                                     : "Uncategorized"}
@@ -119,19 +127,21 @@ export default async function AdminBlogPage({ searchParams }: Props) {
                               </span>
                             </Link>
                           </td>
-                          <td className="px-5 py-3.5 text-muted-foreground">
+                          <td className="text-muted-foreground px-5 py-3.5">
                             {p.author?.name ?? "—"}
                           </td>
                           <td className="px-5 py-3.5">
-                            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground/70">
+                            <span className="text-foreground/70 inline-flex items-center gap-1.5 text-xs font-semibold">
                               <span
                                 className={`size-2 rounded-full ${live ? "bg-green-500" : "bg-muted-foreground/40"}`}
                               />
                               {p.status}
                             </span>
                           </td>
-                          <td className="whitespace-nowrap px-5 py-3.5 text-muted-foreground">
-                            {p.publishedAt ? formatDate(p.publishedAt, "en") : "—"}
+                          <td className="text-muted-foreground px-5 py-3.5 whitespace-nowrap">
+                            {p.publishedAt
+                              ? formatDate(p.publishedAt, "en")
+                              : "—"}
                           </td>
                           <td className="px-5 py-3.5">
                             <div className="flex justify-end">
@@ -140,8 +150,12 @@ export default async function AdminBlogPage({ searchParams }: Props) {
                                   <Eye className="size-4" /> Edit post
                                 </DropdownLink>
                                 {live && p.slug ? (
-                                  <DropdownLink href={`/blog/${p.slug}`} target="_blank">
-                                    <ExternalLink className="size-4" /> View live
+                                  <DropdownLink
+                                    href={`/blog/${p.slug}`}
+                                    target="_blank"
+                                  >
+                                    <ExternalLink className="size-4" /> View
+                                    live
                                   </DropdownLink>
                                 ) : null}
                               </DropdownMenu>
@@ -155,24 +169,34 @@ export default async function AdminBlogPage({ searchParams }: Props) {
               </div>
 
               {/* Mobile cards */}
-              <ul className="divide-y divide-border/70 md:hidden">
+              <ul className="divide-border/70 divide-y md:hidden">
                 {posts.map((p) => (
                   <li key={p.id}>
-                    <Link href={`/admin/blog/${p.id}`} className="flex items-center gap-3 p-4 active:bg-primary-50/40">
+                    <Link
+                      href={`/admin/blog/${p.id}`}
+                      className="active:bg-primary-50/40 flex items-center gap-3 p-4"
+                    >
                       <IconChip icon={Newspaper} />
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-2">
-                          <span className="truncate font-semibold text-foreground">
+                          <span className="text-foreground truncate font-semibold">
                             {getLocalized(p.title, "en")}
                           </span>
-                          {p.featured ? <Badge variant="secondary">Featured</Badge> : null}
+                          {p.featured ? (
+                            <Badge variant="secondary">Featured</Badge>
+                          ) : null}
                         </span>
-                        <span className="block truncate text-xs text-muted-foreground">
-                          {p.category?.name ? getLocalized(p.category.name, "en") : "Uncategorized"} ·{" "}
-                          {p.author?.name ?? "—"}
+                        <span className="text-muted-foreground block truncate text-xs">
+                          {p.category?.name
+                            ? getLocalized(p.category.name, "en")
+                            : "Uncategorized"}{" "}
+                          · {p.author?.name ?? "—"}
                         </span>
-                        <span className="mt-0.5 block text-xs text-muted-foreground">
-                          {p.status} · {p.publishedAt ? formatDate(p.publishedAt, "en") : "Draft"}
+                        <span className="text-muted-foreground mt-0.5 block text-xs">
+                          {p.status} ·{" "}
+                          {p.publishedAt
+                            ? formatDate(p.publishedAt, "en")
+                            : "Draft"}
                         </span>
                       </span>
                     </Link>

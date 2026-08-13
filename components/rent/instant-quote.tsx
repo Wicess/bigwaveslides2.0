@@ -86,13 +86,17 @@ export function InstantQuote({
 
   return (
     <div className="space-y-4">
-      <AvailabilityCalendar productId={productId} value={range} onChange={setRange} />
+      <AvailabilityCalendar
+        productId={productId}
+        value={range}
+        onChange={setRange}
+      />
 
       {/* Live quote */}
-      <div className="rounded-[var(--radius-lg)] border border-border p-5">
+      <div className="border-border rounded-[var(--radius-lg)] border p-5">
         {!quote ? (
-          <p className="flex items-center gap-2 text-sm text-muted-foreground">
-            <CalendarCheck className="size-4 text-primary" />
+          <p className="text-muted-foreground flex items-center gap-2 text-sm">
+            <CalendarCheck className="text-primary size-4" />
             {t("pickDates")}
           </p>
         ) : (
@@ -100,7 +104,7 @@ export function InstantQuote({
             <div className="flex items-center justify-between">
               <h3 className="font-semibold">{t("instantQuote")}</h3>
               {checking ? (
-                <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                <Loader2 className="text-muted-foreground size-4 animate-spin" />
               ) : check ? (
                 available ? (
                   <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
@@ -117,9 +121,12 @@ export function InstantQuote({
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
                 <dt className="text-muted-foreground">
-                  {formatPrice(dailyRateCents, locale)} × {t("days", { count: quote.days })}
+                  {formatPrice(dailyRateCents, locale)} ×{" "}
+                  {t("days", { count: quote.days })}
                 </dt>
-                <dd className="font-medium">{formatPrice(quote.rentalCents, locale)}</dd>
+                <dd className="font-medium">
+                  {formatPrice(quote.rentalCents, locale)}
+                </dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-muted-foreground">{t("deliverySetup")}</dt>
@@ -131,22 +138,28 @@ export function InstantQuote({
               </div>
               {quote.depositCents > 0 ? (
                 <div className="flex justify-between">
-                  <dt className="text-muted-foreground">{t("refundableDeposit")}</dt>
-                  <dd className="font-medium">{formatPrice(quote.depositCents, locale)}</dd>
+                  <dt className="text-muted-foreground">
+                    {t("refundableDeposit")}
+                  </dt>
+                  <dd className="font-medium">
+                    {formatPrice(quote.depositCents, locale)}
+                  </dd>
                 </div>
               ) : null}
             </dl>
 
-            <div className="mt-3 flex justify-between border-t border-border pt-3">
+            <div className="border-border mt-3 flex justify-between border-t pt-3">
               <span className="font-semibold">{t("estTotal")}</span>
-              <span className="font-display text-xl font-bold text-primary">
+              <span className="font-display text-primary text-xl font-bold">
                 {formatPrice(quote.totalCents, locale)}
               </span>
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">{t("estNote")}</p>
+            <p className="text-muted-foreground mt-1 text-xs">{t("estNote")}</p>
 
             {check && !available ? (
-              <p className="mt-3 text-sm text-red-600">{t("unavailableHint")}</p>
+              <p className="mt-3 text-sm text-red-600">
+                {t("unavailableHint")}
+              </p>
             ) : null}
           </>
         )}
@@ -157,7 +170,7 @@ export function InstantQuote({
             <ArrowRight className="size-4" />
           </Link>
         </Button>
-        <p className="mt-2 text-center text-xs text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-center text-xs">
           {t("noPaymentNote")}
         </p>
       </div>

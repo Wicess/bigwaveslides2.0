@@ -20,16 +20,12 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/shop",
-    title: fr
-      ? "Glissades d'eau commerciales à vendre | gonflables"
-      : "Commercial Water Slides for Sale | Buy Inflatable Slides",
-    description: fr
-      ? "Achetez des glissades d'eau gonflables commerciales conçues pour la location et la revente — robustes, livraison nationale. Parcourez nos glissades à vendre et demandez un devis."
-      : "Buy commercial inflatable water slides built for rentals and resale — heavy-duty, nationwide US delivery. Browse slides for sale and request a quote.",
+    title: "Commercial Water Slides for Sale | Buy Inflatable Slides",
+    description:
+      "Buy commercial inflatable water slides built for rentals and resale — heavy-duty, nationwide US delivery. Browse slides for sale and request a quote.",
     og: {
       eyebrow: "For sale",
       subtitle: "Commercial-grade inflatables built for rentals and resale",

@@ -33,7 +33,10 @@ const r2 = new S3Client({
 });
 const PUBLIC_BASE = (process.env.R2_PUBLIC_URL ?? "").replace(/\/$/, "");
 const DIR = path.join(process.cwd(), "images", "Products");
-const L = (en: string, fr: string) => ({ en, fr });
+// French was retired (English-only site) — the second argument is
+// ignored so the hundreds of existing call sites keep compiling while
+// no new `fr` half is ever written to the database.
+const L = (en: string, _fr?: string) => ({ en });
 
 async function upload(file: string): Promise<string> {
   const clean = file
@@ -77,9 +80,9 @@ type GenProduct = {
   ratingAvg: number;
   ratingCount: number;
   featured?: boolean;
-  shortDescription: { en: string; fr: string };
-  description: { en: string; fr: string };
-  features: { en: string; fr: string }[];
+  shortDescription: { en: string };
+  description: { en: string };
+  features: { en: string }[];
 };
 
 const PRODUCTS: GenProduct[] = [

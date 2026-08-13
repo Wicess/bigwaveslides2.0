@@ -44,18 +44,27 @@ describe("getBounceContent", () => {
 
     expect(keys.length).toBeGreaterThan(750);
 
+    // Collect problems and assert once at the end rather than firing ~6,400
+    // expect() calls. Same coverage, a fraction of the runtime, and a failure
+    // reports every broken city at once instead of stopping at the first.
+    const HERO_URL = /^https:\/\/.+\.(jpe?g|webp|png)$/i;
+    const bad: string[] = [];
+
     for (const [slug, place, wider, region] of keys) {
       const c = getBounceContent(slug, place, wider, region);
-      expect(c.hero, slug).toMatch(/^https:\/\/.+\.(jpe?g|webp|png)$/i);
-      expect(c.heroDescription, slug).toContain(place);
-      expect(c.intro, slug).toContain(place);
-      expect(c.seasonal, slug).toBeTruthy();
-      expect(c.faqs, slug).toHaveLength(8);
-      for (const f of c.faqs) {
-        expect(f.q, slug).toBeTruthy();
-        expect(f.a, slug).toBeTruthy();
-      }
+      if (!HERO_URL.test(c.hero)) bad.push(`${slug}: bad hero ${c.hero}`);
+      if (!c.heroDescription?.includes(place))
+        bad.push(`${slug}: heroDescription missing "${place}"`);
+      if (!c.intro?.includes(place))
+        bad.push(`${slug}: intro missing "${place}"`);
+      if (!c.seasonal) bad.push(`${slug}: empty seasonal`);
+      if (c.faqs.length !== 8)
+        bad.push(`${slug}: ${c.faqs.length} faqs, expected 8`);
+      if (c.faqs.some((f) => !f.q || !f.a))
+        bad.push(`${slug}: blank FAQ question or answer`);
     }
+
+    expect(bad.slice(0, 20)).toEqual([]);
   });
 
   it("is deterministic — the same key always renders the same copy", () => {

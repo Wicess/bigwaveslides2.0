@@ -137,10 +137,10 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                           {formatPrice(o.totalCents, "en")}
                         </td>
                         <td className="px-5 py-3.5">
-                          <StatusBadge status={o.status} locale="en" />
+                          <StatusBadge status={o.status} />
                         </td>
                         <td className="px-5 py-3.5">
-                          <StatusBadge status={o.paymentStatus} locale="en" />
+                          <StatusBadge status={o.paymentStatus} />
                         </td>
                         <td className="px-5 py-3.5">
                           <div className="flex justify-end">
@@ -205,8 +205,8 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                       </span>
                     </Link>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <StatusBadge status={o.status} locale="en" />
-                      <StatusBadge status={o.paymentStatus} locale="en" />
+                      <StatusBadge status={o.status} />
+                      <StatusBadge status={o.paymentStatus} />
                     </div>
                   </li>
                 ))}

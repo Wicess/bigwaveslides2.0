@@ -48,7 +48,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const noindex = !isPriorityCity(st.slug, loc.slug);
   return buildMetadata({
     locale,
-    enOnly: true,
     noindex,
     path: `/bounce-house-rentals/${st.slug}/${loc.slug}`,
     title: `Bounce House Rentals in ${name}, ${st.abbr} — From $159/Day`,

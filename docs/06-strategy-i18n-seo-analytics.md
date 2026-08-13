@@ -2,16 +2,16 @@
 
 ## Internationalization (EN / FR)
 
-- **Library:** `next-intl` with a `[locale]` route segment. `en` = default (no prefix optional or `/en`), `fr` = `/fr`.
+- **Library:** `next-intl` with a `[locale]` route segment. `en` is the only locale (`/en`). French was removed 2026-08-13; `/fr/*` 301s to `/en/*`.
 - **Middleware** negotiates locale (cookie → `Accept-Language` → default) and rewrites.
-- **UI strings:** `messages/en.json` + `messages/fr.json`, namespaced by feature.
+- **UI strings:** `messages/en.json`, namespaced by feature.
 - **CMS content** (products, services, blog, events, testimonials, categories, SEO meta): stored **per-locale** so translations are real content, not machine chrome. Admin editors edit each locale; missing FR falls back to EN with a visible "untranslated" flag.
 - **Formatting:** dates, numbers, currency via `next-intl` formatters per locale.
 - **Locale switcher** preserves the current path.
 
 ## SEO (technical — detailed in Phase 18)
 
-- **Metadata:** Next.js Metadata API per route; localized `title`/`description`; canonical URLs; **`hreflang`** alternates for `en`/`fr`.
+- **Metadata:** Next.js Metadata API per route; `title`/`description`; canonical URLs. **No `hreflang`** — with one language version there is nothing to map, so US targeting rides on `<html lang="en-US">` plus the US signals in the LocalBusiness schema.
 - **Structured data (JSON-LD):**
   - `LocalBusiness` / `Organization` (site-wide) — name, logo, geo/service area, hours, contact, social.
   - `Product` + `AggregateRating` + `Review` (shop & rent).

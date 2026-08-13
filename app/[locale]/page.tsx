@@ -36,40 +36,28 @@ type Props = { params: Promise<{ locale: string }> };
 // wins clicks far better than putting the unknown brand name first.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/",
-    title: fr
-      ? "Location de glissades d'eau dès 199 $/jour — livrées & assurées"
-      : "Water Slide Rentals Near You, USA — From $199/Day",
-    description: fr
-      ? "Louez ou achetez des glissades d'eau gonflables partout aux États-Unis dès 199 $/jour — livraison, installation et assurance comprises. Devis gratuit en quelques minutes — les week-ends d'été partent vite !"
-      : "Rent or buy inflatable water slides anywhere in the USA from $199/day — delivery, setup & insurance included. Free quote in minutes; summer books fast.",
+    title: "Water Slide Rentals Near You, USA — From $199/Day",
+    description:
+      "Rent or buy inflatable water slides anywhere in the USA from $199/day — delivery, setup & insurance included. Free quote in minutes; summer books fast.",
     og: {
       eyebrow: "Nationwide USA",
       subtitle: "Delivered, set up, sanitized & fully insured — free quote",
       badge: "All 50 states",
       price: "From $199/day",
     },
-    keywords: fr
-      ? [
-          "location glissade d'eau",
-          "location glissade d'eau près de moi",
-          "location glissade d'eau gonflable",
-          "glissade d'eau gonflable à vendre",
-          "location de fête",
-        ]
-      : [
-          "water slide rentals",
-          "water slide rental near me",
-          "inflatable water slide rentals",
-          "commercial water slides for sale",
-          "buy water slides",
-          "party water slide rentals",
-          "backyard water slide rentals",
-          "birthday party water slide rentals",
-        ],
+    keywords: [
+      "water slide rentals",
+      "water slide rental near me",
+      "inflatable water slide rentals",
+      "commercial water slides for sale",
+      "buy water slides",
+      "party water slide rentals",
+      "backyard water slide rentals",
+      "birthday party water slide rentals",
+    ],
   });
 }
 

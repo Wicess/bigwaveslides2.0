@@ -21,7 +21,7 @@ export async function PostCard({
   const excerpt = getLocalized(post.excerpt, locale);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-background transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
+    <article className="group border-border bg-background hover:border-primary/40 flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-soft)]">
       <Link href={`/blog/${post.slug}`} className="block">
         {post.coverImage ? (
           <MediaImage
@@ -34,14 +34,16 @@ export async function PostCard({
             rounded={false}
           />
         ) : (
-          <div className="aspect-[16/9] w-full bg-muted" />
+          <div className="bg-muted aspect-[16/9] w-full" />
         )}
       </Link>
 
       <div className="flex flex-1 flex-col p-5">
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+        <div className="text-muted-foreground flex items-center gap-3 text-xs">
           {post.category ? (
-            <Badge variant="primary">{getLocalized(post.category.name, locale)}</Badge>
+            <Badge variant="primary">
+              {getLocalized(post.category.name, locale)}
+            </Badge>
           ) : null}
           <span className="inline-flex items-center gap-1">
             <Clock className="size-3.5" />
@@ -49,16 +51,16 @@ export async function PostCard({
           </span>
         </div>
 
-        <h3 className="mt-3 text-lg font-semibold leading-snug">
+        <h3 className="mt-3 text-lg leading-snug font-semibold">
           <Link
             href={`/blog/${post.slug}`}
-            className="transition-colors group-hover:text-primary"
+            className="group-hover:text-primary transition-colors"
           >
             {title}
           </Link>
         </h3>
         {excerpt ? (
-          <p className="mt-1.5 line-clamp-2 flex-1 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1.5 line-clamp-2 flex-1 text-sm">
             {excerpt}
           </p>
         ) : (
@@ -66,13 +68,13 @@ export async function PostCard({
         )}
 
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-xs text-muted-foreground">
+          <span className="text-muted-foreground text-xs">
             {post.author?.name ? `${post.author.name} · ` : ""}
             {post.publishedAt ? formatDate(post.publishedAt, locale) : ""}
           </span>
           <Link
             href={`/blog/${post.slug}`}
-            className="inline-flex items-center gap-1 text-sm font-semibold text-primary"
+            className="text-primary inline-flex items-center gap-1 text-sm font-semibold"
           >
             {t("readMore")}
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />

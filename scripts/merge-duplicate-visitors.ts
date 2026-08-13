@@ -23,7 +23,8 @@ const { PrismaClient } = pkg;
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
-const DRY = process.argv.includes("--dry") || process.argv.includes("--dry-run");
+const DRY =
+  process.argv.includes("--dry") || process.argv.includes("--dry-run");
 
 /** MUST stay identical to lib/analytics/fingerprint.ts → visitorFingerprint(). */
 function fingerprint(
@@ -84,8 +85,11 @@ async function main() {
         `  • ${g.length}× ${p.device}/${p.browser ?? "?"} @ ${p.city ?? "?"}, ${p.countryCode ?? "?"}`,
       );
     }
-    if (dupGroups.length > 25) console.log(`  … and ${dupGroups.length - 25} more groups`);
-    console.log("\nDry run — no changes written. Re-run without --dry to apply.");
+    if (dupGroups.length > 25)
+      console.log(`  … and ${dupGroups.length - 25} more groups`);
+    console.log(
+      "\nDry run — no changes written. Re-run without --dry to apply.",
+    );
     return;
   }
 
@@ -107,16 +111,20 @@ async function main() {
       });
 
       // Recompute rollups from the now-merged children.
-      const [visitCount, eventCount, pageViewCount, bounds] = await Promise.all([
-        tx.visit.count({ where: { visitorId: primary.id } }),
-        tx.analyticsEvent.count({ where: { visitorId: primary.id } }),
-        tx.analyticsEvent.count({ where: { visitorId: primary.id, type: "PAGE_VIEW" } }),
-        tx.visit.aggregate({
-          where: { visitorId: primary.id },
-          _min: { startedAt: true },
-          _max: { lastSeenAt: true },
-        }),
-      ]);
+      const [visitCount, eventCount, pageViewCount, bounds] = await Promise.all(
+        [
+          tx.visit.count({ where: { visitorId: primary.id } }),
+          tx.analyticsEvent.count({ where: { visitorId: primary.id } }),
+          tx.analyticsEvent.count({
+            where: { visitorId: primary.id, type: "PAGE_VIEW" },
+          }),
+          tx.visit.aggregate({
+            where: { visitorId: primary.id },
+            _min: { startedAt: true },
+            _max: { lastSeenAt: true },
+          }),
+        ],
+      );
 
       // Backfill any geo/device fields the primary is missing from its dupes.
       const filler = dupes.find(
@@ -129,10 +137,16 @@ async function main() {
           visitCount,
           eventCount,
           pageViewCount,
-          ...(bounds._max.lastSeenAt ? { lastSeenAt: bounds._max.lastSeenAt } : {}),
-          ...(!primary.browser && filler?.browser ? { browser: filler.browser } : {}),
+          ...(bounds._max.lastSeenAt
+            ? { lastSeenAt: bounds._max.lastSeenAt }
+            : {}),
+          ...(!primary.browser && filler?.browser
+            ? { browser: filler.browser }
+            : {}),
           ...(!primary.os && filler?.os ? { os: filler.os } : {}),
-          ...(primary.device === "UNKNOWN" && filler && filler.device !== "UNKNOWN"
+          ...(primary.device === "UNKNOWN" &&
+          filler &&
+          filler.device !== "UNKNOWN"
             ? { device: filler.device }
             : {}),
         },
@@ -144,7 +158,9 @@ async function main() {
     merged += dupes.length;
   }
 
-  console.log(`Done. Merged ${merged} duplicate rows into ${dupGroups.length} primaries.`);
+  console.log(
+    `Done. Merged ${merged} duplicate rows into ${dupGroups.length} primaries.`,
+  );
 }
 
 main()

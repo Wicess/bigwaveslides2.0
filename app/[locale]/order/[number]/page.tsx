@@ -17,7 +17,7 @@ import {
 import { loadEnabledMethods, DEFAULT_METHODS } from "@/lib/payment-methods";
 import { orderSecurityCode } from "@/lib/security-code";
 import { quoteTerms, orderTerms, SETUP_REQUIREMENTS } from "@/lib/legal-terms";
-import { ANTI_SCAM_SHORT, ANTI_SCAM_SHORT_FR } from "@/lib/anti-scam";
+import { ANTI_SCAM_SHORT } from "@/lib/anti-scam";
 import { getSettings } from "@/server/data/settings";
 import { Container } from "@/components/ui/container";
 import { QuoteActions } from "@/components/order/quote-actions";
@@ -407,11 +407,7 @@ export default async function OrderFlowPage({ params }: Props) {
             {/* Anti-scam — one calm line, full wording is on the PDF */}
             <p className="text-muted-foreground flex items-start gap-2 text-xs leading-relaxed">
               <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
-              {manualMode
-                ? t("manualAntiScamShort")
-                : locale === "fr"
-                  ? ANTI_SCAM_SHORT_FR
-                  : ANTI_SCAM_SHORT}
+              {manualMode ? t("manualAntiScamShort") : ANTI_SCAM_SHORT}
             </p>
 
             {/* Setup + Terms — collapsed, professional disclosures */}

@@ -2,7 +2,10 @@ import { requirePermission } from "@/lib/admin-auth";
 import { getAdminSubscribers } from "@/server/data/admin-cms";
 import { formatDate } from "@/lib/format";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { NewsletterTable, type SubscriberRow } from "@/components/admin/newsletter-table";
+import {
+  NewsletterTable,
+  type SubscriberRow,
+} from "@/components/admin/newsletter-table";
 import { Reveal } from "@/components/admin/admin-ui";
 
 export const dynamic = "force-dynamic";

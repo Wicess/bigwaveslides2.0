@@ -25,9 +25,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/water-slides-for",
-    // Same as the locations hub: English-only copy, so the French route is a
-    // duplicate and must not be indexed.
-    enOnly: true,
     title:
       "Inflatable Rentals for Every Occasion — Fall Festivals to Birthdays",
     og: {

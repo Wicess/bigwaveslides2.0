@@ -55,8 +55,8 @@ export default async function AdminOrderDetail({ params }: Props) {
             </p>
           </div>
           <div className="flex gap-2">
-            <StatusBadge status={order.status} locale="en" />
-            <StatusBadge status={order.paymentStatus} locale="en" />
+            <StatusBadge status={order.status} />
+            <StatusBadge status={order.paymentStatus} />
           </div>
         </div>
       </Reveal>

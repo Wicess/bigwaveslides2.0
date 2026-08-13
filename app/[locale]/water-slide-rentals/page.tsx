@@ -78,12 +78,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return buildMetadata({
     locale,
-    // English-only hub: the French route renders this same English copy, so it
-    // is a pure duplicate. The sitemap already excludes it (EN_ONLY_STATIC) —
-    // this is the matching page-level signal, without which Google can still
-    // discover /fr/water-slide-rentals by crawling the locale switcher and
-    // index a second copy of the page competing with the original.
-    enOnly: true,
     path: "/water-slide-rentals",
     title: "Water Slide Rentals Near You from $199/Day — All 50 States",
     og: {

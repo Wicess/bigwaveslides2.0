@@ -1,14 +1,14 @@
 // lib/localized.ts
 // -----------------------------------------------------------------------------
-// This site is bilingual (English + French). Translatable text is stored in the
-// database as a small JSON object like { "en": "Slide", "fr": "Toboggan" }.
-// These helpers turn that JSON into a single string for the user's current
-// language, and let us build such objects in code. Used anywhere we display
-// content that has both an English and a French version.
+// The site is English (en-US) only, but several database columns are JSON that
+// was written while it was bilingual — e.g. { "en": "Slide", "fr": "Toboggan" }.
+// Those rows still exist, so `getLocalized` stays: it reads whichever shape a
+// row happens to have (plain string, { en }, or the legacy { en, fr }) and
+// always returns displayable English. New writes only ever store { en }.
 // -----------------------------------------------------------------------------
 
-/** Localized text stored in Json columns as { en, fr }. */
-export type LocalizedText = { en: string; fr: string };
+/** Text stored in a Json column. Legacy rows may also carry an `fr` key. */
+export type LocalizedText = { en: string };
 
 /**
  * Resolve a localized Json value for the active locale, with graceful
@@ -42,6 +42,6 @@ export function getLocalized(
 }
 
 /** Build a LocalizedText value. */
-export function localized(en: string, fr: string): LocalizedText {
-  return { en, fr };
+export function localized(en: string): LocalizedText {
+  return { en };
 }

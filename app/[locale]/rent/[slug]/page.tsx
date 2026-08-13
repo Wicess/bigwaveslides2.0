@@ -67,12 +67,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getRentalBySlug(slug);
   if (!product) return {};
   const name = getLocalized(product.name, locale);
-  const seo = rentProductSeo(name, locale, {
+  const seo = rentProductSeo(name, {
     price:
       product.dailyRateCents != null
         ? formatPrice(product.dailyRateCents, locale)
         : undefined,
-    kind: productKindLabel(product.category?.slug, locale),
+    kind: productKindLabel(product.category?.slug),
   });
   const customTitle = product.metaTitle
     ? getLocalized(product.metaTitle, locale)
@@ -169,7 +169,6 @@ export default async function RentalDetailPage({ params }: Props) {
 
   const faqs = rentalFaqs({
     name,
-    locale,
     price:
       product.dailyRateCents != null
         ? formatPrice(product.dailyRateCents, locale)
@@ -304,9 +303,7 @@ export default async function RentalDetailPage({ params }: Props) {
                         )}
                       </span>
                       <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-emerald-700 uppercase ring-1 ring-emerald-600/20 ring-inset">
-                        {locale === "fr"
-                          ? `Économisez ${savingsPercent(product.dailyRateCents)} %`
-                          : `Save ${savingsPercent(product.dailyRateCents)}%`}
+                        {`Save ${savingsPercent(product.dailyRateCents)}%`}
                       </span>
                     </div>
                   </div>
@@ -374,9 +371,7 @@ export default async function RentalDetailPage({ params }: Props) {
       <Section spacing="compact" className="border-border border-t">
         <Container className="max-w-3xl">
           <h2 className="font-display text-2xl font-bold sm:text-3xl">
-            {locale === "fr"
-              ? `Questions fréquentes — ${name}`
-              : `${name} — Frequently Asked Questions`}
+            {`${name} — Frequently Asked Questions`}
           </h2>
           <Accordion
             type="multiple"

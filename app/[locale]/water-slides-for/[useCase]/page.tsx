@@ -51,8 +51,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!uc) return {};
   return buildMetadata({
     locale,
-    // Use-case pages render English copy; keep the French duplicates unindexed.
-    enOnly: true,
     path: `/water-slides-for/${uc.slug}`,
     title: uc.heroTitle,
     description: uc.heroDescription,

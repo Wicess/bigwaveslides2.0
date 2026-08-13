@@ -1,33 +1,39 @@
 import { describe, it, expect } from "vitest";
 import { getLocalized, localized } from "@/lib/localized";
 import { statusLabel, statusTone } from "@/lib/status-labels";
-import { orderNumber, quoteNumber, bookingNumber, contractNumber } from "@/lib/ref-number";
+import {
+  orderNumber,
+  quoteNumber,
+  bookingNumber,
+  contractNumber,
+} from "@/lib/ref-number";
 import { faqLd, productLd, breadcrumbLd } from "@/lib/structured-data";
 
 describe("getLocalized", () => {
-  it("returns the requested locale", () => {
-    expect(getLocalized({ en: "Hello", fr: "Bonjour" }, "fr")).toBe("Bonjour");
+  it("resolves a legacy bilingual row to English", () => {
+    // Rows written while the site was bilingual still carry an `fr` key. The
+    // site is English-only now, so they must always render the English half.
+    expect(getLocalized({ en: "Hello", fr: "Bonjour" }, "en")).toBe("Hello");
   });
   it("falls back to English, then first value", () => {
     expect(getLocalized({ en: "Hello" }, "fr")).toBe("Hello");
-    expect(getLocalized({ es: "Hola" }, "fr")).toBe("Hola");
+    expect(getLocalized({ es: "Hola" }, "en")).toBe("Hola");
   });
   it("passes through plain strings and uses fallback for null", () => {
     expect(getLocalized("plain", "en")).toBe("plain");
     expect(getLocalized(null, "en", "x")).toBe("x");
   });
-  it("localized() builds a pair", () => {
-    expect(localized("a", "b")).toEqual({ en: "a", fr: "b" });
+  it("localized() builds an English value", () => {
+    expect(localized("a")).toEqual({ en: "a" });
   });
 });
 
 describe("statusLabel / statusTone", () => {
   it("localizes known statuses", () => {
-    expect(statusLabel("PAID_IN_FULL", "en")).toBe("Paid in full");
-    expect(statusLabel("CONFIRMED", "fr")).toBe("Confirmée");
+    expect(statusLabel("PAID_IN_FULL")).toBe("Paid in full");
   });
   it("returns the token for unknown statuses", () => {
-    expect(statusLabel("WAT", "en")).toBe("WAT");
+    expect(statusLabel("WAT")).toBe("WAT");
   });
   it("maps tones", () => {
     expect(statusTone("PAID_IN_FULL")).toBe("success");
@@ -65,7 +71,9 @@ describe("structured data", () => {
     }) as Record<string, unknown>;
     expect(ld["@type"]).toBe("Product");
     expect((ld.offers as Record<string, unknown>).price).toBe("129.99");
-    expect((ld.aggregateRating as Record<string, unknown>).reviewCount).toBe(12);
+    expect((ld.aggregateRating as Record<string, unknown>).reviewCount).toBe(
+      12,
+    );
   });
   it("numbers breadcrumb positions from 1", () => {
     const ld = breadcrumbLd([

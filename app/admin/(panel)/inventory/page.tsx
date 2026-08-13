@@ -4,7 +4,12 @@ import { getAdminInventory } from "@/server/data/admin";
 import { getLocalized } from "@/lib/localized";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { InventoryManager } from "@/components/admin/inventory-manager";
-import { AdminCard, EmptyState, IconChip, Reveal } from "@/components/admin/admin-ui";
+import {
+  AdminCard,
+  EmptyState,
+  IconChip,
+  Reveal,
+} from "@/components/admin/admin-ui";
 
 export const dynamic = "force-dynamic";
 
@@ -40,16 +45,18 @@ export default async function AdminInventoryPage() {
                   <div className="mb-4 flex items-center gap-3">
                     <IconChip icon={Boxes} />
                     <div className="min-w-0 flex-1">
-                      <h2 className="truncate font-display text-base font-bold text-foreground">
+                      <h2 className="font-display text-foreground truncate text-base font-bold">
                         {getLocalized(p.name, "en")}
                       </h2>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-xs">
                         {active} of {total} units active
                       </p>
                     </div>
-                    <span className="font-display text-lg font-bold text-primary">{pct}%</span>
+                    <span className="font-display text-primary text-lg font-bold">
+                      {pct}%
+                    </span>
                   </div>
-                  <div className="mb-4 h-2 overflow-hidden rounded-full bg-muted">
+                  <div className="bg-muted mb-4 h-2 overflow-hidden rounded-full">
                     <div
                       className="h-full rounded-full [background:var(--gradient-wave)]"
                       style={{ width: `${pct}%` }}

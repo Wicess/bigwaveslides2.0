@@ -7,8 +7,20 @@ import { requirePermission, logActivity } from "@/lib/admin-auth";
 import { notifyStatusUpdate } from "@/lib/notifications";
 import { statusLabel } from "@/lib/status-labels";
 
-const BOOKING_STATUS = ["REQUESTED", "CONFIRMED", "COMPLETED", "DECLINED", "CANCELLED"] as const;
-const PAYMENT_STATUS = ["PENDING", "INVOICE_SENT", "DEPOSIT_PAID", "PAID_IN_FULL", "CANCELLED"] as const;
+const BOOKING_STATUS = [
+  "REQUESTED",
+  "CONFIRMED",
+  "COMPLETED",
+  "DECLINED",
+  "CANCELLED",
+] as const;
+const PAYMENT_STATUS = [
+  "PENDING",
+  "INVOICE_SENT",
+  "DEPOSIT_PAID",
+  "PAID_IN_FULL",
+  "CANCELLED",
+] as const;
 
 const schema = z.object({
   id: z.string().min(1),
@@ -31,14 +43,17 @@ type UpdateBookingInput = {
  * blocks the availability calendar) and advances a DRAFT contract to SENT.
  * Declining/cancelling releases the hold back to TENTATIVE.
  */
-export async function updateBooking(input: UpdateBookingInput): Promise<AdminActionResult> {
+export async function updateBooking(
+  input: UpdateBookingInput,
+): Promise<AdminActionResult> {
   const session = await requirePermission("booking.confirm");
   const parsed = schema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Invalid data." };
   const { id, status, paymentStatus, invoiceNote } = parsed.data;
 
   try {
-    const holdType = status === "CONFIRMED" || status === "COMPLETED" ? "HARD" : "TENTATIVE";
+    const holdType =
+      status === "CONFIRMED" || status === "COMPLETED" ? "HARD" : "TENTATIVE";
 
     const updated = await prisma.booking.update({
       where: { id },
@@ -72,7 +87,7 @@ export async function updateBooking(input: UpdateBookingInput): Promise<AdminAct
         name: updated.guestName ?? "there",
         reference: updated.bookingNumber,
         kind: "booking",
-        statusLabel: statusLabel(status, "en"),
+        statusLabel: statusLabel(status),
         note: invoiceNote || undefined,
       });
     }

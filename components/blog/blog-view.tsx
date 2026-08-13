@@ -13,7 +13,12 @@ import { Reveal } from "@/components/motion/reveal";
 import type { BlogListing, PostCardData } from "@/server/data/blog";
 import { cn } from "@/lib/utils";
 
-type Category = { id: string; slug: string; name: unknown; _count: { posts: number } };
+type Category = {
+  id: string;
+  slug: string;
+  name: unknown;
+  _count: { posts: number };
+};
 type TagItem = { id: string; slug: string; name: unknown };
 
 export async function BlogView({
@@ -38,16 +43,20 @@ export async function BlogView({
   // The full-width "magazine" hero only makes sense on the unfiltered first
   // page; on search results and category/tag pages we go straight to the grid.
   const showFeatured =
-    !query && !activeCategory && !activeTag && listing.page === 1 && listing.items.length > 0;
+    !query &&
+    !activeCategory &&
+    !activeTag &&
+    listing.page === 1 &&
+    listing.items.length > 0;
   const featured = showFeatured ? listing.items[0] : undefined;
   const gridItems = featured ? listing.items.slice(1) : listing.items;
 
   return (
-    <Section spacing="compact" className="bg-muted/30 pb-20 pt-8">
+    <Section spacing="compact" className="bg-muted/30 pt-8 pb-20">
       <div className="mx-auto w-full max-w-[88rem] px-5 sm:px-6 lg:px-8">
         {/* Toolbar: result count + search */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground text-sm font-medium">
             {query
               ? t("resultsFor", { count: listing.total, query })
               : t("results", { count: listing.total })}
@@ -76,10 +85,12 @@ export async function BlogView({
         </div>
 
         {listing.items.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-[var(--radius-lg)] border border-dashed border-border bg-background p-16 text-center">
-            <Newspaper className="size-10 text-muted-foreground" />
+          <div className="border-border bg-background flex flex-col items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-16 text-center">
+            <Newspaper className="text-muted-foreground size-10" />
             <p className="font-semibold">{t("emptyTitle")}</p>
-            <p className="max-w-sm text-sm text-muted-foreground">{t("emptyDesc")}</p>
+            <p className="text-muted-foreground max-w-sm text-sm">
+              {t("emptyDesc")}
+            </p>
           </div>
         ) : (
           <>
@@ -97,7 +108,11 @@ export async function BlogView({
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 {gridItems.map((post, i) => (
                   <Reveal key={post.id} delay={(i % 4) * 0.05}>
-                    <PostCard post={post} locale={locale} priority={!featured && i < 2} />
+                    <PostCard
+                      post={post}
+                      locale={locale}
+                      priority={!featured && i < 2}
+                    />
                   </Reveal>
                 ))}
               </div>
@@ -109,8 +124,8 @@ export async function BlogView({
 
         {/* Popular tags moved to a clean footer row. */}
         {tags.length > 0 ? (
-          <div className="mt-16 border-t border-border pt-8">
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="border-border mt-16 border-t pt-8">
+            <h3 className="text-muted-foreground mb-4 text-sm font-semibold tracking-wide uppercase">
               {t("tags")}
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -159,7 +174,12 @@ function CategoryPill({
     >
       {label}
       {typeof count === "number" ? (
-        <span className={cn("text-xs", active ? "text-white/70" : "text-muted-foreground")}>
+        <span
+          className={cn(
+            "text-xs",
+            active ? "text-white/70" : "text-muted-foreground",
+          )}
+        >
           {count}
         </span>
       ) : null}
@@ -187,7 +207,7 @@ function FeaturedCard({
     <Reveal>
       <Link
         href={`/blog/${post.slug}`}
-        className="group mb-10 grid overflow-hidden rounded-3xl border border-border bg-background shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[var(--shadow-soft)] lg:grid-cols-2"
+        className="group border-border bg-background hover:border-primary/30 mb-10 grid overflow-hidden rounded-3xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)] lg:grid-cols-2"
       >
         <div className="relative">
           <MediaImage
@@ -199,16 +219,18 @@ function FeaturedCard({
             imgClassName="group-hover:scale-[1.03]"
             sizes="(min-width:1024px) 50vw, 100vw"
           />
-          <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-[0_6px_18px_-8px_rgba(0,153,255,0.9)]">
+          <span className="bg-primary absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold tracking-wide text-white uppercase shadow-[0_6px_18px_-8px_rgba(0,153,255,0.9)]">
             <Sparkles className="size-3.5" />
             {label}
           </span>
         </div>
 
         <div className="flex flex-col justify-center gap-4 p-7 sm:p-10">
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-3 text-xs">
             {post.category ? (
-              <Badge variant="primary">{getLocalized(post.category.name, locale)}</Badge>
+              <Badge variant="primary">
+                {getLocalized(post.category.name, locale)}
+              </Badge>
             ) : null}
             <span className="inline-flex items-center gap-1">
               <Clock className="size-3.5" />
@@ -216,20 +238,22 @@ function FeaturedCard({
             </span>
           </div>
 
-          <h3 className="font-display text-2xl font-bold leading-tight tracking-tight transition-colors group-hover:text-primary sm:text-3xl lg:text-[2rem]">
+          <h3 className="font-display group-hover:text-primary text-2xl leading-tight font-bold tracking-tight transition-colors sm:text-3xl lg:text-[2rem]">
             {title}
           </h3>
 
           {excerpt ? (
-            <p className="line-clamp-3 text-pretty text-muted-foreground">{excerpt}</p>
+            <p className="text-muted-foreground line-clamp-3 text-pretty">
+              {excerpt}
+            </p>
           ) : null}
 
           <div className="mt-1 flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               {post.author?.name ? `${post.author.name} · ` : ""}
               {post.publishedAt ? formatDate(post.publishedAt, locale) : ""}
             </span>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+            <span className="text-primary inline-flex items-center gap-1 text-sm font-semibold">
               {readMore}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </span>

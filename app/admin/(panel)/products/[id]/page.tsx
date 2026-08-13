@@ -4,14 +4,18 @@ import { getAdminProduct, getCategoryOptions } from "@/server/data/admin";
 import { getLocalized } from "@/lib/localized";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminCard, BackLink, Reveal } from "@/components/admin/admin-ui";
-import { ProductForm, type ProductFormValues } from "@/components/admin/product-form";
+import {
+  ProductForm,
+  type ProductFormValues,
+} from "@/components/admin/product-form";
 import { DeleteProductButton } from "@/components/admin/delete-product-button";
 
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ id: string }> };
 
-const dollars = (cents: number | null) => (cents != null ? String(cents / 100) : "");
+const dollars = (cents: number | null) =>
+  cents != null ? String(cents / 100) : "";
 
 export default async function AdminEditProduct({ params }: Props) {
   await requirePermission("product.write");
@@ -23,9 +27,11 @@ export default async function AdminEditProduct({ params }: Props) {
   if (!product) notFound();
 
   const name = (product.name as { en?: string; fr?: string }) ?? {};
-  const short = (product.shortDescription as { en?: string; fr?: string }) ?? {};
+  const short =
+    (product.shortDescription as { en?: string; fr?: string }) ?? {};
   const desc = (product.description as { en?: string; fr?: string }) ?? {};
-  const dims = (product.dimensions as { size?: string; weight?: string } | null) ?? {};
+  const dims =
+    (product.dimensions as { size?: string; weight?: string } | null) ?? {};
   const space = (product.spaceRequired as { value?: string } | null) ?? {};
   // Features are stored as an array of { en, fr } (or plain strings); split back
   // into newline-separated EN/FR text for the form.
@@ -33,16 +39,19 @@ export default async function AdminEditProduct({ params }: Props) {
     ? (product.features as unknown[])
     : [];
   const featuresEn = featureList
-    .map((f) => (typeof f === "string" ? f : ((f as { en?: string })?.en ?? "")))
+    .map((f) =>
+      typeof f === "string" ? f : ((f as { en?: string })?.en ?? ""),
+    )
     .join("\n");
   const featuresFr = featureList
-    .map((f) => (typeof f === "string" ? f : ((f as { fr?: string })?.fr ?? "")))
+    .map((f) =>
+      typeof f === "string" ? f : ((f as { fr?: string })?.fr ?? ""),
+    )
     .join("\n");
 
   const defaults: ProductFormValues = {
     id: product.id,
     nameEn: name.en ?? "",
-    nameFr: name.fr ?? "",
     slug: product.slug,
     sku: product.sku,
     type: product.type,
@@ -79,7 +88,10 @@ export default async function AdminEditProduct({ params }: Props) {
         <AdminCard className="p-6 sm:p-8">
           <ProductForm
             defaults={defaults}
-            categories={categories.map((c) => ({ id: c.id, name: getLocalized(c.name, "en") }))}
+            categories={categories.map((c) => ({
+              id: c.id,
+              name: getLocalized(c.name, "en"),
+            }))}
           />
         </AdminCard>
       </Reveal>

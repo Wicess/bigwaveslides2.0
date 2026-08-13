@@ -8,7 +8,12 @@ import { getRentalBySlug } from "@/server/data/rentals";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { getLocalized } from "@/lib/localized";
 import { formatPrice } from "@/lib/format";
-import { rentalDays, computeQuote, parseISODate, toISODate } from "@/lib/rental-pricing";
+import {
+  rentalDays,
+  computeQuote,
+  parseISODate,
+  toISODate,
+} from "@/lib/rental-pricing";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
@@ -17,11 +22,17 @@ import { MediaImage } from "@/components/ui/media-image";
 import { BookingForm } from "@/components/rent/booking-form";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-type Props = { params: Promise<{ locale: string }>; searchParams: SearchParams };
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: SearchParams;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as AppLocale, namespace: "Checkout" });
+  const t = await getTranslations({
+    locale: locale as AppLocale,
+    namespace: "Checkout",
+  });
   return { title: t("title"), robots: { index: false } };
 }
 
@@ -66,7 +77,14 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
   const name = getLocalized(product.name, locale);
   const image = product.media[0]?.url;
 
-  const surfaceKeys = ["grass", "concrete", "asphalt", "turf", "indoor", "other"] as const;
+  const surfaceKeys = [
+    "grass",
+    "concrete",
+    "asphalt",
+    "turf",
+    "indoor",
+    "other",
+  ] as const;
   const surfaceOptions = surfaceKeys.map((k) => ({
     value: k,
     label: t(`surface_${k}`),
@@ -74,7 +92,11 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 
   return (
     <main>
-      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("desc")}
+      />
       <Section spacing="compact" className="pb-16">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
@@ -88,7 +110,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
             {/* Summary */}
             <Card className="h-fit p-6 lg:sticky lg:top-28">
               <div className="flex gap-4">
-                <div className="size-20 shrink-0 overflow-hidden rounded-[var(--radius-lg)] bg-muted">
+                <div className="bg-muted size-20 shrink-0 overflow-hidden rounded-[var(--radius-lg)]">
                   {image ? (
                     <MediaImage
                       src={image}
@@ -101,23 +123,28 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
                 </div>
                 <div>
                   <h2 className="font-semibold">{name}</h2>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {formatPrice(dailyRate, locale)}/{t("day")}
                   </p>
                 </div>
               </div>
 
-              <dl className="mt-5 space-y-2 border-t border-border pt-4 text-sm">
+              <dl className="border-border mt-5 space-y-2 border-t pt-4 text-sm">
                 {quote ? (
                   <>
                     <div className="flex justify-between">
                       <dt className="text-muted-foreground">
-                        {formatPrice(dailyRate, locale)} × {t("days", { count: quote.days })}
+                        {formatPrice(dailyRate, locale)} ×
+                        {t("days", { count: quote.days })}
                       </dt>
-                      <dd className="font-medium">{formatPrice(quote.rentalCents, locale)}</dd>
+                      <dd className="font-medium">
+                        {formatPrice(quote.rentalCents, locale)}
+                      </dd>
                     </div>
                     <div className="flex justify-between">
-                      <dt className="text-muted-foreground">{t("deliverySetup")}</dt>
+                      <dt className="text-muted-foreground">
+                        {t("deliverySetup")}
+                      </dt>
                       <dd className="font-medium">
                         {quote.deliveryCents > 0
                           ? formatPrice(quote.deliveryCents, locale)
@@ -126,15 +153,17 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
                     </div>
                     {quote.depositCents > 0 ? (
                       <div className="flex justify-between">
-                        <dt className="text-muted-foreground">{t("refundableDeposit")}</dt>
+                        <dt className="text-muted-foreground">
+                          {t("refundableDeposit")}
+                        </dt>
                         <dd className="font-medium">
                           {formatPrice(quote.depositCents, locale)}
                         </dd>
                       </div>
                     ) : null}
-                    <div className="flex justify-between border-t border-border pt-3">
+                    <div className="border-border flex justify-between border-t pt-3">
                       <dt className="font-semibold">{t("estTotal")}</dt>
-                      <dd className="font-display text-lg font-bold text-primary">
+                      <dd className="font-display text-primary text-lg font-bold">
                         {formatPrice(quote.totalCents, locale)}
                       </dd>
                     </div>
@@ -144,8 +173,8 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
                 )}
               </dl>
 
-              <p className="mt-4 flex items-start gap-2 rounded-[var(--radius-sm)] bg-muted/60 p-3 text-xs text-muted-foreground">
-                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
+              <p className="bg-muted/60 text-muted-foreground mt-4 flex items-start gap-2 rounded-[var(--radius-sm)] p-3 text-xs">
+                <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
                 {t("holdNote")}
               </p>
             </Card>

@@ -15,7 +15,6 @@ import { UploadDropzone } from "@/components/media/upload-dropzone";
 export type ProductFormValues = {
   id?: string;
   nameEn: string;
-  nameFr: string;
   slug: string;
   sku: string;
   type: "SALE" | "RENTAL" | "BOTH";

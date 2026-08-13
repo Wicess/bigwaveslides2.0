@@ -11,16 +11,12 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/contact",
-    title: fr
-      ? "Devis gratuit de location de glissade d'eau — contactez-nous"
-      : "Get a Free Water Slide Rental Quote — Contact Us",
-    description: fr
-      ? "Demandez un devis gratuit de location ou d'achat de glissade d'eau. Indiquez votre date, lieu et type d'événement — réponse en quelques heures. Réservez dès aujourd'hui."
-      : "Request a free water slide rental or purchase quote. Tell us your date, location and event — we reply within hours. Book your inflatable water slide today.",
+    title: "Get a Free Water Slide Rental Quote — Contact Us",
+    description:
+      "Request a free water slide rental or purchase quote. Tell us your date, location and event — we reply within hours. Book your inflatable water slide today.",
     og: {
       eyebrow: "Free quote",
       subtitle: "Tell us your date, city and event — we reply within hours",

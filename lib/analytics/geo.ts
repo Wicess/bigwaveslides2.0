@@ -255,16 +255,38 @@ export type UaInfo = {
   os: string | null;
 };
 
+/**
+ * A hand-assembled "stock Chrome" user agent that gives itself away.
+ *
+ * Every real Chromium browser carries the historical `Safari/537.36`
+ * compatibility token — Chrome ends on it, Edge and Opera follow it with their
+ * own `Edg/` or `OPR/` suffix. Crawlers that fabricate a desktop UA to look
+ * human routinely mistype it; a truncated `Safari/537.3` is the common tell and
+ * no shipping browser emits one.
+ *
+ * Deliberately narrow. Two broader rules were tried and rejected against real
+ * data: an implausible-Chrome-version ceiling flagged Chrome/150, which is
+ * genuine and in use by actual visitors here, and treating desktop Linux as
+ * automation hid real Linux users alongside the crawlers. Anything less certain
+ * than this belongs behind the admin's manual "Mark as bot", not an automatic
+ * rule — see components/admin/visitor-bot-toggle.tsx.
+ */
+function hasMalformedChromeToken(s: string): boolean {
+  if (!/chrome\/\d/.test(s)) return false;
+  return !/safari\/537\.36(\s|$)/.test(s);
+}
+
 /** Lightweight user-agent parsing — enough for an analytics breakdown. */
 export function parseUserAgent(ua?: string | null): UaInfo {
   if (!ua) return { device: "UNKNOWN", browser: null, os: null };
-  const s = ua.toLowerCase();
+  const s = ua.toLowerCase().trim();
 
   let device: DeviceType = "DESKTOP";
   if (
     /bot|crawl|spider|slurp|bingpreview|facebookexternalhit|headless|phantomjs|puppeteer|playwright|selenium|lighthouse|pagespeed|gtmetrix|pingdom|uptimerobot|statuscake|monitoring|curl|wget|python-requests|httpx|axios|node-fetch|go-http-client|java\/|okhttp|libwww|scrapy|preview|fetcher|validator|whatsapp|telegrambot|discordbot|slackbot|embedly|quora link|vercelbot|ahrefs|semrush|mj12|dotbot|petalbot|yandex|baidu|sogou|duckduck/.test(
       s,
-    )
+    ) ||
+    hasMalformedChromeToken(s)
   ) {
     device = "BOT";
   } else if (/ipad|tablet|playbook|silk|(android(?!.*mobile))/.test(s)) {

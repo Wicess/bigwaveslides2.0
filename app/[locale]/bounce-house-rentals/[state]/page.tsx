@@ -37,8 +37,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cities3 = loc.cities.slice(0, 3).join(", ");
   return buildMetadata({
     locale,
-    // English-only copy — the French route would be a straight duplicate.
-    enOnly: true,
     path: `/bounce-house-rentals/${loc.slug}`,
     title: `Bounce House Rentals in ${loc.name} — From $159/Day`,
     description: `Bounce house & combo rentals across ${loc.name} from $159/day — delivered, set up, sanitized & insured in ${cities3} and statewide. Free quote.`,

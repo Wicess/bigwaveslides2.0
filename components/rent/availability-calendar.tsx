@@ -35,7 +35,9 @@ export function AvailabilityCalendar({
   const [blocked, setBlocked] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
 
-  const initial = value.start ? new Date(`${value.start}T00:00:00Z`) : new Date();
+  const initial = value.start
+    ? new Date(`${value.start}T00:00:00Z`)
+    : new Date();
   const [view, setView] = useState({
     year: initial.getUTCFullYear(),
     month: initial.getUTCMonth(),
@@ -59,7 +61,7 @@ export function AvailabilityCalendar({
 
   const monthLabel = useMemo(
     () =>
-      new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : "en-US", {
+      new Intl.DateTimeFormat("en-US", {
         month: "long",
         year: "numeric",
         timeZone: "UTC",
@@ -68,7 +70,7 @@ export function AvailabilityCalendar({
   );
 
   const weekdays = useMemo(() => {
-    const fmt = new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : "en-US", {
+    const fmt = new Intl.DateTimeFormat("en-US", {
       weekday: "short",
       timeZone: "UTC",
     });
@@ -79,7 +81,9 @@ export function AvailabilityCalendar({
   }, [locale]);
 
   const firstWeekday = new Date(Date.UTC(view.year, view.month, 1)).getUTCDay();
-  const daysInMonth = new Date(Date.UTC(view.year, view.month + 1, 0)).getUTCDate();
+  const daysInMonth = new Date(
+    Date.UTC(view.year, view.month + 1, 0),
+  ).getUTCDate();
 
   const rangeHasBlocked = (start: string, end: string) =>
     eachDate(start, end).some((d) => blocked.has(d));
@@ -118,34 +122,34 @@ export function AvailabilityCalendar({
   };
 
   return (
-    <div className="rounded-[var(--radius-lg)] border border-border p-4">
+    <div className="border-border rounded-[var(--radius-lg)] border p-4">
       <div className="flex items-center justify-between">
         <button
           type="button"
           onClick={() => shiftMonth(-1)}
           disabled={!canGoBack}
           aria-label={t("prevMonth")}
-          className="grid size-9 place-items-center rounded-full hover:bg-muted disabled:opacity-30"
+          className="hover:bg-muted grid size-9 place-items-center rounded-full disabled:opacity-30"
         >
           <ChevronLeft className="size-4" />
         </button>
         <span className="font-semibold capitalize">
           {monthLabel}
           {loading ? (
-            <Loader2 className="ml-2 inline size-3.5 animate-spin text-muted-foreground" />
+            <Loader2 className="text-muted-foreground ml-2 inline size-3.5 animate-spin" />
           ) : null}
         </span>
         <button
           type="button"
           onClick={() => shiftMonth(1)}
           aria-label={t("nextMonth")}
-          className="grid size-9 place-items-center rounded-full hover:bg-muted"
+          className="hover:bg-muted grid size-9 place-items-center rounded-full"
         >
           <ChevronRight className="size-4" />
         </button>
       </div>
 
-      <div className="mt-3 grid grid-cols-7 gap-1 text-center text-xs text-muted-foreground">
+      <div className="text-muted-foreground mt-3 grid grid-cols-7 gap-1 text-center text-xs">
         {weekdays.map((w) => (
           <span key={w} className="py-1">
             {w}
@@ -176,7 +180,8 @@ export function AvailabilityCalendar({
               aria-pressed={selected}
               className={cn(
                 "relative grid h-10 place-items-center rounded-lg text-sm transition-colors",
-                disabled && "cursor-not-allowed text-muted-foreground/40 line-through",
+                disabled &&
+                  "text-muted-foreground/40 cursor-not-allowed line-through",
                 !disabled && !selected && !within && "hover:bg-muted",
                 within && "bg-primary-50 text-primary",
                 selected && "bg-primary font-semibold text-white",
@@ -188,15 +193,16 @@ export function AvailabilityCalendar({
         })}
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+      <div className="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
         <span className="flex items-center gap-1.5">
-          <span className="size-3 rounded bg-primary" /> {t("legendSelected")}
+          <span className="bg-primary size-3 rounded" /> {t("legendSelected")}
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="size-3 rounded bg-primary-50" /> {t("legendRange")}
+          <span className="bg-primary-50 size-3 rounded" /> {t("legendRange")}
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="size-3 rounded bg-muted line-through" /> {t("legendBooked")}
+          <span className="bg-muted size-3 rounded line-through" />{" "}
+          {t("legendBooked")}
         </span>
       </div>
     </div>

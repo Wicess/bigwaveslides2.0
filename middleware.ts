@@ -30,6 +30,24 @@ export default function middleware(req: NextRequest) {
 
   if (UNLOCALIZED.has(req.nextUrl.pathname)) return NextResponse.next();
 
+  // ─── Retired French locale ────────────────────────────────────────────────
+  // The site was bilingual until 2026-08-13. Those /fr/* URLs were submitted to
+  // Google and Bing, so they must not simply disappear: an indexed URL that
+  // starts 404ing drops out of the index and takes any link equity with it.
+  //
+  // This redirect has to run BEFORE next-intl. With "fr" gone from
+  // routing.locales, next-intl no longer recognises the segment as a locale and
+  // would treat it as an ordinary path — rewriting /fr/rent to /en/fr/rent,
+  // which 404s. So we map the path ourselves and 301 (permanent, so Google
+  // transfers the old URL's signals to the English page and drops the French
+  // one from the index).
+  const { pathname } = req.nextUrl;
+  if (pathname === "/fr" || pathname.startsWith("/fr/")) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/en${pathname.slice(3)}`;
+    return NextResponse.redirect(url, 301);
+  }
+
   return intlMiddleware(req);
 }
 

@@ -1,6 +1,6 @@
 # 02 — Database Schema (ERD)
 
-> Phase 1 deliverable: the complete data model on paper. Implemented as Prisma + Neon in **Phase 4**. All money is integer **cents**; all timestamps **UTC**. Localized text fields are marked **(i18n)** and stored per-locale (either JSON `{en, fr}` or a related `*Translation` row — decided per entity in Phase 4).
+> Phase 1 deliverable: the complete data model on paper. Implemented as Prisma + Neon in **Phase 4**. All money is integer **cents**; all timestamps **UTC**. Text fields once marked **(i18n)** are stored as JSON. The site is English-only since 2026-08-13; legacy rows may still carry a `{en, fr}` shape and `getLocalized` resolves them to English.
 
 ## Entity map
 
@@ -43,7 +43,7 @@ enum RegistrationStatus { PENDING  CONFIRMED  CANCELLED }
 enum ReviewStatus     { PENDING  APPROVED  REJECTED }
 enum TestimonialStatus{ PENDING  APPROVED  REJECTED }
 enum PostStatus       { DRAFT  PUBLISHED  ARCHIVED }
-enum Locale           { en  fr }
+// locale columns are plain String @default("en") — English-only site
 enum AdminRoleType    { SUPER_ADMIN  ADMIN  EDITOR  SALES  SUPPORT }
 ```
 

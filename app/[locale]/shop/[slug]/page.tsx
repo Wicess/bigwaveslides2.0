@@ -55,7 +55,6 @@ import {
 // when the serverless DB is asleep, and refreshes catalog data within the hour.
 export const revalidate = 3600;
 
-
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
 export async function generateStaticParams() {
@@ -68,12 +67,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(slug);
   if (!product) return {};
   const name = getLocalized(product.name, locale);
-  const seo = saleProductSeo(name, locale, {
+  const seo = saleProductSeo(name, {
     price:
       product.salePriceCents != null
         ? formatPrice(product.salePriceCents, locale)
         : undefined,
-    kind: productKindLabel(product.category?.slug, locale),
+    kind: productKindLabel(product.category?.slug),
   });
   const customTitle = product.metaTitle
     ? getLocalized(product.metaTitle, locale)
@@ -172,12 +171,11 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const faqs = saleFaqs({
     name,
-    locale,
     price:
       product.salePriceCents != null
         ? formatPrice(product.salePriceCents, locale)
         : undefined,
-    kind: productKindLabel(product.category?.slug, locale),
+    kind: productKindLabel(product.category?.slug),
   });
 
   return (
@@ -337,9 +335,7 @@ export default async function ProductDetailPage({ params }: Props) {
                       {formatPrice(compareAtCents(priceCents), locale)}
                     </span>
                     <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-emerald-700 uppercase ring-1 ring-emerald-600/20 ring-inset">
-                      {locale === "fr"
-                        ? `Économisez ${savingsPercent(priceCents)} %`
-                        : `Save ${savingsPercent(priceCents)}%`}
+                      {`Save ${savingsPercent(priceCents)}%`}
                     </span>
                   </div>
                 </div>
@@ -403,9 +399,7 @@ export default async function ProductDetailPage({ params }: Props) {
       <Section spacing="compact" className="border-border border-t">
         <Container className="max-w-3xl">
           <h2 className="font-display text-2xl font-bold sm:text-3xl">
-            {locale === "fr"
-              ? `Questions fréquentes — ${name}`
-              : `${name} — Frequently Asked Questions`}
+            {`${name} — Frequently Asked Questions`}
           </h2>
           <Accordion
             type="multiple"

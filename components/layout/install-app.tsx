@@ -18,7 +18,6 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { useLocale } from "next-intl";
 import { Download, Share, SquarePlus, X, MoreVertical } from "lucide-react";
 import { trackEvent } from "@/lib/analytics/client";
 import { APP_INSTALLED_COOKIE } from "@/lib/loyalty";
@@ -53,35 +52,6 @@ const STRINGS = {
     ],
     close: "Close",
   },
-  fr: {
-    install: "Installer l'app",
-    title: "Obtenez l'app Big Wave Slides",
-    subtitle:
-      "Ajoutez-nous à votre écran d'accueil — un geste pour parcourir les glissades et réserver votre date.",
-    iosSteps: [
-      { icon: Share, text: "Touchez le bouton Partager dans Safari" },
-      {
-        icon: SquarePlus,
-        text: "Faites défiler et touchez « Sur l'écran d'accueil »",
-      },
-      {
-        icon: Download,
-        text: "Touchez « Ajouter » — l'app apparaît sur votre écran d'accueil",
-      },
-    ],
-    genericSteps: [
-      { icon: MoreVertical, text: "Ouvrez le menu du navigateur (⋮)" },
-      {
-        icon: SquarePlus,
-        text: "Touchez « Installer l'application » ou « Ajouter à l'écran d'accueil »",
-      },
-      {
-        icon: Download,
-        text: "Confirmez — l'app apparaît sur votre écran d'accueil",
-      },
-    ],
-    close: "Fermer",
-  },
 } as const;
 
 export function InstallApp({
@@ -89,8 +59,7 @@ export function InstallApp({
 }: {
   variant?: "chip" | "drawer";
 }) {
-  const locale = useLocale();
-  const t = STRINGS[locale === "fr" ? "fr" : "en"];
+  const t = STRINGS.en;
 
   const [mounted, setMounted] = React.useState(false);
   const [standalone, setStandalone] = React.useState(false);

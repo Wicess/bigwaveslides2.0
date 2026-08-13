@@ -11,7 +11,10 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 // Helpers
-const L = (en: string, fr: string) => ({ en, fr });
+// French was retired (English-only site) — the second argument is
+// ignored so the hundreds of existing call sites keep compiling while
+// no new `fr` half is ever written to the database.
+const L = (en: string, _fr?: string) => ({ en });
 const img = (seed: string) => `https://picsum.photos/seed/bws-${seed}/1200/800`;
 
 const now = new Date();
@@ -568,7 +571,7 @@ async function seedServices() {
 
 // ───────────────────────── Blog ─────────────────────────
 // Localized display names for the blog taxonomy.
-const CATEGORY_NAMES: Record<string, { en: string; fr: string }> = {
+const CATEGORY_NAMES: Record<string, { en: string }> = {
   guides: L("Guides", "Guides"),
   planning: L("Planning", "Planification"),
   safety: L("Safety", "Sécurité"),
@@ -577,7 +580,7 @@ const CATEGORY_NAMES: Record<string, { en: string; fr: string }> = {
   buying: L("Buying", "Achat"),
   ownership: L("Ownership", "Entretien"),
 };
-const TAG_NAMES: Record<string, { en: string; fr: string }> = {
+const TAG_NAMES: Record<string, { en: string }> = {
   pricing: L("Pricing", "Tarifs"),
   rentals: L("Rentals", "Locations"),
   tips: L("Tips", "Conseils"),
@@ -601,11 +604,11 @@ type SeedPost = {
   featured: boolean;
   publishedDaysAgo: number;
   readingMinutes: number;
-  title: { en: string; fr: string };
-  excerpt: { en: string; fr: string };
-  metaTitle: { en: string; fr: string };
-  metaDescription: { en: string; fr: string };
-  content: { en: string; fr: string };
+  title: { en: string };
+  excerpt: { en: string };
+  metaTitle: { en: string };
+  metaDescription: { en: string };
+  content: { en: string };
 };
 
 async function seedBlog() {

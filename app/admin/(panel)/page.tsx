@@ -235,7 +235,7 @@ export default async function AdminDashboard() {
                           </span>
                         </span>
                         <span className="flex shrink-0 items-center gap-2">
-                          <StatusBadge status={o.paymentStatus} locale="en" />
+                          <StatusBadge status={o.paymentStatus} />
                           <span className="font-bold">
                             {formatPrice(o.totalCents, "en")}
                           </span>
@@ -270,7 +270,7 @@ export default async function AdminDashboard() {
                             {formatDate(b.eventStartDate, "en")}
                           </span>
                         </span>
-                        <StatusBadge status={b.status} locale="en" />
+                        <StatusBadge status={b.status} />
                       </div>
                     </li>
                   ))}

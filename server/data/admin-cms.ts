@@ -62,7 +62,10 @@ export async function getAdminTestimonials() {
 
 export async function getAdminContacts() {
   return withRetry(() =>
-    prisma.contactInquiry.findMany({ orderBy: { createdAt: "desc" }, take: 200 }),
+    prisma.contactInquiry.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 200,
+    }),
   ).catch(() => []);
 }
 
@@ -105,7 +108,9 @@ export async function getAdminPost(id: string) {
 export async function getBlogTaxonomy() {
   return withRetry(async () => {
     const [categories, tags, authors] = await Promise.all([
-      prisma.blogCategory.findMany({ select: { id: true, slug: true, name: true } }),
+      prisma.blogCategory.findMany({
+        select: { id: true, slug: true, name: true },
+      }),
       prisma.tag.findMany({ select: { id: true, slug: true, name: true } }),
       prisma.author.findMany({ select: { id: true, name: true } }),
     ]);
@@ -127,7 +132,10 @@ export async function getAllSettings() {
   const rows = await withRetry(() =>
     prisma.siteSetting.findMany({ select: { key: true, value: true } }),
   ).catch(() => []);
-  return Object.fromEntries(rows.map((r) => [r.key, r.value])) as Record<string, unknown>;
+  return Object.fromEntries(rows.map((r) => [r.key, r.value])) as Record<
+    string,
+    unknown
+  >;
 }
 
 /* ───────────────── Governance ───────────────── */

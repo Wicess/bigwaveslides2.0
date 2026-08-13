@@ -3,7 +3,7 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { PRIVACY, pickLocale } from "@/lib/legal-content";
+import { PRIVACY } from "@/lib/legal-content";
 import { buildMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -16,9 +16,9 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const data = PRIVACY[pickLocale(locale)];
-  // See testimonials/page.tsx — buildMetadata supplies the canonical and
-  // hreflang alternates this sitemap-listed, bilingual page needs.
+  const data = PRIVACY;
+  // buildMetadata (not a bare object) so the page gets its self-referencing
+  // canonical and the site-wide robots directives — it ships in the sitemap.
   return buildMetadata({
     locale,
     path: "/privacy-policy",
@@ -31,7 +31,7 @@ export default async function PrivacyPage({ params }: Props) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  const data = PRIVACY[pickLocale(locale)];
+  const data = PRIVACY;
 
   return (
     <main>

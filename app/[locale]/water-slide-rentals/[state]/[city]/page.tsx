@@ -79,11 +79,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Only wave-1 priority metros are indexable; the rest stay crawlable and
   // linked (so they still pass equity and still serve a visitor who lands on
   // one) but out of the index, so crawl budget goes to the pages that can rank.
-  // `enOnly` separately handles the French duplicates AND suppresses hreflang.
   const noindex = !isPriorityCity(st.slug, loc.slug);
   return buildMetadata({
     locale,
-    enOnly: true,
     noindex,
     path: `/water-slide-rentals/${st.slug}/${loc.slug}`,
     // Kept inside Google's ~60-character render width so the city — the whole

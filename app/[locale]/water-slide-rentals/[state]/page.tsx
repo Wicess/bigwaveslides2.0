@@ -54,9 +54,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cities3 = loc.cities.slice(0, 3).join(", ");
   return buildMetadata({
     locale,
-    // French location pages render English content (duplicates) — keep them out
-    // of the index; English state hubs stay indexable.
-    enOnly: true,
     path: `/water-slide-rentals/${loc.slug}`,
     title: `Water Slide Rentals in ${loc.name} — From $199/Day`,
     description: `Water slide & bounce house rentals across ${loc.name} from $199/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,

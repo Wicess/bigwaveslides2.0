@@ -39,7 +39,6 @@ export async function getPosts(query: BlogQuery = {}) {
       ? {
           OR: [
             { title: { path: ["en"], string_contains: q.trim() } },
-            { title: { path: ["fr"], string_contains: q.trim() } },
             { excerpt: { path: ["en"], string_contains: q.trim() } },
           ],
         }

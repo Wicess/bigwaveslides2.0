@@ -44,7 +44,10 @@ export default async function BlogTagPage({ params, searchParams }: Props) {
 
   const t = await getTranslations("Blog");
   const sp = await searchParams;
-  const page = Math.max(1, Number(Array.isArray(sp.page) ? sp.page[0] : sp.page) || 1);
+  const page = Math.max(
+    1,
+    Number(Array.isArray(sp.page) ? sp.page[0] : sp.page) || 1,
+  );
 
   const [listing, categories, tags] = await Promise.all([
     getPosts({ tag: slug, page }),

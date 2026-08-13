@@ -26,7 +26,8 @@ export async function submitTestimonial(
   if (!parsed.success) {
     return { ok: false, error: "Please check your testimonial and try again." };
   }
-  const { authorName, authorRole, organization, rating, quote, locale } = parsed.data;
+  const { authorName, authorRole, organization, rating, quote, locale } =
+    parsed.data;
 
   try {
     await prisma.testimonial.create({

@@ -23,8 +23,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return buildMetadata({
     locale,
-    // English-only content resource — keep the French duplicate unindexed.
-    enOnly: true,
     path: "/answers",
     title: "Water Slide Rental Questions Answered — Cost, Space & Power",
     description:

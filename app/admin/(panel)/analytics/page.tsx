@@ -14,10 +14,30 @@ export default async function AnalyticsPage() {
   const d = await getAnalyticsOverview(30);
 
   const kpis = [
-    { label: "Visitors", value: n(d.visitors), today: d.visitorsToday, icon: Users },
-    { label: "Sessions", value: n(d.visits), today: d.visitsToday, icon: MousePointerClick },
-    { label: "Page views", value: n(d.pageViews), today: d.pageViewsToday, icon: Eye },
-    { label: "Orders from cart", value: n(d.cart.orders), today: undefined, icon: ShoppingCart },
+    {
+      label: "Visitors",
+      value: n(d.visitors),
+      today: d.visitorsToday,
+      icon: Users,
+    },
+    {
+      label: "Sessions",
+      value: n(d.visits),
+      today: d.visitsToday,
+      icon: MousePointerClick,
+    },
+    {
+      label: "Page views",
+      value: n(d.pageViews),
+      today: d.pageViewsToday,
+      icon: Eye,
+    },
+    {
+      label: "Orders from cart",
+      value: n(d.cart.orders),
+      today: undefined,
+      icon: ShoppingCart,
+    },
   ];
 
   return (
@@ -43,7 +63,9 @@ export default async function AnalyticsPage() {
             icon={k.icon}
             label={k.label}
             value={k.value}
-            trend={typeof k.today === "number" ? `+${n(k.today)} today` : undefined}
+            trend={
+              typeof k.today === "number" ? `+${n(k.today)} today` : undefined
+            }
             delay={0.05 * i}
           />
         ))}

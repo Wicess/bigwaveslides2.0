@@ -4,8 +4,19 @@ import { getAdminUsers, getRoleOptions } from "@/server/data/admin-cms";
 import { formatDate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { NewUserForm, ToggleUserButton, EditUserButton } from "@/components/admin/user-admin";
-import { AdminCard, Avatar, CountPill, Reveal, Th, Toolbar } from "@/components/admin/admin-ui";
+import {
+  NewUserForm,
+  ToggleUserButton,
+  EditUserButton,
+} from "@/components/admin/user-admin";
+import {
+  AdminCard,
+  Avatar,
+  CountPill,
+  Reveal,
+  Th,
+  Toolbar,
+} from "@/components/admin/admin-ui";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +36,7 @@ export default async function AdminUsersPage() {
         <div>
           <Toolbar>
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-foreground">Team</h2>
+              <h2 className="text-foreground text-sm font-semibold">Team</h2>
               <CountPill>{users.length}</CountPill>
             </div>
           </Toolbar>
@@ -35,7 +46,7 @@ export default async function AdminUsersPage() {
               {/* Desktop table */}
               <div className="hidden overflow-x-auto md:block">
                 <table className="w-full text-sm">
-                  <thead className="border-b border-border bg-muted/50">
+                  <thead className="border-border bg-muted/50 border-b">
                     <tr>
                       <Th>User</Th>
                       <Th>Role</Th>
@@ -43,37 +54,49 @@ export default async function AdminUsersPage() {
                       <Th className="text-right">Actions</Th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border/70">
+                  <tbody className="divide-border/70 divide-y">
                     {users.map((u) => (
-                      <tr key={u.id} className="transition-colors hover:bg-primary-50/40">
+                      <tr
+                        key={u.id}
+                        className="hover:bg-primary-50/40 transition-colors"
+                      >
                         <td className="px-5 py-3.5">
                           <span className="flex items-center gap-3">
                             <Avatar name={u.name} className="size-9" />
                             <span className="min-w-0">
                               <span className="flex items-center gap-2">
-                                <span className="truncate font-semibold text-foreground">
+                                <span className="text-foreground truncate font-semibold">
                                   {u.name}
                                 </span>
-                                {!u.isActive ? <Badge variant="outline">Inactive</Badge> : null}
+                                {!u.isActive ? (
+                                  <Badge variant="outline">Inactive</Badge>
+                                ) : null}
                               </span>
-                              <span className="block truncate text-xs text-muted-foreground">
+                              <span className="text-muted-foreground block truncate text-xs">
                                 {u.email}
                               </span>
                             </span>
                           </span>
                         </td>
                         <td className="px-5 py-3.5">
-                          <span className="rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary">
+                          <span className="bg-primary-50 text-primary rounded-full px-2.5 py-1 text-xs font-semibold">
                             {u.role?.name ?? "—"}
                           </span>
                         </td>
-                        <td className="whitespace-nowrap px-5 py-3.5 text-muted-foreground">
-                          {u.lastLoginAt ? formatDate(u.lastLoginAt, "en") : "Never"}
+                        <td className="text-muted-foreground px-5 py-3.5 whitespace-nowrap">
+                          {u.lastLoginAt
+                            ? formatDate(u.lastLoginAt, "en")
+                            : "Never"}
                         </td>
                         <td className="px-5 py-3.5">
                           <div className="flex justify-end gap-1">
                             <EditUserButton
-                              user={{ id: u.id, name: u.name, email: u.email, roleId: u.roleId }}
+                              user={{
+                                id: u.id,
+                                name: u.name,
+                                email: u.email,
+                                roleId: u.roleId,
+                              }}
                               roles={roles}
                             />
                             <ToggleUserButton id={u.id} isActive={u.isActive} />
@@ -86,29 +109,40 @@ export default async function AdminUsersPage() {
               </div>
 
               {/* Mobile cards */}
-              <ul className="divide-y divide-border/70 md:hidden">
+              <ul className="divide-border/70 divide-y md:hidden">
                 {users.map((u) => (
                   <li key={u.id} className="p-4">
                     <div className="flex items-start gap-3">
                       <Avatar name={u.name} className="size-10" />
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-2">
-                          <span className="truncate font-semibold text-foreground">{u.name}</span>
-                          {!u.isActive ? <Badge variant="outline">Inactive</Badge> : null}
+                          <span className="text-foreground truncate font-semibold">
+                            {u.name}
+                          </span>
+                          {!u.isActive ? (
+                            <Badge variant="outline">Inactive</Badge>
+                          ) : null}
                         </span>
-                        <span className="block truncate text-xs text-muted-foreground">
+                        <span className="text-muted-foreground block truncate text-xs">
                           {u.email}
                         </span>
-                        <span className="mt-1 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <span className="rounded-full bg-primary-50 px-2 py-0.5 font-semibold text-primary">
+                        <span className="text-muted-foreground mt-1 inline-flex items-center gap-1.5 text-xs">
+                          <span className="bg-primary-50 text-primary rounded-full px-2 py-0.5 font-semibold">
                             {u.role?.name ?? "—"}
                           </span>
-                          {u.lastLoginAt ? formatDate(u.lastLoginAt, "en") : "Never"}
+                          {u.lastLoginAt
+                            ? formatDate(u.lastLoginAt, "en")
+                            : "Never"}
                         </span>
                       </span>
                       <div className="flex shrink-0 gap-1">
                         <EditUserButton
-                          user={{ id: u.id, name: u.name, email: u.email, roleId: u.roleId }}
+                          user={{
+                            id: u.id,
+                            name: u.name,
+                            email: u.email,
+                            roleId: u.roleId,
+                          }}
                           roles={roles}
                         />
                         <ToggleUserButton id={u.id} isActive={u.isActive} />
@@ -123,8 +157,8 @@ export default async function AdminUsersPage() {
 
         <Reveal delay={0.1}>
           <AdminCard className="h-fit p-6">
-            <h2 className="mb-4 flex items-center gap-2 font-display text-base font-bold text-foreground">
-              <span className="grid size-9 place-items-center rounded-xl bg-primary-50 text-primary">
+            <h2 className="font-display text-foreground mb-4 flex items-center gap-2 text-base font-bold">
+              <span className="bg-primary-50 text-primary grid size-9 place-items-center rounded-xl">
                 <UserPlus className="size-[18px]" />
               </span>
               New admin user

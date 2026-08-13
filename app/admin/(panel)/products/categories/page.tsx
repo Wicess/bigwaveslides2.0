@@ -3,7 +3,10 @@ import { getAdminCategoriesList } from "@/server/data/admin";
 import { getLocalized } from "@/lib/localized";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { BackLink, Reveal } from "@/components/admin/admin-ui";
-import { CategoryManager, type CategoryItem } from "@/components/admin/category-manager";
+import {
+  CategoryManager,
+  type CategoryItem,
+} from "@/components/admin/category-manager";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +17,6 @@ export default async function AdminCategoriesPage() {
   const items: CategoryItem[] = categories.map((c) => ({
     id: c.id,
     nameEn: getLocalized(c.name, "en"),
-    nameFr: getLocalized(c.name, "fr"),
     slug: c.slug,
     order: c.order,
     productCount: c._count.products,

@@ -122,7 +122,7 @@ export function PaymentWatcher() {
             // rather than hardcoding prefixes, so this survives any
             // localePrefix strategy.
             const seg = currentPath.split("/")[1];
-            const prefix = seg === "en" || seg === "fr" ? `/${seg}` : "";
+            const prefix = seg === "en" ? `/${seg}` : "";
             router.push(`${prefix}/order/${number}`);
           }
         }

@@ -17,19 +17,34 @@ const prisma = new PrismaClient({
 const accountId = process.env.R2_ACCOUNT_ID;
 const r2 = new S3Client({
   region: "auto",
-  endpoint: process.env.R2_ENDPOINT ?? (accountId ? `https://${accountId}.r2.cloudflarestorage.com` : undefined),
-  credentials: { accessKeyId: process.env.R2_ACCESS_KEY_ID ?? "", secretAccessKey: process.env.R2_SECRET_ACCESS_KEY ?? "" },
+  endpoint:
+    process.env.R2_ENDPOINT ??
+    (accountId ? `https://${accountId}.r2.cloudflarestorage.com` : undefined),
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID ?? "",
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY ?? "",
+  },
 });
 const PUBLIC_BASE = (process.env.R2_PUBLIC_URL ?? "").replace(/\/$/, "");
 const DIR = path.join(process.cwd(), "images", "Products");
-const L = (en: string, fr: string) => ({ en, fr });
+// French was retired (English-only site) — the second argument is
+// ignored so the hundreds of existing call sites keep compiling while
+// no new `fr` half is ever written to the database.
+const L = (en: string, _fr?: string) => ({ en });
 
 async function upload(file: string): Promise<string> {
   const key = `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file
     .toLowerCase()
     .replace(/[^a-z0-9.\-]+/g, "-")
     .replace(/-+/g, "-")}`;
-  await r2.send(new PutObjectCommand({ Bucket: process.env.R2_BUCKET_NAME ?? "", Key: key, Body: await readFile(path.join(DIR, file)), ContentType: "image/jpeg" }));
+  await r2.send(
+    new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME ?? "",
+      Key: key,
+      Body: await readFile(path.join(DIR, file)),
+      ContentType: "image/jpeg",
+    }),
+  );
   return `${PUBLIC_BASE}/${key}`;
 }
 
@@ -40,7 +55,8 @@ const MATCH: Record<string, (f: string) => boolean> = {
   "tidal-tower-27": (f) => f.includes("202606280828"),
   "lil-splash-junior": (f) => f.includes("Toddler"),
   "cyclone-curve-24": (f) => f.includes("202606280834"),
-  "palm-paradise-24": (f) => f.includes("Tropical") || f.includes("Dual-lane_wave"),
+  "palm-paradise-24": (f) =>
+    f.includes("Tropical") || f.includes("Dual-lane_wave"),
   "blue-vortex-26": (f) => f.includes("Blue_Vortex"),
   "mega-monsoon-28": (f) => f.includes("Giant"),
   "sunset-splash-16": (f) => f.includes("sunset"),
@@ -48,9 +64,15 @@ const MATCH: Record<string, (f: string) => boolean> = {
 
 // Sale price (cents) for every product so each can show on the shop page too.
 const SALE: Record<string, number> = {
-  "tropical-wave-18": 550000, "double-drop-racer-22": 750000, "tidal-tower-27": 980000,
-  "lil-splash-junior": 240000, "cyclone-curve-24": 890000, "marble-rapids-20": 620000,
-  "blue-vortex-26": 1050000, "mega-monsoon-28": 1350000, "palm-paradise-24": 820000,
+  "tropical-wave-18": 550000,
+  "double-drop-racer-22": 750000,
+  "tidal-tower-27": 980000,
+  "lil-splash-junior": 240000,
+  "cyclone-curve-24": 890000,
+  "marble-rapids-20": 620000,
+  "blue-vortex-26": 1050000,
+  "mega-monsoon-28": 1350000,
+  "palm-paradise-24": 820000,
   "sunset-splash-16": 360000,
 };
 
@@ -58,7 +80,10 @@ async function main() {
   const files = (await readdir(DIR)).filter((f) => /\.(jpe?g)$/i.test(f));
 
   // 1) Create the new Sunset Splash 16 product.
-  const backyardCat = await prisma.productCategory.findUnique({ where: { slug: "backyard-slides" }, select: { id: true } });
+  const backyardCat = await prisma.productCategory.findUnique({
+    where: { slug: "backyard-slides" },
+    select: { id: true },
+  });
   await prisma.product.upsert({
     where: { slug: "sunset-splash-16" },
     update: {},
@@ -100,30 +125,59 @@ async function main() {
   });
 
   // Ensure the new product has rental units.
-  const sunset = await prisma.product.findUnique({ where: { slug: "sunset-splash-16" }, select: { id: true } });
+  const sunset = await prisma.product.findUnique({
+    where: { slug: "sunset-splash-16" },
+    select: { id: true },
+  });
   if (sunset) {
-    const have = await prisma.rentalUnit.count({ where: { productId: sunset.id } });
+    const have = await prisma.rentalUnit.count({
+      where: { productId: sunset.id },
+    });
     for (let u = have; u < 2; u++) {
-      await prisma.rentalUnit.create({ data: { productId: sunset.id, unitLabel: `sunset-splash-16-unit-${u + 1}` } });
+      await prisma.rentalUnit.create({
+        data: {
+          productId: sunset.id,
+          unitLabel: `sunset-splash-16-unit-${u + 1}`,
+        },
+      });
     }
   }
 
   // 2) Every product → BOTH + a sale price (so it shows on rent and shop).
   for (const [slug, sale] of Object.entries(SALE)) {
-    await prisma.product.updateMany({ where: { slug }, data: { type: "BOTH", salePriceCents: sale } });
+    await prisma.product.updateMany({
+      where: { slug },
+      data: { type: "BOTH", salePriceCents: sale },
+    });
   }
 
   // 3) Replace each mapped product's gallery with its 4 new photos.
   for (const [slug, match] of Object.entries(MATCH)) {
-    const product = await prisma.product.findUnique({ where: { slug }, select: { id: true } });
-    if (!product) { console.log(`SKIP ${slug} (not found)`); continue; }
+    const product = await prisma.product.findUnique({
+      where: { slug },
+      select: { id: true },
+    });
+    if (!product) {
+      console.log(`SKIP ${slug} (not found)`);
+      continue;
+    }
     const matched = files.filter(match).sort();
-    if (matched.length === 0) { console.log(`SKIP ${slug} (no images)`); continue; }
+    if (matched.length === 0) {
+      console.log(`SKIP ${slug} (no images)`);
+      continue;
+    }
     const urls: string[] = [];
     for (const f of matched.slice(0, 4)) urls.push(await upload(f));
     await prisma.productMedia.deleteMany({ where: { productId: product.id } });
     for (let i = 0; i < urls.length; i++) {
-      await prisma.productMedia.create({ data: { productId: product.id, url: urls[i]!, isPrimary: i === 0, order: i } });
+      await prisma.productMedia.create({
+        data: {
+          productId: product.id,
+          url: urls[i]!,
+          isPrimary: i === 0,
+          order: i,
+        },
+      });
     }
     console.log(`${slug}: ${urls.length} images`);
   }
@@ -132,4 +186,8 @@ async function main() {
   await prisma.$disconnect();
 }
 
-main().catch(async (e) => { console.error(e); await prisma.$disconnect(); process.exit(1); });
+main().catch(async (e) => {
+  console.error(e);
+  await prisma.$disconnect();
+  process.exit(1);
+});

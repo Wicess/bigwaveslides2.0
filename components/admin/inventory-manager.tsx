@@ -3,7 +3,10 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Power } from "lucide-react";
-import { addRentalUnit, toggleRentalUnit } from "@/server/actions/admin-products";
+import {
+  addRentalUnit,
+  toggleRentalUnit,
+} from "@/server/actions/admin-products";
 import { toast } from "@/components/ui/toaster";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -44,7 +47,7 @@ export function InventoryManager({
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
         {units.length === 0 ? (
-          <span className="text-sm text-muted-foreground">No units yet.</span>
+          <span className="text-muted-foreground text-sm">No units yet.</span>
         ) : (
           units.map((u) => (
             <button
@@ -73,7 +76,13 @@ export function InventoryManager({
           placeholder="New unit label (e.g. Unit A)"
           className="h-9"
         />
-        <Button type="button" size="sm" onClick={add} loading={pending} disabled={!label.trim()}>
+        <Button
+          type="button"
+          size="sm"
+          onClick={add}
+          loading={pending}
+          disabled={!label.trim()}
+        >
           <Plus className="size-4" /> Add
         </Button>
       </div>

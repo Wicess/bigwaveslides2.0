@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 type Kind = "category" | "tag" | "author";
-export type TaxItem = { id: string; nameEn: string; nameFr?: string; slug?: string };
+export type TaxItem = { id: string; nameEn: string; slug?: string };
 type Groups = Record<Kind, TaxItem[]>;
 
 const TITLES: Record<Kind, string> = {
@@ -26,13 +26,11 @@ export function TaxonomyManager({ groups }: { groups: Groups }) {
   const [kind, setKind] = useState<Kind>("category");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [nameEn, setNameEn] = useState("");
-  const [nameFr, setNameFr] = useState("");
   const [slug, setSlug] = useState("");
 
   const reset = () => {
     setEditingId(null);
     setNameEn("");
-    setNameFr("");
     setSlug("");
   };
 
@@ -40,9 +38,9 @@ export function TaxonomyManager({ groups }: { groups: Groups }) {
     setKind(k);
     setEditingId(item.id);
     setNameEn(item.nameEn);
-    setNameFr(item.nameFr ?? "");
     setSlug(item.slug ?? "");
-    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined")
+      window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const submit = (e: React.FormEvent) => {
@@ -52,7 +50,6 @@ export function TaxonomyManager({ groups }: { groups: Groups }) {
         id: editingId ?? undefined,
         kind,
         nameEn,
-        nameFr,
         slug,
       });
       if (res.ok) {
@@ -86,15 +83,18 @@ export function TaxonomyManager({ groups }: { groups: Groups }) {
           <Card key={k} className="p-5">
             <h2 className="mb-3 font-semibold">{TITLES[k]}</h2>
             {groups[k].length === 0 ? (
-              <p className="text-sm text-muted-foreground">None yet.</p>
+              <p className="text-muted-foreground text-sm">None yet.</p>
             ) : (
-              <ul className="divide-y divide-border">
+              <ul className="divide-border divide-y">
                 {groups[k].map((item) => (
-                  <li key={item.id} className="flex items-center justify-between gap-3 py-2">
+                  <li
+                    key={item.id}
+                    className="flex items-center justify-between gap-3 py-2"
+                  >
                     <span className="min-w-0">
                       <span className="font-medium">{item.nameEn}</span>
                       {item.slug ? (
-                        <span className="ml-1.5 font-mono text-xs text-muted-foreground">
+                        <span className="text-muted-foreground ml-1.5 font-mono text-xs">
                           /{item.slug}
                         </span>
                       ) : null}
@@ -104,7 +104,7 @@ export function TaxonomyManager({ groups }: { groups: Groups }) {
                         type="button"
                         onClick={() => startEdit(k, item)}
                         aria-label={`Edit ${item.nameEn}`}
-                        className="grid size-8 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-primary"
+                        className="text-muted-foreground hover:bg-muted hover:text-primary grid size-8 place-items-center rounded-full"
                       >
                         <Pencil className="size-4" />
                       </button>
@@ -112,7 +112,7 @@ export function TaxonomyManager({ groups }: { groups: Groups }) {
                         type="button"
                         onClick={() => remove(k, item)}
                         aria-label={`Delete ${item.nameEn}`}
-                        className="grid size-8 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-red-600"
+                        className="text-muted-foreground hover:bg-muted grid size-8 place-items-center rounded-full hover:text-red-600"
                       >
                         <Trash2 className="size-4" />
                       </button>
@@ -132,7 +132,7 @@ export function TaxonomyManager({ groups }: { groups: Groups }) {
             <button
               type="button"
               onClick={reset}
-              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs"
             >
               <X className="size-3.5" /> Cancel
             </button>
@@ -159,12 +159,24 @@ export function TaxonomyManager({ groups }: { groups: Groups }) {
           />
           {kind !== "author" ? (
             <>
-              <Input placeholder="Name (FR)" value={nameFr} onChange={(e) => setNameFr(e.target.value)} />
-              <Input placeholder="slug (optional)" value={slug} onChange={(e) => setSlug(e.target.value)} />
+              <Input
+                placeholder="slug (optional)"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+              />
             </>
           ) : null}
-          <Button type="submit" variant="gradient" loading={pending} className="w-full">
-            {pending ? "Saving…" : editingId ? "Save changes" : (
+          <Button
+            type="submit"
+            variant="gradient"
+            loading={pending}
+            className="w-full"
+          >
+            {pending ? (
+              "Saving…"
+            ) : editingId ? (
+              "Save changes"
+            ) : (
               <>
                 <Plus className="size-4" /> Add
               </>

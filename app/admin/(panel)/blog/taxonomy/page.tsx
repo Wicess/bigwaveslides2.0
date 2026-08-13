@@ -3,7 +3,10 @@ import { getBlogTaxonomy } from "@/server/data/admin-cms";
 import { getLocalized } from "@/lib/localized";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { BackLink, Reveal } from "@/components/admin/admin-ui";
-import { TaxonomyManager, type TaxItem } from "@/components/admin/taxonomy-manager";
+import {
+  TaxonomyManager,
+  type TaxItem,
+} from "@/components/admin/taxonomy-manager";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +19,6 @@ export default async function AdminBlogTaxonomy() {
       (c): TaxItem => ({
         id: c.id,
         nameEn: getLocalized(c.name, "en"),
-        nameFr: getLocalized(c.name, "fr"),
         slug: c.slug,
       }),
     ),
@@ -24,7 +26,6 @@ export default async function AdminBlogTaxonomy() {
       (t): TaxItem => ({
         id: t.id,
         nameEn: getLocalized(t.name, "en"),
-        nameFr: getLocalized(t.name, "fr"),
         slug: t.slug,
       }),
     ),

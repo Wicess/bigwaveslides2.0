@@ -80,7 +80,7 @@ export default async function StyleguidePage({ params }: Props) {
       {/* Hero */}
       <Section
         spacing="default"
-        className="relative overflow-hidden border-b border-border"
+        className="border-border relative overflow-hidden border-b"
       >
         <div
           aria-hidden
@@ -96,9 +96,9 @@ export default async function StyleguidePage({ params }: Props) {
             <KineticText
               as="h1"
               text="The Big Wave design language"
-              className="mt-4 block text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl"
+              className="mt-4 block text-4xl leading-[1.05] font-bold sm:text-5xl lg:text-6xl"
             />
-            <p className="mt-5 max-w-prose text-lg text-muted-foreground">
+            <p className="text-muted-foreground mt-5 max-w-prose text-lg">
               Tokens, components, and the motion engine that power every page.
               Built for buttery 60fps and full reduced-motion support.
             </p>
@@ -125,16 +125,19 @@ export default async function StyleguidePage({ params }: Props) {
           />
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {COLORS.map((c) => (
-              <div key={c.name} className="overflow-hidden rounded-[var(--radius)] border border-border">
+              <div
+                key={c.name}
+                className="border-border overflow-hidden rounded-[var(--radius)] border"
+              >
                 <div className="h-20" style={{ background: c.hex }} />
                 <div className="p-3">
                   <p className="text-sm font-semibold">{c.name}</p>
-                  <p className="text-xs text-muted-foreground">{c.hex}</p>
+                  <p className="text-muted-foreground text-xs">{c.hex}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-4 flex overflow-hidden rounded-[var(--radius)] border border-border">
+          <div className="border-border mt-4 flex overflow-hidden rounded-[var(--radius)] border">
             {PRIMARY_SCALE.map((step) => (
               <div
                 key={step}
@@ -156,12 +159,12 @@ export default async function StyleguidePage({ params }: Props) {
             description="Sora for display, Inter for body."
           />
           <div className="mt-8 space-y-4">
-            <p className="font-display text-6xl font-bold leading-none">
+            <p className="font-display text-6xl leading-none font-bold">
               Display 6xl
             </p>
             <p className="font-display text-4xl font-bold">Heading 4xl</p>
             <p className="text-2xl font-semibold">Subheading 2xl</p>
-            <p className="max-w-2xl text-lg text-muted-foreground">
+            <p className="text-muted-foreground max-w-2xl text-lg">
               Body large — premium water slides to buy, rent, and install for
               unforgettable events.
             </p>
@@ -215,7 +218,7 @@ export default async function StyleguidePage({ params }: Props) {
                   <CardTitle>Solid card</CardTitle>
                   <CardDescription>Default surface.</CardDescription>
                 </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
+                <CardContent className="text-muted-foreground text-sm">
                   Used for most content blocks.
                 </CardContent>
                 <CardFooter>
@@ -227,7 +230,7 @@ export default async function StyleguidePage({ params }: Props) {
                   <CardTitle>Glass card</CardTitle>
                   <CardDescription>Glassmorphism surface.</CardDescription>
                 </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
+                <CardContent className="text-muted-foreground text-sm">
                   Best over imagery or gradients.
                 </CardContent>
                 <CardFooter>
@@ -306,13 +309,22 @@ export default async function StyleguidePage({ params }: Props) {
                   <TabsTrigger value="buy">Buy</TabsTrigger>
                   <TabsTrigger value="install">Install</TabsTrigger>
                 </TabsList>
-                <TabsContent value="rent" className="text-sm text-muted-foreground">
+                <TabsContent
+                  value="rent"
+                  className="text-muted-foreground text-sm"
+                >
                   Daily rentals with delivery & setup.
                 </TabsContent>
-                <TabsContent value="buy" className="text-sm text-muted-foreground">
+                <TabsContent
+                  value="buy"
+                  className="text-muted-foreground text-sm"
+                >
                   Own a premium commercial slide.
                 </TabsContent>
-                <TabsContent value="install" className="text-sm text-muted-foreground">
+                <TabsContent
+                  value="install"
+                  className="text-muted-foreground text-sm"
+                >
                   Professional installation services.
                 </TabsContent>
               </Tabs>
@@ -324,7 +336,9 @@ export default async function StyleguidePage({ params }: Props) {
             <div className="mt-6">
               <Accordion type="single" collapsible>
                 <AccordionItem value="a">
-                  <AccordionTrigger>Do you deliver and set up?</AccordionTrigger>
+                  <AccordionTrigger>
+                    Do you deliver and set up?
+                  </AccordionTrigger>
                   <AccordionContent>
                     Yes — delivery, setup, and pickup are included options.
                   </AccordionContent>
@@ -332,7 +346,8 @@ export default async function StyleguidePage({ params }: Props) {
                 <AccordionItem value="b">
                   <AccordionTrigger>What surfaces are okay?</AccordionTrigger>
                   <AccordionContent>
-                    Grass, concrete, and turf. We&apos;ll advise on the best fit.
+                    Grass, concrete, and turf. We&apos;ll advise on the best
+                    fit.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -354,20 +369,30 @@ export default async function StyleguidePage({ params }: Props) {
       {/* Marquee */}
       <Section spacing="compact" className="bg-accent text-white">
         <Container>
-          <SectionHeader eyebrow="Components" title="Marquee" className="[&_h2]:text-white [&_span]:text-secondary" />
+          <SectionHeader
+            eyebrow="Components"
+            title="Marquee"
+            className="[&_span]:text-secondary [&_h2]:text-white"
+          />
         </Container>
         <div className="mt-8">
           <Marquee durationSeconds={26}>
-            {["Birthday", "Pool Party", "Schools", "Churches", "Hotels", "Festivals", "Corporate"].map(
-              (t) => (
-                <span
-                  key={t}
-                  className="text-2xl font-bold uppercase tracking-tight text-white/80"
-                >
-                  {t} •
-                </span>
-              ),
-            )}
+            {[
+              "Birthday",
+              "Pool Party",
+              "Schools",
+              "Churches",
+              "Hotels",
+              "Festivals",
+              "Corporate",
+            ].map((t) => (
+              <span
+                key={t}
+                className="text-2xl font-bold tracking-tight text-white/80 uppercase"
+              >
+                {t} •
+              </span>
+            ))}
           </Marquee>
         </div>
       </Section>
@@ -384,8 +409,8 @@ export default async function StyleguidePage({ params }: Props) {
             {[0, 1, 2].map((i) => (
               <Reveal key={i} delay={i * 0.1}>
                 <Card className="p-6">
-                  <p className="text-5xl font-bold text-gradient">0{i + 1}</p>
-                  <p className="mt-2 text-sm text-muted-foreground">
+                  <p className="text-gradient text-5xl font-bold">0{i + 1}</p>
+                  <p className="text-muted-foreground mt-2 text-sm">
                     Staggered reveal block {i + 1}
                   </p>
                 </Card>

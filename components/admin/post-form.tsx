@@ -27,7 +27,15 @@ export type PostFormValues = {
   categoryId: string;
 };
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block space-y-1.5">
       <span className="text-sm font-medium">{label}</span>
@@ -48,7 +56,11 @@ export function PostForm({
 }) {
   const router = useRouter();
   const [pending, start] = useTransition();
-  const { register, handleSubmit, formState: { errors } } = useForm<PostFormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<PostFormValues>({
     defaultValues: defaults,
   });
 
@@ -94,33 +106,57 @@ export function PostForm({
         <Field label="Author">
           <Select {...register("authorId")}>
             <option value="">— None —</option>
-            {authors.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+            {authors.map((a) => (
+              <option key={a.id} value={a.id}>
+                {a.name}
+              </option>
+            ))}
           </Select>
         </Field>
         <Field label="Category">
           <Select {...register("categoryId")}>
             <option value="">— None —</option>
-            {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
           </Select>
         </Field>
         <label className="flex items-center gap-2 self-end pb-2.5 text-sm sm:col-span-2">
-          <input type="checkbox" className="size-4 rounded border-border" {...register("featured")} />
+          <input
+            type="checkbox"
+            className="border-border size-4 rounded"
+            {...register("featured")}
+          />
           Featured
         </label>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        <Field label="Excerpt (EN)"><Textarea rows={2} {...register("excerptEn")} /></Field>
-        <Field label="Excerpt (FR)"><Textarea rows={2} {...register("excerptFr")} /></Field>
-        <Field label="Content (EN)"><Textarea rows={8} {...register("contentEn")} /></Field>
-        <Field label="Content (FR)"><Textarea rows={8} {...register("contentFr")} /></Field>
+        <Field label="Excerpt (EN)">
+          <Textarea rows={2} {...register("excerptEn")} />
+        </Field>
+        <Field label="Excerpt (FR)">
+          <Textarea rows={2} {...register("excerptFr")} />
+        </Field>
+        <Field label="Content (EN)">
+          <Textarea rows={8} {...register("contentEn")} />
+        </Field>
+        <Field label="Content (FR)">
+          <Textarea rows={8} {...register("contentFr")} />
+        </Field>
       </section>
 
       <div className="flex flex-wrap gap-3">
         <Button type="submit" variant="gradient" loading={pending}>
           {pending ? "Saving…" : "Save post"}
         </Button>
-        <Button type="button" variant="outline" onClick={() => router.push("/admin/blog")}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => router.push("/admin/blog")}
+        >
           Cancel
         </Button>
         {defaults.id ? (
@@ -132,8 +168,11 @@ export function PostForm({
               if (!confirm("Delete this post?")) return;
               start(async () => {
                 const res = await deletePost(defaults.id!);
-                if (res.ok) { toast.success("Deleted"); router.push("/admin/blog"); router.refresh(); }
-                else toast.error(res.error ?? "Failed");
+                if (res.ok) {
+                  toast.success("Deleted");
+                  router.push("/admin/blog");
+                  router.refresh();
+                } else toast.error(res.error ?? "Failed");
               });
             }}
           >

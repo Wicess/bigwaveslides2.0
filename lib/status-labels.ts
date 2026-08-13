@@ -2,38 +2,36 @@
 
 type Tone = "neutral" | "info" | "success" | "warning" | "danger";
 
-const LABELS: Record<string, { en: string; fr: string; tone: Tone }> = {
+const LABELS: Record<string, { label: string; tone: Tone }> = {
   // Order / payment
-  PENDING: { en: "Pending", fr: "En attente", tone: "warning" },
-  PROCESSING: { en: "Processing", fr: "En traitement", tone: "info" },
-  FULFILLED: { en: "Fulfilled", fr: "Honorée", tone: "success" },
-  INVOICE_SENT: { en: "Invoice sent", fr: "Facture envoyée", tone: "info" },
-  DEPOSIT_PAID: { en: "Deposit paid", fr: "Acompte payé", tone: "info" },
-  PAID_IN_FULL: { en: "Paid in full", fr: "Payé intégralement", tone: "success" },
+  PENDING: { label: "Pending", tone: "warning" },
+  PROCESSING: { label: "Processing", tone: "info" },
+  FULFILLED: { label: "Fulfilled", tone: "success" },
+  INVOICE_SENT: { label: "Invoice sent", tone: "info" },
+  DEPOSIT_PAID: { label: "Deposit paid", tone: "info" },
+  PAID_IN_FULL: { label: "Paid in full", tone: "success" },
   // Booking
-  REQUESTED: { en: "Requested", fr: "Demandée", tone: "warning" },
-  CONFIRMED: { en: "Confirmed", fr: "Confirmée", tone: "success" },
-  COMPLETED: { en: "Completed", fr: "Terminée", tone: "success" },
-  DECLINED: { en: "Declined", fr: "Refusée", tone: "danger" },
+  REQUESTED: { label: "Requested", tone: "warning" },
+  CONFIRMED: { label: "Confirmed", tone: "success" },
+  COMPLETED: { label: "Completed", tone: "success" },
+  DECLINED: { label: "Declined", tone: "danger" },
   // Quote
-  NEW: { en: "New", fr: "Nouvelle", tone: "warning" },
-  REVIEWED: { en: "Reviewed", fr: "Examinée", tone: "info" },
-  QUOTED: { en: "Quoted", fr: "Devis envoyé", tone: "info" },
-  WON: { en: "Won", fr: "Gagnée", tone: "success" },
-  LOST: { en: "Lost", fr: "Perdue", tone: "neutral" },
+  NEW: { label: "New", tone: "warning" },
+  REVIEWED: { label: "Reviewed", tone: "info" },
+  QUOTED: { label: "Quoted", tone: "info" },
+  WON: { label: "Won", tone: "success" },
+  LOST: { label: "Lost", tone: "neutral" },
   // Contract
-  DRAFT: { en: "Draft", fr: "Brouillon", tone: "warning" },
-  SENT: { en: "Sent", fr: "Envoyé", tone: "info" },
-  SIGNED: { en: "Signed", fr: "Signé", tone: "success" },
-  VOID: { en: "Void", fr: "Annulé", tone: "danger" },
+  DRAFT: { label: "Draft", tone: "warning" },
+  SENT: { label: "Sent", tone: "info" },
+  SIGNED: { label: "Signed", tone: "success" },
+  VOID: { label: "Void", tone: "danger" },
   // Shared
-  CANCELLED: { en: "Cancelled", fr: "Annulée", tone: "danger" },
+  CANCELLED: { label: "Cancelled", tone: "danger" },
 };
 
-export function statusLabel(token: string, locale: string): string {
-  const entry = LABELS[token];
-  if (!entry) return token;
-  return locale === "fr" ? entry.fr : entry.en;
+export function statusLabel(token: string): string {
+  return LABELS[token]?.label ?? token;
 }
 
 export function statusTone(token: string): Tone {

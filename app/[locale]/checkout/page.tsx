@@ -16,7 +16,10 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as AppLocale, namespace: "Cart" });
+  const t = await getTranslations({
+    locale: locale as AppLocale,
+    namespace: "Cart",
+  });
   return { title: t("checkout"), robots: { index: false } };
 }
 
@@ -45,11 +48,11 @@ export default async function CheckoutPage({ params }: Props) {
 
   return (
     <main>
-      <Section spacing="compact" className="pb-16 pt-8 sm:pt-10">
+      <Section spacing="compact" className="pt-8 pb-16 sm:pt-10">
         <Container>
           {/* Animated, centered title */}
           <Reveal className="mb-8 text-center sm:mb-10">
-            <h1 className="text-shimmer bg-[linear-gradient(90deg,#0a1a2f_0%,#0099ff_35%,#00d4ff_50%,#0099ff_65%,#0a1a2f_100%)] font-display text-4xl font-extrabold uppercase tracking-tight sm:text-6xl">
+            <h1 className="text-shimmer font-display bg-[linear-gradient(90deg,#0a1a2f_0%,#0099ff_35%,#00d4ff_50%,#0099ff_65%,#0a1a2f_100%)] text-4xl font-extrabold tracking-tight uppercase sm:text-6xl">
               {t("checkout")}
             </h1>
             <span

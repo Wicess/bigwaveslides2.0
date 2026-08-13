@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { FileSignature, CheckCircle2, ShieldCheck, CalendarDays, MapPin } from "lucide-react";
+import {
+  FileSignature,
+  CheckCircle2,
+  ShieldCheck,
+  CalendarDays,
+  MapPin,
+} from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { getContractByNumber } from "@/server/data/contracts";
 import { formatPrice, formatDate } from "@/lib/format";
@@ -26,11 +32,19 @@ export default async function ContractPage({ params }: Props) {
 
   const t = await getTranslations("Contract");
   const b = contract.booking;
-  const address = (b.eventAddress as { address?: string; city?: string } | null) ?? {};
+  const address =
+    (b.eventAddress as { address?: string; city?: string } | null) ?? {};
   const isSigned = contract.status === "SIGNED";
   const isVoid = contract.status === "VOID";
 
-  const terms = [t("term1"), t("term2"), t("term3"), t("term4"), t("term5"), t("term6")];
+  const terms = [
+    t("term1"),
+    t("term2"),
+    t("term3"),
+    t("term4"),
+    t("term5"),
+    t("term6"),
+  ];
 
   const feeRows = [
     { label: t("rentalSubtotal"), cents: b.subtotalCents },
@@ -45,12 +59,12 @@ export default async function ContractPage({ params }: Props) {
           {/* Header */}
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <span className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+              <span className="text-primary inline-flex items-center gap-2 text-sm font-semibold tracking-[0.18em] uppercase">
                 <FileSignature className="size-4" />
                 {t("eyebrow")}
               </span>
               <h1 className="mt-2 text-3xl font-bold">{t("title")}</h1>
-              <p className="mt-1 font-mono text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-1 font-mono text-sm">
                 {contract.contractNumber}
               </p>
             </div>
@@ -77,31 +91,33 @@ export default async function ContractPage({ params }: Props) {
             <h2 className="text-lg font-semibold">{t("agreementSummary")}</h2>
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                <dt className="text-muted-foreground text-xs tracking-wide uppercase">
                   {t("booking")}
                 </dt>
                 <dd className="font-mono text-sm">{b.bookingNumber}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                <dt className="text-muted-foreground text-xs tracking-wide uppercase">
                   {t("renter")}
                 </dt>
                 <dd className="text-sm">{b.guestName}</dd>
               </div>
               <div>
-                <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground">
+                <dt className="text-muted-foreground flex items-center gap-1.5 text-xs tracking-wide uppercase">
                   <CalendarDays className="size-3.5" /> {t("eventDates")}
                 </dt>
                 <dd className="text-sm">
-                  {formatDate(b.eventStartDate, locale)} – {formatDate(b.eventEndDate, locale)}
+                  {formatDate(b.eventStartDate, locale)} –
+                  {formatDate(b.eventEndDate, locale)}
                 </dd>
               </div>
               <div>
-                <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground">
+                <dt className="text-muted-foreground flex items-center gap-1.5 text-xs tracking-wide uppercase">
                   <MapPin className="size-3.5" /> {t("location")}
                 </dt>
                 <dd className="text-sm">
-                  {[address.address, address.city].filter(Boolean).join(", ") || "—"}
+                  {[address.address, address.city].filter(Boolean).join(", ") ||
+                    "—"}
                 </dd>
               </div>
             </dl>
@@ -109,7 +125,7 @@ export default async function ContractPage({ params }: Props) {
             {/* Equipment */}
             <div className="mt-6">
               <h3 className="text-sm font-semibold">{t("equipment")}</h3>
-              <ul className="mt-2 divide-y divide-border text-sm">
+              <ul className="divide-border mt-2 divide-y text-sm">
                 {b.items.map((item) => (
                   <li key={item.id} className="flex justify-between py-2">
                     <span>
@@ -127,36 +143,46 @@ export default async function ContractPage({ params }: Props) {
             </div>
 
             {/* Fees */}
-            <dl className="mt-4 space-y-1.5 border-t border-border pt-4 text-sm">
+            <dl className="border-border mt-4 space-y-1.5 border-t pt-4 text-sm">
               {feeRows.map((r) => (
                 <div key={r.label} className="flex justify-between">
                   <dt className="text-muted-foreground">{r.label}</dt>
-                  <dd className="font-medium">{formatPrice(r.cents, locale)}</dd>
+                  <dd className="font-medium">
+                    {formatPrice(r.cents, locale)}
+                  </dd>
                 </div>
               ))}
               {b.depositCents > 0 ? (
                 <div className="flex justify-between">
-                  <dt className="text-muted-foreground">{t("refundableDeposit")}</dt>
-                  <dd className="font-medium">{formatPrice(b.depositCents, locale)}</dd>
+                  <dt className="text-muted-foreground">
+                    {t("refundableDeposit")}
+                  </dt>
+                  <dd className="font-medium">
+                    {formatPrice(b.depositCents, locale)}
+                  </dd>
                 </div>
               ) : null}
-              <div className="flex justify-between border-t border-border pt-2">
+              <div className="border-border flex justify-between border-t pt-2">
                 <dt className="font-semibold">{t("total")}</dt>
-                <dd className="font-display text-lg font-bold text-primary">
+                <dd className="font-display text-primary text-lg font-bold">
                   {formatPrice(b.totalCents, locale)}
                 </dd>
               </div>
             </dl>
-            <p className="mt-2 text-xs text-muted-foreground">{t("paymentNote")}</p>
+            <p className="text-muted-foreground mt-2 text-xs">
+              {t("paymentNote")}
+            </p>
           </Card>
 
           {/* Terms */}
           <div className="mt-6">
             <h2 className="text-lg font-semibold">{t("termsTitle")}</h2>
-            <ol className="mt-3 space-y-3 text-sm text-muted-foreground">
+            <ol className="text-muted-foreground mt-3 space-y-3 text-sm">
               {terms.map((term, i) => (
                 <li key={i} className="flex gap-3">
-                  <span className="font-semibold text-foreground">{i + 1}.</span>
+                  <span className="text-foreground font-semibold">
+                    {i + 1}.
+                  </span>
                   <span>{term}</span>
                 </li>
               ))}
@@ -169,8 +195,10 @@ export default async function ContractPage({ params }: Props) {
               <div className="flex items-start gap-3">
                 <ShieldCheck className="mt-0.5 size-6 text-green-600" />
                 <div>
-                  <p className="font-semibold">{t("signedBy", { name: contract.signerName ?? "" })}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-semibold">
+                    {t("signedBy", { name: contract.signerName ?? "" })}
+                  </p>
+                  <p className="text-muted-foreground text-sm">
                     {contract.signedAt
                       ? formatDate(contract.signedAt, locale, {
                           dateStyle: "long",
@@ -178,15 +206,19 @@ export default async function ContractPage({ params }: Props) {
                         } as Intl.DateTimeFormatOptions)
                       : ""}
                   </p>
-                  <p className="mt-2 text-xs text-muted-foreground">{t("signedNote")}</p>
+                  <p className="text-muted-foreground mt-2 text-xs">
+                    {t("signedNote")}
+                  </p>
                 </div>
               </div>
             ) : isVoid ? (
-              <p className="text-sm text-muted-foreground">{t("voidNote")}</p>
+              <p className="text-muted-foreground text-sm">{t("voidNote")}</p>
             ) : (
               <>
                 <h2 className="text-lg font-semibold">{t("signTitle")}</h2>
-                <p className="mt-1 text-sm text-muted-foreground">{t("signIntro")}</p>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  {t("signIntro")}
+                </p>
                 <div className="mt-4">
                   <SignContract
                     contractNumber={contract.contractNumber}

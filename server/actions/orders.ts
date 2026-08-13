@@ -108,9 +108,7 @@ export async function createOrderRequest(
       const mode = item.mode === "RENT" ? "RENT" : "BUY";
       const unit = cartUnitPrice(item.product, mode);
       const baseName =
-        (item.product.name as { en?: string; fr?: string })[
-          data.locale as "en" | "fr"
-        ] ??
+        (item.product.name as { en?: string; fr?: string })["en"] ??
         (item.product.name as { en?: string }).en ??
         item.product.sku;
       const name = mode === "RENT" ? `${baseName} (Rental)` : baseName;

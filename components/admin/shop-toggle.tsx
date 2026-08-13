@@ -34,7 +34,9 @@ export function ShopToggle({
         setOn(!next);
         toast.error(res.error ?? "Couldn't update.");
       } else {
-        toast.success(next ? `${name} is now in the shop` : `${name} removed from the shop`);
+        toast.success(
+          next ? `${name} is now in the shop` : `${name} removed from the shop`,
+        );
         router.refresh();
       }
     });

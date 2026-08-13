@@ -1,6 +1,6 @@
 # 03 — Sitemap & Route Map
 
-> All public routes are localized under `/[locale]` where `locale ∈ {en, fr}`. `en` is the default. Admin is **not** localized (`/admin`).
+> All public routes sit under `/[locale]` where `locale` is always `en` — the site is English (en-US) only. The `/en` prefix is kept because every indexed URL and backlink uses it. Admin is **not** localized (`/admin`).
 
 ## Public site map
 

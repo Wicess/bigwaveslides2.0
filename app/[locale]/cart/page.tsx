@@ -10,6 +10,8 @@ type Props = { params: Promise<{ locale: string }> };
  */
 export default async function CartRedirect({ params }: Props) {
   const { locale } = await params;
-  const safeLocale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const safeLocale = hasLocale(routing.locales, locale)
+    ? locale
+    : routing.defaultLocale;
   redirect({ href: "/checkout", locale: safeLocale });
 }

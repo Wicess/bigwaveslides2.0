@@ -12,7 +12,11 @@ const postSchema = z.object({
   id: z.string().optional(),
   titleEn: z.string().min(2).max(200),
   titleFr: z.string().min(2).max(200),
-  slug: z.string().min(2).max(200).regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers, hyphens"),
+  slug: z
+    .string()
+    .min(2)
+    .max(200)
+    .regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers, hyphens"),
   excerptEn: z.string().max(400).optional().or(z.literal("")),
   excerptFr: z.string().max(400).optional().or(z.literal("")),
   contentEn: z.string().max(20000).optional().or(z.literal("")),
@@ -31,7 +35,10 @@ export async function savePost(
   const session = await requirePermission("blog.write");
   const parsed = postSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid data." };
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Invalid data.",
+    };
   }
   const d = parsed.data;
 
@@ -58,7 +65,10 @@ export async function savePost(
     let id = d.id;
     if (id) await prisma.blogPost.update({ where: { id }, data });
     else {
-      const created = await prisma.blogPost.create({ data, select: { id: true } });
+      const created = await prisma.blogPost.create({
+        data,
+        select: { id: true },
+      });
       id = created.id;
     }
     await logActivity(session.id, d.id ? "blog.update" : "blog.create", {
@@ -84,7 +94,10 @@ export async function deletePost(id: string): Promise<AdminActionResult> {
   const session = await requirePermission("blog.write");
   try {
     await prisma.blogPost.delete({ where: { id } });
-    await logActivity(session.id, "blog.delete", { entityType: "BlogPost", entityId: id });
+    await logActivity(session.id, "blog.delete", {
+      entityType: "BlogPost",
+      entityId: id,
+    });
     revalidatePath("/admin/blog");
     return { ok: true };
   } catch {
@@ -98,7 +111,6 @@ const taxonomySchema = z.object({
   id: z.string().optional(),
   kind: z.enum(["category", "tag", "author"]),
   nameEn: z.string().min(1).max(120),
-  nameFr: z.string().max(120).optional(),
   slug: z.string().max(120).optional(),
 });
 
@@ -108,20 +120,32 @@ export async function saveTaxonomy(
   const session = await requirePermission("blog.write");
   const parsed = taxonomySchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Invalid data." };
-  const { id, kind, nameEn, nameFr, slug } = parsed.data;
-  const safeSlug = (slug || nameEn).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  const name = { en: nameEn, fr: nameFr || nameEn };
+  const { id, kind, nameEn, slug } = parsed.data;
+  const safeSlug = (slug || nameEn)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  const name = { en: nameEn };
   const editing = Boolean(id);
 
   try {
     if (kind === "author") {
-      if (id) await prisma.author.update({ where: { id }, data: { name: nameEn } });
+      if (id)
+        await prisma.author.update({ where: { id }, data: { name: nameEn } });
       else await prisma.author.create({ data: { name: nameEn } });
     } else if (kind === "category") {
-      if (id) await prisma.blogCategory.update({ where: { id }, data: { slug: safeSlug, name } });
+      if (id)
+        await prisma.blogCategory.update({
+          where: { id },
+          data: { slug: safeSlug, name },
+        });
       else await prisma.blogCategory.create({ data: { slug: safeSlug, name } });
     } else {
-      if (id) await prisma.tag.update({ where: { id }, data: { slug: safeSlug, name } });
+      if (id)
+        await prisma.tag.update({
+          where: { id },
+          data: { slug: safeSlug, name },
+        });
       else await prisma.tag.create({ data: { slug: safeSlug, name } });
     }
     await logActivity(session.id, "blog.taxonomy", {
@@ -141,12 +165,18 @@ export async function deleteTaxonomy(
   const session = await requirePermission("blog.write");
   try {
     if (kind === "author") await prisma.author.delete({ where: { id } });
-    else if (kind === "category") await prisma.blogCategory.delete({ where: { id } });
+    else if (kind === "category")
+      await prisma.blogCategory.delete({ where: { id } });
     else await prisma.tag.delete({ where: { id } });
-    await logActivity(session.id, "blog.taxonomy", { summary: `Deleted ${kind}` });
+    await logActivity(session.id, "blog.taxonomy", {
+      summary: `Deleted ${kind}`,
+    });
     revalidatePath("/admin/blog/taxonomy");
     return { ok: true };
   } catch {
-    return { ok: false, error: "Couldn't delete (it may still be in use by posts)." };
+    return {
+      ok: false,
+      error: "Couldn't delete (it may still be in use by posts).",
+    };
   }
 }

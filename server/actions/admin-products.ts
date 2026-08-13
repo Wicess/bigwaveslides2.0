@@ -41,7 +41,6 @@ const productSchema = z.object({
   id: z.string().optional(),
   nameEn: z.string().min(2).max(160),
   // The following are optional in the form now — auto-derived / auto-filled.
-  nameFr: z.string().max(160).optional().or(z.literal("")),
   slug: z.string().max(160).optional().or(z.literal("")),
   sku: z.string().max(60).optional().or(z.literal("")),
   type: z.enum(["SALE", "RENTAL", "BOTH"]),
@@ -100,7 +99,7 @@ export async function saveProduct(
   // French fields are optional in the form now — fall back to English so the
   // bilingual site still renders. Slug/SKU are auto-derived on create.
   const data = {
-    name: { en: d.nameEn, fr: d.nameFr?.trim() || d.nameEn },
+    name: { en: d.nameEn },
     type: d.type,
     salePriceCents: dollarsToCents(d.salePrice),
     dailyRateCents: dollarsToCents(d.dailyRate),
@@ -207,7 +206,9 @@ export async function saveProduct(
  * type SALE or BOTH; toggling off makes it RENTAL-only (it stays rentable —
  * every unit in this fleet rents), toggling on makes it BOTH.
  */
-export async function toggleProductSale(id: string): Promise<AdminActionResult> {
+export async function toggleProductSale(
+  id: string,
+): Promise<AdminActionResult> {
   const session = await requirePermission("product.write");
   try {
     const p = await prisma.product.findUnique({
@@ -265,7 +266,6 @@ export async function deleteProduct(id: string): Promise<AdminActionResult> {
 const categorySchema = z.object({
   id: z.string().optional(),
   nameEn: z.string().min(2).max(120),
-  nameFr: z.string().min(2).max(120),
   slug: z
     .string()
     .min(2)
@@ -287,7 +287,7 @@ export async function saveCategory(
   }
   const d = parsed.data;
   const data = {
-    name: { en: d.nameEn, fr: d.nameFr },
+    name: { en: d.nameEn },
     slug: d.slug,
     order: d.order ? Number(d.order) || 0 : 0,
   };

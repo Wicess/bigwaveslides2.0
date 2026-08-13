@@ -71,7 +71,7 @@ export async function updateOrder(
         name: updated.guestName ?? "there",
         reference: updated.orderNumber,
         kind: "order",
-        statusLabel: `${statusLabel(status, "en")} · ${statusLabel(paymentStatus, "en")}`,
+        statusLabel: `${statusLabel(status)} · ${statusLabel(paymentStatus)}`,
         note: invoiceNote || undefined,
       });
     }

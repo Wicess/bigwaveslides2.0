@@ -14,7 +14,7 @@ A single Next.js 15 (App Router) application deployed on Vercel, serving three s
                          ┌──────────────────────────────────────┐
         Visitor  ─────▶  │  Vercel Edge / Node (Next.js 15)      │
                          │  - RSC + Server Actions               │
-                         │  - next-intl (en/fr)                  │
+                         │  - next-intl (en-US only)             │
                          │  - NextAuth (RBAC)                     │
                          └───────┬───────────────┬───────────────┘
                                  │               │
@@ -82,8 +82,8 @@ A single Next.js 15 (App Router) application deployed on Vercel, serving three s
 
 ## 8. Internationalization (Phase 2 → all pages)
 
-- **next-intl** with a `[locale]` route segment; `en` (default) and `fr`.
-- **UI strings** in `messages/en.json` + `messages/fr.json`.
+- **next-intl** with a `[locale]` route segment; `en` only. French was retired 2026-08-13 (US-only market); `/fr/*` 301s to `/en/*` in `middleware.ts`.
+- **UI strings** in `messages/en.json`.
 - **CMS content** (products, blog, events, services, testimonials) stores **per-locale fields/rows** so content is genuinely translated, not just chrome.
 - `hreflang` + localized metadata handled in Phase 18.
 

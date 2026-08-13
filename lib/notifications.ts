@@ -96,9 +96,7 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
       ? formatDate(eventDay, o.locale)
       : undefined;
   const validUntil = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-  const onlineUrl = siteUrl(
-    `${o.locale === "fr" ? "/fr" : ""}/order/${o.orderNumber}`,
-  );
+  const onlineUrl = siteUrl(`/order/${o.orderNumber}`);
   const attachments = await buildQuoteAttachment({
     kind: "order",
     docType: "quote",
@@ -538,9 +536,7 @@ export async function notifyNewsletterSignup(s: {
     title: "New newsletter subscriber",
     message: [
       `✉️ ${s.email}`,
-      ...(s.locale
-        ? [`Language: ${s.locale === "fr" ? "French" : "English"}`]
-        : []),
+      ...(s.locale ? [] : []),
       "Tap to open subscribers in admin.",
     ].join("\n"),
     clickUrl: siteUrl("/admin/newsletter"),

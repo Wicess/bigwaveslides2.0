@@ -5,12 +5,7 @@ import tseslint from "typescript-eslint";
 // circular-serialization bug by composing the official flat configs directly.
 export default tseslint.config(
   {
-    ignores: [
-      ".next/**",
-      "node_modules/**",
-      "next-env.d.ts",
-      "*.config.*",
-    ],
+    ignores: [".next/**", "node_modules/**", "next-env.d.ts", "*.config.*"],
   },
   ...tseslint.configs.recommended,
   {
@@ -18,6 +13,18 @@ export default tseslint.config(
     rules: {
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs["core-web-vitals"].rules,
+      // A leading underscore marks something as deliberately unused. Needed for
+      // parameters that must keep their position for callers' sake even though
+      // the body no longer reads them — e.g. formatPrice/formatDate's `locale`,
+      // vestigial since the site became English-only.
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
     },
   },
 );

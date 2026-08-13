@@ -1,7 +1,7 @@
 import { statusLabel, statusTone, TONE_CLASS } from "@/lib/status-labels";
 import { cn } from "@/lib/utils";
 
-export function StatusBadge({ status, locale }: { status: string; locale: string }) {
+export function StatusBadge({ status }: { status: string }) {
   return (
     <span
       className={cn(
@@ -9,7 +9,7 @@ export function StatusBadge({ status, locale }: { status: string; locale: string
         TONE_CLASS[statusTone(status)],
       )}
     >
-      {statusLabel(status, locale)}
+      {statusLabel(status)}
     </span>
   );
 }

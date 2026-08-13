@@ -12,12 +12,14 @@ import {
   Activity,
   Clock,
   Download,
+  Bot,
 } from "lucide-react";
 import type { AnalyticsEventType } from "@prisma/client";
 import { getVisitorDetail } from "@/server/data/analytics";
 import { formatDate } from "@/lib/format";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminCard, BackLink, Reveal } from "@/components/admin/admin-ui";
+import { VisitorBotToggle } from "@/components/admin/visitor-bot-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -172,6 +174,30 @@ export default async function VisitorDetailPage({
         description={`📍 ${location}`}
       />
 
+      {/* Crawlers request the homepage, read it, and leave — so their timeline is
+          a short run of identical "/" views with no click path. That looks like
+          broken tracking until you know the visitor is a bot, so say it here
+          rather than leaving it to the lowercase "bot" in the Device field. */}
+      {visitor.device === "BOT" ? (
+        <Reveal>
+          <div className="mb-4 flex gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900">
+            <Bot className="mt-0.5 size-5 shrink-0" />
+            <div className="text-sm">
+              <p className="font-semibold">This visitor is a bot or crawler.</p>
+              <p className="mt-1 text-amber-800">
+                Automated clients fetch one page and leave, so a thin timeline
+                here is expected — it is not missing data. Classification comes
+                from the user agent plus a datacenter-IP check. Bots are hidden
+                from the visitors list unless you turn on “Show bots”.
+              </p>
+              <div className="mt-3">
+                <VisitorBotToggle id={visitor.id} isBot />
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      ) : null}
+
       {/* Profile */}
       <Reveal delay={0.05}>
         <AdminCard className="p-6">
@@ -194,6 +220,15 @@ export default async function VisitorDetailPage({
             <span>First seen: {dateTime(visitor.firstSeenAt)}</span>
             <span>Last seen: {dateTime(visitor.lastSeenAt)}</span>
           </div>
+          {/* Escape hatch for the crawlers that arrive on a convincing desktop
+              UA — detection can't call those, but a person reading the timeline
+              can. Hidden for visitors already flagged, whose control lives in
+              the banner above. */}
+          {visitor.device !== "BOT" ? (
+            <div className="border-border mt-4 border-t pt-4">
+              <VisitorBotToggle id={visitor.id} isBot={false} />
+            </div>
+          ) : null}
         </AdminCard>
       </Reveal>
 

@@ -11,11 +11,14 @@ const { PrismaClient } = pkg;
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
-const L = (en: string, fr: string) => ({ en, fr });
+// French was retired (English-only site) — the second argument is
+// ignored so the hundreds of existing call sites keep compiling while
+// no new `fr` half is ever written to the database.
+const L = (en: string, _fr?: string) => ({ en });
 const daysFromNow = (d: number) =>
   new Date(Date.now() + d * 24 * 60 * 60 * 1000);
 
-const CATEGORY_NAMES: Record<string, { en: string; fr: string }> = {
+const CATEGORY_NAMES: Record<string, { en: string }> = {
   guides: L("Guides", "Guides"),
   planning: L("Planning", "Planification"),
   safety: L("Safety", "Sécurité"),
@@ -24,7 +27,7 @@ const CATEGORY_NAMES: Record<string, { en: string; fr: string }> = {
   buying: L("Buying", "Achat"),
   ownership: L("Ownership", "Entretien"),
 };
-const TAG_NAMES: Record<string, { en: string; fr: string }> = {
+const TAG_NAMES: Record<string, { en: string }> = {
   pricing: L("Pricing", "Tarifs"),
   rentals: L("Rentals", "Locations"),
   tips: L("Tips", "Conseils"),
@@ -48,11 +51,11 @@ type SeedPost = {
   featured: boolean;
   publishedDaysAgo: number;
   readingMinutes: number;
-  title: { en: string; fr: string };
-  excerpt: { en: string; fr: string };
-  metaTitle: { en: string; fr: string };
-  metaDescription: { en: string; fr: string };
-  content: { en: string; fr: string };
+  title: { en: string };
+  excerpt: { en: string };
+  metaTitle: { en: string };
+  metaDescription: { en: string };
+  content: { en: string };
 };
 
 async function main() {
@@ -112,7 +115,9 @@ async function main() {
   }
 
   const count = await prisma.blogPost.count();
-  console.log(`Seeded ${posts.length} posts. Total published blog posts: ${count}.`);
+  console.log(
+    `Seeded ${posts.length} posts. Total published blog posts: ${count}.`,
+  );
 }
 
 main()

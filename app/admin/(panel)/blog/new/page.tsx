@@ -10,22 +10,38 @@ export default async function AdminNewPost() {
   const { categories, authors } = await getBlogTaxonomy();
 
   const defaults: PostFormValues = {
-    titleEn: "", titleFr: "", slug: "",
-    excerptEn: "", excerptFr: "", contentEn: "", contentFr: "",
-    coverImage: "", status: "DRAFT", readingMinutes: "4",
-    featured: false, authorId: "", categoryId: "",
+    titleEn: "",
+    titleFr: "",
+    slug: "",
+    excerptEn: "",
+    excerptFr: "",
+    contentEn: "",
+    contentFr: "",
+    coverImage: "",
+    status: "DRAFT",
+    readingMinutes: "4",
+    featured: false,
+    authorId: "",
+    categoryId: "",
   };
 
   return (
     <div>
       <BackLink href="/admin/blog">Blog</BackLink>
-      <AdminPageHeader eyebrow="Content" title="New post" description="Write a new article or guide." />
+      <AdminPageHeader
+        eyebrow="Content"
+        title="New post"
+        description="Write a new article or guide."
+      />
       <Reveal delay={0.05}>
         <AdminCard className="p-6 sm:p-8">
           <PostForm
             defaults={defaults}
             authors={authors}
-            categories={categories.map((c) => ({ id: c.id, name: getLocalized(c.name, "en") }))}
+            categories={categories.map((c) => ({
+              id: c.id,
+              name: getLocalized(c.name, "en"),
+            }))}
           />
         </AdminCard>
       </Reveal>

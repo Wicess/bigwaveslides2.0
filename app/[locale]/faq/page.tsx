@@ -4,7 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { FAQS, pickLocale } from "@/lib/legal-content";
+import { FAQS } from "@/lib/legal-content";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
@@ -21,29 +21,19 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
-  const data = FAQS[pickLocale(locale)];
+  const data = FAQS;
   return buildMetadata({
     locale,
     path: "/faq",
-    title: fr
-      ? "Questions fréquentes — location de glissades d'eau gonflables"
-      : "Water Slide Rental FAQ — Delivery, Setup, Pricing & Booking",
+    title: "Water Slide Rental FAQ — Delivery, Setup, Pricing & Booking",
     description: data.intro,
-    keywords: fr
-      ? [
-          "faq location glissade d'eau",
-          "questions location glissade gonflable",
-          "prix location glissade d'eau",
-          "livraison installation glissade d'eau",
-        ]
-      : [
-          "water slide rental FAQ",
-          "inflatable water slide questions",
-          "water slide rental cost",
-          "water slide delivery and setup",
-          "how to book a water slide rental",
-        ],
+    keywords: [
+      "water slide rental FAQ",
+      "inflatable water slide questions",
+      "water slide rental cost",
+      "water slide delivery and setup",
+      "how to book a water slide rental",
+    ],
   });
 }
 
@@ -51,7 +41,7 @@ export default async function FaqPage({ params }: Props) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  const data = FAQS[pickLocale(locale)];
+  const data = FAQS;
 
   return (
     <main>
@@ -73,40 +63,30 @@ export default async function FaqPage({ params }: Props) {
             ))}
           </ul>
 
-          {locale !== "fr" ? (
-            <Link
-              href="/answers"
-              className="border-border bg-background hover:border-primary/40 hover:text-primary mt-6 flex items-center justify-between gap-4 rounded-[var(--radius-lg)] border p-5 font-semibold transition-colors"
-            >
-              More questions answered — cost, space, setup, safety & weather
-              <ArrowRight className="text-primary size-5 shrink-0" />
-            </Link>
-          ) : null}
+          <Link
+            href="/answers"
+            className="border-border bg-background hover:border-primary/40 hover:text-primary mt-6 flex items-center justify-between gap-4 rounded-[var(--radius-lg)] border p-5 font-semibold transition-colors"
+          >
+            More questions answered — cost, space, setup, safety & weather
+            <ArrowRight className="text-primary size-5 shrink-0" />
+          </Link>
 
           {/* Conversion CTA — turn high-intent FAQ traffic into bookings. */}
           <div className="border-primary/20 bg-primary/5 mt-8 rounded-[var(--radius-lg)] border p-6 text-center sm:p-8">
             <h2 className="font-display text-2xl font-bold">
-              {locale === "fr"
-                ? "Prêt à réserver votre glissade ?"
-                : "Ready to book your water slide?"}
+              Ready to book your water slide?
             </h2>
             <p className="text-muted-foreground mx-auto mt-2 max-w-lg">
-              {locale === "fr"
-                ? "Vérifiez votre date gratuitement — livraison, installation et reprise incluses."
-                : "Check your date free — delivery, setup & pickup always included."}
+              {
+                "Check your date free — delivery, setup & pickup always included."
+              }
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" variant="gradient">
-                <Link href="/rent">
-                  {locale === "fr"
-                    ? "Vérifier la disponibilité"
-                    : "Check availability"}
-                </Link>
+                <Link href="/rent">Check availability</Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link href="/contact">
-                  {locale === "fr" ? "Obtenir un devis" : "Get a free quote"}
-                </Link>
+                <Link href="/contact">Get a free quote</Link>
               </Button>
             </div>
           </div>

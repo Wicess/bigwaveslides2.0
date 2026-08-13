@@ -22,16 +22,24 @@ const PUBLIC_BASE = (process.env.R2_PUBLIC_URL ?? "").replace(/\/$/, "");
 
 // Verified post-slug → local image file mapping (each image inspected by eye).
 const MAP: Record<string, string> = {
-  "best-inflatable-water-slides-to-buy-2026": "Kids_sliding_on_water_slide_202606290448.jpeg",
-  "commercial-water-slide-buying-guide": "Commercial_water_slide_at_festival_202606290451.jpeg",
-  "residential-vs-commercial-water-slide": "Inflatable_slides_backyard_park_202606290455.jpeg",
-  "clean-dry-store-inflatable-water-slide": "Adult_rinsing_water_slide_202606290458.jpeg",
-  "water-slide-rentals-churches-schools-hoas": "Inflatable_water_slide_church_fair_202606290501.jpeg",
-  "water-slide-season-state-by-state": "Inflatable_water_slide_blue_sky_202606290520.jpeg",
+  "best-inflatable-water-slides-to-buy-2026":
+    "Kids_sliding_on_water_slide_202606290448.jpeg",
+  "commercial-water-slide-buying-guide":
+    "Commercial_water_slide_at_festival_202606290451.jpeg",
+  "residential-vs-commercial-water-slide":
+    "Inflatable_slides_backyard_park_202606290455.jpeg",
+  "clean-dry-store-inflatable-water-slide":
+    "Adult_rinsing_water_slide_202606290458.jpeg",
+  "water-slide-rentals-churches-schools-hoas":
+    "Inflatable_water_slide_church_fair_202606290501.jpeg",
+  "water-slide-season-state-by-state":
+    "Inflatable_water_slide_blue_sky_202606290520.jpeg",
 };
 
 async function upload(slug: string, file: string): Promise<string> {
-  const body = await readFileAsync(path.join(process.cwd(), "images", "Blogs", file));
+  const body = await readFileAsync(
+    path.join(process.cwd(), "images", "Blogs", file),
+  );
   const rand = Math.random().toString(36).slice(2, 8);
   const key = `blog/${Date.now()}-${rand}-${slug}.jpg`;
   await r2.send(
@@ -47,7 +55,10 @@ async function upload(slug: string, file: string): Promise<string> {
 
 async function main() {
   const POSTS = "prisma/blog-posts.json";
-  const posts = JSON.parse(readFileSync(POSTS, "utf8")) as { slug: string; coverImage: string }[];
+  const posts = JSON.parse(readFileSync(POSTS, "utf8")) as {
+    slug: string;
+    coverImage: string;
+  }[];
   for (const [slug, file] of Object.entries(MAP)) {
     const url = await upload(slug, file);
     const post = posts.find((p) => p.slug === slug);

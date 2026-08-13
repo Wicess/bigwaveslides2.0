@@ -30,16 +30,12 @@ type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/about",
-    title: fr
-      ? "À propos — location & vente de glissades d'eau aux États-Unis"
-      : "About Us — Water Slide Rentals & Sales Across the USA",
-    description: fr
-      ? "Spécialistes de la location et de la vente de glissades d'eau gonflables : entièrement assurés, propres et ponctuels pour des fêtes et événements inoubliables partout aux États-Unis."
-      : "Family-run water slide rental and sales specialists — delivered, set up, sanitized, and fully insured in all 50 states from $199/day. Here's who we are and how we work.",
+    title: "About Us — Water Slide Rentals & Sales Across the USA",
+    description:
+      "Family-run water slide rental and sales specialists — delivered, set up, sanitized, and fully insured in all 50 states from $199/day. Here's who we are and how we work.",
     keywords: [
       "water slide rental company",
       "inflatable rental company",

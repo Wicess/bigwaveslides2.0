@@ -28,7 +28,10 @@ const r2 = new S3Client({
 });
 const PUBLIC_BASE = (process.env.R2_PUBLIC_URL ?? "").replace(/\/$/, "");
 
-const L = (en: string, fr: string) => ({ en, fr });
+// French was retired (English-only site) — the second argument is
+// ignored so the hundreds of existing call sites keep compiling while
+// no new `fr` half is ever written to the database.
+const L = (en: string, _fr?: string) => ({ en });
 
 async function uploadImage(slug: string): Promise<string> {
   const body = await readFile(
@@ -48,8 +51,14 @@ async function uploadImage(slug: string): Promise<string> {
 }
 
 const CATEGORIES = [
-  { slug: "backyard-slides", name: L("Backyard slides", "Toboggans de jardin") },
-  { slug: "racing-slides", name: L("Racing & dual-lane", "Course et double couloir") },
+  {
+    slug: "backyard-slides",
+    name: L("Backyard slides", "Toboggans de jardin"),
+  },
+  {
+    slug: "racing-slides",
+    name: L("Racing & dual-lane", "Course et double couloir"),
+  },
   { slug: "tall-slides", name: L("Tall & extreme", "Hauts et extrêmes") },
   { slug: "toddler-slides", name: L("Toddler", "Tout-petits") },
 ];
@@ -59,10 +68,10 @@ type Slide = {
   category: string;
   type: "RENTAL" | "SALE" | "BOTH";
   featured?: boolean;
-  name: { en: string; fr: string };
-  short: { en: string; fr: string };
-  desc: { en: string; fr: string };
-  features: { en: string; fr: string }[];
+  name: { en: string };
+  short: { en: string };
+  desc: { en: string };
+  features: { en: string }[];
   dailyRate?: number;
   sale?: number;
   deposit: number;
@@ -399,7 +408,9 @@ async function main() {
 
     // Primary image (only when we uploaded a fresh one).
     if (url) {
-      await prisma.productMedia.deleteMany({ where: { productId: product.id } });
+      await prisma.productMedia.deleteMany({
+        where: { productId: product.id },
+      });
       await prisma.productMedia.create({
         data: { productId: product.id, url, isPrimary: true, order: 0 },
       });
@@ -407,7 +418,9 @@ async function main() {
 
     // Rental units so rentable slides are bookable.
     if (s.type !== "SALE") {
-      const have = await prisma.rentalUnit.count({ where: { productId: product.id } });
+      const have = await prisma.rentalUnit.count({
+        where: { productId: product.id },
+      });
       for (let u = have; u < 2; u++) {
         await prisma.rentalUnit.create({
           data: { productId: product.id, unitLabel: `${s.slug}-unit-${u + 1}` },

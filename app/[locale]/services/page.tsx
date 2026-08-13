@@ -55,16 +55,12 @@ const CTA_HREF: Record<ServiceCtaKind, string> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
   return buildMetadata({
     locale,
     path: "/services",
-    title: fr
-      ? "Installation, livraison & montage de glissades d'eau"
-      : "Water Slide Installation, Delivery & Setup Services",
-    description: fr
-      ? "Livraison, installation professionnelle, nettoyage et construction sur mesure de glissades d'eau — pour fêtes, événements et parcs aquatiques partout aux États-Unis. Devis gratuit."
-      : "Professional water slide delivery, setup, cleaning and custom builds for parties, events and water parks nationwide. Get a free service quote.",
+    title: "Water Slide Installation, Delivery & Setup Services",
+    description:
+      "Professional water slide delivery, setup, cleaning and custom builds for parties, events and water parks nationwide. Get a free service quote.",
     keywords: [
       "water slide installation",
       "professional water slide installation",

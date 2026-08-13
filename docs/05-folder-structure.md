@@ -5,7 +5,7 @@
 ```
 big-wave-slides/
 ├── app/
-│   ├── [locale]/                     # localized public site (en/fr)
+│   ├── [locale]/                     # public site (en-US only)
 │   │   ├── (marketing)/              # route group: home, about, services, faq, legal
 │   │   │   ├── page.tsx              # Home
 │   │   │   ├── about/page.tsx
@@ -79,7 +79,7 @@ big-wave-slides/
 │   ├── migrations/
 │   └── seed.ts
 │
-├── messages/  en.json  fr.json       # next-intl UI strings
+├── messages/  en.json                # next-intl UI strings
 ├── i18n.ts  middleware.ts            # locale routing + auth middleware
 ├── emails/                           # branded transactional templates
 ├── content/                          # MDX/static where useful

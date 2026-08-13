@@ -34,7 +34,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: getLocalized(category.name, locale) };
 }
 
-export default async function BlogCategoryPage({ params, searchParams }: Props) {
+export default async function BlogCategoryPage({
+  params,
+  searchParams,
+}: Props) {
   const { locale, slug } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
@@ -44,7 +47,10 @@ export default async function BlogCategoryPage({ params, searchParams }: Props) 
 
   const t = await getTranslations("Blog");
   const sp = await searchParams;
-  const page = Math.max(1, Number(Array.isArray(sp.page) ? sp.page[0] : sp.page) || 1);
+  const page = Math.max(
+    1,
+    Number(Array.isArray(sp.page) ? sp.page[0] : sp.page) || 1,
+  );
 
   const [listing, categories, tags] = await Promise.all([
     getPosts({ category: slug, page }),

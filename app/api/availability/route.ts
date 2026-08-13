@@ -37,8 +37,14 @@ export async function GET(request: Request) {
 
   const from = searchParams.get("from") ?? undefined;
   const days = Number(searchParams.get("days")) || 180;
-  const window = await getAvailabilityWindow(productId, from, Math.min(365, days));
+  const window = await getAvailabilityWindow(
+    productId,
+    from,
+    Math.min(365, days),
+  );
   return NextResponse.json(window, {
-    headers: { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" },
+    headers: {
+      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+    },
   });
 }

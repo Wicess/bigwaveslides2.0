@@ -5,7 +5,12 @@ import { getAdminQuote } from "@/server/data/admin";
 import { formatDate } from "@/lib/format";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { QuoteControls } from "@/components/admin/quote-controls";
-import { AdminCard, BackLink, Reveal, SectionTitle } from "@/components/admin/admin-ui";
+import {
+  AdminCard,
+  BackLink,
+  Reveal,
+  SectionTitle,
+} from "@/components/admin/admin-ui";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +29,14 @@ export default async function AdminQuoteDetail({ params }: Props) {
       <Reveal>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="font-mono text-2xl font-bold text-foreground">{quote.quoteNumber}</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-foreground font-mono text-2xl font-bold">
+              {quote.quoteNumber}
+            </h1>
+            <p className="text-muted-foreground text-sm">
               {formatDate(quote.createdAt, "en")} · {quote.context}
             </p>
           </div>
-          <StatusBadge status={quote.status} locale="en" />
+          <StatusBadge status={quote.status} />
         </div>
       </Reveal>
 
@@ -44,11 +51,13 @@ export default async function AdminQuoteDetail({ params }: Props) {
                 <Field label="Phone" value={quote.guestPhone ?? "—"} />
                 <Field
                   label="Event date"
-                  value={quote.eventDate ? formatDate(quote.eventDate, "en") : "—"}
+                  value={
+                    quote.eventDate ? formatDate(quote.eventDate, "en") : "—"
+                  }
                 />
               </div>
               {quote.message ? (
-                <p className="mt-4 whitespace-pre-line rounded-2xl bg-muted/50 p-3.5 text-sm text-foreground/80">
+                <p className="bg-muted/50 text-foreground/80 mt-4 rounded-2xl p-3.5 text-sm whitespace-pre-line">
                   {quote.message}
                 </p>
               ) : null}
@@ -59,10 +68,13 @@ export default async function AdminQuoteDetail({ params }: Props) {
             <Reveal delay={0.1}>
               <AdminCard className="p-6">
                 <SectionTitle icon={Package}>Items</SectionTitle>
-                <ul className="divide-y divide-border/70 text-sm">
+                <ul className="divide-border/70 divide-y text-sm">
                   {quote.items.map((item) => (
-                    <li key={item.id} className="py-2.5 text-foreground/80">
-                      {item.label} <span className="text-muted-foreground">× {item.quantity}</span>
+                    <li key={item.id} className="text-foreground/80 py-2.5">
+                      {item.label}{" "}
+                      <span className="text-muted-foreground">
+                        × {item.quantity}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -90,8 +102,10 @@ export default async function AdminQuoteDetail({ params }: Props) {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className="mt-0.5 text-foreground/80">{value}</p>
+      <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+        {label}
+      </p>
+      <p className="text-foreground/80 mt-0.5">{value}</p>
     </div>
   );
 }
