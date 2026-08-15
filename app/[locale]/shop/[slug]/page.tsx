@@ -375,6 +375,9 @@ export default async function ProductDetailPage({ params }: Props) {
                     added: tp("added"),
                     primary: tp("buyNow"),
                   }}
+                  // Straight to the one-page purchase — the cart is a detour
+                  // for someone buying a single slide.
+                  directHref={`/shop/checkout?product=${product.slug}`}
                 />
               </div>
 

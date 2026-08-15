@@ -342,6 +342,9 @@ export default async function RentalDetailPage({ params }: Props) {
                       added: tp("added"),
                       primary: tp("rentNow"),
                     }}
+                    // Straight to the one-page reservation, where the date is
+                    // checked before anything else is asked for.
+                    directHref={`/rent/checkout?product=${product.slug}`}
                   />
                 </div>
 

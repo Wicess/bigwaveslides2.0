@@ -137,8 +137,11 @@ export function InvoicePayment({
   const [pending, startTransition] = React.useTransition();
   // Pre-select the 50% deposit — the lowest-friction way to lock the date — so
   // an accepted quote lands one tap (pick a method) from paying instead of two.
-  const [chosenPlan, setChosenPlan] = React.useState<PaymentPlan | null>(
-    plan ?? "HALF",
+  // Only the two selectable plans. DELIVERY exists in PaymentPlan for legacy
+  // rows but is not offerable, and `choosePaymentPlan` rejects it — narrowing
+  // here keeps that impossible rather than relying on the action to catch it.
+  const [chosenPlan, setChosenPlan] = React.useState<"HALF" | "FULL" | null>(
+    plan === "HALF" || plan === "FULL" ? plan : "HALF",
   );
   const [method, setMethod] = React.useState<string | null>(methodKey);
 

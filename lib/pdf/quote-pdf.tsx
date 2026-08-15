@@ -10,7 +10,11 @@ import {
 } from "@react-pdf/renderer";
 import { formatPrice } from "@/lib/format";
 import { ANTI_SCAM_HEADING, ANTI_SCAM_BODY } from "@/lib/anti-scam";
-import { amountDueCents, balanceCents } from "@/lib/payment-plan";
+import {
+  amountDueCents,
+  balanceCents,
+  type PaymentPlan,
+} from "@/lib/payment-plan";
 import {
   TRANSPORT_LABEL,
   DEPOSIT_RATE,
@@ -303,7 +307,11 @@ export type QuotePdfInput = {
   /** "Renter" for rental orders, "Buyer" for purchases. Bookings are always Renter. */
   party?: "Renter" | "Buyer";
   /** Chosen payment plan (invoice docs, once picked). */
-  paymentPlan?: "HALF" | "FULL";
+  // Full PaymentPlan, not just the two selectable ones: legacy orders carry
+  // DELIVERY and still get re-rendered here. The block below branches on FULL
+  // and HALF and falls through for anything else, so an old plan prints the
+  // document without a plan line rather than failing to render at all.
+  paymentPlan?: PaymentPlan;
   /** Public page where the client can accept/pay online. */
   onlineUrl?: string;
   /** Manual invoice mode — details are sent by the owner (email/phone/WhatsApp),

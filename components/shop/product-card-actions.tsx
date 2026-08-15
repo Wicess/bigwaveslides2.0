@@ -18,11 +18,22 @@ export function ProductCardActions({
   productId,
   labels,
   mode = "BUY",
+  directHref,
 }: {
   productId: string;
   labels: { add: string; added: string; primary: string };
   /** Buy (sale price) or Rent (daily rate) — sets how the line is priced. */
   mode?: "BUY" | "RENT";
+  /**
+   * Send the primary CTA straight to a single-item checkout instead of routing
+   * through the cart.
+   *
+   * The cart is a detour for someone buying one slide, and it is now
+   * single-mode — a shopper with a rental already in it would be refused at the
+   * add step and never reach checkout at all. When this is set the button
+   * navigates and nothing is added to the cart.
+   */
+  directHref?: string;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -71,14 +82,19 @@ export function ProductCardActions({
         )}
       </Button>
 
-      {/* "Rent now" / "Buy now" both add the item and go straight to the
-          unified checkout where the quote is generated and emailed. */}
+      {/* "Rent now" / "Buy now". With directHref this is a straight navigation
+          to the single-item checkout — no cart round trip. Without it, the old
+          behaviour: add the line, then open the cart checkout. */}
       <Button
         type="button"
         variant="gradient"
         size="sm"
-        loading={pending}
-        onClick={() => add(() => router.push("/checkout"))}
+        loading={pending && !directHref}
+        onClick={() =>
+          directHref
+            ? router.push(directHref)
+            : add(() => router.push("/checkout"))
+        }
         className="w-full gap-1.5"
       >
         {labels.primary} <ArrowRight className="size-4" />

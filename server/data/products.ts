@@ -256,6 +256,9 @@ export async function getRelatedProducts(
       where: {
         status: "ACTIVE",
         type: { in: ["SALE", "BOTH"] },
+        // Mirror of the rental guard: a BOTH product with no sale price is
+        // rental-only, and must never appear on a shop page under "Buy now".
+        salePriceCents: { not: null },
         id: { not: productId },
         ...(categoryId ? { categoryId } : {}),
       },

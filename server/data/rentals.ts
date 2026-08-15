@@ -260,6 +260,10 @@ export async function getRelatedRentals(
       where: {
         status: "ACTIVE",
         type: { in: ["RENTAL", "BOTH"] },
+        // A BOTH product with no daily rate is sale-only in practice. Without
+        // this guard it surfaces on a rental page with a blank price and a
+        // "Rent now" button that leads to a checkout unable to total anything.
+        dailyRateCents: { not: null },
         id: { not: productId },
         ...(categoryId ? { categoryId } : {}),
       },
