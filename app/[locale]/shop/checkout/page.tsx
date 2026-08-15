@@ -3,13 +3,13 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { getRentalBySlug } from "@/server/data/rentals";
+import { getProductBySlug } from "@/server/data/products";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { getLocalized } from "@/lib/localized";
 import { TRANSPORT_CENTS } from "@/lib/checkout-config";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { RentCheckoutForm } from "@/components/checkout/rent-checkout-form";
+import { BuyCheckoutForm } from "@/components/checkout/buy-checkout-form";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -17,26 +17,15 @@ type Props = {
 };
 
 export function generateMetadata(): Metadata {
-  // Per-visitor page — never indexed.
-  return {
-    title: "Reserve your date",
-    robots: { index: false, follow: false },
-  };
+  // Checkout is a private, per-visitor page — never indexed.
+  return { title: "Buy your slide", robots: { index: false, follow: false } };
 }
 
 function one(v: string | string[] | undefined) {
   return Array.isArray(v) ? v[0] : v;
 }
 
-/**
- * Rent Now.
- *
- * Replaces the old quote flow: this page creates the booking outright rather
- * than issuing a quote the client has to come back and accept. There is no
- * summary sidebar — the itemised total lives inside the form, directly above the
- * button, where the client is actually looking when they decide.
- */
-export default async function RentCheckoutPage({
+export default async function ShopCheckoutPage({
   params,
   searchParams,
 }: Props) {
@@ -45,11 +34,12 @@ export default async function RentCheckoutPage({
   setRequestLocale(locale);
 
   const slug = one((await searchParams).product);
-  if (!slug) redirect(`/${locale}/rent`);
+  if (!slug) redirect(`/${locale}/shop`);
 
-  const product = await getRentalBySlug(slug).catch(() => null);
-  // Sale-only products have no daily rate — nothing to rent.
-  if (!product?.dailyRateCents) redirect(`/${locale}/rent`);
+  const product = await getProductBySlug(slug).catch(() => null);
+  // A rental-only product has no sale price — send them to the shop rather than
+  // rendering a checkout that cannot compute a total.
+  if (!product?.salePriceCents) redirect(`/${locale}/shop`);
 
   const settings = await getSettings().catch((): SiteSettings => ({}));
   const transport =
@@ -61,20 +51,19 @@ export default async function RentCheckoutPage({
         <Container className="max-w-2xl">
           <header className="mb-6 text-center">
             <h1 className="font-display text-3xl font-extrabold sm:text-4xl">
-              Reserve your date
+              Buy your slide
             </h1>
             <p className="text-muted-foreground mx-auto mt-3 max-w-xl leading-relaxed">
-              Check your date, tell us where the party is, and lock it in. We
-              verify availability and confirm your booking first. Nothing is
-              charged online.
+              Place your order now — we confirm availability and delivery, then
+              get in touch to finalize your purchase. Nothing is charged online.
             </p>
           </header>
 
-          <RentCheckoutForm
+          <BuyCheckoutForm
             productId={product.id}
             productSlug={product.slug}
             productName={getLocalized(product.name, locale)}
-            dailyRateCents={product.dailyRateCents}
+            unitPriceCents={product.salePriceCents}
             transportCents={transport}
             locale={locale}
             contactEmail={settings.contact?.email ?? null}
