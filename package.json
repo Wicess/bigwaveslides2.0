@@ -19,6 +19,7 @@
     "db:seed-blog": "dotenv -e .env.local -- tsx scripts/seed-blog.ts",
     "db:rebrand-catalog": "dotenv -e .env.local -- tsx scripts/rebrand-catalog.ts",
     "db:retire-dup-posts": "dotenv -e .env.local -- tsx scripts/retire-duplicate-posts.ts",
+    "db:remove-fake-testimonials": "dotenv -e .env.local -- tsx scripts/remove-fake-testimonials.ts",
     "db:sync-ratings": "dotenv -e .env.local -- tsx scripts/sync-product-ratings.ts",
     "db:reclassify-bots": "dotenv -e .env.local -- tsx scripts/reclassify-bots.ts",
     "gen:indexing-urls": "dotenv -e .env.local -- tsx scripts/gen-indexing-urls.ts",
