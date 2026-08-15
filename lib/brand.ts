@@ -62,15 +62,15 @@ export const BRAND_WORDMARK_LIGHT = "/brand/splash-republic-wordmark-light.svg";
  * Absolute logo URL for contexts that cannot resolve a site-relative path:
  * transactional email, the PDF renderer, and the Satori-backed invoice image.
  *
- * TODO — replace with a PNG before sending email at volume. Outlook and several
- * older mobile clients will not render an SVG in an <img>, and a broken logo at
- * the top of an invoice is worse than no logo. Drop a 600px-wide PNG at
- * public/brand/splash-republic-logo.png and point this at it; nothing else has
- * to change. (The previous logo lived in R2 for this reason — but that file is
- * the OTHER company's mark and must not be used here.)
+ * Deliberately the PNG, not the SVG. Outlook and several older mobile clients
+ * will not render an SVG in an <img>, and a broken logo at the top of an
+ * invoice is worse than no logo at all. public/logo-email.png is rasterised
+ * from the same source wordmark, so the two cannot drift.
  */
+export const BRAND_LOGO_RASTER = "/logo-email.png";
+
 export function brandLogoUrl(siteOrigin: string): string {
-  return `${siteOrigin}${BRAND_LOGO}`;
+  return `${siteOrigin}${BRAND_LOGO_RASTER}`;
 }
 
 /**

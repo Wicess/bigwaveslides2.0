@@ -95,8 +95,11 @@ export async function Hero({
             // download it first (high priority) and not block rendering (async).
             fetchPriority="high"
             decoding="async"
-            // Width scales with the viewport (86vw) but never exceeds 720px.
-            className="h-auto w-[min(86vw,720px)]"
+            // Width scales with the viewport but never exceeds 900px. The
+            // wordmark is the brand's only appearance above the fold and the
+            // site is establishing a name nobody recognises yet, so it earns
+            // the extra size. Capped so it still clears the CTAs on a laptop.
+            className="h-auto w-[min(92vw,900px)]"
             // Two drop-shadows: a dark one for depth and a cyan glow so the
             // logo stays readable and on-brand over any background slide.
             style={{
