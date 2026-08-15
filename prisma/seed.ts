@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { randomBytes } from "node:crypto";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pkg from "@prisma/client";
 import type { ProductType } from "@prisma/client";
@@ -128,7 +129,17 @@ async function seedRbac() {
   const superRole = await prisma.role.findUnique({
     where: { name: "Super Admin" },
   });
-  const passwordHash = await bcrypt.hash("BigWave!2026", 10);
+  // Never hardcode a real password here: this file is committed, so anything
+  // written in it is the admin password in plaintext in the repository. Seed
+  // from SEED_ADMIN_PASSWORD, or generate a throwaway and print it once — a
+  // fresh install then starts with a credential that exists nowhere in git.
+  const seedPassword =
+    process.env.SEED_ADMIN_PASSWORD ?? randomBytes(18).toString("base64url");
+  if (!process.env.SEED_ADMIN_PASSWORD) {
+    console.log(`\n  Generated admin password: ${seedPassword}`);
+    console.log("  Save it now — it is not stored anywhere else.\n");
+  }
+  const passwordHash = await bcrypt.hash(seedPassword, 10);
   await prisma.adminUser.upsert({
     where: { email: "admin@splashrep.com" },
     update: { roleId: superRole?.id },
