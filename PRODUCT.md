@@ -1,4 +1,4 @@
-# Big Wave Slides — PRODUCT.md
+# Splash Republic — PRODUCT.md
 
 ## Register
 

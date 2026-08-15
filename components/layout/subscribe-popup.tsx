@@ -53,7 +53,10 @@ export function SubscribePopup({ locale = "en" }: { locale?: string }) {
       } catch {
         // ignore storage errors
       }
-      trackEvent({ type: "NEWSLETTER_SUBSCRIBE", meta: { source: "popup", email } });
+      trackEvent({
+        type: "NEWSLETTER_SUBSCRIBE",
+        meta: { source: "popup", email },
+      });
       setDone(true);
       toast.success("You're in! Your 15% discount is on its way.");
       window.setTimeout(() => setOpen(false), 2600);
@@ -69,21 +72,29 @@ export function SubscribePopup({ locale = "en" }: { locale?: string }) {
       role="dialog"
       aria-label="Subscribe for 15% off"
       className={cn(
-        "fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-border bg-background shadow-[0_24px_60px_-20px_rgba(2,32,71,0.45)]",
+        "border-border bg-background fixed right-4 bottom-4 z-50 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border shadow-[0_24px_60px_-20px_rgba(2,32,71,0.45)]",
         "animate-[wa-pop_0.35s_ease-out]",
       )}
     >
       {/* Gradient header with logo + close */}
-      <div className="relative flex items-center gap-2.5 px-5 pb-4 pt-5 text-white [background:linear-gradient(135deg,#0a1a2f_0%,#0e2742_55%,#0099FF_140%)]">
+      <div className="relative flex items-center gap-2.5 px-5 pt-5 pb-4 text-white [background:linear-gradient(135deg,#0a1a2f_0%,#0e2742_55%,#0099FF_140%)]">
         <span className="grid size-10 place-items-center rounded-xl bg-white/95 p-1.5">
-          <Image src="/logo.png" alt="Big Wave Slides" width={80} height={68} className="h-7 w-auto" />
+          <Image
+            src="/logo.png"
+            alt="Splash Republic"
+            width={80}
+            height={68}
+            className="h-7 w-auto"
+          />
         </span>
-        <span className="font-display text-base font-bold leading-tight">Big Wave Slides</span>
+        <span className="font-display text-base leading-tight font-bold">
+          Splash Republic
+        </span>
         <button
           type="button"
           onClick={() => setOpen(false)}
           aria-label="Close"
-          className="absolute right-2.5 top-2.5 grid size-8 place-items-center rounded-lg text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+          className="absolute top-2.5 right-2.5 grid size-8 place-items-center rounded-lg text-white/80 transition-colors hover:bg-white/15 hover:text-white"
         >
           <X className="size-4.5" />
         </button>
@@ -93,44 +104,49 @@ export function SubscribePopup({ locale = "en" }: { locale?: string }) {
         {done ? (
           <div className="flex items-center gap-3 py-2">
             <CheckCircle2 className="size-8 shrink-0 text-emerald-500" />
-            <p className="text-sm font-medium text-foreground">
-              You&apos;re subscribed! Watch your inbox for your <strong>15% off</strong> code.
+            <p className="text-foreground text-sm font-medium">
+              You&apos;re subscribed! Watch your inbox for your{" "}
+              <strong>15% off</strong> code.
             </p>
           </div>
         ) : (
           <>
-            <div className="flex items-center gap-2 text-primary-700">
+            <div className="text-primary-700 flex items-center gap-2">
               <Sparkles className="size-4" />
-              <span className="text-xs font-bold uppercase tracking-wider">Limited offer</span>
+              <span className="text-xs font-bold tracking-wider uppercase">
+                Limited offer
+              </span>
             </div>
-            <h2 className="mt-1.5 font-display text-xl font-extrabold leading-tight text-foreground">
-              Get <span className="text-primary">15% OFF</span> your first rental
+            <h2 className="font-display text-foreground mt-1.5 text-xl leading-tight font-extrabold">
+              Get <span className="text-primary">15% OFF</span> your first
+              rental
             </h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-              Join our list for exclusive deals, new slides, and party tips. Your discount lands straight in your inbox.
+            <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+              Join our list for exclusive deals, new slides, and party tips.
+              Your discount lands straight in your inbox.
             </p>
 
             <form onSubmit={onSubmit} className="mt-4 space-y-2.5">
-              <div className="flex items-center gap-2 rounded-xl border border-border bg-muted/40 px-3 focus-within:border-primary">
-                <Mail className="size-4 shrink-0 text-muted-foreground" />
+              <div className="border-border bg-muted/40 focus-within:border-primary flex items-center gap-2 rounded-xl border px-3">
+                <Mail className="text-muted-foreground size-4 shrink-0" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
-                  className="w-full bg-transparent py-2.5 text-sm outline-none placeholder:text-muted-foreground"
+                  className="placeholder:text-muted-foreground w-full bg-transparent py-2.5 text-sm outline-none"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-xl bg-primary py-2.5 text-sm font-bold text-white transition-all hover:brightness-110 disabled:opacity-60 [background:linear-gradient(135deg,#0099FF,#00D4FF)]"
+                className="bg-primary w-full rounded-xl py-2.5 text-sm font-bold text-white transition-all [background:linear-gradient(135deg,#0099FF,#00D4FF)] hover:brightness-110 disabled:opacity-60"
               >
                 {loading ? "Subscribing…" : "Claim my 15% off"}
               </button>
             </form>
-            <p className="mt-2.5 text-center text-[11px] text-muted-foreground">
+            <p className="text-muted-foreground mt-2.5 text-center text-[11px]">
               No spam. Unsubscribe anytime.
             </p>
           </>

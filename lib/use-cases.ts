@@ -59,7 +59,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Turn a backyard birthday into the party everyone talks about. We deliver, set up, and pick up a freshly sanitized water slide so you can just enjoy the day.",
     intro:
-      "A birthday water slide is the easiest way to keep a yard full of kids happy for hours. Big Wave Slides delivers commercial-grade inflatable slides right to your home, anchors them safely, and picks them up when the cake's gone — no pumps to haul, no setup stress, no cleanup. You host; we handle the rest.",
+      "A birthday water slide is the easiest way to keep a yard full of kids happy for hours. Splash Republic delivers commercial-grade inflatable slides right to your home, anchors them safely, and picks them up when the cake's gone — no pumps to haul, no setup stress, no cleanup. You host; we handle the rest.",
     keywords: [
       "water slide rental for birthday party",
       "birthday party water slide rental",
@@ -108,7 +108,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Add a thrill to poolside fun with a commercial water slide. Delivered, anchored, and sanitized — the perfect upgrade for summer pool parties.",
     intro:
-      "A pool is great; a pool plus a towering water slide is unforgettable. Big Wave Slides brings the waterpark feel to your pool party with commercial-grade inflatable slides that splash into their own pool or run alongside yours. We deliver, install, and pick up — you just add sunshine and guests.",
+      "A pool is great; a pool plus a towering water slide is unforgettable. Splash Republic brings the waterpark feel to your pool party with commercial-grade inflatable slides that splash into their own pool or run alongside yours. We deliver, install, and pick up — you just add sunshine and guests.",
     keywords: [
       "water slide rental for pool party",
       "pool party water slide rental",
@@ -157,7 +157,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Make field day, end-of-year, or a fundraiser unforgettable. Insured, high-throughput water slides delivered and set up on your school grounds.",
     intro:
-      "Field days, end-of-year celebrations, and school fundraisers run best when kids have something they can't wait to line up for. Big Wave Slides delivers insured, high-capacity water slides to schools, sets them up safely on your grounds, and provides the certificate of insurance many districts require. We handle logistics so your staff can focus on the students.",
+      "Field days, end-of-year celebrations, and school fundraisers run best when kids have something they can't wait to line up for. Splash Republic delivers insured, high-capacity water slides to schools, sets them up safely on your grounds, and provides the certificate of insurance many districts require. We handle logistics so your staff can focus on the students.",
     keywords: [
       "water slide rental for school event",
       "school field day water slide rental",
@@ -206,7 +206,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Draw a crowd to your festival, VBS, or community day with an insured water slide. Delivered, set up, and supervised-ready by our team.",
     intro:
-      "Church festivals, Vacation Bible School, and community outreach days thrive on a great reason to show up. A water slide is exactly that. Big Wave Slides delivers insured, family-friendly slides to your event, sets them up safely, and briefs your volunteers — helping you welcome more families and keep them all afternoon.",
+      "Church festivals, Vacation Bible School, and community outreach days thrive on a great reason to show up. A water slide is exactly that. Splash Republic delivers insured, family-friendly slides to your event, sets them up safely, and briefs your volunteers — helping you welcome more families and keep them all afternoon.",
     keywords: [
       "water slide rental for church event",
       "church festival water slide rental",
@@ -255,7 +255,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Company picnics, team days, and grand openings made memorable. Premium, insured water slides delivered and set up for your corporate event.",
     intro:
-      "A company picnic or team-building day is far more memorable with a water slide as the centerpiece. Big Wave Slides delivers polished, commercial-grade attractions to corporate events, handles full setup and insurance, and keeps everything running smoothly so your team can relax and connect.",
+      "A company picnic or team-building day is far more memorable with a water slide as the centerpiece. Splash Republic delivers polished, commercial-grade attractions to corporate events, handles full setup and insurance, and keeps everything running smoothly so your team can relax and connect.",
     keywords: [
       "water slide rental for corporate event",
       "company picnic water slide rental",
@@ -304,7 +304,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Celebrate the big day with a water slide everyone remembers. Delivered, set up, and sanitized for your graduation party.",
     intro:
-      "Graduation season lands right when the weather turns perfect for a water slide. Big Wave Slides helps you throw a celebration the grad and their friends will be talking about — we deliver a commercial-grade slide, set it up safely, and pick it up after, so you can celebrate instead of working the party.",
+      "Graduation season lands right when the weather turns perfect for a water slide. Splash Republic helps you throw a celebration the grad and their friends will be talking about — we deliver a commercial-grade slide, set it up safely, and pick it up after, so you can celebrate instead of working the party.",
     keywords: [
       "water slide rental for graduation party",
       "graduation party water slide rental",
@@ -353,7 +353,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Bring the block together with a water slide at your HOA pool day or neighborhood block party. Insured, delivered, and set up for the whole community.",
     intro:
-      "Neighborhood block parties and HOA summer events are at their best when there's something for every family. Big Wave Slides delivers insured water slides to your common area or cul-de-sac, sets them up safely, and provides documentation your HOA or community board may need — making it easy to put on an event the whole neighborhood remembers.",
+      "Neighborhood block parties and HOA summer events are at their best when there's something for every family. Splash Republic delivers insured water slides to your common area or cul-de-sac, sets them up safely, and provides documentation your HOA or community board may need — making it easy to put on an event the whole neighborhood remembers.",
     keywords: [
       "water slide rental for HOA event",
       "neighborhood block party water slide rental",
@@ -402,7 +402,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Give campers a day they'll beg to repeat. Insured, age-appropriate water slides delivered and set up at your camp or daycare.",
     intro:
-      "A water slide day is the highlight of any camp or daycare summer. Big Wave Slides delivers insured, age-appropriate slides to camps and childcare centers, sets them up safely, and provides the insurance documentation your program needs — so staff can keep the focus on happy, safe kids.",
+      "A water slide day is the highlight of any camp or daycare summer. Splash Republic delivers insured, age-appropriate slides to camps and childcare centers, sets them up safely, and provides the insurance documentation your program needs — so staff can keep the focus on happy, safe kids.",
     keywords: [
       "water slide rental for summer camp",
       "daycare water slide rental",
@@ -459,7 +459,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Slides, combos and bounce houses for community fall festivals — delivered, set up, and run dry for cool-weather crowds. Book three to four weeks out; October weekends fill first.",
     intro:
-      "A fall festival lives or dies on how long families stay, and an inflatable is the single easiest way to hold a crowd on site for an extra hour. Big Wave Slides delivers commercial-grade slides, combo units and bounce houses to community festivals across the country, sets them up and anchors them, and collects them when the last pumpkin's gone. Every wet slide in our fleet runs perfectly dry in autumn weather — same unit, no hose, no cold kids — so you get the same headline attraction the summer events had. Most festivals book six to seven pieces; tell us your footprint and expected headcount and we'll size the mix for you.",
+      "A fall festival lives or dies on how long families stay, and an inflatable is the single easiest way to hold a crowd on site for an extra hour. Splash Republic delivers commercial-grade slides, combo units and bounce houses to community festivals across the country, sets them up and anchors them, and collects them when the last pumpkin's gone. Every wet slide in our fleet runs perfectly dry in autumn weather — same unit, no hose, no cold kids — so you get the same headline attraction the summer events had. Most festivals book six to seven pieces; tell us your footprint and expected headcount and we'll size the mix for you.",
     keywords: [
       "fall festival inflatable rentals",
       "fall festival rentals",
@@ -527,7 +527,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Bounce houses and dry slides for church and school trunk-or-treats — anchored for asphalt, set up before dusk, and gone before you lock the lot.",
     intro:
-      "Trunk-or-treat is a parking-lot event, and that changes almost everything about how an inflatable gets installed. Big Wave Slides sets up on hard surfaces with ballast rather than stakes, works around the car line rather than through it, and schedules delivery so the unit is inflated and safety-checked before the first family arrives — not while they're queuing. The events are short, usually two to three hours around dusk, so we build the setup and strike window around your actual run time instead of a standard all-day rental.",
+      "Trunk-or-treat is a parking-lot event, and that changes almost everything about how an inflatable gets installed. Splash Republic sets up on hard surfaces with ballast rather than stakes, works around the car line rather than through it, and schedules delivery so the unit is inflated and safety-checked before the first family arrives — not while they're queuing. The events are short, usually two to three hours around dusk, so we build the setup and strike window around your actual run time instead of a standard all-day rental.",
     keywords: [
       "trunk or treat inflatable rentals",
       "trunk or treat bounce house rental",
@@ -595,7 +595,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Inflatables for PTA carnivals, fall field days and school fundraisers — insured for districts, invoiced on a PO, and sized to move a whole grade level.",
     intro:
-      "School events are a throughput problem before they're an entertainment problem: you have a fixed number of minutes and a fixed number of students, and the schedule only works if the line keeps moving. Big Wave Slides supplies dual-lane slides, obstacle courses and multi-play combos chosen for riders-per-hour rather than height, and we handle the paperwork side that PTAs and district offices actually get stuck on — certificates of insurance naming the district, W-9s, and invoicing against a purchase order rather than a card at the door.",
+      "School events are a throughput problem before they're an entertainment problem: you have a fixed number of minutes and a fixed number of students, and the schedule only works if the line keeps moving. Splash Republic supplies dual-lane slides, obstacle courses and multi-play combos chosen for riders-per-hour rather than height, and we handle the paperwork side that PTAs and district offices actually get stuck on — certificates of insurance naming the district, W-9s, and invoicing against a purchase order rather than a card at the door.",
     keywords: [
       "school carnival inflatable rentals",
       "fall field day rentals",
@@ -663,7 +663,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Dry slides, bounce houses and combos for Halloween parties and neighbourhood events — delivered and set up for evening run times, in costume-safe layouts.",
     intro:
-      "Halloween bookings are the tightest of the year: everyone wants the same Friday and Saturday, and there are only two of them. Big Wave Slides delivers commercial-grade inflatables for home, HOA and neighbourhood Halloween parties, set up dry for evening weather and laid out with the specific hazards of the night in mind — costumes, low light, and a crowd that arrives all at once rather than trickling in. If you're holding a party on the weekend before Halloween, the practical deadline to book is late September.",
+      "Halloween bookings are the tightest of the year: everyone wants the same Friday and Saturday, and there are only two of them. Splash Republic delivers commercial-grade inflatables for home, HOA and neighbourhood Halloween parties, set up dry for evening weather and laid out with the specific hazards of the night in mind — costumes, low light, and a crowd that arrives all at once rather than trickling in. If you're holding a party on the weekend before Halloween, the practical deadline to book is late September.",
     keywords: [
       "halloween inflatable rentals",
       "halloween bounce house rental",
@@ -731,7 +731,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Multi-day inflatable rentals for pumpkin patches, corn mazes and harvest weekends — priced by the weekend, installed on uneven farm ground.",
     intro:
-      "Pumpkin patches and harvest festivals don't run for an afternoon; they run for weekends on end, on ground that was a field six weeks ago. That makes them a different rental from a backyard party in almost every respect — the pricing is by the weekend or the season rather than the day, the anchoring has to account for soft and uneven ground, and the unit has to keep working through a month of daily use. Big Wave Slides handles multi-day and multi-weekend placements, and we'll be straight with you about which units hold up to that kind of run and which don't.",
+      "Pumpkin patches and harvest festivals don't run for an afternoon; they run for weekends on end, on ground that was a field six weeks ago. That makes them a different rental from a backyard party in almost every respect — the pricing is by the weekend or the season rather than the day, the anchoring has to account for soft and uneven ground, and the unit has to keep working through a month of daily use. Splash Republic handles multi-day and multi-weekend placements, and we'll be straight with you about which units hold up to that kind of run and which don't.",
     keywords: [
       "harvest festival rentals",
       "pumpkin patch inflatable rentals",
@@ -799,7 +799,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Inflatables for employee appreciation days and company family events — invoiced to the business, insured for your venue, and staffed around a workday schedule.",
     intro:
-      "A company family day has a guest list that runs from toddlers to grandparents, a venue that usually belongs to someone else, and a finance process that needs an invoice rather than a card. Big Wave Slides handles all three. We supply a mix that gives the under-tens somewhere to burn an afternoon and gives the older kids something worth queueing for, we deal directly with venue and facilities teams on insurance and access, and we invoice the business on standard terms with no online payment at any stage.",
+      "A company family day has a guest list that runs from toddlers to grandparents, a venue that usually belongs to someone else, and a finance process that needs an invoice rather than a card. Splash Republic handles all three. We supply a mix that gives the under-tens somewhere to burn an afternoon and gives the older kids something worth queueing for, we deal directly with venue and facilities teams on insurance and access, and we invoice the business on standard terms with no online payment at any stage.",
     keywords: [
       "corporate family day rentals",
       "employee appreciation event rentals",

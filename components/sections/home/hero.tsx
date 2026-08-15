@@ -26,7 +26,11 @@ import {
 // app's /public folder. This keeps the app bundle small and serves big media
 // fast from a CDN. R2 is the base folder URL; we build full URLs from it.
 const R2 = "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/hero";
-const WORDMARK = `${R2}/wordmark.png`;
+// Local SVG, not the old R2 PNG: that PNG is the previous company's wordmark.
+// Light-on-dark variant because this sits over video. Same proportions as the
+// PNG it replaces, so the sizing, glow filter and reveal animation below are
+// unchanged — only the mark itself moved.
+const WORDMARK = "/brand/splash-republic-wordmark-light.svg";
 
 // The background slides shown behind the hero text: one looping video first,
 // then two high-res photos. Passed into <HeroCarousel> below.
@@ -83,10 +87,10 @@ export async function Hero({
               R2; the eslint-disable just silences the next/image suggestion. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={optimizedSrc(WORDMARK, 760)}
-            alt="Big Wave Slides"
-            width={1949}
-            height={741}
+            src={WORDMARK}
+            alt="Splash Republic"
+            width={760}
+            height={290}
             // The logo is the most important visual, so tell the browser to
             // download it first (high priority) and not block rendering (async).
             fetchPriority="high"

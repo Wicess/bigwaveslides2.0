@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 290" role="img" aria-label="Splash Republic">
+  <title>Splash Republic</title>
+  <!-- Light-on-dark variant for the hero, which sits over video. The dark
+       wordmark (splash-republic-logo.svg) is unreadable there. Same proportions
+       as the PNG it replaces, so the hero's existing sizing, glow filter and
+       reveal animation are untouched. -->
+  <defs>
+    <linearGradient id="sr-foam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#7FD4FF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Slide flume mark, centred above the wordmark. -->
+  <g transform="translate(300 8)">
+    <path d="M10 44c34 0 18 52 46 52s16-40 46-40"
+          fill="none" stroke="#FFFFFF" stroke-width="15"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M0 120c14 0 14-10 28-10s14 10 28 10 14-10 28-10 14 10 28 10"
+          fill="none" stroke="#7FD4FF" stroke-width="11" stroke-linecap="round"/>
+    <circle cx="102" cy="66" r="9" fill="#7FD4FF"/>
+  </g>
+
+  <text x="380" y="222" text-anchor="middle"
+        font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        font-size="104" font-weight="800" letter-spacing="-2"
+        fill="url(#sr-foam)">SPLASH</text>
+  <text x="380" y="272" text-anchor="middle"
+        font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        font-size="43" font-weight="600" letter-spacing="19"
+        fill="#FFFFFF">REPUBLIC</text>
+</svg>

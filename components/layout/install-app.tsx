@@ -34,7 +34,7 @@ const INSTALLED_KEY = "bws_pwa_installed";
 const STRINGS = {
   en: {
     install: "Install app",
-    title: "Get the Big Wave Slides app",
+    title: "Get the Splash Republic app",
     subtitle:
       "Add us to your home screen — one tap to browse slides and book your date.",
     iosSteps: [
@@ -246,7 +246,7 @@ export function InstallApp({
               <span className="border-border shrink-0 rounded-2xl border bg-white p-2 shadow-sm">
                 <Image
                   src="/pwa/icon-192.png"
-                  alt="Big Wave Slides app icon"
+                  alt="Splash Republic app icon"
                   width={56}
                   height={56}
                   className="size-14 rounded-xl"

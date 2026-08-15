@@ -45,7 +45,7 @@ import "@fontsource-variable/space-grotesk";
 import "../globals.css";
 
 // Default SEO/social metadata for every page. Individual pages can override
-// pieces of this; the `title.template` wraps page titles as "<page> · Big Wave Slides".
+// pieces of this; the `title.template` wraps page titles as "<page> · Splash Republic".
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     "Rent or buy inflatable water slides anywhere in the USA from $199/day — delivered, set up, sanitized and fully insured. Get a free quote in minutes.",
   openGraph: {
     type: "website",
-    siteName: "Big Wave Slides",
+    siteName: "Splash Republic",
     images: [{ url: "/api/og", width: 1200, height: 630 }],
   },
   twitter: {
@@ -98,7 +98,7 @@ export const metadata: Metadata = {
   // instead of being hidden behind an immersive translucent bar.
   appleWebApp: {
     capable: true,
-    title: "Big Wave Slides",
+    title: "Splash Republic",
     statusBarStyle: "default",
   },
 };

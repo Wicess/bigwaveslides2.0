@@ -14,14 +14,14 @@ export default async function AdminLoginPage() {
         <div className="mb-6 flex flex-col items-center text-center">
           <Image
             src="/logo.png"
-            alt="Big Wave Slides"
+            alt="Splash Republic"
             width={200}
             height={170}
             priority
             className="h-16 w-auto"
           />
           <p className="text-muted-foreground mt-3 text-xs font-bold tracking-[0.18em] uppercase">
-            Big Wave Slides
+            Splash Republic
           </p>
         </div>
         <Card className="p-8">

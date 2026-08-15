@@ -64,10 +64,10 @@ async function main() {
     update: {},
     create: {
       id: "author-bigwave-team",
-      name: "The Big Wave Team",
+      name: "The Splash Republic Team",
       bio: L(
-        "The crew behind Big Wave Slides — water-fun experts who deliver, set up, and sweat the details so your event is effortless.",
-        "L'équipe derrière Big Wave Slides — des experts du plaisir aquatique qui livrent, installent et soignent les détails pour que votre événement soit sans effort.",
+        "The crew behind Splash Republic — water-fun experts who deliver, set up, and sweat the details so your event is effortless.",
+        "L'équipe derrière Splash Republic — des experts du plaisir aquatique qui livrent, installent et soignent les détails pour que votre événement soit sans effort.",
       ),
     },
   });

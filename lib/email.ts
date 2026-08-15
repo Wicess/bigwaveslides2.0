@@ -1,3 +1,5 @@
+import { brandLogoUrl } from "@/lib/brand";
+import { CANONICAL_ORIGIN } from "@/lib/site";
 import "server-only";
 import nodemailer, { type Transporter } from "nodemailer";
 import { env } from "@/lib/env";
@@ -17,7 +19,7 @@ function getTransport(): Transporter | null {
 }
 
 export const FROM =
-  env.SMTP_FROM ?? "Big Wave Slides <contact@bigwavesslides.com>";
+  env.SMTP_FROM ?? "Splash Republic <contact@bigwavesslides.com>";
 
 export type SendResult = { ok: boolean; skipped?: boolean; error?: string };
 
@@ -27,9 +29,9 @@ export type EmailAttachment = { filename: string; content: Buffer };
 function parseFrom(value: string): { name: string; email: string } {
   const match = value.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
   if (match && match[2]) {
-    return { name: match[1] || "Big Wave Slides", email: match[2] };
+    return { name: match[1] || "Splash Republic", email: match[2] };
   }
-  return { name: "Big Wave Slides", email: value.trim() };
+  return { name: "Splash Republic", email: value.trim() };
 }
 
 /** Send via Brevo's transactional API (uses the xkeysib- API key). */
@@ -146,8 +148,7 @@ const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 const CONTACT_EMAIL = "contact@bigwavesslides.com";
 // Hosted on R2 CDN so it renders in email clients independently of site deploys.
-const EMAIL_LOGO =
-  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
+const EMAIL_LOGO = brandLogoUrl(CANONICAL_ORIGIN);
 
 export type EmailRow = { label: string; value: string };
 
@@ -229,7 +230,7 @@ export function renderEmail(opts: {
       <table role="presentation" width="580" cellpadding="0" cellspacing="0" style="max-width:580px;width:100%;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(2,32,71,0.08)">
         <tr><td style="height:5px;line-height:5px;font-size:0;background:linear-gradient(135deg,#0099FF,#00D4FF)">&nbsp;</td></tr>
         <tr><td style="background:#ffffff;padding:26px 32px 18px;border-bottom:1px solid #eef2f7" align="left">
-          <img src="${EMAIL_LOGO}" alt="Big Wave Slides" height="52" style="display:block;height:52px;width:auto;border:0;outline:none" />
+          <img src="${EMAIL_LOGO}" alt="Splash Republic" height="52" style="display:block;height:52px;width:auto;border:0;outline:none" />
         </td></tr>
         <tr><td style="padding:30px 32px">
           <h1 style="margin:0 0 10px;color:#0f172a;font-size:23px;line-height:1.25">${escape(opts.heading)}</h1>
@@ -243,7 +244,7 @@ export function renderEmail(opts: {
           ${opts.outro ? `<p style="margin:18px 0 0;color:#6b7280;font-size:13px;line-height:1.6">${escape(opts.outro)}</p>` : ""}
         </td></tr>
         <tr><td style="padding:22px 32px;background:#f8fafc;border-top:1px solid #eef2f7">
-          <p style="margin:0 0 4px;color:#475569;font-size:13px;font-weight:600">Big Wave Slides</p>
+          <p style="margin:0 0 4px;color:#475569;font-size:13px;font-weight:600">Splash Republic</p>
           <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6">
             <a href="mailto:${CONTACT_EMAIL}" style="color:#0099FF;text-decoration:none">${CONTACT_EMAIL}</a>
             ${

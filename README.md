@@ -1,6 +1,6 @@
-# Big Wave Slides 🌊
+# Splash Republic 🌊
 
-World-class platform for **Big Wave Slides** — a US company that **sells, rents, and installs** water slides and provides **event services** for individuals, organizations, schools, churches, hotels, and municipalities.
+World-class platform for **Splash Republic** — a US company that **sells, rents, and installs** water slides and provides **event services** for individuals, organizations, schools, churches, hotels, and municipalities.
 
 > Goal: a design and experience **superior to** WhiteWaterWest.com, ProSlide.com, Aquarena.com, and Polin.com.tr — ultra-premium, motion-rich, water-inspired, and conversion-focused.
 

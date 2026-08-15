@@ -1,4 +1,4 @@
-# Build Progress — Big Wave Slides
+# Build Progress — Splash Republic
 
 20-phase build. One phase at a time; each phase ends with full code (no placeholders), install commands, testing, deployment verification, an acceptance checklist, and a git commit. **No on-site payments** — request + email model throughout.
 

@@ -6,7 +6,7 @@ import "@fontsource-variable/sora";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Admin · Big Wave Slides", template: "%s · Admin" },
+  title: { default: "Admin · Splash Republic", template: "%s · Admin" },
   robots: { index: false, follow: false },
 };
 

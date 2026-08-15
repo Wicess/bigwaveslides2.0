@@ -1,4 +1,4 @@
-# 🚀 Big Wave Slides — Production Launch Guide
+# 🚀 Splash Republic — Production Launch Guide
 
 Everything needed to take the site live at **https://bigwavesslides.com**.
 Work top to bottom. Most steps are one‑time. Estimated time: **60–90 minutes**
@@ -168,7 +168,7 @@ SMTP_HOST=smtp.hostinger.com
 SMTP_PORT=465
 SMTP_USER=contact@bigwavesslides.com
 SMTP_PASSWORD=‹mailbox password›
-SMTP_FROM=Big Wave Slides <contact@bigwavesslides.com>
+SMTP_FROM=Splash Republic <contact@bigwavesslides.com>
 
 CRON_SECRET=‹paste the openssl value›
 

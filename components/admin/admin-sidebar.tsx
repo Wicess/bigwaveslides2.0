@@ -121,14 +121,14 @@ function NavBody({
         <span className="grid size-9 place-items-center rounded-xl bg-[var(--gradient-wave,#e8741b)] shadow-[var(--shadow-glow)] [background:var(--gradient-wave)]">
           <NextImage
             src="/logo.png"
-            alt="Big Wave Slides"
+            alt="Splash Republic"
             width={120}
             height={102}
             className="h-6 w-auto brightness-0 invert"
           />
         </span>
         <span className="font-display text-foreground text-base font-bold tracking-tight">
-          Big Wave
+          Splash Republic
           <span className="bg-primary-50 text-primary ml-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase">
             Admin
           </span>
@@ -196,7 +196,7 @@ function NavBody({
         >
           <p className="text-primary-800 text-sm font-bold">View storefront</p>
           <p className="text-primary-700/80 mt-0.5 text-xs leading-relaxed">
-            Open the live Big Wave Slides site in a new tab.
+            Open the live Splash Republic site in a new tab.
           </p>
           <span className="text-primary mt-3 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-bold shadow-sm">
             Open site <ArrowUpRight className="size-3.5" />

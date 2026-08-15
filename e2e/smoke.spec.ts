@@ -7,7 +7,7 @@ import { test, expect } from "@playwright/test";
  */
 test("home page loads", async ({ page }) => {
   await page.goto("/en");
-  await expect(page).toHaveTitle(/Big Wave/i);
+  await expect(page).toHaveTitle(/Splash Republic/i);
   await page.screenshot({
     path: `e2e/__screenshots__/home-${test.info().project.name}.png`,
     fullPage: true,

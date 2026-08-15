@@ -133,7 +133,7 @@ async function seedRbac() {
     where: { email: "admin@bigwavesslides.com" },
     update: { roleId: superRole?.id },
     create: {
-      name: "Big Wave Admin",
+      name: "Splash Republic Admin",
       email: "admin@bigwavesslides.com",
       passwordHash,
       roleId: superRole?.id,
@@ -617,10 +617,10 @@ async function seedBlog() {
     update: {},
     create: {
       id: "author-bigwave-team",
-      name: "The Big Wave Team",
+      name: "The Splash Republic Team",
       bio: L(
-        "The crew behind Big Wave Slides — water-fun experts who deliver, set up, and sweat the details so your event is effortless.",
-        "L'équipe derrière Big Wave Slides — des experts du plaisir aquatique qui livrent, installent et soignent les détails pour que votre événement soit sans effort.",
+        "The crew behind Splash Republic — water-fun experts who deliver, set up, and sweat the details so your event is effortless.",
+        "L'équipe derrière Splash Republic — des experts du plaisir aquatique qui livrent, installent et soignent les détails pour que votre événement soit sans effort.",
       ),
       avatar: img("author-team"),
     },
@@ -701,8 +701,8 @@ async function seedEvents() {
     {
       slug: "big-wave-community-day-2025",
       title: L(
-        "Big Wave Community Day 2025",
-        "Journée communautaire Big Wave 2025",
+        "Splash Republic Community Day 2025",
+        "Journée communautaire Splash Republic 2025",
       ),
       excerpt: L(
         "Last year's free neighborhood splash day.",
@@ -800,7 +800,7 @@ async function seedSettings() {
 }
 
 async function main() {
-  console.log("🌊 Seeding Big Wave Slides…");
+  console.log("🌊 Seeding Splash Republic…");
   await seedRbac();
   const categories = await seedCategories();
   await seedProducts(categories);

@@ -4,8 +4,8 @@ import type { MetadataRoute } from "next";
 // /manifest.webmanifest and links it from every page automatically.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Big Wave Slides — Water Slide Rentals",
-    short_name: "Big Wave",
+    name: "Splash Republic — Water Slide Rentals",
+    short_name: "Splash Republic",
     description:
       "Rent premium inflatable water slides & bounce houses — delivered, set up, sanitized & fully insured, nationwide.",
     id: "/",

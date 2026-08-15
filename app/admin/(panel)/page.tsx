@@ -131,7 +131,7 @@ export default async function AdminDashboard() {
             />
             <div className="relative">
               <p className="flex items-center gap-2 text-xs font-semibold tracking-wider text-white/70 uppercase">
-                <Sparkles className="size-4" /> Big Wave Slides
+                <Sparkles className="size-4" /> Splash Republic
               </p>
               <h2 className="font-display mt-2 text-xl leading-tight font-bold">
                 Run your rentals with confidence

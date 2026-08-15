@@ -64,7 +64,7 @@ export default async function UseCasesHubPage({ params }: Props) {
           <Reveal className="max-w-3xl">
             <p className="text-muted-foreground text-lg leading-relaxed">
               From fall festivals and trunk-or-treats to backyard birthdays and
-              company picnics, Big Wave Slides has a fully-insured inflatable
+              company picnics, Splash Republic has a fully-insured inflatable
               sized for your event — delivered and set up anywhere in the
               country. Every slide runs wet in summer and dry in cooler months,
               so the same unit works in October as in July.

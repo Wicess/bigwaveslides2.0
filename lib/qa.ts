@@ -20,7 +20,7 @@ export const QA_CATEGORIES: QACategory[] = [
       },
       {
         q: "What is included in the water slide rental price?",
-        a: "Every Big Wave Slides rental includes delivery, professional setup and anchoring, sanitizing before drop-off, full insurance, and end-of-event pickup. You only provide the space, a water hookup, and power. There is nothing to haul, install, or clean up yourself.",
+        a: "Every Splash Republic rental includes delivery, professional setup and anchoring, sanitizing before drop-off, full insurance, and end-of-event pickup. You only provide the space, a water hookup, and power. There is nothing to haul, install, or clean up yourself.",
       },
       {
         q: "How much are delivery fees for a water slide rental?",
@@ -28,11 +28,11 @@ export const QA_CATEGORIES: QACategory[] = [
       },
       {
         q: "Do I pay online to book a water slide?",
-        a: "No. Big Wave Slides is quote-based with no online checkout. You request a free quote, we confirm your date, delivery window, and exact price, and payment is arranged directly with our team. No card is charged on the website.",
+        a: "No. Splash Republic is quote-based with no online checkout. You request a free quote, we confirm your date, delivery window, and exact price, and payment is arranged directly with our team. No card is charged on the website.",
       },
       {
         q: "Is it cheaper to rent or buy an inflatable water slide?",
-        a: "For one-off events, renting is far cheaper — from $199 per day, all-inclusive, versus thousands to buy. Buying a commercial unit makes sense only if you host very often or run a rental business. Big Wave Slides offers both: rentals nationwide and commercial inflatables for sale.",
+        a: "For one-off events, renting is far cheaper — from $199 per day, all-inclusive, versus thousands to buy. Buying a commercial unit makes sense only if you host very often or run a rental business. Splash Republic offers both: rentals nationwide and commercial inflatables for sale.",
       },
     ],
   },
@@ -50,7 +50,7 @@ export const QA_CATEGORIES: QACategory[] = [
       },
       {
         q: "What areas do you deliver water slides to?",
-        a: "Big Wave Slides delivers, sets up, and picks up in all 50 U.S. states. Whether it is a backyard, park, school, church, or community venue, we bring the equipment to you and handle installation and pickup nationwide.",
+        a: "Splash Republic delivers, sets up, and picks up in all 50 U.S. states. Whether it is a backyard, park, school, church, or community venue, we bring the equipment to you and handle installation and pickup nationwide.",
       },
       {
         q: "Can you deliver a water slide to a park or public venue?",
@@ -90,7 +90,7 @@ export const QA_CATEGORIES: QACategory[] = [
     items: [
       {
         q: "Are inflatable water slides safe?",
-        a: "Yes, when properly anchored and supervised. Every Big Wave Slides unit is commercial-grade, sanitized, fully insured, and installed by a trained crew with a safety check. For safe use, an adult should supervise riders and follow the posted rider limits.",
+        a: "Yes, when properly anchored and supervised. Every Splash Republic unit is commercial-grade, sanitized, fully insured, and installed by a trained crew with a safety check. For safe use, an adult should supervise riders and follow the posted rider limits.",
       },
       {
         q: "Do you clean and sanitize the water slides?",

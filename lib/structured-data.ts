@@ -1,7 +1,7 @@
 import { env } from "@/lib/env";
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const NAME = "Big Wave Slides";
+const NAME = "Splash Republic";
 // Real business facts (match lib/email.ts + site settings) — shown in rich
 // results, so keep them in lockstep with the NAP used everywhere else. The
 // phone deliberately has no constant here: it comes from Settings → Contact so

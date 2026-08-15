@@ -20,7 +20,7 @@
 ```
 ┌─ HERO ───────────────────────────────────────────────────────┐
 │  [ Looping video bg + animated SVG/R3F waves + parallax ]     │
-│  KINETIC HEADLINE: "Ride the Big Wave"                        │
+│  KINETIC HEADLINE: "Ride the Splash Republic"                        │
 │  Subcopy. [ Shop Slides ]  [ Rent for Your Event ]            │
 │  ▸ mini "check your date" widget (date → availability)        │
 └──────────────────────────────────────────────────────────────┘

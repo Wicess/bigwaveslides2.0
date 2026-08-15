@@ -44,7 +44,7 @@ const REGIONS = ["Northeast", "Midwest", "South", "West"] as const;
 const FAQS = [
   {
     q: "Do you rent water slides near me?",
-    a: "Very likely — Big Wave Slides delivers to 50+ major U.S. metros and serves all 50 states. Pick your city below (or search your date on the rent page) to see local availability, delivery details, and pricing.",
+    a: "Very likely — Splash Republic delivers to 50+ major U.S. metros and serves all 50 states. Pick your city below (or search your date on the rent page) to see local availability, delivery details, and pricing.",
   },
   {
     q: "How much does it cost to rent a water slide?",
@@ -130,7 +130,7 @@ export default async function LocationsHubPage({ params }: Props) {
         <Container className="max-w-[84rem]">
           <Reveal className="max-w-3xl">
             <p className="text-muted-foreground text-lg leading-relaxed">
-              Looking for a water slide rental near you? Big Wave Slides
+              Looking for a water slide rental near you? Splash Republic
               delivers to 50+ major metros and every U.S. state —
               commercial-grade slides, delivered, set up, sanitized, and fully
               insured. Pick your city below or check your date to book in under

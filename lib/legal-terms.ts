@@ -9,7 +9,7 @@ export type Clause = { t: string; b: string };
 export const RENTAL_TERMS: Clause[] = [
   {
     t: "Agreement & validity.",
-    b: 'This Rental Invoice & Agreement becomes binding once signed by the Renter and accepted by Big Wave Slides (the "Company"). This document is the final invoice for the rental — no separate invoice will be issued. Equipment is supplied for the stated rental period only and may not be extended without written approval.',
+    b: 'This Rental Invoice & Agreement becomes binding once signed by the Renter and accepted by Splash Republic (the "Company"). This document is the final invoice for the rental — no separate invoice will be issued. Equipment is supplied for the stated rental period only and may not be extended without written approval.',
   },
   {
     t: "Fees & refundable deposit.",
@@ -40,7 +40,7 @@ export const RENTAL_TERMS: Clause[] = [
 export const orderTerms = (party: string): Clause[] => [
   {
     t: "Agreement & validity.",
-    b: `This Invoice becomes a binding order once signed by the ${party} and accepted by Big Wave Slides. This document is the final invoice for the order — no separate invoice will be issued. Applicable taxes and delivery, where relevant, are itemized above.`,
+    b: `This Invoice becomes a binding order once signed by the ${party} and accepted by Splash Republic. This document is the final invoice for the order — no separate invoice will be issued. Applicable taxes and delivery, where relevant, are itemized above.`,
   },
   {
     t: "Payment.",

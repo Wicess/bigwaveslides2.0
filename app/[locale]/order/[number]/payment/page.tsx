@@ -1,3 +1,5 @@
+import { brandLogoUrl } from "@/lib/brand";
+import { CANONICAL_ORIGIN } from "@/lib/site";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
@@ -18,8 +20,7 @@ import { PendingOrderFlag } from "@/components/order/pending-order-flag";
 import { ClaimAccount } from "@/components/order/claim-account";
 import { PaymentTrust } from "@/components/order/payment-trust";
 
-const LOGO =
-  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
+const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
 const CONTACT_EMAIL = "contact@bigwavesslides.com";
 
 // Live payment page — never serve it from the Full Route Cache.
@@ -30,7 +31,7 @@ type Props = { params: Promise<{ locale: string; number: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { number } = await params;
   return {
-    title: `Secure payment ${number} — Big Wave Slides`,
+    title: `Secure payment ${number} — Splash Republic`,
     robots: { index: false, follow: false },
   };
 }
@@ -105,7 +106,7 @@ export default async function PaymentPage({ params }: Props) {
             <div className="flex items-center justify-between gap-4">
               <Image
                 src={LOGO}
-                alt="Big Wave Slides"
+                alt="Splash Republic"
                 width={200}
                 height={100}
                 className="h-10 w-auto brightness-0 invert"

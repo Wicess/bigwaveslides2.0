@@ -1,3 +1,5 @@
+import { brandLogoUrl } from "@/lib/brand";
+import { CANONICAL_ORIGIN } from "@/lib/site";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
@@ -26,8 +28,7 @@ import { PendingOrderFlag } from "@/components/order/pending-order-flag";
 import { ClaimAccount } from "@/components/order/claim-account";
 import { cn } from "@/lib/utils";
 
-const LOGO =
-  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
+const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
 const CONTACT_EMAIL = "contact@bigwavesslides.com";
 
 // Live order-status page — never serve it from the Full Route Cache.
@@ -38,7 +39,7 @@ type Props = { params: Promise<{ locale: string; number: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { number } = await params;
   return {
-    title: `Order ${number} — Big Wave Slides`,
+    title: `Order ${number} — Splash Republic`,
     robots: { index: false, follow: false },
   };
 }
@@ -180,7 +181,7 @@ export default async function OrderFlowPage({ params }: Props) {
           <header className="flex items-center justify-between gap-4 px-6 pt-6 sm:px-10 sm:pt-8">
             <Image
               src={LOGO}
-              alt="Big Wave Slides"
+              alt="Splash Republic"
               width={220}
               height={110}
               className="h-12 w-auto sm:h-14"
@@ -473,7 +474,7 @@ export default async function OrderFlowPage({ params }: Props) {
           </div>
 
           <footer className="border-border text-muted-foreground border-t px-6 py-4 text-center text-xs sm:px-10">
-            Big Wave Slides · {CONTACT_EMAIL}
+            Splash Republic · {CONTACT_EMAIL}
             {contactPhone ? ` · ${contactPhone}` : ""}
           </footer>
         </article>

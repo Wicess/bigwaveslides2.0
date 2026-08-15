@@ -10,6 +10,6 @@ export const ANTI_SCAM_SHORT =
   "Only ever pay using the details on this page or emailed from contact@bigwavesslides.com. Unsure? Call +1 (614) 302-5899 first.";
 
 export const ANTI_SCAM_BODY =
-  "Before paying, make sure the Big Wave Slides logo is on the invoice you are paying — we have had reports of our brand and images being used by impostors. " +
+  "Before paying, make sure the Splash Republic logo is on the invoice you are paying — we have had reports of our brand and images being used by impostors. " +
   "The only money we will ever ask from you is your deposit and your completion (balance) fee, using the payment details shown on your secure invoice page or sent from contact@bigwavesslides.com. " +
   "If anything looks off, call us at +1 (614) 302-5899 before sending any money.";

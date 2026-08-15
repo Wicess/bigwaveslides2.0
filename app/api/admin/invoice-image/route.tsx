@@ -1,3 +1,5 @@
+import { brandLogoUrl } from "@/lib/brand";
+import { CANONICAL_ORIGIN } from "@/lib/site";
 import { ImageResponse } from "next/og";
 import { getAdminSession } from "@/lib/admin-auth";
 import {
@@ -9,8 +11,7 @@ import {
 // Satori (the renderer behind ImageResponse) needs a real Node runtime here.
 export const runtime = "nodejs";
 
-const LOGO =
-  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
+const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
 
 /**
  * Invoice PNG the owner sends straight to a client — WhatsApp, SMS, email.

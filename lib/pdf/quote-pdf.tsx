@@ -9,6 +9,8 @@ import {
   renderToBuffer,
 } from "@react-pdf/renderer";
 import { formatPrice } from "@/lib/format";
+import { brandLogoUrl } from "@/lib/brand";
+import { CANONICAL_ORIGIN } from "@/lib/site";
 import { ANTI_SCAM_HEADING, ANTI_SCAM_BODY } from "@/lib/anti-scam";
 import {
   amountDueCents,
@@ -27,8 +29,7 @@ import {
   SETUP_REQUIREMENTS,
 } from "@/lib/legal-terms";
 
-const LOGO =
-  "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/brand/logo-email.png";
+const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
 const CONTACT_EMAIL = "contact@bigwavesslides.com";
 const CONTACT_PHONE = "+1 (614) 302-5899";
 const SITE = "bigwavesslides.com";
@@ -389,8 +390,8 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
 
   return (
     <Document
-      title={`Big Wave Slides ${isQuote ? "Quote" : "Invoice"} ${input.number}`}
-      author="Big Wave Slides"
+      title={`Splash Republic ${isQuote ? "Quote" : "Invoice"} ${input.number}`}
+      author="Splash Republic"
       subject={docTitle}
     >
       <Page size="A4" style={s.page}>
@@ -399,7 +400,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
         <View style={s.headerRow}>
           <Image src={LOGO} style={s.logo} />
           <View style={s.brandRight}>
-            <Text style={s.brandName}>Big Wave Slides</Text>
+            <Text style={s.brandName}>Splash Republic</Text>
             <Text>Big waves, bigger smiles.</Text>
             <Text>{CONTACT_EMAIL}</Text>
             <Text>{CONTACT_PHONE}</Text>
@@ -750,9 +751,9 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
               </View>
               <View style={s.signCol}>
                 <Text style={[s.label, { marginBottom: 4 }]}>
-                  For Big Wave Slides
+                  For Splash Republic
                 </Text>
-                <Text style={s.signName}>Big Wave Slides</Text>
+                <Text style={s.signName}>Splash Republic</Text>
                 <View style={s.signLineRow}>
                   <View style={s.signLineWide} />
                   <View style={s.signLineDate} />
@@ -784,7 +785,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
 
         <View style={s.footer} fixed>
           <Text>
-            Big Wave Slides · {CONTACT_EMAIL} · {CONTACT_PHONE}
+            Splash Republic · {CONTACT_EMAIL} · {CONTACT_PHONE}
           </Text>
           <Text
             render={({ pageNumber, totalPages }) =>

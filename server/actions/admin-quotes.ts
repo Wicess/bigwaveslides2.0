@@ -168,7 +168,7 @@ export async function createAdminQuote(
     if (d.emailClient) {
       const res = await sendEmail({
         to: d.email,
-        subject: `Your invoice ${number} — Big Wave Slides`,
+        subject: `Your invoice ${number} — Splash Republic`,
         html: renderEmail({
           heading: "Your invoice is ready",
           intro: `Hi ${d.name}, thanks for reaching out! Your invoice ${number} is attached as a PDF — this is the only invoice you'll receive. Sign it, tick your preferred payment method, and reply to this email to confirm.`,

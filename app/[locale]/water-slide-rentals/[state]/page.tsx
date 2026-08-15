@@ -119,7 +119,7 @@ export default async function StateRentalPage({ params }: Props) {
   const faqs = [
     {
       q: `Do you deliver water slides anywhere in ${loc.name}?`,
-      a: `Yes — Big Wave Slides delivers, sets up, and picks up across ${loc.name}, including ${cityList}. Tell us your venue and date and we'll confirm delivery in your free quote.`,
+      a: `Yes — Splash Republic delivers, sets up, and picks up across ${loc.name}, including ${cityList}. Tell us your venue and date and we'll confirm delivery in your free quote.`,
     },
     {
       q: `How much does a water slide rental cost in ${loc.name}?`,
@@ -192,8 +192,8 @@ export default async function StateRentalPage({ params }: Props) {
             <div className="lg:col-span-7">
               <Reveal>
                 <p className="text-muted-foreground text-lg leading-relaxed">
-                  Looking for a water slide rental in {loc.name}? Big Wave
-                  Slides brings the waterpark to you — anywhere in the{" "}
+                  Looking for a water slide rental in {loc.name}? Splash
+                  Republic Slides brings the waterpark to you — anywhere in the{" "}
                   {loc.region}, from {loc.cities[0]} to{" "}
                   {loc.cities[loc.cities.length - 1]}. We deliver premium,
                   freshly sanitized inflatable slides, set them up safely, and

@@ -3,7 +3,7 @@ import { defineRouting } from "next-intl/routing";
 /**
  * The site is English (en-US) only.
  *
- * It shipped bilingual (en + fr), but Big Wave Slides sells and delivers in the
+ * It shipped bilingual (en + fr), but Splash Republic sells and delivers in the
  * United States alone, so the French half could not convert anyone — it just
  * doubled the number of URLs Google had to crawl on a young domain. It was
  * removed on 2026-08-13; `middleware.ts` 301s every old `/fr/*` URL to its

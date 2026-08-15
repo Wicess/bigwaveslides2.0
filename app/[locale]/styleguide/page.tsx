@@ -95,7 +95,7 @@ export default async function StyleguidePage({ params }: Props) {
             <Badge variant="primary">Phase 3 · Design System</Badge>
             <KineticText
               as="h1"
-              text="The Big Wave design language"
+              text="The Splash Republic design language"
               className="mt-4 block text-4xl leading-[1.05] font-bold sm:text-5xl lg:text-6xl"
             />
             <p className="text-muted-foreground mt-5 max-w-prose text-lg">
@@ -419,7 +419,7 @@ export default async function StyleguidePage({ params }: Props) {
           </div>
           <KineticText
             as="p"
-            text="Ride the Big Wave — world class, every pixel."
+            text="Ride the Splash Republic — world class, every pixel."
             className="mt-10 block text-3xl font-bold sm:text-4xl"
           />
         </Container>

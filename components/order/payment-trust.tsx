@@ -166,7 +166,7 @@ export async function PaymentTrust({ locale }: { locale: string }) {
         <div className="border-border/70 mt-6 flex flex-wrap items-center gap-x-5 gap-y-1.5 border-t pt-5 text-xs">
           <span className="text-foreground inline-flex items-center gap-1.5 font-semibold">
             <Building2 className="text-primary size-3.5" />
-            Big Wave Slides
+            Splash Republic
           </span>
           <span className="text-muted-foreground">{t("businessNote")}</span>
         </div>

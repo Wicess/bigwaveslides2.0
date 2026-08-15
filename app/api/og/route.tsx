@@ -27,7 +27,7 @@ function clamp(v: string | null, max: number): string {
 
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = clamp(searchParams.get("title"), 110) || "Big Wave Slides";
+  const title = clamp(searchParams.get("title"), 110) || "Splash Republic";
   const eyebrow = clamp(searchParams.get("eyebrow"), 42);
   const subtitle =
     clamp(searchParams.get("subtitle"), 120) ||

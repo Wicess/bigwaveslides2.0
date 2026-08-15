@@ -64,7 +64,7 @@ export default async function AppInstallsPage() {
       <AdminPageHeader
         eyebrow="Insights"
         title="App installs"
-        description="Everyone who installed the Big Wave Slides app (PWA), with the location and IP address they installed from. Installers earn the extra 5% app discount at checkout."
+        description="Everyone who installed the Splash Republic app (PWA), with the location and IP address they installed from. Installers earn the extra 5% app discount at checkout."
       />
 
       <Toolbar>

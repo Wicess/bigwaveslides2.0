@@ -68,11 +68,11 @@ const pick = <T>(arr: readonly T[], seed: number): T =>
 // ── Opening paragraphs ───────────────────────────────────────────────────────
 const INTROS: readonly ((place: string, wider: string) => string)[] = [
   (place, wider) =>
-    `Booking a bounce house in ${place}? Big Wave Slides delivers commercial-grade bouncers and bounce-and-slide combos across ${wider}, anchors them properly, and collects them when the party winds down. Because they run dry, they work indoors and out — a church hall in February books as easily as a back garden in July.`,
+    `Booking a bounce house in ${place}? Splash Republic delivers commercial-grade bouncers and bounce-and-slide combos across ${wider}, anchors them properly, and collects them when the party winds down. Because they run dry, they work indoors and out — a church hall in February books as easily as a back garden in July.`,
   (place, wider) =>
     `A bounce house is the one rental that keeps toddlers and ten-year-olds equally busy, which is what makes it such a dependable pick for ${place} parties. Every castle, combo and themed bouncer travels across ${wider} cleaned, anchored by a trained crew, and fully insured — you supply the space and an outlet, we handle the rest.`,
   (place, wider) =>
-    `From first birthdays to school field days, Big Wave Slides sets up inflatable bounce houses right across ${place} and the wider ${wider} area. Pick a themed castle for the little ones or a combo unit that pairs bouncing with a slide, and we'll deliver, install and pick up — no pumps to haul and nothing to clean afterwards.`,
+    `From first birthdays to school field days, Splash Republic sets up inflatable bounce houses right across ${place} and the wider ${wider} area. Pick a themed castle for the little ones or a combo unit that pairs bouncing with a slide, and we'll deliver, install and pick up — no pumps to haul and nothing to clean afterwards.`,
   (place, wider) =>
     `Bounce house rentals in ${place} are our year-round staple: no hose, no swimsuits, and no waiting for warm weather. We bring the unit anywhere in ${wider}, stake or sandbag it to the ground, walk you through the safety rules, and return to pack it away — so the only thing you plan is the cake.`,
 ];
@@ -129,7 +129,7 @@ const CORE_FAQS: readonly ((place: string) => BounceFaq)[] = [
   }),
   (place) => ({
     q: `Are your bounce houses cleaned and insured?`,
-    a: `Every unit is cleaned and sanitized before it leaves for your event, and Big Wave Slides carries full commercial liability insurance. If your ${place} venue, school or park district needs a certificate of insurance naming them as additional insured, tell us when you book and we'll send it ahead of the date.`,
+    a: `Every unit is cleaned and sanitized before it leaves for your event, and Splash Republic carries full commercial liability insurance. If your ${place} venue, school or park district needs a certificate of insurance naming them as additional insured, tell us when you book and we'll send it ahead of the date.`,
   }),
   () => ({
     q: `What's the difference between a bounce house and a combo unit?`,

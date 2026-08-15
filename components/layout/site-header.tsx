@@ -80,7 +80,7 @@ export function SiteHeader({ locale, data }: Props) {
           <div className="flex items-center gap-5">
             <Link
               href="/"
-              aria-label="Big Wave Slides — home"
+              aria-label="Splash Republic — home"
               className="flex shrink-0 items-center gap-2.5"
             >
               <Image
@@ -92,14 +92,14 @@ export function SiteHeader({ locale, data }: Props) {
                 priority
                 className="h-10 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] sm:h-12"
               />
-              {/* Redundant with the logo image (which already reads "Big Wave
+              {/* Redundant with the logo image (which already reads "Splash Republic
                   Slides") — hidden on narrow phones so the crowded action row
                   never overflows and collides with the logo. */}
               <span
                 aria-hidden
                 className="font-brand hidden text-[1.65rem] font-bold tracking-[-0.01em] text-white min-[430px]:inline"
               >
-                BWS
+                SR
               </span>
             </Link>
 
@@ -576,7 +576,7 @@ function MobileMenu({
           <Link
             href="/"
             onClick={onClose}
-            aria-label="Big Wave Slides — home"
+            aria-label="Splash Republic — home"
             className="flex items-center gap-2.5"
           >
             <Image
@@ -591,7 +591,7 @@ function MobileMenu({
               aria-hidden
               className="font-brand text-foreground text-xl font-bold tracking-[-0.01em]"
             >
-              BWS
+              SR
             </span>
           </Link>
           <button

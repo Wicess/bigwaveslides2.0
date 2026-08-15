@@ -7,7 +7,7 @@ export type Faq = { q: string; a: string };
 export const PRIVACY: { title: string; intro: string; sections: Section[] } = {
   title: "Privacy Policy",
   intro:
-    "This policy explains what information Big Wave Slides collects, how we use it, and your choices. We never take payment online — requests are handled by our team.",
+    "This policy explains what information Splash Republic collects, how we use it, and your choices. We never take payment online — requests are handled by our team.",
   sections: [
     {
       heading: "Information we collect",
@@ -43,7 +43,7 @@ export const PRIVACY: { title: string; intro: string; sections: Section[] } = {
 export const TERMS: { title: string; intro: string; sections: Section[] } = {
   title: "Terms of Service",
   intro:
-    "These terms govern your use of the Big Wave Slides website and our request-based ordering, rental, and event services.",
+    "These terms govern your use of the Splash Republic website and our request-based ordering, rental, and event services.",
   sections: [
     {
       heading: "Request-based model",
@@ -67,11 +67,11 @@ export const TERMS: { title: string; intro: string; sections: Section[] } = {
     },
     {
       heading: "Intellectual property",
-      body: "All site content, branding, and imagery are owned by Big Wave Slides or its licensors and may not be reused without permission.",
+      body: "All site content, branding, and imagery are owned by Splash Republic or its licensors and may not be reused without permission.",
     },
     {
       heading: "Limitation of liability",
-      body: "To the extent permitted by law, Big Wave Slides is not liable for indirect or consequential damages arising from use of the site or services.",
+      body: "To the extent permitted by law, Splash Republic is not liable for indirect or consequential damages arising from use of the site or services.",
     },
     {
       heading: "Changes",
@@ -83,7 +83,7 @@ export const TERMS: { title: string; intro: string; sections: Section[] } = {
 export const FAQS: { title: string; intro: string; items: Faq[] } = {
   title: "Frequently asked questions",
   intro:
-    "Everything you need to know about renting, buying, and booking with Big Wave Slides.",
+    "Everything you need to know about renting, buying, and booking with Splash Republic.",
   items: [
     {
       q: "Do I pay online?",

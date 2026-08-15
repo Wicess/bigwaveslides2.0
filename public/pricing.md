@@ -1,6 +1,6 @@
-# Pricing — Big Wave Slides
+# Pricing — Splash Republic
 
-Big Wave Slides rents commercial-grade inflatable water slides, bounce houses, and combo units across all 50 U.S. states, and sells commercial units. Rental pricing is per day and confirmed with a free quote. Every rental includes delivery, professional setup and anchoring, sanitizing, full insurance, and pickup. There is no online payment — request a quote and the team confirms your date and exact price.
+Splash Republic rents commercial-grade inflatable water slides, bounce houses, and combo units across all 50 U.S. states, and sells commercial units. Rental pricing is per day and confirmed with a free quote. Every rental includes delivery, professional setup and anchoring, sanitizing, full insurance, and pickup. There is no online payment — request a quote and the team confirms your date and exact price.
 
 ## Rental pricing (per day)
 
@@ -49,4 +49,4 @@ Request a quote: https://www.bigwavesslides.com/en/contact
 - Headquarters: Dallas, Texas
 - Currency: USD
 
-_Prices are typical ranges in U.S. dollars, confirmed per booking via a free quote. Big Wave Slides operates in the United States only (all 50 states). Last updated: 2026-08-12._
+_Prices are typical ranges in U.S. dollars, confirmed per booking via a free quote. Splash Republic operates in the United States only (all 50 states). Last updated: 2026-08-12._

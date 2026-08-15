@@ -47,13 +47,13 @@ const pick = <T>(arr: T[], seed: number): T => arr[seed % arr.length]!;
 // ── Opening paragraph variants (city + state woven in) ────────────────────
 const INTROS: ((name: string, state: string) => string)[] = [
   (name, state) =>
-    `Planning a party in ${name}? Big Wave Slides brings the waterpark to your ${name} backyard, park, school, or church. We deliver premium, freshly sanitized inflatable water slides across ${state}, set them up safely, and pick them up when the fun's done — so all you do is enjoy the day.`,
+    `Planning a party in ${name}? Splash Republic brings the waterpark to your ${name} backyard, park, school, or church. We deliver premium, freshly sanitized inflatable water slides across ${state}, set them up safely, and pick them up when the fun's done — so all you do is enjoy the day.`,
   (name, state) =>
-    `From backyard birthdays to big community events, Big Wave Slides is how ${name} keeps cool. Every commercial-grade water slide is delivered anywhere in ${name} — and right across ${state} — professionally installed and anchored, then collected afterward, so there's no hauling, no cleanup, and no stress on your part.`,
+    `From backyard birthdays to big community events, Splash Republic is how ${name} keeps cool. Every commercial-grade water slide is delivered anywhere in ${name} — and right across ${state} — professionally installed and anchored, then collected afterward, so there's no hauling, no cleanup, and no stress on your part.`,
   (name, state) =>
     `Give the kids (and the grown-ups) in ${name} a day they'll talk about all summer. We rent giant inflatable water slides across ${state} — sanitized before every booking, delivered and set up by a trained crew, and fully insured — so your only job in ${name} is to hand out the towels.`,
   (name, state) =>
-    `Big Wave Slides turns any ${name} yard, cul-de-sac, or field into a private splash park. Pick your slide, tell us your date, and we handle delivery, setup, and pickup throughout ${name} and the wider ${state} area — freshly cleaned and ready to ride the moment we leave.`,
+    `Splash Republic turns any ${name} yard, cul-de-sac, or field into a private splash park. Pick your slide, tell us your date, and we handle delivery, setup, and pickup throughout ${name} and the wider ${state} area — freshly cleaned and ready to ride the moment we leave.`,
 ];
 
 const HERO_DESCRIPTIONS: ((name: string) => string)[] = [
@@ -114,7 +114,7 @@ function coreFaqs(name: string, stateName: string, place: string): CityFaq[] {
   return [
     {
       q: `Do you deliver water slides in ${name}?`,
-      a: `Yes — Big Wave Slides delivers, sets up, and picks up water slides throughout ${name} and the surrounding ${stateName} area. Share your venue and date and we'll confirm delivery in your free quote.`,
+      a: `Yes — Splash Republic delivers, sets up, and picks up water slides throughout ${name} and the surrounding ${stateName} area. Share your venue and date and we'll confirm delivery in your free quote.`,
     },
     {
       q: `How much does a water slide rental cost in ${name}?`,

@@ -62,7 +62,7 @@ export default async function AnswersPage({ params }: Props) {
       <PhotoHero
         image={HERO}
         title="Water Slide Rental Questions & Answers"
-        description="Clear, straight answers to the questions renters ask most — cost, space and setup, safety, weather, and booking. Big Wave Slides delivers nationwide from $199/day, fully insured."
+        description="Clear, straight answers to the questions renters ask most — cost, space and setup, safety, weather, and booking. Splash Republic delivers nationwide from $199/day, fully insured."
       />
 
       <Section spacing="compact" className="pt-10 pb-16">

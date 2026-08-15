@@ -169,7 +169,7 @@ export function buildMetadata({
       description,
       url: canonical,
       type,
-      siteName: "Big Wave Slides",
+      siteName: "Splash Republic",
       locale: "en_US",
       images: [{ url: img, width: 1200, height: 630, alt: title }],
     },

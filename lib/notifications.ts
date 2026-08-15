@@ -147,14 +147,14 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
   await sendEmail({
     to: o.email,
     replyTo: CONTACT_EMAIL,
-    subject: `Your Big Wave Slides quote — ${o.orderNumber}`,
+    subject: `Your Splash Republic quote — ${o.orderNumber}`,
     attachments,
     html: renderEmail({
       heading: `Thanks, ${o.name.split(" ")[0] || o.name}! Your quote is ready`,
       preheader:
         "Review your quote online, then accept it to receive your invoice — or reach out with any questions.",
       intro:
-        "Thanks for your request with Big Wave Slides! Your personalized quote is attached as a PDF and also available on your secure quote page, together with our terms & conditions. When you're ready, accept the quote online — your official invoice is issued instantly and you can reserve your date with a 50% deposit or full payment. Not sure about something? Contact us first, no obligation.",
+        "Thanks for your request with Splash Republic! Your personalized quote is attached as a PDF and also available on your secure quote page, together with our terms & conditions. When you're ready, accept the quote online — your official invoice is issued instantly and you can reserve your date with a 50% deposit or full payment. Not sure about something? Contact us first, no obligation.",
       rows,
       cta: { label: "View & accept your quote", url: onlineUrl },
       outro:
@@ -296,7 +296,7 @@ export async function notifyBookingRequest(
   await sendEmail({
     to: b.email,
     replyTo: CONTACT_EMAIL,
-    subject: `Your Big Wave Slides rental invoice — ${b.bookingNumber}`,
+    subject: `Your Splash Republic rental invoice — ${b.bookingNumber}`,
     attachments,
     html: renderEmail({
       heading: `Thanks, ${b.name.split(" ")[0] || b.name}! Your rental invoice is attached`,
@@ -413,13 +413,13 @@ export async function notifyContact(c: {
   await sendEmail({
     to: c.email,
     replyTo: supportEmail,
-    subject: "We received your message — Big Wave Slides",
+    subject: "We received your message — Splash Republic",
     html: renderEmail({
       heading: `Thanks, ${c.name.split(" ")[0] || c.name}!`,
       preheader:
         "We've received your message and a team member will reach out shortly.",
       intro:
-        "Thanks for reaching out to Big Wave Slides. A member of our team will get back to you very shortly. Here's a copy of what you sent us:",
+        "Thanks for reaching out to Splash Republic. A member of our team will get back to you very shortly. Here's a copy of what you sent us:",
       quote: c.message,
       cta: { label: "Email us directly", url: `mailto:${supportEmail}` },
       outro: `If you haven't heard from us within a few minutes, please email us directly at ${supportEmail} and we'll respond right away.`,
@@ -429,7 +429,7 @@ export async function notifyContact(c: {
   const admins = await adminRecipients();
   if (admins.length) {
     const replySubject = encodeURIComponent(
-      `Re: your Big Wave Slides enquiry${c.subject ? ` (${c.subject})` : ""}`,
+      `Re: your Splash Republic enquiry${c.subject ? ` (${c.subject})` : ""}`,
     );
     await sendEmail({
       to: admins,
@@ -503,13 +503,13 @@ export async function notifyNewsletterSignup(s: {
   await sendEmail({
     to: s.email,
     replyTo: CONTACT_EMAIL,
-    subject: "You're on the list! 🌊 Big Wave Slides",
+    subject: "You're on the list! 🌊 Splash Republic",
     html: renderEmail({
-      heading: "Welcome to the Big Wave family!",
+      heading: "Welcome to the Splash Republic family!",
       preheader:
         "Thanks for subscribing — splashy tips, offers, and new slides are headed your way.",
       intro:
-        "Thanks for subscribing to Big Wave Slides. You'll be the first to hear about new slides, seasonal offers, and party-planning tips. Ready to make a splash?",
+        "Thanks for subscribing to Splash Republic. You'll be the first to hear about new slides, seasonal offers, and party-planning tips. Ready to make a splash?",
       cta: { label: "Browse our slides", url: siteUrl("/rent") },
       outro:
         "Not you, or changed your mind? Just reply to this email and we'll remove you right away.",
@@ -691,7 +691,7 @@ export async function sendInvoiceIssuedEmails(
   await sendEmail({
     to: o.guestEmail,
     replyTo: CONTACT_EMAIL,
-    subject: `Your invoice ${inv} — Big Wave Slides`,
+    subject: `Your invoice ${inv} — Splash Republic`,
     attachments,
     html: renderEmail({
       heading: "Quote confirmed — your invoice is ready 🎉",
@@ -750,7 +750,7 @@ export async function sendPaymentDetailsEmail(
   await sendEmail({
     to: o.guestEmail,
     replyTo: CONTACT_EMAIL,
-    subject: `Payment details for invoice ${inv} — Big Wave Slides`,
+    subject: `Payment details for invoice ${inv} — Splash Republic`,
     html: renderEmail({
       heading: "Your payment details are ready 💳",
       preheader: `Send ${formatPrice(due, o.locale)} via ${o.paymentMethodLabel ?? "your chosen method"} to lock in your booking.`,

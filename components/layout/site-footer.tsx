@@ -110,13 +110,13 @@ export async function SiteFooter({
         <div>
           <Link
             href="/"
-            aria-label="Big Wave Slides — home"
+            aria-label="Splash Republic — home"
             className="inline-flex"
           >
             <span className="rounded-2xl bg-white/95 px-3 py-2 shadow-[var(--shadow-soft)]">
               <Image
                 src="/logo.png"
-                alt="Big Wave Slides"
+                alt="Splash Republic"
                 width={170}
                 height={144}
                 className="h-14 w-auto"
@@ -269,7 +269,7 @@ export async function SiteFooter({
       <div className="border-t border-white/10">
         <Container className="flex flex-col items-center justify-between gap-3 py-5 text-sm text-white/55 sm:flex-row">
           <p>
-            © {year} Big Wave Slides. {t("footerRights")}
+            © {year} Splash Republic. {t("footerRights")}
           </p>
           <div className="flex gap-5">
             <Link href="/faq" className="hover:text-white">
