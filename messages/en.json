@@ -11,7 +11,7 @@
     "blog": "Blog",
     "about": "About",
     "contact": "Contact",
-    "quote": "Get a Quote"
+    "quote": "Book now"
   },
   "Layout": {
     "megaShopTitle": "Shop water slides",
@@ -25,11 +25,11 @@
     "allServices": "All services",
     "popularRentals": "Popular rentals",
     "rentNow": "Rent Now",
-    "getQuote": "Get a Quote",
+    "getQuote": "Book now",
     "search": "Search",
     "cart": "Cart",
     "call": "Call us",
-    "announce": "Free quotes · Fully insured · On-time delivery & setup",
+    "announce": "Book online in minutes · Fully insured · On-time delivery & setup",
     "wishlist": "Wishlist",
     "account": "Account",
     "openMenu": "Open menu",
@@ -56,7 +56,7 @@
     "onTime": "On-time delivery",
     "exploreCity": "Your city",
     "exploreSlides": "Slides",
-    "exploreQuote": "Free quote",
+    "exploreQuote": "Book now",
     "exploreNav": "Explore the site"
   },
   "Product": {
@@ -105,7 +105,7 @@
     "catRacingDesc": "Adrenaline-packed dual-lane racers.",
     "servicesEyebrow": "What we do",
     "servicesTitle": "Services for every celebration",
-    "servicesDesc": "Backyards, school field days, church festivals, company family days — one crew, one invoice.",
+    "servicesDesc": "Backyards, school field days, church festivals, company family days — one crew, booked in one page.",
     "howEyebrow": "How it works",
     "howTitle": "Rent in 3 easy steps",
     "howDesc": "Three steps, and only one of them is yours.",
@@ -133,7 +133,7 @@
     "readMore": "Read more",
     "ctaTitle": "Ready to make a splash?",
     "ctaDesc": "Tell us your date and where you are. We will confirm what we can get to you.",
-    "ctaButton": "Get a Free Quote",
+    "ctaButton": "Check your date",
     "ctaSecondary": "Browse rentals"
   },
   "About": {
@@ -166,7 +166,7 @@
     "areaTitle": "Where we serve",
     "areaDesc": "We deliver nationwide, with our own crews in the metros we serve most. Tell us where you are and we will tell you honestly what we can do.",
     "ctaTitle": "Let's make your event unforgettable",
-    "ctaButton": "Get a free quote",
+    "ctaButton": "Check your date",
     "statStates": "States served",
     "statFleet": "Slides & inflatables in the fleet",
     "statInsured": "Insured & sanitized rentals",
@@ -179,9 +179,9 @@
     "whatBuyDesc": "The same commercial units, available to buy with nationwide delivery. Built for operators, venues and camps that need something that will still be earning in five years.",
     "whatBuyCta": "Shop slides",
     "howTitle": "How booking works",
-    "how1Title": "Request your free quote",
+    "how1Title": "Pick your date and book it",
     "how1Desc": "Pick your slide and your date and fill in one page. Availability is live, so a date you can select is a date we actually have.",
-    "how2Title": "Accept online & reserve your date",
+    "how2Title": "Confirm and lock it in",
     "how2Desc": "Book it there and then. Pay half now to lock the date, or pay in full — nothing is charged online, and we confirm your booking before any money moves.",
     "how3Title": "We deliver the fun",
     "how3Desc": "Our crew delivers, sets up, anchors and safety-checks before your start time, then comes back to take it down.",
@@ -201,7 +201,7 @@
   },
   "ServiceDetail": {
     "included": "What's included",
-    "getQuote": "Get a quote",
+    "getQuote": "Book now",
     "rentRelated": "Browse rentals",
     "back": "All services",
     "relatedTitle": "Other services"
@@ -295,7 +295,7 @@
     "weight": "Weight",
     "spaceNeeded": "Space needed",
     "deposit": "Refundable deposit: {amount}",
-    "requestQuote": "Request a Quote",
+    "requestQuote": "Book now",
     "noPaymentNote": "No payment online — we’ll send a personalized quote and payment details.",
     "trustInsured": "Fully insured",
     "trustClean": "Sanitized before delivery",
@@ -607,7 +607,7 @@
     "relatedTitle": "Keep reading",
     "ctaTitle": "Ready to make a splash?",
     "ctaText": "Tell us about your event and we'll send a free, no-obligation quote — delivery, professional setup, and full insurance included.",
-    "ctaQuote": "Request a free quote",
+    "ctaQuote": "Check your date",
     "ctaBrowse": "Browse our rentals",
     "writtenBy": "Written by",
     "featured": "Featured",

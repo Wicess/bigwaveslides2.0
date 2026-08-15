@@ -47,8 +47,11 @@ const ICONS: Record<ServiceItem["icon"], LucideIcon> = {
   shield: ShieldCheck,
 };
 
+// "enquire" is the only path that still goes to a conversation, and only for
+// bespoke work (custom builds). Everything bookable goes straight into the
+// one-page flow — there is no quote step to send anyone to any more.
 const CTA_HREF: Record<ServiceCtaKind, string> = {
-  quote: "/contact",
+  enquire: "/contact",
   shop: "/shop",
   rent: "/rent",
 };
@@ -60,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: "/services",
     title: "Water Slide Installation, Delivery & Setup Services",
     description:
-      "Professional water slide delivery, setup, cleaning and custom builds for parties, events and water parks nationwide. Get a free service quote.",
+      "Water slide delivery, setup, cleaning and custom builds for parties, events and water parks nationwide. Book online in one page — nothing charged online.",
     keywords: [
       "water slide installation",
       "professional water slide installation",

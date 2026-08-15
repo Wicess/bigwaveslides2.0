@@ -6,7 +6,7 @@
 type LT = { en: string; fr: string };
 const l = (en: string, fr: string): LT => ({ en, fr });
 
-export type ServiceCtaKind = "quote" | "shop" | "rent";
+export type ServiceCtaKind = "enquire" | "shop" | "rent";
 
 export type ServiceItem = {
   slug: string;
@@ -102,8 +102,8 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           l("Permit & insurance support", "Soutien permis et assurance"),
         ],
         cta: {
-          kind: "quote",
-          label: l("Plan your event", "Planifier votre événement"),
+          kind: "rent",
+          label: l("Book your event", "Book your event"),
         },
       },
       {
@@ -133,8 +133,8 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           l("Flexible scheduling", "Horaires flexibles"),
         ],
         cta: {
-          kind: "quote",
-          label: l("Request a quote", "Demander un devis"),
+          kind: "rent",
+          label: l("Book now", "Book now"),
         },
       },
     ],
@@ -195,8 +195,8 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           l("Commissioning & maintenance", "Mise en service et entretien"),
         ],
         cta: {
-          kind: "quote",
-          label: l("Start your project", "Lancer votre projet"),
+          kind: "enquire",
+          label: l("Start your project", "Start your project"),
         },
       },
     ],
@@ -229,8 +229,8 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           l("Pre-use safety inspection", "Inspection de sécurité avant usage"),
         ],
         cta: {
-          kind: "quote",
-          label: l("Request a quote", "Demander un devis"),
+          kind: "rent",
+          label: l("Book now", "Book now"),
         },
       },
       {
@@ -263,8 +263,8 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           ),
         ],
         cta: {
-          kind: "quote",
-          label: l("Request a quote", "Demander un devis"),
+          kind: "rent",
+          label: l("Book now", "Book now"),
         },
       },
       {
@@ -294,8 +294,8 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           ),
         ],
         cta: {
-          kind: "quote",
-          label: l("Request a quote", "Demander un devis"),
+          kind: "rent",
+          label: l("Book now", "Book now"),
         },
       },
     ],
