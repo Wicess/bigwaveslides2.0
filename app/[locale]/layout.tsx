@@ -46,6 +46,10 @@ import "../globals.css";
 
 // Default SEO/social metadata for every page. Individual pages can override
 // pieces of this; the `title.template` wraps page titles as "<page> · Splash Republic".
+// Empty unless explicitly configured — see the note on `verification` below.
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION ?? "";
+const bingVerification = process.env.NEXT_PUBLIC_BING_VERIFICATION ?? "";
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
@@ -86,11 +90,27 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  // Search-engine ownership verification (Google Search Console + Bing).
-  verification: {
-    google: "WYcoBF1TYbRFo5hYautyiggnHft64nHSJbzQSQwCLS0",
-    other: { "msvalidate.01": "A8C9495020F192A25CD68B7F02D73D38" },
-  },
+  // Search-engine ownership verification.
+  //
+  // Intentionally driven by env vars and EMPTY by default. The previous tokens
+  // were hardcoded and belonged to properties verified on the old domain and
+  // the old brand's account; carrying them onto a new domain verifies nothing
+  // and leaves stale meta tags claiming ownership from someone else's console.
+  //
+  // To verify a new property: set NEXT_PUBLIC_GOOGLE_VERIFICATION (and/or
+  // NEXT_PUBLIC_BING_VERIFICATION) in Vercel to the token the console gives
+  // you, redeploy, then click Verify. Prefer the DNS TXT method where you can —
+  // it survives redeploys and domain moves without a code change at all.
+  ...(googleVerification || bingVerification
+    ? {
+        verification: {
+          ...(googleVerification ? { google: googleVerification } : {}),
+          ...(bingVerification
+            ? { other: { "msvalidate.01": bingVerification } }
+            : {}),
+        },
+      }
+    : {}),
   // iOS home-screen app behavior (Add to Home Screen). "default" keeps a
   // normal, visible status bar (dark text on light) with the web content
   // sitting below it — matching Android's standalone display, so the system
