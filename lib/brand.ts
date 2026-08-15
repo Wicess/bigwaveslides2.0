@@ -44,12 +44,11 @@ export const BRAND_DESCRIPTION =
 /**
  * Contact details.
  *
- * NOTE: the email still sits on the current domain because that is the domain
- * the business controls today. Once a matching domain is registered, change it
- * here and nowhere else. A brand name that does not match its own email address
- * weakens the entity signal, so this is worth doing early.
+ * On the brand's own domain, which is the point: a brand whose email sits on a
+ * different name weakens the entity signal Google builds from it. Change here
+ * and nowhere else.
  */
-export const BRAND_EMAIL = "contact@bigwavesslides.com";
+export const BRAND_EMAIL = "contact@splashrep.com";
 export const BRAND_PHONE = "+1 (614) 302-5899";
 
 /** Brand marks. See public/brand/ — the wordmark is a plain SVG, no webfont. */

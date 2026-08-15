@@ -65,3 +65,4 @@ skills-lock.json
 
 # Throwaway debugging scripts (admin-audit.tmp.mjs, login-debug.tmp.mjs, ...)
 *.tmp.mjs
+VERCEL-ENV.txt

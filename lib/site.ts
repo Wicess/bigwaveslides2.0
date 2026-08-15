@@ -19,7 +19,7 @@
 // edge for every page request.
 
 /** The single host every canonical URL, sitemap entry and redirect targets. */
-export const CANONICAL_HOST = "www.bigwavesslides.com";
+export const CANONICAL_HOST = "www.splashrep.com";
 
 /** Canonical origin, e.g. for absolute URLs built outside a request context. */
 export const CANONICAL_ORIGIN = `https://${CANONICAL_HOST}`;
@@ -32,7 +32,11 @@ export const CANONICAL_ORIGIN = `https://${CANONICAL_HOST}`;
  */
 export const ALIAS_HOSTS: readonly string[] = [
   // Apex → www. Canonicals must match the host verified in Search Console.
+  "splashrep.com",
+  // The pre-rebrand domain. Kept as an alias so any link that still points at
+  // it lands on the new brand instead of 404ing.
   "bigwavesslides.com",
+  "www.bigwavesslides.com",
 ];
 
 // DO NOT add bigwaveslides.com (one 's') here.
