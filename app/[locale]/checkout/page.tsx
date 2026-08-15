@@ -11,6 +11,9 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Reveal } from "@/components/motion/reveal";
 import { CartClient } from "@/components/cart/cart-client";
+import { CartCheckoutForm } from "@/components/checkout/cart-checkout-form";
+import { TRANSPORT_CENTS } from "@/lib/checkout-config";
+import { BRAND_EMAIL } from "@/lib/brand";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -61,12 +64,44 @@ export default async function CheckoutPage({ params }: Props) {
             />
           </Reveal>
 
+          {/* Cart contents stay editable (quantities, remove, suggestions);
+              the booking half below is the same one-page flow as Rent Now and
+              Buy Now. `checkoutSummary` hides CartClient's own sidebar summary
+              and its quote button — the totals now live above the submit, where
+              the plan and method pickers can move them in view. */}
           <CartClient
             cart={cart}
             locale={locale}
             deliveryFromCents={settings.fees?.deliveryBaseCents}
             suggestions={suggestions}
+            checkoutSummary
           />
+
+          {cart.lines.length > 0 && cart.id ? (
+            <div className="mx-auto mt-10 max-w-2xl">
+              <CartCheckoutForm
+                cartId={cart.id}
+                lines={cart.lines.map((l) => ({
+                  productId: l.productId,
+                  slug: l.slug,
+                  name: l.name,
+                  mode: l.mode,
+                  unitPriceCents: l.unitPriceCents,
+                  quantity: l.quantity,
+                  lineTotalCents: l.lineTotalCents,
+                }))}
+                subtotalCents={cart.subtotalCents}
+                transportCents={
+                  settings.fees?.transportEnabled === false
+                    ? 0
+                    : TRANSPORT_CENTS
+                }
+                locale={locale}
+                contactEmail={settings.contact?.email ?? BRAND_EMAIL}
+                contactPhone={settings.contact?.phone ?? null}
+              />
+            </div>
+          ) : null}
         </Container>
       </Section>
     </main>

@@ -119,11 +119,12 @@ export async function Hero({
                 "0 2px 14px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.6)",
             }}
           >
-            {t("subtitle")}{" "}
-            <span className="font-semibold text-white">
-              {t("rentNowAt")}{" "}
-              <span className="text-secondary-400 font-extrabold">$199</span>.
-            </span>
+            {/* No price here. "$199" is the floor of the range, and leading the
+                brand's only above-the-fold line with the cheapest number
+                anchors the whole catalogue low before anyone has seen a slide.
+                Pricing still appears on every product card and in full in the
+                checkout breakdown. */}
+            {t("subtitle")}
           </h1>
         </Reveal>
 

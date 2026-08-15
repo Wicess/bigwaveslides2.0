@@ -80,11 +80,11 @@ export function SubscribePopup({ locale = "en" }: { locale?: string }) {
       <div className="relative flex items-center gap-2.5 px-5 pt-5 pb-4 text-white [background:linear-gradient(135deg,#0a1a2f_0%,#0e2742_55%,#0099FF_140%)]">
         <span className="grid size-10 place-items-center rounded-xl bg-white/95 p-1.5">
           <Image
-            src="/logo.png"
+            src="/brand/splash-republic-mark.svg"
             alt="Splash Republic"
-            width={80}
-            height={68}
-            className="h-7 w-auto"
+            width={40}
+            height={40}
+            className="h-7 w-7"
           />
         </span>
         <span className="font-display text-base leading-tight font-bold">

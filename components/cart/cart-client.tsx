@@ -39,11 +39,16 @@ export function CartClient({
   cart,
   locale,
   deliveryFromCents,
+  checkoutSummary = false,
   suggestions = [],
 }: {
   cart: CartSummary;
   locale: string;
   deliveryFromCents?: number;
+  /** On the checkout page the totals live in the booking form below, so this
+      hides the sticky sidebar summary rather than showing two sets of numbers
+      that disagree the moment a payment plan is chosen. */
+  checkoutSummary?: boolean;
   suggestions?: CheckoutSuggestion[];
 }) {
   const t = useTranslations("Cart");
@@ -199,7 +204,13 @@ export function CartClient({
 
   return (
     <>
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+      <div
+        className={
+          checkoutSummary
+            ? "mx-auto max-w-2xl"
+            : "grid gap-8 lg:grid-cols-[1fr_360px]"
+        }
+      >
         <div className="space-y-8">
           {/* Detailed booking — what you're renting / buying. */}
           <div>
@@ -359,7 +370,9 @@ export function CartClient({
           </Card>
         </div>
 
-        <div className="lg:sticky lg:top-28 lg:self-start">{summary}</div>
+        {checkoutSummary ? null : (
+          <div className="lg:sticky lg:top-28 lg:self-start">{summary}</div>
+        )}
       </div>
 
       {/* You might also like — quick-add straight into this order. */}

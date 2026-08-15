@@ -120,11 +120,11 @@ function NavBody({
       <div className="flex items-center gap-2.5 px-6 pt-6 pb-2">
         <span className="grid size-9 place-items-center rounded-xl bg-[var(--gradient-wave,#e8741b)] shadow-[var(--shadow-glow)] [background:var(--gradient-wave)]">
           <NextImage
-            src="/logo.png"
+            src="/brand/splash-republic-mark.svg"
             alt="Splash Republic"
-            width={120}
-            height={102}
-            className="h-6 w-auto brightness-0 invert"
+            width={36}
+            height={36}
+            className="h-6 w-6"
           />
         </span>
         <span className="font-display text-foreground text-base font-bold tracking-tight">
