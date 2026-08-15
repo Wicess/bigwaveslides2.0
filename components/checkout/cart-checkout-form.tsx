@@ -1,7 +1,18 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { ShieldCheck, Sparkles, Truck } from "lucide-react";
+import {
+  ShieldCheck,
+  Sparkles,
+  Truck,
+  User,
+  Mail,
+  Phone,
+  CalendarDays,
+  MapPin,
+  Building2,
+  MessageSquare,
+} from "lucide-react";
 import { createCartReservation } from "@/server/actions/reservations";
 import {
   cryptoDiscountCents,
@@ -43,6 +54,84 @@ export type CartCheckoutLine = {
  * them: a figure that moves when you click something must be visible from where
  * you clicked, not parked in a sticky panel beside it.
  */
+
+/**
+ * One labelled input.
+ *
+ * The icon does real work here: on a form of eight near-identical rows it is
+ * the fastest way to tell them apart at a glance, and it gives the focus ring
+ * something to key off. Deliberately NOT a floating label — those hide the
+ * field name the moment you type, which is exactly when someone re-checking a
+ * phone number needs it.
+ *
+ * Border and shadow are never both decorative on the same element: the resting
+ * state is a hairline border on a tinted surface, and focus swaps to the brand
+ * border plus a soft ring. That keeps the focus state unmistakable without the
+ * 1px-border-plus-wide-drop-shadow look that reads as a template.
+ */
+function Field({
+  name,
+  label,
+  icon: Icon,
+  type = "text",
+  required,
+  placeholder,
+  className = "",
+  textarea,
+}: {
+  name: string;
+  label: string;
+  icon: typeof User;
+  type?: string;
+  required?: boolean;
+  placeholder?: string;
+  className?: string;
+  textarea?: boolean;
+}) {
+  const shared =
+    "peer w-full rounded-[var(--radius)] border border-border/80 bg-muted/40 py-3 pl-11 pr-3.5 text-[15px] text-foreground " +
+    "placeholder:text-muted-foreground/70 outline-none transition-[border-color,box-shadow,background-color] duration-200 " +
+    "hover:border-border focus:border-primary focus:bg-background focus:ring-4 focus:ring-primary/12";
+
+  return (
+    <label className={`block ${className}`}>
+      <span className="text-foreground/80 mb-1.5 flex items-center gap-1.5 text-[13px] font-semibold">
+        {label}
+        {required ? (
+          <span className="text-primary" aria-hidden="true">
+            *
+          </span>
+        ) : null}
+      </span>
+      <span className="relative block">
+        <Icon
+          aria-hidden="true"
+          className={`text-muted-foreground/70 peer-focus:text-primary pointer-events-none absolute left-3.5 size-[18px] transition-colors ${
+            textarea ? "top-3.5" : "top-1/2 -translate-y-1/2"
+          }`}
+        />
+        {textarea ? (
+          <textarea
+            name={name}
+            rows={3}
+            required={required}
+            placeholder={placeholder}
+            className={`${shared} resize-y`}
+          />
+        ) : (
+          <input
+            name={name}
+            type={type}
+            required={required}
+            placeholder={placeholder}
+            className={shared}
+          />
+        )}
+      </span>
+    </label>
+  );
+}
+
 export function CartCheckoutForm({
   cartId,
   lines,
@@ -148,58 +237,72 @@ export function CartCheckoutForm({
     );
   }
 
-  const field =
-    "border-border bg-background focus:border-primary w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none transition-colors";
-
   return (
     <form onSubmit={submit} className="space-y-8">
       {/* Details */}
-      <section>
-        <h2 className="font-display text-lg font-semibold">Your details</h2>
-        <p className="text-muted-foreground mt-1 text-sm">
+      <section className="border-border/70 bg-background rounded-[var(--radius-lg)] border p-5 sm:p-6">
+        <h2 className="font-display text-xl font-bold tracking-tight">
+          Your details
+        </h2>
+        <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
           {context === "rent"
             ? "Tell us your date, address and how you'd like to reserve — we'll confirm your booking and be in touch."
             : "Tell us where this is going and how you'd like to pay — we'll confirm your order and be in touch."}
         </p>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <label className="block">
-            <span className="text-sm font-medium">Name*</span>
-            <input name="name" required className={`mt-1 ${field}`} />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Email*</span>
-            <input
-              name="email"
-              type="email"
-              required
-              className={`mt-1 ${field}`}
-            />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Phone*</span>
-            <input name="phone" required className={`mt-1 ${field}`} />
-          </label>
+        <div className="mt-5 grid gap-x-4 gap-y-4 sm:grid-cols-2">
+          <Field
+            name="name"
+            label="Name"
+            icon={User}
+            required
+            placeholder="Jordan Ellis"
+          />
+          <Field
+            name="email"
+            label="Email"
+            icon={Mail}
+            type="email"
+            required
+            placeholder="you@example.com"
+          />
+          <Field
+            name="phone"
+            label="Phone"
+            icon={Phone}
+            type="tel"
+            required
+            placeholder="(555) 012-3456"
+          />
           {context === "rent" ? (
-            <label className="block">
-              <span className="text-sm font-medium">Event date</span>
-              <input name="eventDate" type="date" className={`mt-1 ${field}`} />
-            </label>
+            <Field
+              name="eventDate"
+              label="Event date"
+              icon={CalendarDays}
+              type="date"
+            />
           ) : null}
-          <label className="block sm:col-span-2">
-            <span className="text-sm font-medium">
-              {context === "rent" ? "Event address" : "Delivery address"}
-            </span>
-            <input name="address" className={`mt-1 ${field}`} />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">City</span>
-            <input name="city" className={`mt-1 ${field}`} />
-          </label>
-          <label className="block sm:col-span-2">
-            <span className="text-sm font-medium">Notes (optional)</span>
-            <textarea name="notes" rows={3} className={`mt-1 ${field}`} />
-          </label>
+          <Field
+            name="address"
+            label={context === "rent" ? "Event address" : "Delivery address"}
+            icon={MapPin}
+            placeholder="Where should we set up?"
+            className="sm:col-span-2"
+          />
+          <Field
+            name="city"
+            label="City"
+            icon={Building2}
+            placeholder="Houston"
+          />
+          <Field
+            name="notes"
+            label="Notes"
+            icon={MessageSquare}
+            placeholder="Gate code, surface type, anything we should know"
+            className="sm:col-span-2"
+            textarea
+          />
         </div>
 
         {/* Honeypot — hidden from people, tempting to bots. */}
@@ -246,18 +349,29 @@ export function CartCheckoutForm({
 
       {/* Subscriber saving — shown as a ceiling, not a promise, because it is
           applied server-side only if the email really is a subscriber. */}
-      <p className="text-sm font-medium text-emerald-700">
-        Newsletter subscribers save {Math.round(LOYALTY_SUBSCRIBE_RATE * 100)}%
-        (20% with our app) — up to −
-        {formatPrice(Math.round(subtotalCents * 0.2), locale)}
+      <p className="flex flex-wrap items-baseline gap-x-1.5 rounded-[var(--radius)] bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+        <span className="font-semibold">
+          Subscribers save {Math.round(LOYALTY_SUBSCRIBE_RATE * 100)}%
+        </span>
+        <span className="text-emerald-800/80">
+          (20% with our app) — up to −
+          {formatPrice(Math.round(subtotalCents * 0.2), locale)} on this order.
+        </span>
       </p>
 
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error ? (
+        <p
+          role="alert"
+          className="rounded-[var(--radius)] bg-red-50 px-4 py-3 text-sm font-medium text-red-800"
+        >
+          {error}
+        </p>
+      ) : null}
 
       <button
         type="submit"
         disabled={pending || lines.length === 0}
-        className="bg-primary w-full rounded-full px-6 py-3.5 text-base font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="focus-visible:ring-primary/30 h-14 w-full rounded-full px-6 text-base font-bold tracking-wide text-white shadow-[var(--shadow-glow)] transition-[transform,filter] duration-200 ease-out [background:var(--gradient-wave)] hover:-translate-y-0.5 hover:brightness-110 focus-visible:ring-4 focus-visible:outline-none active:translate-y-0 disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
       >
         {pending
           ? "Confirming…"
