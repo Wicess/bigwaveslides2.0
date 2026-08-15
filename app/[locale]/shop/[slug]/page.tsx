@@ -210,7 +210,10 @@ export default async function ProductDetailPage({ params }: Props) {
               <>
                 <span className="px-2">/</span>
                 <Link
-                  href={`/shop/category/${product.category.slug}`}
+                  // The filtered /shop directly. /shop/category/<slug> is a
+                  // retained 308 for old external links, so linking it here
+                  // would put a redirect inside our own breadcrumb.
+                  href={`/shop?category=${product.category.slug}`}
                   className="hover:text-primary"
                 >
                   {getLocalized(product.category.name, locale)}

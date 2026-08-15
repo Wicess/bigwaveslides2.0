@@ -153,9 +153,14 @@ export function SiteHeader({ locale, data }: Props) {
                     </p>
                     <div className="grid grid-cols-2 gap-1">
                       {data.categories.map((c) => (
+                        // Straight to the filtered /shop, NOT via
+                        // /shop/category/<slug> — that path still exists but
+                        // only as a 308 for old external links. Pointing our
+                        // own nav at it made every category click a redirect
+                        // hop for users and crawlers alike.
                         <PanelLink
                           key={c.slug}
-                          href={`/shop/category/${c.slug}`}
+                          href={`/shop?category=${c.slug}`}
                         >
                           {loc(c.name)}
                         </PanelLink>
