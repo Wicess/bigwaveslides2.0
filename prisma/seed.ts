@@ -267,11 +267,11 @@ const PRODUCTS: ProductSeed[] = [
     rentalUnits: 2,
   },
   {
-    slug: "castle-splash-combo",
+    slug: "keep-and-splash-combo",
     sku: "BWS-CSC1",
     category: "combo-units",
     type: "RENTAL",
-    name: L("Castle Splash Combo", "Combo Castle Splash"),
+    name: L("Keep & Splash Combo", "Combo Castle Splash"),
     shortDescription: L(
       "Bounce, climb, and slide — a castle-themed combo with a wet finish.",
       "Sautez, grimpez et glissez — un combo château avec arrivée aquatique.",
