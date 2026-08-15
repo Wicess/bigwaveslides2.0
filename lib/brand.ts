@@ -44,11 +44,12 @@ export const BRAND_DESCRIPTION =
 /**
  * Contact details.
  *
- * On the brand's own domain, which is the point: a brand whose email sits on a
- * different name weakens the entity signal Google builds from it. Change here
- * and nowhere else.
+ * Must match a VERIFIED sender in Brevo. Brevo will not deliver mail from an
+ * address it has not verified, and it fails quietly — the booking is created,
+ * the confirmation never arrives, and nothing in the app reports an error.
+ * Change here and nowhere else.
  */
-export const BRAND_EMAIL = "contact@splashrep.com";
+export const BRAND_EMAIL = "sales@splashrep.com";
 export const BRAND_PHONE = "+1 (614) 302-5899";
 
 /** Brand marks. See public/brand/ — the wordmark is a plain SVG, no webfont. */

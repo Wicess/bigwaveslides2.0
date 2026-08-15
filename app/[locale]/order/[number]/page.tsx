@@ -29,7 +29,7 @@ import { ClaimAccount } from "@/components/order/claim-account";
 import { cn } from "@/lib/utils";
 
 const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
-const CONTACT_EMAIL = "contact@splashrep.com";
+const CONTACT_EMAIL = "sales@splashrep.com";
 
 // Live order-status page — never serve it from the Full Route Cache.
 export const dynamic = "force-dynamic";

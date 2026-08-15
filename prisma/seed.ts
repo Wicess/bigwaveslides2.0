@@ -772,7 +772,7 @@ async function seedSettings() {
       key: "contact",
       group: "contact",
       value: {
-        email: "contact@splashrep.com",
+        email: "sales@splashrep.com",
         phone: "+1 (614) 302-5899",
         whatsapp: "16143025899",
         address: "123 Riverside Ave, Springfield, USA",

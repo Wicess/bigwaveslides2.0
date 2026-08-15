@@ -30,7 +30,7 @@ import {
 } from "@/lib/legal-terms";
 
 const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
-const CONTACT_EMAIL = "contact@splashrep.com";
+const CONTACT_EMAIL = "sales@splashrep.com";
 const CONTACT_PHONE = "+1 (614) 302-5899";
 const SITE = "splashrep.com";
 
