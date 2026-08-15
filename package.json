@@ -24,6 +24,7 @@
     "db:rewrite-product-copy": "dotenv -e .env.local -- tsx scripts/rewrite-product-copy.ts",
     "db:write-blog-cluster": "dotenv -e .env.local -- tsx scripts/write-blog-cluster.ts",
     "db:fix-blog-product-links": "dotenv -e .env.local -- tsx scripts/fix-blog-product-links.ts",
+    "db:fix-blog-brand-leaks": "dotenv -e .env.local -- tsx scripts/fix-blog-brand-leaks.ts",
     "db:seed-cost-guide": "dotenv -e .env.local -- tsx scripts/seed-cost-guide.ts",
     "db:sync-ratings": "dotenv -e .env.local -- tsx scripts/sync-product-ratings.ts",
     "db:reclassify-bots": "dotenv -e .env.local -- tsx scripts/reclassify-bots.ts",
