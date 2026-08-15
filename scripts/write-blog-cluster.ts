@@ -111,6 +111,19 @@ Weekends. Holidays. Peak summer. School-holiday weeks.
 
 Surge pricing on party rentals is common, and we do not do it. The rate you see in June is the rate in October.
 
+Booking early does not get you a lower number either — but it does decide whether the unit you actually wanted is still free. October is the busiest month in this trade, because every school and church fall festival lands in it, and the end-of-school run in late May is close behind. Three weeks out and three days out cost the same; only one of them has the Thunderhead available.
+
+## What a cheap quote usually leaves out
+
+If a quote comes in well under the ranges above, it is usually one of four things, and they are worth knowing how to spot.
+
+- **A residential unit sold as a commercial one.** Consumer inflatables are built for a family's own garden a few weekends a year. They do not survive a party of thirty, and they are not insurable for one.
+- **No insurance.** Ask directly. A legitimate operator will hand you a certificate without hesitating.
+- **Delivery billed separately.** A low day rate plus mileage can land well above an all-in price. Ask for the total, not the rate.
+- **Anchoring left to you.** This is the one that actually hurts. Anchoring is what stops an inflatable moving in wind, and it is not a customer job — if a company drops a unit off for you to stake yourself, the saving is not a saving.
+
+Two questions settle most of it: **is that the all-in price?** and **are you insured, and can I see the certificate?** The answers tell you nearly everything about who you are dealing with.
+
 ## Why there is no "Book Now" button
 
 We quote, then you decide. You send a request with your date, your ZIP and your unit; we confirm availability and site suitability and send back a real number.

@@ -5,6 +5,24 @@ import { CANONICAL_HOST, isAliasHost } from "./lib/site";
 
 const intlMiddleware = createMiddleware(routing);
 
+/**
+ * Retired blog URLs → the post that now owns their topic. Locale-free paths.
+ *
+ * Only for posts that were genuinely published and then withdrawn in favour of
+ * another page. A post that was merely never finished should stay DRAFT with no
+ * entry here — redirecting a URL that was never live invents a signal.
+ *
+ * "what-a-water-slide-rental-actually-costs" was published alongside
+ * "water-slide-rental-cost-guide" and competed with it for the same query. The
+ * cost guide won on integration (older, longer, cover image, tags, 7 product
+ * links, cited in llms.txt); the duplicate was orphaned from the link graph.
+ * See scripts/retire-duplicate-cost-guide.ts.
+ */
+const RETIRED_POSTS: Record<string, string> = {
+  "/blog/what-a-water-slide-rental-actually-costs":
+    "/blog/water-slide-rental-cost-guide",
+};
+
 // Paths matched below purely so the host redirect can reach them. next-intl
 // must not touch these — /sitemap.xml and /robots.txt are not localized, and
 // prefixing them with a locale would 404 the two files Google reads first.
@@ -45,6 +63,18 @@ export default function middleware(req: NextRequest) {
   if (pathname === "/fr" || pathname.startsWith("/fr/")) {
     const url = req.nextUrl.clone();
     url.pathname = `/en${pathname.slice(3)}`;
+    return NextResponse.redirect(url, 301);
+  }
+
+  // ─── Retired posts ────────────────────────────────────────────────────────
+  // A post set to DRAFT stops rendering, so its URL would start 404ing. That is
+  // the wrong ending for a page that was live and linkable: 404 throws away
+  // whatever the URL had accumulated, while a 301 hands it to the page that
+  // replaced it. Keyed without the locale prefix — there is only ever one.
+  const retired = RETIRED_POSTS[pathname.replace(/^\/en/, "")];
+  if (retired) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/en${retired}`;
     return NextResponse.redirect(url, 301);
   }
 
