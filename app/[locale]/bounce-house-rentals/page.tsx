@@ -42,14 +42,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/bounce-house-rentals",
-    title: "Bounce House Rentals Near You — From $159/Day, USA",
+    title: "Bounce House Rentals Near You — From $165/Day, USA",
     description:
-      "Bounce house & bounce-and-slide combo rentals from $159/day in all 50 states — delivered, set up, sanitized & insured. Indoor or outdoor, all year.",
+      "Bounce house & bounce-and-slide combo rentals from $165/day in all 50 states — delivered, set up, sanitized & insured. Indoor or outdoor, all year.",
     og: {
       eyebrow: "All 50 states",
       subtitle: "Themed castles, toddler bouncers and combo units",
       badge: "Nationwide",
-      price: "From $159/day",
+      price: "From $165/day",
     },
     keywords: [
       ...bounceKeywords("USA"),
@@ -103,7 +103,7 @@ export default async function BounceHubPage({ params }: Props) {
       <PhotoHero
         image="https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/products/1783340836997-6q9pmj-circus-big-top-bounce-castle-202607061305.jpeg"
         title="Bounce House Rentals Near You"
-        description="Themed castles, toddler bouncers and bounce-and-slide combos — delivered, set up, sanitized and fully insured in all 50 states. From $159/day."
+        description="Themed castles, toddler bouncers and bounce-and-slide combos — delivered, set up, sanitized and fully insured in all 50 states. From $165/day."
       />
 
       <Section spacing="compact" className="pt-10">
@@ -130,10 +130,10 @@ export default async function BounceHubPage({ params }: Props) {
               </Reveal>
               <Reveal className="mt-4" delay={0.05}>
                 <p className="text-muted-foreground leading-relaxed">
-                  Rentals start at $159 per day. Themed castles — unicorn,
-                  circus, farm, candy, royal — run about $229–$285, and
+                  Rentals start at $165 per day. Themed castles — unicorn,
+                  circus, farm, candy, royal — run about $240–$295, and
                   bounce-and-slide combo units, which add a slide and often a
-                  basketball hoop to the same footprint, run about $269–$550.
+                  basketball hoop to the same footprint, run about $280–$570.
                   Every price includes delivery, professional setup and
                   anchoring, sanitizing before drop-off, full insurance and
                   pickup. Nothing is added at the door.

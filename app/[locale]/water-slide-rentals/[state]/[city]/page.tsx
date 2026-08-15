@@ -86,15 +86,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: `/water-slide-rentals/${st.slug}/${loc.slug}`,
     // Kept inside Google's ~60-character render width so the city — the whole
     // reason this page exists — never gets truncated away. The old title ran to
-    // 83 characters, which meant "…from $199/Day — Delivered & Insured" was cut
+    // 83 characters, which meant "…from $155/Day — Delivered & Insured" was cut
     // and Google was free to rewrite the title with its own guess.
-    title: `Water Slide Rentals in ${name}, ${st.abbr} — From $199/Day`,
-    description: `Water slide & bounce house rentals in ${name}, ${st.abbr} from $199/day — delivered, set up, sanitized & insured. Free quote in minutes.`,
+    title: `Water Slide Rentals in ${name}, ${st.abbr} — From $155/Day`,
+    description: `Water slide & bounce house rentals in ${name}, ${st.abbr} from $155/day — delivered, set up, sanitized & insured. Free quote in minutes.`,
     og: {
       eyebrow: `${name}, ${st.abbr}`,
       subtitle: "Delivered, set up, sanitized & fully insured",
       badge: "Free quote",
-      price: "From $199/day",
+      price: "From $155/day",
     },
     keywords: [
       `water slide rentals in ${name} ${st.abbr}`,

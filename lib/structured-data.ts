@@ -8,12 +8,17 @@ const NAME = "Splash Republic";
 // schema never advertises a number the site itself doesn't show.
 const EMAIL = "sales@splashrep.com";
 // Spans the WHOLE rentable catalog, not just the water slides: the cheapest
-// unit is the Lil' Splash Junior at $149/day and the dearest the Mega Waterpark
-// Combo at $550. The bounce-house pages advertise "From $159/day", so a range
-// starting at $199 would have contradicted the visible price on those pages —
-// and markup that disagrees with the page is what a rich-results spam check
-// looks for. Keep this in step with the real daily rates in the database.
-const PRICE_RANGE = "$149 - $550";
+// unit is the Little Harbor Junior at $155/day and the dearest the Grand
+// Waterworks Combo at $570. Markup that disagrees with the visible page price
+// is what a rich-results spam check looks for, so this has to stay in step with
+// BOTH the database and the "From $X/day" hooks in the page metadata.
+//
+// It drifted once already: this read "$149 - $550" against a catalog repriced
+// to $155–$570, while the pages advertised a $199 floor matching no unit at
+// all. If you change a daily rate, re-derive this from
+// `SELECT min(dailyRateCents), max(dailyRateCents) FROM "Product"` rather than
+// adjusting it by eye.
+const PRICE_RANGE = "$155 - $570";
 
 type Json = Record<string, unknown>;
 

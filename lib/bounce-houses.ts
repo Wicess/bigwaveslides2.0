@@ -109,7 +109,7 @@ const REGION_SEASONAL: Record<StateLocation["region"], (p: string) => string> =
 const CORE_FAQS: readonly ((place: string) => BounceFaq)[] = [
   (place) => ({
     q: `How much does it cost to rent a bounce house in ${place}?`,
-    a: `Bounce house rentals in ${place} start at $159 per day, with most themed castles running about $229–$285 and bounce-and-slide combos about $269–$550. Delivery, professional setup and anchoring, sanitizing and pickup are included in every price. Your exact rate is confirmed in a free quote.`,
+    a: `Bounce house rentals in ${place} start at $165 per day, with most themed castles running about $240–$295 and bounce-and-slide combos about $280–$570. Delivery, professional setup and anchoring, sanitizing and pickup are included in every price. Your exact rate is confirmed in a free quote.`,
   }),
   (place) => ({
     q: `Can a bounce house be set up indoors in ${place}?`,

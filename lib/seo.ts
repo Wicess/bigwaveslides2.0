@@ -32,7 +32,7 @@ export type OgParams = {
   subtitle?: string;
   /** Pill in the top-right, e.g. "Delivered nationwide". */
   badge?: string;
-  /** Price hook rendered in the footer strip, e.g. "From $199/day". */
+  /** Price hook rendered in the footer strip, e.g. "From $155/day". */
   price?: string;
 };
 

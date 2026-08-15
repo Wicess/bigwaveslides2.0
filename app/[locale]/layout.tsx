@@ -60,11 +60,11 @@ export const metadata: Metadata = {
     // template is a pass-through (no automatic brand suffix). Kept under ~60
     // characters so Google renders it whole instead of truncating or (worse)
     // rewriting it with its own guess.
-    default: "Water Slide Rentals Near You — From $199/Day, USA",
+    default: "Water Slide Rentals Near You — From $155/Day, USA",
     template: "%s",
   },
   description:
-    "Rent or buy inflatable water slides anywhere in the USA from $199/day — delivered, set up, sanitized and fully insured. Get a free quote in minutes.",
+    "Rent or buy inflatable water slides anywhere in the USA from $155/day — delivered, set up, sanitized and fully insured. Get a free quote in minutes.",
   openGraph: {
     type: "website",
     siteName: "Splash Republic",

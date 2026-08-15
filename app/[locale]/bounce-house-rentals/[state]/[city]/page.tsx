@@ -50,13 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     noindex,
     path: `/bounce-house-rentals/${st.slug}/${loc.slug}`,
-    title: `Bounce House Rentals in ${name}, ${st.abbr} — From $159/Day`,
-    description: `Bounce house & combo rentals in ${name}, ${st.abbr} from $159/day — delivered, set up, sanitized & insured. Indoor or outdoor. Free quote.`,
+    title: `Bounce House Rentals in ${name}, ${st.abbr} — From $165/Day`,
+    description: `Bounce house & combo rentals in ${name}, ${st.abbr} from $165/day — delivered, set up, sanitized & insured. Indoor or outdoor. Free quote.`,
     og: {
       eyebrow: `${name}, ${st.abbr}`,
       subtitle: "Bounce houses & combos — indoor or out, all year round",
       badge: "Free quote",
-      price: "From $159/day",
+      price: "From $165/day",
     },
     keywords: bounceKeywords(name, st.abbr),
   });

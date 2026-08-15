@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       eyebrow: "By occasion",
       subtitle: "Fall festivals, trunk-or-treats, schools, churches, birthdays",
       badge: "Free quote",
-      price: "From $199/day",
+      price: "From $155/day",
     },
     description:
       "Fall festivals, trunk-or-treats, school carnivals, Halloween parties, birthdays and corporate family days — find the right inflatable rental for your event. October dates book 3–4 weeks ahead.",

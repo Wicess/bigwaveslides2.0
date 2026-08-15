@@ -1,52 +1,68 @@
 # Pricing — Splash Republic
 
-Splash Republic rents commercial-grade inflatable water slides, bounce houses, and combo units across all 50 U.S. states, and sells commercial units. Rental pricing is per day and confirmed with a free quote. Every rental includes delivery, professional setup and anchoring, sanitizing, full insurance, and pickup. There is no online payment — request a quote and the team confirms your date and exact price.
+Splash Republic rents commercial-grade inflatable water slides, bounce houses and combo units across the United States, and sells commercial units. Rental pricing is per day and confirmed with a free quote. Every rental includes delivery, professional setup and anchoring, sanitizing and pickup. There is no online payment — request a quote and the team confirms your date, your site and the exact price.
 
-## Rental pricing (per day)
+Last updated: 2026-08-15. Currency: USD.
 
-- Starting price: $199/day
-- Typical backyard water slide or combo: about $250–$550/day
-- Larger or commercial-size units: quote-based
-- Included in every rental: delivery, professional setup + anchoring, sanitizing before delivery, full insurance, and pickup
+## The whole price, in three numbers
 
-## Bounce house & combo pricing (per day)
+1. **The daily rate** for the unit — $155 to $570, listed by category below.
+2. **A flat $30 delivery fee** per order — not per item, not per mile. Covers delivery, setup, anchoring and pickup.
+3. **A refundable deposit**, quoted separately and returned after the rental. It is a hold, not a cost, and is not part of the rental total.
 
-Bounce houses run dry, so they are booked year-round and can be set up indoors as well as outdoors.
+A mid-range tall slide at $330/day is therefore **$360 delivered, set up, anchored and collected**.
 
-- Starting price: $159/day
-- Themed castle bouncers: about $229–$285/day
-- Bounce-and-slide combo units: about $269–$550/day
-- Included in every rental: delivery, professional setup + anchoring, sanitizing before delivery, full insurance, and pickup
-- See: https://www.bigwavesslides.com/en/bounce-house-rentals
+## Rental pricing by category (per day)
 
-## Delivery fees
+- Toddler slide: $155 — one unit, ages 2 to 6
+- Bounce houses: $165 to $295
+- Backyard water slides: $230 to $290
+- Combo units (bounce house + slide): $280 to $570
+- Racing slides (dual lane): $290 to $405
+- Tall slides (18 ft and above): $320 to $500
+- Party attractions: $415 — mechanical bull, trained operator included for the booking
 
-- Base delivery fee: $49
-- First 15 miles from our service base: included
-- Beyond 15 miles: $2.50 per mile
-- Pickup fee: $29
-- Nationwide delivery, setup, and pickup
+## Multi-day rentals
 
-## For sale (commercial units)
+Multi-day pricing is the daily rate multiplied by the number of days, counted inclusively — a Saturday-to-Sunday booking is 2 days. No automatic multi-day discount is applied at quote time.
 
-- Commercial inflatable water slides and bounce houses for sale
-- Pricing is quote-based, with nationwide delivery
-- See: https://www.bigwavesslides.com/en/shop
+## What does not change the price
 
-## How booking works
+- Weekends
+- Public holidays, including July 4th
+- Peak summer and school-holiday weeks
 
-1. Request a free quote — choose a slide, date, and city.
-2. We confirm availability, delivery window, and the exact price.
-3. Pay offline once confirmed — there is no online checkout.
+Splash Republic does not use surge pricing. The rate quoted in June is the rate in October.
 
-Request a quote: https://www.bigwavesslides.com/en/contact
+## What can change a quote
+
+- **Rental length** — days multiply.
+- **Which unit** — sculpted single-lane character slides cost more than plain dual-lane slides of the same height, because of the sculpt work and lower rider throughput.
+- **Site access** — long carries, stairs or gates too narrow for the folded unit. Flagged in advance, never added as a surprise.
+- **Ground and power** — hard surfaces need ballast instead of stakes; units above 18 ft generally need two separate 20A circuits. Where a site cannot supply that, a generator is required.
+
+## What is included in every rental
+
+- Delivery to the site
+- Professional setup and anchoring (stakes on turf, ballast on hard ground)
+- Sanitizing before delivery
+- Full insurance
+- Pickup at the end of the booking
+
+A certificate of insurance naming a venue as additional insured is available on request, and should be requested at the time of booking rather than in the final week.
+
+## Payment
+
+There is no online checkout. Payment is arranged directly after the quote is confirmed. Accepted methods: Zelle, Cash App, Apple Pay, Chime and Bitcoin.
+
+## Buying
+
+Most of the catalog is available to purchase as well as rent. Sale prices are quoted individually — contact sales@splashrep.com with the unit name.
 
 ## Contact
 
-- Email: contact@bigwavesslides.com
+- Email: sales@splashrep.com
 - Phone: +1 (614) 302-5899
-- Service area: all 50 U.S. states (United States only — no international delivery)
-- Headquarters: Dallas, Texas
-- Currency: USD
-
-_Prices are typical ranges in U.S. dollars, confirmed per booking via a free quote. Splash Republic operates in the United States only (all 50 states). Last updated: 2026-08-12._
+- Quote request: https://www.splashrep.com/en/contact
+- Full rental catalog: https://www.splashrep.com/en/rent
+- Bounce house rentals: https://www.splashrep.com/en/bounce-house-rentals

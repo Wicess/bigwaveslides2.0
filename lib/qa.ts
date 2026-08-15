@@ -16,7 +16,7 @@ export const QA_CATEGORIES: QACategory[] = [
     items: [
       {
         q: "How much does it cost to rent a water slide?",
-        a: "Water slide rentals start at $199 per day. Most backyard water slides and bounce-and-slide combos run about $250–$550 per day, with the exact price confirmed in a free quote. Every rental includes delivery, professional setup, sanitizing, full insurance, and pickup — no hidden fees.",
+        a: "Water slide rentals start at $155 per day. Most backyard water slides and bounce-and-slide combos run about $230–$570 per day, with the exact price confirmed in a free quote. Every rental includes delivery, professional setup, sanitizing, full insurance, and pickup — no hidden fees.",
       },
       {
         q: "What is included in the water slide rental price?",
@@ -32,7 +32,7 @@ export const QA_CATEGORIES: QACategory[] = [
       },
       {
         q: "Is it cheaper to rent or buy an inflatable water slide?",
-        a: "For one-off events, renting is far cheaper — from $199 per day, all-inclusive, versus thousands to buy. Buying a commercial unit makes sense only if you host very often or run a rental business. Splash Republic offers both: rentals nationwide and commercial inflatables for sale.",
+        a: "For one-off events, renting is far cheaper — from $155 per day, all-inclusive, versus thousands to buy. Buying a commercial unit makes sense only if you host very often or run a rental business. Splash Republic offers both: rentals nationwide and commercial inflatables for sale.",
       },
     ],
   },

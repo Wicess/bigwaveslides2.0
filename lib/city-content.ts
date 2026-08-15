@@ -80,7 +80,7 @@ export function getCityContent(loc: CityLocation): CityContent {
     return {
       hero,
       heroDescription: `Water slide and bounce house rentals delivered to ${place}.`,
-      intro: `We deliver inflatable water slides, bounce houses and combo units to ${place} and the surrounding area — set up, anchored, sanitized and fully insured, from $199 a day. Tell us your date and where you are and we'll confirm what we can get to you.`,
+      intro: `We deliver inflatable water slides, bounce houses and combo units to ${place} and the surrounding area — set up, anchored, sanitized and fully insured, from $155 a day. Tell us your date and where you are and we'll confirm what we can get to you.`,
       seasonal: "",
       faqs: [
         {

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       eyebrow: "Free quote",
       subtitle: "Tell us your date, city and event — we reply within hours",
       badge: "No obligation",
-      price: "From $199/day",
+      price: "From $155/day",
     },
     keywords: [
       "water slide rental quote",

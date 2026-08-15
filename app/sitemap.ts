@@ -22,7 +22,12 @@ const EN = routing.defaultLocale;
 // removed, fall/Halloween cluster shipped, bounce-house family added.
 // 2026-08-13: French retired — every /fr URL now 301s to /en, so the whole
 // sitemap changed shape. A recrawl is genuinely warranted.
-const CONTENT_UPDATED = new Date("2026-08-13T00:00:00Z");
+// 2026-08-15: the largest content change the site has had — all 53 product
+// descriptions rewritten, the 9-post blog cluster written and republished, and
+// 312 dead internal product links repaired across 43 posts. Nearly every URL in
+// this file now returns different text than it did on the last crawl, which is
+// exactly the case `lastmod` exists for.
+const CONTENT_UPDATED = new Date("2026-08-15T00:00:00Z");
 
 /**
  * Every indexable path, without the locale prefix.

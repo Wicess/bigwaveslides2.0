@@ -33,7 +33,7 @@ export function GET(request: Request) {
     clamp(searchParams.get("subtitle"), 120) ||
     "Delivered, set up, sanitized & fully insured";
   const badge = clamp(searchParams.get("badge"), 24);
-  const price = clamp(searchParams.get("price"), 28) || "From $199/day";
+  const price = clamp(searchParams.get("price"), 28) || "From $155/day";
 
   // Long headlines need a smaller size or they overflow the card.
   const titleSize = title.length > 78 ? 54 : title.length > 48 ? 64 : 76;

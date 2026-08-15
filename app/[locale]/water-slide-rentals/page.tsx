@@ -48,7 +48,7 @@ const FAQS = [
   },
   {
     q: "How much does it cost to rent a water slide?",
-    a: "Rentals start at $199/day. The exact price depends on the slide and your dates — delivery, professional setup, anchoring, sanitizing, and pickup are always included, with no hidden fees.",
+    a: "Rentals start at $155/day. The exact price depends on the slide and your dates — delivery, professional setup, anchoring, sanitizing, and pickup are always included, with no hidden fees.",
   },
   {
     q: "Is delivery and setup included?",
@@ -79,15 +79,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/water-slide-rentals",
-    title: "Water Slide Rentals Near You from $199/Day — All 50 States",
+    title: "Water Slide Rentals Near You from $155/Day — All 50 States",
     og: {
       eyebrow: "All 50 states",
       subtitle: "Find your city, check your date, book in minutes",
       badge: "Nationwide",
-      price: "From $199/day",
+      price: "From $155/day",
     },
     description:
-      "Water slide & bounce house rentals from $199/day in all 50 states — delivered, set up, sanitized & insured. Find your city and check your date free.",
+      "Water slide & bounce house rentals from $155/day in all 50 states — delivered, set up, sanitized & insured. Find your city and check your date free.",
     keywords: [
       "water slide rentals",
       "water slide rental near me",
@@ -123,7 +123,7 @@ export default async function LocationsHubPage({ params }: Props) {
       <PhotoHero
         image={HERO}
         title="Water Slide Rentals Near You, Delivered"
-        description="Premium, fully-insured inflatable water slides from $199/day — find your city, check your date free, and we deliver, set up, and pick up. Nationwide."
+        description="Premium, fully-insured inflatable water slides from $155/day — find your city, check your date free, and we deliver, set up, and pick up. Nationwide."
       />
 
       <Section spacing="compact" className="pt-10">
