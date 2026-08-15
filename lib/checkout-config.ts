@@ -25,14 +25,30 @@ export const TRANSPORT_CENTS = 3000;
  * phone, an email lands in a promotions tab. The success page leads with it
  * rather than burying it under "we'll be in touch".
  */
-export const WHATSAPP_DIGITS = "16143025899";
+/**
+ * Strip a stored number down to the digits wa.me needs.
+ *
+ * There is deliberately NO hardcoded default. The number is read from
+ * Settings -> Contact, so the success screen can only ever offer a channel the
+ * owner has actually set up and is watching. A constant here would have shipped
+ * the old brand's number and sent customers somewhere nobody answers — worse
+ * than showing no button at all.
+ */
+export function whatsappDigits(raw?: string | null): string | null {
+  if (!raw) return null;
+  const digits = raw.replace(/\D/g, "");
+  // Shorter than this cannot be a dialable international number.
+  return digits.length >= 8 ? digits : null;
+}
 
-/** Display form of the same number, for anywhere it's shown as text. */
-export const WHATSAPP_DISPLAY = "+1 (614) 302-5899";
-
-/** Build a wa.me deep link with a pre-filled message. */
-export function whatsappLink(message: string): string {
-  return `https://wa.me/${WHATSAPP_DIGITS}?text=${encodeURIComponent(message)}`;
+/** Build a wa.me deep link with a pre-filled message, or null if unconfigured. */
+export function whatsappLink(
+  message: string,
+  raw?: string | null,
+): string | null {
+  const digits = whatsappDigits(raw);
+  if (!digits) return null;
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
 /**

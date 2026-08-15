@@ -40,6 +40,7 @@ export function RentCheckoutForm({
   locale,
   contactEmail,
   contactPhone,
+  whatsapp,
 }: {
   productId: string;
   productSlug: string;
@@ -49,6 +50,8 @@ export function RentCheckoutForm({
   locale: string;
   contactEmail?: string | null;
   contactPhone?: string | null;
+  /** Settings -> Contact WhatsApp number; omit to hide the success CTA. */
+  whatsapp?: string | null;
 }) {
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   const [plan, setPlan] = useState<PaymentPlan>("HALF");
@@ -138,6 +141,7 @@ export function RentCheckoutForm({
         dueCents={done.dueCents}
         totalCents={done.totalCents}
         plan={done.plan}
+        whatsapp={whatsapp}
         locale={locale}
       />
     );

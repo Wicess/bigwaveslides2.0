@@ -99,6 +99,7 @@ export default async function CheckoutPage({ params }: Props) {
                 locale={locale}
                 contactEmail={settings.contact?.email ?? BRAND_EMAIL}
                 contactPhone={settings.contact?.phone ?? null}
+                whatsapp={settings.contact?.whatsapp ?? null}
               />
             </div>
           ) : null}

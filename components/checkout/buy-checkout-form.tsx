@@ -34,6 +34,7 @@ export function BuyCheckoutForm({
   locale,
   contactEmail,
   contactPhone,
+  whatsapp,
 }: {
   productId: string;
   productSlug: string;
@@ -43,6 +44,8 @@ export function BuyCheckoutForm({
   locale: string;
   contactEmail?: string | null;
   contactPhone?: string | null;
+  /** Settings -> Contact WhatsApp number; omit to hide the success CTA. */
+  whatsapp?: string | null;
 }) {
   const [qty, setQty] = useState(1);
   const [plan, setPlan] = useState<PaymentPlan>("HALF");
@@ -112,6 +115,7 @@ export function BuyCheckoutForm({
         dueCents={done.dueCents}
         totalCents={done.totalCents}
         plan={done.plan}
+        whatsapp={whatsapp}
         locale={locale}
       />
     );

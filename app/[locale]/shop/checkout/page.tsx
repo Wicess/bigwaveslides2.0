@@ -68,6 +68,7 @@ export default async function ShopCheckoutPage({
             locale={locale}
             contactEmail={settings.contact?.email ?? null}
             contactPhone={settings.contact?.phone ?? null}
+            whatsapp={settings.contact?.whatsapp ?? null}
           />
         </Container>
       </Section>

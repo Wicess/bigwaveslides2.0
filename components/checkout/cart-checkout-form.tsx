@@ -51,6 +51,7 @@ export function CartCheckoutForm({
   locale,
   contactEmail,
   contactPhone,
+  whatsapp,
 }: {
   cartId: string;
   lines: CartCheckoutLine[];
@@ -59,6 +60,8 @@ export function CartCheckoutForm({
   locale: string;
   contactEmail?: string | null;
   contactPhone?: string | null;
+  /** Settings -> Contact WhatsApp number; omit to hide the success CTA. */
+  whatsapp?: string | null;
 }) {
   // The cart is single-mode, so one line decides the copy for the whole page.
   const isBuy = lines.length > 0 && lines.every((l) => l.mode === "BUY");
@@ -139,6 +142,7 @@ export function CartCheckoutForm({
         dueCents={done.dueCents}
         totalCents={done.totalCents}
         plan={done.plan}
+        whatsapp={whatsapp}
         locale={locale}
       />
     );
