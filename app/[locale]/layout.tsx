@@ -46,9 +46,23 @@ import "../globals.css";
 
 // Default SEO/social metadata for every page. Individual pages can override
 // pieces of this; the `title.template` wraps page titles as "<page> · Splash Republic".
-// Empty unless explicitly configured — see the note on `verification` below.
-const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION ?? "";
-const bingVerification = process.env.NEXT_PUBLIC_BING_VERIFICATION ?? "";
+// Ownership verification tokens for THIS domain's Search Console and Bing
+// properties. Committed deliberately: they are public strings (they ship in
+// the HTML by design), they are worthless to anyone who does not also control
+// this DNS, and keeping them env-only meant a missed variable silently shipped
+// a page with no tag — which is exactly what happened. Env still overrides, so
+// a new property can be verified without a code change.
+//
+// These belong to splashrep.com. Never carry a token to a different domain:
+// it verifies nothing and claims ownership from another account's console.
+// `||` not `??`: these vars were previously set to an empty string, and "" is
+// defined, so `??` would let it win and ship a blank tag.
+const googleVerification =
+  process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION ||
+  "7Mz8blEHJA_eWulNtkAgaF5MB8QrJN5CF1OXgndUFIw";
+const bingVerification =
+  process.env.NEXT_PUBLIC_BING_VERIFICATION ||
+  "A8C9495020F192A25CD68B7F02D73D38";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
