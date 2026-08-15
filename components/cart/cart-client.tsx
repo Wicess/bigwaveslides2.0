@@ -328,46 +328,56 @@ export function CartClient({
             </ul>
           </div>
 
-          {/* Your details — submitting emails the quote PDF. */}
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold">{t("yourDetails")}</h2>
-            <p className="text-muted-foreground mt-1 text-sm">
-              {t("detailsIntro")}
-            </p>
-
-            <div className="bg-muted/50 mt-4 rounded-[var(--radius-lg)] p-4">
-              <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                {t("nextStepsTitle")}
+          {/* Your details — the LEGACY quote form. On the checkout page this is
+              replaced by CartCheckoutForm, which books immediately instead of
+              issuing a quote. Both used to render: the old form appeared first,
+              so a customer filling in the visible fields at the top of the page
+              got a quote while the new booking form sat unused below it. */}
+          {checkoutSummary ? null : (
+            <Card className="p-6">
+              <h2 className="text-lg font-semibold">{t("yourDetails")}</h2>
+              <p className="text-muted-foreground mt-1 text-sm">
+                {t("detailsIntro")}
               </p>
-              <ol className="mt-2 space-y-1.5 text-sm">
-                {[t("step1"), t("step2"), t("step3")].map((stepText, i) => (
-                  <li key={i} className="flex gap-2.5">
-                    <span className="bg-primary grid size-5 shrink-0 place-items-center rounded-full text-[11px] font-bold text-white">
-                      {i + 1}
-                    </span>
-                    {stepText}
-                  </li>
-                ))}
-              </ol>
-            </div>
 
-            <div className="mt-5">
-              <OrderRequestForm
-                onSuccess={(num) => {
-                  trackEvent({
-                    type: "ORDER_REQUEST",
-                    meta: { orderNumber: num, itemCount: count, subtotalCents },
-                  });
-                  // Straight to the quote. There is no interstitial "request
-                  // received" card: the client reads the quote and accepts it
-                  // on that page, which issues the invoice.
-                  setLines([]);
-                  notifyChange();
-                  router.push(`/order/${num}`);
-                }}
-              />
-            </div>
-          </Card>
+              <div className="bg-muted/50 mt-4 rounded-[var(--radius-lg)] p-4">
+                <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                  {t("nextStepsTitle")}
+                </p>
+                <ol className="mt-2 space-y-1.5 text-sm">
+                  {[t("step1"), t("step2"), t("step3")].map((stepText, i) => (
+                    <li key={i} className="flex gap-2.5">
+                      <span className="bg-primary grid size-5 shrink-0 place-items-center rounded-full text-[11px] font-bold text-white">
+                        {i + 1}
+                      </span>
+                      {stepText}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <div className="mt-5">
+                <OrderRequestForm
+                  onSuccess={(num) => {
+                    trackEvent({
+                      type: "ORDER_REQUEST",
+                      meta: {
+                        orderNumber: num,
+                        itemCount: count,
+                        subtotalCents,
+                      },
+                    });
+                    // Straight to the quote. There is no interstitial "request
+                    // received" card: the client reads the quote and accepts it
+                    // on that page, which issues the invoice.
+                    setLines([]);
+                    notifyChange();
+                    router.push(`/order/${num}`);
+                  }}
+                />
+              </div>
+            </Card>
+          )}
         </div>
 
         {checkoutSummary ? null : (
