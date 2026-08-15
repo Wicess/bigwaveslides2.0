@@ -19,7 +19,7 @@ const { PrismaClient } = pkg;
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
-const BASE = "https://www.bigwavesslides.com";
+const BASE = "https://www.splashrep.com";
 const EN = ["en"] as const;
 
 const CORE_STATIC = [

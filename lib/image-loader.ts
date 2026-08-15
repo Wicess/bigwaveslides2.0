@@ -7,7 +7,7 @@
 //                  (including our pub-*.r2.dev images). Best zero-infra option.
 //   "cloudflare" → Cloudflare Image Resizing (/cdn-cgi/image/...). Requires the
 //                  images to be served through a Cloudflare-proxied domain with
-//                  Transformations enabled (e.g. media.bigwavesslides.com).
+//                  Transformations enabled (e.g. media.splashrep.com).
 //   unset/other  → passthrough: serve the original file (no optimization, no
 //                  Vercel cost). Safe default so nothing ever breaks.
 //

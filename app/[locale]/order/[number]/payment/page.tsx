@@ -21,7 +21,7 @@ import { ClaimAccount } from "@/components/order/claim-account";
 import { PaymentTrust } from "@/components/order/payment-trust";
 
 const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
-const CONTACT_EMAIL = "contact@bigwavesslides.com";
+const CONTACT_EMAIL = "contact@splashrep.com";
 
 // Live payment page — never serve it from the Full Route Cache.
 export const dynamic = "force-dynamic";

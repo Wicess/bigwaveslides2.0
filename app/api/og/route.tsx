@@ -101,7 +101,7 @@ export function GET(request: Request) {
               letterSpacing: 4,
             }}
           >
-            BIG WAVE SLIDES
+            SPLASH REPUBLIC
           </div>
         </div>
 
@@ -197,7 +197,7 @@ export function GET(request: Request) {
             letterSpacing: 1,
           }}
         >
-          bigwavesslides.com
+          splashrep.com
         </div>
       </div>
     </div>,

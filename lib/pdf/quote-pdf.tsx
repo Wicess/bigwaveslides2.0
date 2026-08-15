@@ -30,9 +30,9 @@ import {
 } from "@/lib/legal-terms";
 
 const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
-const CONTACT_EMAIL = "contact@bigwavesslides.com";
+const CONTACT_EMAIL = "contact@splashrep.com";
 const CONTACT_PHONE = "+1 (614) 302-5899";
-const SITE = "bigwavesslides.com";
+const SITE = "splashrep.com";
 
 const C = {
   ink: "#0f172a",
@@ -401,7 +401,7 @@ function QuoteDoc({ input }: { input: QuotePdfInput }) {
           <Image src={LOGO} style={s.logo} />
           <View style={s.brandRight}>
             <Text style={s.brandName}>Splash Republic</Text>
-            <Text>Big waves, bigger smiles.</Text>
+            <Text>Water slides, delivered.</Text>
             <Text>{CONTACT_EMAIL}</Text>
             <Text>{CONTACT_PHONE}</Text>
             <Text>{SITE}</Text>

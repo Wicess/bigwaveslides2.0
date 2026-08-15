@@ -6,7 +6,7 @@ const NAME = "Splash Republic";
 // results, so keep them in lockstep with the NAP used everywhere else. The
 // phone deliberately has no constant here: it comes from Settings → Contact so
 // schema never advertises a number the site itself doesn't show.
-const EMAIL = "contact@bigwavesslides.com";
+const EMAIL = "contact@splashrep.com";
 // Spans the WHOLE rentable catalog, not just the water slides: the cheapest
 // unit is the Lil' Splash Junior at $149/day and the dearest the Mega Waterpark
 // Combo at $550. The bounce-house pages advertise "From $159/day", so a range

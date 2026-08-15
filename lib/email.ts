@@ -1,8 +1,8 @@
-import { brandLogoUrl } from "@/lib/brand";
-import { CANONICAL_ORIGIN } from "@/lib/site";
 import "server-only";
 import nodemailer, { type Transporter } from "nodemailer";
 import { env } from "@/lib/env";
+import { BRAND_EMAIL, brandLogoUrl } from "@/lib/brand";
+import { CANONICAL_ORIGIN } from "@/lib/site";
 
 let cached: Transporter | null = null;
 
@@ -18,8 +18,7 @@ function getTransport(): Transporter | null {
   return cached;
 }
 
-export const FROM =
-  env.SMTP_FROM ?? "Splash Republic <contact@bigwavesslides.com>";
+export const FROM = env.SMTP_FROM ?? `Splash Republic <${BRAND_EMAIL}>`;
 
 export type SendResult = { ok: boolean; skipped?: boolean; error?: string };
 
@@ -146,7 +145,7 @@ function stripHtml(html: string): string {
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-const CONTACT_EMAIL = "contact@bigwavesslides.com";
+const CONTACT_EMAIL = BRAND_EMAIL;
 // Hosted on R2 CDN so it renders in email clients independently of site deploys.
 const EMAIL_LOGO = brandLogoUrl(CANONICAL_ORIGIN);
 

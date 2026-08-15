@@ -4,7 +4,7 @@
 // at /<key>.txt (public/) so search engines can verify ownership.
 //
 // IMPORTANT: NEXT_PUBLIC_SITE_URL must be the canonical host that serves the key
-// file WITHOUT a redirect (e.g. https://bigwavesslides.com if the apex is your
+// file WITHOUT a redirect (e.g. https://splashrep.com if the apex is your
 // primary Vercel domain). If the host redirects (apex⇄www), IndexNow can't
 // verify the key.
 import { routing } from "@/i18n/routing";

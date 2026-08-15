@@ -130,11 +130,11 @@ async function seedRbac() {
   });
   const passwordHash = await bcrypt.hash("BigWave!2026", 10);
   await prisma.adminUser.upsert({
-    where: { email: "admin@bigwavesslides.com" },
+    where: { email: "admin@splashrep.com" },
     update: { roleId: superRole?.id },
     create: {
       name: "Splash Republic Admin",
-      email: "admin@bigwavesslides.com",
+      email: "admin@splashrep.com",
       passwordHash,
       roleId: superRole?.id,
     },
@@ -761,7 +761,7 @@ async function seedSettings() {
       key: "contact",
       group: "contact",
       value: {
-        email: "contact@bigwavesslides.com",
+        email: "contact@splashrep.com",
         phone: "+1 (614) 302-5899",
         whatsapp: "16143025899",
         address: "123 Riverside Ave, Springfield, USA",

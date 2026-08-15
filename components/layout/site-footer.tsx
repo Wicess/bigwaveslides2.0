@@ -13,6 +13,7 @@
  * (client) piece and lives in its own file.
  */
 import { getTranslations } from "next-intl/server";
+import { BRAND_EMAIL } from "@/lib/brand";
 import Image from "next/image";
 import { Mail, Phone, ShieldCheck, Sparkles, Clock } from "lucide-react";
 import { Link } from "@/i18n/navigation";
@@ -61,7 +62,13 @@ export async function SiteFooter({
   const loc = (v: unknown) => getLocalized(v, locale);
   // Contact and social settings come from the CMS; default to {} so reading a
   // missing field (e.g. contact.email) is safely `undefined` instead of crashing.
-  const contact = data.settings.contact ?? {};
+  // Fall back to the brand's own address when Settings has no contact row.
+  // The footer is where a visitor looks for who to email; showing nothing
+  // there reads as an abandoned site, and after the rebrand Settings was empty.
+  const contact = {
+    ...data.settings.contact,
+    email: data.settings.contact?.email || BRAND_EMAIL,
+  };
   const social = data.settings.social ?? {};
 
   // Static link lists, defined once here and mapped into the columns below.

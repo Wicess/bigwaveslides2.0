@@ -5,7 +5,7 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 // Whatever host R2_PUBLIC_URL points at is a legitimate image source. Derived
 // rather than hardcoded so moving the bucket behind a custom domain (e.g.
-// media.bigwavesslides.com) is a one-value env change, not a code edit. The
+// media.splashrep.com) is a one-value env change, not a code edit. The
 // literal **.r2.dev stays so existing rows still render mid-migration —
 // see scripts/rehost-images.ts for rewriting stored URLs.
 const r2Hostname = (() => {

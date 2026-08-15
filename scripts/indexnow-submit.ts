@@ -2,12 +2,12 @@
 // One-shot bulk submit of every live URL to IndexNow (Bing/Yandex/etc.).
 // Reads the production sitemap, extracts all <loc> URLs, and submits them.
 // Run:  dotenv -e .env.local -- tsx scripts/indexnow-submit.ts
-//   or: SITE=https://bigwavesslides.com tsx scripts/indexnow-submit.ts
+//   or: SITE=https://splashrep.com tsx scripts/indexnow-submit.ts
 const KEY = "a6c8a198654f4812ae52d2692674c8a2";
 const SITE = (
   process.env.SITE ??
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://www.bigwavesslides.com"
+  "https://www.splashrep.com"
 ).replace(/\/$/, "");
 
 async function main() {

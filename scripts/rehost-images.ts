@@ -6,7 +6,7 @@
  *
  *   e.g. npm run media:rehost -- \
  *          --from pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev \
- *          --to   media.bigwavesslides.com --apply
+ *          --to   media.splashrep.com --apply
  *
  * Why this exists: uploads are stored as ABSOLUTE URLs, so the R2 host is baked
  * into every row. Changing R2_PUBLIC_URL only affects NEW uploads — existing
