@@ -1,4 +1,5 @@
 // lib/locations.ts
+import { PROFILED_CITY_KEYS } from "@/lib/city-profiles";
 // US states + major cities for the programmatic location landing pages. Big
 // Wave Slides delivers nationwide, so every state gets its own SEO page
 // ("water slide rentals in <state>") and every city gets its own page
@@ -1208,155 +1209,24 @@ export function getCity(
 }
 
 /**
- * Wave-1 priority metros — the highest-demand US cities we concentrate crawl
- * budget and deepened, genuinely-local content on. On a young, low-authority
- * domain Google won't index 750+ near-templated city pages, so only these are
- * indexed + sitemapped; every other city page is `noindex` until the domain
- * earns authority and we widen the net in waves.
+ * Which city pages are indexable.
  *
- * Keyed as "stateSlug/citySlug". Safe to edit freely — a key whose city isn't
- * in US_STATES simply never matches (see `isPriorityCity`).
+ * This used to be a hand-maintained list of 123 metros. The list was the wrong
+ * mechanism: nothing tied membership to whether the page had anything real on
+ * it, so 123 spun pages went into the sitemap — the same four paragraphs with
+ * the city name swapped, identical to a second site running this codebase.
+ *
+ * A city is now indexable if, and only if, someone has written a genuine local
+ * profile for it in lib/city-profiles.ts: season length, ground conditions,
+ * real venues, the local permit authority, when dates actually book. That makes
+ * the guarantee structural rather than a promise — you cannot add a city to the
+ * sitemap without first writing content that justifies it.
+ *
+ * Everything else still renders (a visitor searching their town finds a useful
+ * page) but is noindex and absent from the sitemap, so it cannot dilute the
+ * domain or duplicate the other site.
  */
-export const PRIORITY_CITY_KEYS: readonly string[] = [
-  // Texas
-  "texas/houston",
-  "texas/san-antonio",
-  "texas/dallas",
-  "texas/austin",
-  "texas/fort-worth",
-  "texas/el-paso",
-  // California
-  "california/los-angeles",
-  "california/san-diego",
-  "california/san-jose",
-  "california/san-francisco",
-  "california/fresno",
-  "california/sacramento",
-  "california/long-beach",
-  // Florida
-  "florida/jacksonville",
-  "florida/miami",
-  "florida/tampa",
-  "florida/orlando",
-  // New York
-  "new-york/new-york-city",
-  "new-york/buffalo",
-  // Illinois / Arizona
-  "illinois/chicago",
-  "arizona/phoenix",
-  "arizona/tucson",
-  "arizona/mesa",
-  // Pennsylvania / Ohio
-  "pennsylvania/philadelphia",
-  "pennsylvania/pittsburgh",
-  "ohio/columbus",
-  "ohio/cleveland",
-  "ohio/cincinnati",
-  // North Carolina / Georgia / Michigan
-  "north-carolina/charlotte",
-  "north-carolina/raleigh",
-  "georgia/atlanta",
-  "michigan/detroit",
-  // West / Mountain
-  "washington/seattle",
-  "colorado/denver",
-  "nevada/las-vegas",
-  "oregon/portland",
-  "new-mexico/albuquerque",
-  // Northeast / Mid-Atlantic
-  "washington-dc/washington",
-  "massachusetts/boston",
-  "maryland/baltimore",
-  "virginia/virginia-beach",
-  // Tennessee / Oklahoma / Kentucky / Louisiana
-  "tennessee/nashville",
-  "tennessee/memphis",
-  "oklahoma/oklahoma-city",
-  "oklahoma/tulsa",
-  "kentucky/louisville",
-  "louisiana/new-orleans",
-  // Midwest
-  "missouri/kansas-city",
-  "missouri/st-louis",
-  "indiana/indianapolis",
-  "wisconsin/milwaukee",
-  "minnesota/minneapolis",
-
-  // ── Wave 2 — next tier of major metros (added 2026-07-31). All genuine
-  //    top-~120 US cities with real party-rental demand; each page carries
-  //    localized delivery areas + schema, so they're not thin duplicates.
-  "california/oakland",
-  "california/bakersfield",
-  "california/anaheim",
-  "california/riverside",
-  "california/santa-ana",
-  "california/stockton",
-  "california/chula-vista",
-  "california/irvine",
-  "texas/arlington",
-  "texas/corpus-christi",
-  "texas/plano",
-  "texas/lubbock",
-  "texas/laredo",
-  "texas/garland",
-  "texas/irving",
-  "florida/st-petersburg",
-  "florida/hialeah",
-  "florida/fort-lauderdale",
-  "florida/tallahassee",
-  "florida/cape-coral",
-  "florida/port-st-lucie",
-  "arizona/chandler",
-  "arizona/gilbert",
-  "arizona/scottsdale",
-  "arizona/glendale",
-  "arizona/tempe",
-  "colorado/colorado-springs",
-  "colorado/aurora",
-  "north-carolina/greensboro",
-  "north-carolina/durham",
-  "north-carolina/winston-salem",
-  "ohio/toledo",
-  "ohio/akron",
-  "tennessee/knoxville",
-  "tennessee/chattanooga",
-  "nevada/henderson",
-  "nevada/reno",
-  "washington/spokane",
-  "washington/tacoma",
-  "virginia/richmond",
-  "virginia/norfolk",
-  "virginia/chesapeake",
-  "new-york/rochester",
-  "new-york/syracuse",
-  "new-york/yonkers",
-  "new-york/albany",
-  "georgia/augusta",
-  "georgia/columbus",
-  "georgia/savannah",
-  "michigan/grand-rapids",
-  "minnesota/saint-paul",
-  "kansas/wichita",
-  "kansas/overland-park",
-  "nebraska/omaha",
-  "nebraska/lincoln",
-  "new-jersey/newark",
-  "new-jersey/jersey-city",
-  "indiana/fort-wayne",
-  "kentucky/lexington",
-  "louisiana/baton-rouge",
-  "louisiana/shreveport",
-  "utah/salt-lake-city",
-  "south-carolina/charleston",
-  "south-carolina/columbia",
-  "alabama/birmingham",
-  "alabama/montgomery",
-  "alabama/huntsville",
-  "iowa/des-moines",
-  "arkansas/little-rock",
-  "mississippi/jackson",
-  "oregon/salem",
-];
+export const PRIORITY_CITY_KEYS: readonly string[] = PROFILED_CITY_KEYS;
 
 const PRIORITY_SET = new Set(PRIORITY_CITY_KEYS);
 

@@ -136,7 +136,8 @@ export default async function CityRentalPage({ params }: Props) {
   // Deterministically-varied per-city content (hero image, opening copy,
   // a region/season paragraph, and the FAQ set) — differentiates the 750+
   // programmatic pages so they don't read as one identical template.
-  const { hero, heroDescription, intro, seasonal, faqs } = getCityContent(loc);
+  const { hero, heroDescription, intro, seasonal, faqs, venues, setup } =
+    getCityContent(loc);
 
   // Real, verifiable delivery suburbs/neighborhoods for this metro (priority
   // cities only) — the strongest "genuinely about this city" signal.
@@ -225,12 +226,55 @@ export default async function CityRentalPage({ params }: Props) {
                 </p>
               </Reveal>
 
-              {/* Region/season-specific paragraph — genuinely unique per state. */}
-              <Reveal className="mt-4" delay={0.05}>
-                <p className="text-muted-foreground leading-relaxed">
-                  {seasonal}
-                </p>
-              </Reveal>
+              {/* Season window + local booking pressure. Written per city, not
+                  per region — two cities in the same state have different
+                  seasons and different weekends that sell out. */}
+              {seasonal ? (
+                <Reveal className="mt-4" delay={0.05}>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {seasonal}
+                  </p>
+                </Reveal>
+              ) : null}
+
+              {/* Ground, access and anchoring — the part that is genuinely
+                  different city to city (caliche in Phoenix, limestone in
+                  Miami, gumbo clay in Houston) and the reason these pages are
+                  worth indexing at all. */}
+              {setup ? (
+                <Reveal className="mt-4" delay={0.08}>
+                  <h2 className="font-display text-foreground text-lg font-semibold">
+                    Setting up in {name}
+                  </h2>
+                  <p className="text-muted-foreground mt-2 leading-relaxed">
+                    {setup}
+                  </p>
+                </Reveal>
+              ) : null}
+
+              {/* Real venues locals actually book. */}
+              {venues.length > 0 ? (
+                <Reveal className="mt-6" delay={0.1}>
+                  <h2 className="font-display text-foreground text-lg font-semibold">
+                    Venues we deliver to around {name}
+                  </h2>
+                  <ul className="text-muted-foreground mt-2 grid gap-1.5 sm:grid-cols-2">
+                    {venues.map((v) => (
+                      <li key={v} className="flex gap-2">
+                        <span aria-hidden="true" className="text-primary">
+                          ·
+                        </span>
+                        {v}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
+                    Public sites run their own reservation process — confirm
+                    your spot before booking the slide, and ask us for a
+                    certificate of insurance early if the venue needs one.
+                  </p>
+                </Reveal>
+              ) : null}
 
               {/* Real local delivery area — unique, verifiable per-metro content. */}
               {local ? (
