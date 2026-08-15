@@ -64,45 +64,50 @@ export default async function CheckoutPage({ params }: Props) {
             />
           </Reveal>
 
-          {/* Cart contents stay editable (quantities, remove, suggestions);
-              the booking half below is the same one-page flow as Rent Now and
-              Buy Now. `checkoutSummary` hides CartClient's own sidebar summary
-              and its quote button — the totals now live above the submit, where
-              the plan and method pickers can move them in view. */}
+          {/* Cart contents stay editable (quantities, remove, suggestions).
+              The booking form goes in via `afterCart` rather than after this
+              component, so the page reads cart -> book -> "you might also like";
+              rendered as a sibling it landed BELOW four upsell cards, which put
+              the submit button off the bottom of the page.
+
+              `checkoutSummary` hides CartClient's own sticky summary and its
+              legacy quote form — the totals now sit directly above the submit,
+              where the plan and method pickers can move them in view. */}
           <CartClient
             cart={cart}
             locale={locale}
             deliveryFromCents={settings.fees?.deliveryBaseCents}
             suggestions={suggestions}
             checkoutSummary
+            afterCart={
+              cart.lines.length > 0 && cart.id ? (
+                <div className="mx-auto mt-10 max-w-2xl">
+                  <CartCheckoutForm
+                    cartId={cart.id}
+                    lines={cart.lines.map((l) => ({
+                      productId: l.productId,
+                      slug: l.slug,
+                      name: l.name,
+                      mode: l.mode,
+                      unitPriceCents: l.unitPriceCents,
+                      quantity: l.quantity,
+                      lineTotalCents: l.lineTotalCents,
+                    }))}
+                    subtotalCents={cart.subtotalCents}
+                    transportCents={
+                      settings.fees?.transportEnabled === false
+                        ? 0
+                        : TRANSPORT_CENTS
+                    }
+                    locale={locale}
+                    contactEmail={settings.contact?.email ?? BRAND_EMAIL}
+                    contactPhone={settings.contact?.phone ?? null}
+                    whatsapp={settings.contact?.whatsapp ?? null}
+                  />
+                </div>
+              ) : null
+            }
           />
-
-          {cart.lines.length > 0 && cart.id ? (
-            <div className="mx-auto mt-10 max-w-2xl">
-              <CartCheckoutForm
-                cartId={cart.id}
-                lines={cart.lines.map((l) => ({
-                  productId: l.productId,
-                  slug: l.slug,
-                  name: l.name,
-                  mode: l.mode,
-                  unitPriceCents: l.unitPriceCents,
-                  quantity: l.quantity,
-                  lineTotalCents: l.lineTotalCents,
-                }))}
-                subtotalCents={cart.subtotalCents}
-                transportCents={
-                  settings.fees?.transportEnabled === false
-                    ? 0
-                    : TRANSPORT_CENTS
-                }
-                locale={locale}
-                contactEmail={settings.contact?.email ?? BRAND_EMAIL}
-                contactPhone={settings.contact?.phone ?? null}
-                whatsapp={settings.contact?.whatsapp ?? null}
-              />
-            </div>
-          ) : null}
         </Container>
       </Section>
     </main>

@@ -40,6 +40,7 @@ export function CartClient({
   locale,
   deliveryFromCents,
   checkoutSummary = false,
+  afterCart,
   suggestions = [],
 }: {
   cart: CartSummary;
@@ -49,6 +50,11 @@ export function CartClient({
       hides the sticky sidebar summary rather than showing two sets of numbers
       that disagree the moment a payment plan is chosen. */
   checkoutSummary?: boolean;
+  /** Rendered between the cart and the suggestions. The checkout page passes
+      its booking form here so the order reads cart -> book -> "you might also
+      like" — a customer should reach the button before being offered more to
+      add, not scroll past four upsells to find it. */
+  afterCart?: React.ReactNode;
   suggestions?: CheckoutSuggestion[];
 }) {
   const t = useTranslations("Cart");
@@ -384,6 +390,8 @@ export function CartClient({
           <div className="lg:sticky lg:top-28 lg:self-start">{summary}</div>
         )}
       </div>
+
+      {afterCart}
 
       {/* You might also like — quick-add straight into this order. */}
       {recommend.length > 0 ? (
