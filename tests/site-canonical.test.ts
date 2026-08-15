@@ -8,9 +8,16 @@ import {
 import { USE_CASES, getUseCaseBySlug } from "@/lib/use-cases";
 
 describe("isAliasHost", () => {
-  it("flags the one-'s' duplicate domain and its www form", () => {
-    expect(isAliasHost("bigwaveslides.com")).toBe(true);
-    expect(isAliasHost("www.bigwaveslides.com")).toBe(true);
+  it("NEVER redirects bigwaveslides.com — it is a different client's site", () => {
+    // One letter apart from this domain and built from the same codebase, so it
+    // reads like a typo of ours. It is not: it is a separate business run for a
+    // separate client. Treating it as an alias would 301 their traffic to us.
+    // This test exists so that mistake cannot be made twice.
+    expect(isAliasHost("bigwaveslides.com")).toBe(false);
+    expect(isAliasHost("www.bigwaveslides.com")).toBe(false);
+    expect(canonicalSiteUrl("https://www.bigwaveslides.com")).toBe(
+      "https://www.bigwaveslides.com",
+    );
   });
 
   it("flags the apex so it folds into www", () => {
@@ -28,7 +35,8 @@ describe("isAliasHost", () => {
   });
 
   it("ignores case and port", () => {
-    expect(isAliasHost("BigWaveSlides.com:443")).toBe(true);
+    // Note the double 's' — this is our own apex, not the other client's domain.
+    expect(isAliasHost("BigWavesSlides.com:443")).toBe(true);
   });
 
   it("handles missing headers", () => {
@@ -43,8 +51,6 @@ describe("canonicalSiteUrl", () => {
     for (const raw of [
       "https://bigwavesslides.com",
       "https://www.bigwavesslides.com/",
-      "https://bigwaveslides.com",
-      "https://www.bigwaveslides.com/en",
     ]) {
       expect(canonicalSiteUrl(raw)).toBe(CANONICAL_ORIGIN);
     }

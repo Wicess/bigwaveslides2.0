@@ -33,10 +33,18 @@ export const CANONICAL_ORIGIN = `https://${CANONICAL_HOST}`;
 export const ALIAS_HOSTS: readonly string[] = [
   // Apex → www. Canonicals must match the host verified in Search Console.
   "bigwavesslides.com",
-  // The one-'s' typo domain that ran as a full duplicate deployment.
-  "bigwaveslides.com",
-  "www.bigwaveslides.com",
 ];
+
+// DO NOT add bigwaveslides.com (one 's') here.
+//
+// It looks like a typo of this domain and was briefly treated as one. It is
+// not: it is a DIFFERENT CLIENT'S SITE, built from this same codebase and run
+// as a separate business. Redirecting it here would take a paying client's
+// traffic and hand it to another. Any host in ALIAS_HOSTS must be a domain
+// THIS site owns.
+//
+// The two sites being near-identical is a real problem, but it is a content
+// problem, not a routing one — see docs/site-differentiation.md.
 
 /** Strip the port so `example.com:443` matches `example.com`. */
 function bareHost(host: string): string {
