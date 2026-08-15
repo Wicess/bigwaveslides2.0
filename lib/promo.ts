@@ -20,6 +20,16 @@ export type Promo = {
 
 export const PROMOS: Promo[] = [
   {
+    // The everyday code: 5% off any order, no product or duration restriction.
+    // Safe to hand out anywhere (social, flyers, a reply to "any discount?")
+    // because it cannot be combined with loyalty — the server takes the larger
+    // of the two, so a subscriber already getting 15% is unaffected by it.
+    code: "SAVE5",
+    label: "5% off your order",
+    pct: 0.05,
+    expiresAt: "2026-12-31T23:59:59.000Z",
+  },
+  {
     code: "WAVE25",
     label: "25% off the Tropical Wave 18 (2+ day rentals)",
     pct: 0.25,

@@ -1,6 +1,12 @@
 // Shared (server + client) helpers for the half/full payment plan on invoices.
 
-export type PaymentPlan = "HALF" | "FULL";
+/**
+ * DELIVERY is legacy: orders taken before instant reservation existed deferred
+ * the whole amount to delivery day, so `amountDueCents` is 0 for them. Nothing
+ * new is ever created with it — it stays in the union only so old rows still
+ * compute and render. New checkouts offer HALF and FULL.
+ */
+export type PaymentPlan = "HALF" | "FULL" | "DELIVERY";
 
 /**
  * Instant-pay discounts, applied to the whole invoice and shown prominently to
@@ -57,9 +63,24 @@ export function effectiveTotalCents(
 }
 
 /** Amount due right now for the chosen plan. HALF = 50% deposit to reserve
-    the date (rounded up to the cent); FULL = the whole invoice. */
+    the date (rounded up to the cent); FULL = the whole invoice; DELIVERY is
+    legacy and defers everything to delivery day. */
 export function amountDueCents(plan: PaymentPlan, totalCents: number): number {
+  if (plan === "DELIVERY") return 0;
   return plan === "HALF" ? Math.ceil(totalCents / 2) : totalCents;
+}
+
+/**
+ * Plan label for the checkout cards, emails and the WhatsApp message.
+ *
+ * Deliberately free of any "we will send you payment details" phrasing — that
+ * reads as a scam to a first-time customer. These say what the client is
+ * choosing, nothing about how we collect it.
+ */
+export function planLabel(plan: PaymentPlan): string {
+  if (plan === "HALF") return "50% deposit now";
+  if (plan === "FULL") return "Pay in full now";
+  return "Due on delivery";
 }
 
 /** The remaining balance due before setup on event day (0 for FULL). */

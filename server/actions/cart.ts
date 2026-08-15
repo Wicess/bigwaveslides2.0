@@ -63,6 +63,27 @@ export async function addToCart(
     if (!product) return { ok: false, error: "Product unavailable" };
 
     const cartId = await ensureCart();
+
+    // One cart, one mode. Renting and buying are different transactions with
+    // different totals, different copy and — critically — different checkouts:
+    // a rental needs an event date and availability, a purchase needs a
+    // quantity and a delivery address. A cart holding both cannot present a
+    // coherent summary or a single "Book Now"/"Order Now" button, so we refuse
+    // the mix at the door rather than trying to reconcile it at checkout.
+    const opposite = await prisma.cartItem.findFirst({
+      where: { cartId, mode: cartMode === "RENT" ? "BUY" : "RENT" },
+      select: { id: true },
+    });
+    if (opposite) {
+      return {
+        ok: false,
+        error:
+          cartMode === "RENT"
+            ? "Your cart has items to buy — check out or clear it before adding a rental."
+            : "Your cart has rentals — check out or clear it before adding a purchase.",
+      };
+    }
+
     // Buy and rent of the same product are kept as separate lines.
     const existing = await prisma.cartItem.findFirst({
       where: { cartId, productId, variationId: null, mode: cartMode },

@@ -22,7 +22,7 @@ const CONTACT_EMAIL = "contact@bigwavesslides.com";
 const DEFAULT_ADMIN_NOTIFY = ["kenjones086@gmail.com"];
 
 /** All inboxes that should receive admin notifications (settings + defaults + env). */
-async function adminRecipients(): Promise<string[]> {
+export async function adminRecipients(): Promise<string[]> {
   const settings = await getSettings().catch((): SiteSettings => ({}));
   const primary = settings.contact?.email ?? env.SMTP_USER ?? null;
   const extras = (env.ADMIN_NOTIFY_EMAILS ?? "")
