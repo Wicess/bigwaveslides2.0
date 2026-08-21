@@ -5,6 +5,9 @@ import { CANONICAL_HOST, isAliasHost } from "./lib/site";
 
 const intlMiddleware = createMiddleware(routing);
 
+/** The one locale. See i18n/routing.ts. */
+const EN = routing.defaultLocale;
+
 /**
  * Retired blog URLs → the post that now owns their topic. Locale-free paths.
  *
@@ -76,6 +79,30 @@ export default function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
     url.pathname = `/en${retired}`;
     return NextResponse.redirect(url, 301);
+  }
+
+  // ─── Locale prefix: permanent, not temporary ──────────────────────────────
+  // next-intl redirects an unprefixed path to the default locale with a 307.
+  // That is the right default when the locale is negotiated per visitor — but
+  // this site has exactly one locale (i18n/routing.ts), so "/" can never
+  // legitimately resolve anywhere except "/en".
+  //
+  // The status matters. Google treats a temporary redirect as "keep indexing
+  // the source, this may change back", so it does not fully consolidate the
+  // source URL's signals into the target. The paths this affects are the worst
+  // possible ones to leave unconsolidated: "/" is what almost every external
+  // link, directory listing and social share points at, followed by /shop,
+  // /rent and /blog. Search Console was reporting these as "Moved temporarily
+  // (302)". Issuing the redirect ourselves, permanently, before next-intl sees
+  // it consolidates them instead.
+  //
+  // Matched on a segment boundary, not a prefix: "/energy" starts with "/en"
+  // but is not the locale.
+  const isLocalized = pathname === `/${EN}` || pathname.startsWith(`/${EN}/`);
+  if (!isLocalized) {
+    const url = req.nextUrl.clone();
+    url.pathname = pathname === "/" ? `/${EN}` : `/${EN}${pathname}`;
+    return NextResponse.redirect(url, 308);
   }
 
   return intlMiddleware(req);
