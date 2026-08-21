@@ -21,8 +21,13 @@ async function main() {
   }
   console.log(`Submitting ${urls.length} URLs to IndexNow (host: ${host})…`);
 
-  // IndexNow accepts up to 10,000 URLs per request; batch to be safe.
-  const BATCH = 5000;
+  // The spec allows 10,000 URLs per request, but Bing applies a per-host quota
+  // that a young site trips long before that: a single 343-URL POST was
+  // rejected 403 while the same key in batches of 100 was accepted 200. So the
+  // batch is deliberately small — a 403 here is far more likely to be the
+  // quota than a bad key, and the key is easy to verify separately by POSTing
+  // one URL.
+  const BATCH = 100;
   for (let i = 0; i < urls.length; i += BATCH) {
     const urlList = urls.slice(i, i + BATCH);
     const res = await fetch("https://api.indexnow.org/indexnow", {

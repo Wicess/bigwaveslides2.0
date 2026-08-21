@@ -30,6 +30,7 @@
     "db:strip-fr": "dotenv -e .env.local -- tsx scripts/strip-retired-locale.ts",
     "db:sync-ratings": "dotenv -e .env.local -- tsx scripts/sync-product-ratings.ts",
     "db:reclassify-bots": "dotenv -e .env.local -- tsx scripts/reclassify-bots.ts",
+    "seo:indexnow": "SITE=https://www.splashrep.com tsx scripts/indexnow-submit.ts",
     "gen:indexing-urls": "dotenv -e .env.local -- tsx scripts/gen-indexing-urls.ts",
     "media:rehost": "dotenv -e .env.local -- tsx scripts/rehost-images.ts",
     "admin:set-password": "dotenv -e .env.local -- tsx scripts/set-admin-password.ts",
