@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import { getRenamedProductSlug } from "@/server/data/products";
 import {
   Users,
   Zap,
@@ -101,7 +102,13 @@ export default async function RentalDetailPage({ params }: Props) {
   setRequestLocale(locale);
 
   const product = await getRentalBySlug(slug);
-  if (!product) notFound();
+  if (!product) {
+    // The rename changed every product URL. Old ones were indexed and are
+    // still requested, so hand them to the renamed page instead of 404ing.
+    const renamed = await getRenamedProductSlug(slug);
+    if (renamed) permanentRedirect(`/${locale}/rent/${renamed}`);
+    notFound();
+  }
 
   const t = await getTranslations("RentalDetail");
   const tp = await getTranslations("Product");

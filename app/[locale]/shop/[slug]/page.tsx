@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import {
   Ruler,
   Users,
@@ -19,6 +19,7 @@ import {
   getProductBySlug,
   getRelatedProducts,
   getProductSlugs,
+  getRenamedProductSlug,
 } from "@/server/data/products";
 import { getLocalized } from "@/lib/localized";
 import { buildMetadata, saleProductSeo, productKindLabel } from "@/lib/seo";
@@ -101,7 +102,13 @@ export default async function ProductDetailPage({ params }: Props) {
   setRequestLocale(locale);
 
   const product = await getProductBySlug(slug);
-  if (!product) notFound();
+  if (!product) {
+    // The rename changed every product URL. Old ones were indexed and are
+    // still requested, so hand them to the renamed page instead of 404ing.
+    const renamed = await getRenamedProductSlug(slug);
+    if (renamed) permanentRedirect(`/${locale}/shop/${renamed}`);
+    notFound();
+  }
 
   const t = await getTranslations("ProductDetail");
   const tp = await getTranslations("Product");

@@ -242,6 +242,39 @@ export async function getProductBySlug(slug: string) {
   ).catch(() => null);
 }
 
+/**
+ * Resolve a PRE-RENAME product slug to the slug that product carries now.
+ *
+ * rebrand-catalog.ts renamed all 53 products, which changed every product URL.
+ * The SKUs were deliberately left alone, so they still encode the old names —
+ * BWS-AQUA-WAVE-15 belongs to what is now `cascade-15`. That makes the SKU
+ * column an exact, self-maintaining old-slug map: rename a product again and
+ * this keeps working with no list to update.
+ *
+ * Used by the product routes to 301 instead of 404. Those old URLs were live
+ * and indexed under the previous name, and crawlers still request them —
+ * `/en/rent/mega-waterpark-combo` was hit on 2026-08-17. A 404 throws away
+ * whatever each one had accumulated; a 301 hands it to the renamed page.
+ *
+ * Returns null when there is no match, when the product is no longer ACTIVE, or
+ * when the slug is already current (so a live URL can never redirect to itself).
+ */
+export async function getRenamedProductSlug(
+  oldSlug: string,
+): Promise<string | null> {
+  // The slug reaches us from the URL, so reject anything that could not be one
+  // before building an SKU string out of it.
+  if (!/^[a-z0-9-]+$/.test(oldSlug)) return null;
+  const row = await withRetry(() =>
+    prisma.product.findUnique({
+      where: { sku: `BWS-${oldSlug.toUpperCase()}` },
+      select: { slug: true, status: true },
+    }),
+  ).catch(() => null);
+  if (!row || row.status !== "ACTIVE" || row.slug === oldSlug) return null;
+  return row.slug;
+}
+
 export type ProductDetail = NonNullable<
   Awaited<ReturnType<typeof getProductBySlug>>
 >;
