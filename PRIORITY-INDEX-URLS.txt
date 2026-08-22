@@ -1,13 +1,26 @@
-# Splash Republic — manual indexing priority
+# Splash Republic — full manual indexing list
 #
 # Google Search Console -> URL Inspection -> paste -> Request Indexing.
-# Roughly 10-15 requests per property per day; work down in order and stop
-# when GSC refuses rather than retrying (repeats can get the quota throttled).
+# Quota is roughly 10-15 URLs per property per day. Work top to bottom and stop
+# when GSC refuses; do NOT retry the same URL, repeats can throttle the quota.
 #
-# All verified: HTTP 200, present in sitemap.xml, meta robots "index, follow".
-# ---------------------------------------------------------------------------
+# Every URL below is taken from the live sitemap and returns 200 with
+# meta robots "index, follow" — none will waste a request.
+#
+# IMPORTANT: you do not need to submit all of these by hand. Once Google crawls
+# Day 1 and finds real content, it follows your internal links and picks up the
+# rest on its own. Manual submission is a kickstart; what actually raises your
+# crawl budget is a Google Business Profile and the first real backlinks.
+#
+# Generated from https://www.splashrep.com/sitemap.xml
 
-# DAY 1 — entity + commercial + seasonal
+
+# --------------------------------------------------------------------------
+# DAY 1 — entity, commercial and seasonal. Do these first: the homepage is how
+#          Google discovers everything else, and the fall pages have a real
+#          October window that closes.
+# 15 URLs
+# --------------------------------------------------------------------------
 https://www.splashrep.com/en
 https://www.splashrep.com/en/rent
 https://www.splashrep.com/en/shop
@@ -24,24 +37,365 @@ https://www.splashrep.com/en/water-slides-for/school-carnivals
 https://www.splashrep.com/en/water-slide-rentals/nevada/las-vegas
 https://www.splashrep.com/en/water-slide-rentals/georgia/atlanta
 
-# DAY 2 — remaining profiled cities (real local content behind each)
-https://www.splashrep.com/en/water-slide-rentals/texas/austin
-https://www.splashrep.com/en/water-slide-rentals/texas/san-antonio
-https://www.splashrep.com/en/water-slide-rentals/florida/tampa
-https://www.splashrep.com/en/water-slide-rentals/florida/miami
-https://www.splashrep.com/en/water-slide-rentals/california/los-angeles
-https://www.splashrep.com/en/water-slide-rentals/california/san-diego
-https://www.splashrep.com/en/water-slide-rentals/north-carolina/charlotte
-https://www.splashrep.com/en/water-slide-rentals/tennessee/nashville
-https://www.splashrep.com/en/water-slide-rentals/louisiana/new-orleans
-https://www.splashrep.com/en/water-slide-rentals/south-carolina/charleston
-https://www.splashrep.com/en/water-slide-rentals/oklahoma/oklahoma-city
+# --------------------------------------------------------------------------
+# DAY 2 — remaining hand-written city profiles and the rest of the fall cluster.
+#          These are the only city pages with genuine local content behind them.
+# 11 URLs
+# --------------------------------------------------------------------------
+https://www.splashrep.com/en/water-slides-for/birthday-parties
+https://www.splashrep.com/en/water-slides-for/church-events
+https://www.splashrep.com/en/water-slides-for/corporate-events
+https://www.splashrep.com/en/water-slides-for/corporate-fall-family-day
+https://www.splashrep.com/en/water-slides-for/graduation-parties
 https://www.splashrep.com/en/water-slides-for/halloween-parties
 https://www.splashrep.com/en/water-slides-for/harvest-festivals
-https://www.splashrep.com/en/water-slides-for/corporate-fall-family-day
-https://www.splashrep.com/en/services
+https://www.splashrep.com/en/water-slides-for/hoa-neighborhood-events
+https://www.splashrep.com/en/water-slides-for/pool-parties
+https://www.splashrep.com/en/water-slides-for/school-events
+https://www.splashrep.com/en/water-slides-for/summer-camps-daycares
 
-# DAY 3+ — everything else is in indexing-urls.txt (343 URLs, full sitemap
-# mirror). You do NOT need to submit them all by hand: once Google crawls the
-# pages above and sees real content, it allocates budget to the rest by
-# following your internal links. Manual submission is a kickstart, not the fix.
+# --------------------------------------------------------------------------
+# DAY 3 — core site pages.
+# 7 URLs
+# --------------------------------------------------------------------------
+https://www.splashrep.com/en/blog
+https://www.splashrep.com/en/bounce-house-rentals
+https://www.splashrep.com/en/contact
+https://www.splashrep.com/en/faq
+https://www.splashrep.com/en/services
+https://www.splashrep.com/en/testimonials
+https://www.splashrep.com/en/water-slide-rentals
+
+# --------------------------------------------------------------------------
+# DAY 4-5 — blog. Original posts; the strongest long-tail surface you have.
+# 72 URLs
+# --------------------------------------------------------------------------
+https://www.splashrep.com/en/blog/are-inflatable-water-slides-safe
+https://www.splashrep.com/en/blog/are-water-slide-rentals-insured
+https://www.splashrep.com/en/blog/are-water-slide-rentals-worth-it
+https://www.splashrep.com/en/blog/best-age-for-inflatable-water-slides
+https://www.splashrep.com/en/blog/best-inflatable-water-slides-to-buy-2026
+https://www.splashrep.com/en/blog/best-water-slide-rentals-birthday-party
+https://www.splashrep.com/en/blog/can-a-water-slide-fit-in-a-small-backyard
+https://www.splashrep.com/en/blog/can-adults-use-inflatable-water-slides
+https://www.splashrep.com/en/blog/can-you-book-a-water-slide-rental-last-minute
+https://www.splashrep.com/en/blog/can-you-set-up-a-water-slide-on-grass
+https://www.splashrep.com/en/blog/category/buying
+https://www.splashrep.com/en/blog/category/events
+https://www.splashrep.com/en/blog/category/guides
+https://www.splashrep.com/en/blog/category/ownership
+https://www.splashrep.com/en/blog/category/planning
+https://www.splashrep.com/en/blog/category/pricing
+https://www.splashrep.com/en/blog/category/safety
+https://www.splashrep.com/en/blog/choose-the-right-water-slide
+https://www.splashrep.com/en/blog/clean-dry-store-inflatable-water-slide
+https://www.splashrep.com/en/blog/combo-bounce-house-vs-water-slide
+https://www.splashrep.com/en/blog/commercial-water-slide-buying-guide
+https://www.splashrep.com/en/blog/do-water-slide-rentals-need-a-generator
+https://www.splashrep.com/en/blog/do-water-slide-rentals-need-electricity
+https://www.splashrep.com/en/blog/do-you-have-to-pay-a-deposit-to-rent-a-water-slide
+https://www.splashrep.com/en/blog/fourth-of-july-water-slide-party
+https://www.splashrep.com/en/blog/graduation-party-water-slide-ideas
+https://www.splashrep.com/en/blog/how-are-water-slides-cleaned-and-sanitized
+https://www.splashrep.com/en/blog/how-long-does-water-slide-setup-take
+https://www.splashrep.com/en/blog/how-much-space-water-slide
+https://www.splashrep.com/en/blog/how-much-water-does-a-water-slide-use
+https://www.splashrep.com/en/blog/how-to-prepare-your-yard-for-a-water-slide-rental
+https://www.splashrep.com/en/blog/how-to-rent-a-water-slide
+https://www.splashrep.com/en/blog/how-windy-is-too-windy-for-a-water-slide
+https://www.splashrep.com/en/blog/perfect-backyard-water-slide-party
+https://www.splashrep.com/en/blog/questions-to-ask-before-renting-a-water-slide
+https://www.splashrep.com/en/blog/rent-or-buy-water-slide
+https://www.splashrep.com/en/blog/residential-vs-commercial-water-slide
+https://www.splashrep.com/en/blog/safety-setup-inspection-process
+https://www.splashrep.com/en/blog/start-a-water-slide-rental-business
+https://www.splashrep.com/en/blog/summer-block-party-water-slide
+https://www.splashrep.com/en/blog/tag/buying
+https://www.splashrep.com/en/blog/tag/commercial
+https://www.splashrep.com/en/blog/tag/community
+https://www.splashrep.com/en/blog/tag/corporate
+https://www.splashrep.com/en/blog/tag/events
+https://www.splashrep.com/en/blog/tag/guides
+https://www.splashrep.com/en/blog/tag/ownership
+https://www.splashrep.com/en/blog/tag/parties
+https://www.splashrep.com/en/blog/tag/planning
+https://www.splashrep.com/en/blog/tag/pricing
+https://www.splashrep.com/en/blog/tag/rentals
+https://www.splashrep.com/en/blog/tag/safety
+https://www.splashrep.com/en/blog/tag/seasonal
+https://www.splashrep.com/en/blog/tag/tips
+https://www.splashrep.com/en/blog/water-slide-delivery-and-pickup-times
+https://www.splashrep.com/en/blog/water-slide-in-extreme-heat
+https://www.splashrep.com/en/blog/water-slide-on-concrete
+https://www.splashrep.com/en/blog/water-slide-on-uneven-ground
+https://www.splashrep.com/en/blog/water-slide-rain-weather-policy
+https://www.splashrep.com/en/blog/water-slide-rental-deals-and-discounts
+https://www.splashrep.com/en/blog/water-slide-rentals-churches-schools-hoas
+https://www.splashrep.com/en/blog/water-slide-season-state-by-state
+https://www.splashrep.com/en/blog/water-slide-vs-bounce-house
+https://www.splashrep.com/en/blog/water-slide-water-source
+https://www.splashrep.com/en/blog/water-slide-weight-limit
+https://www.splashrep.com/en/blog/water-slides-corporate-community-events
+https://www.splashrep.com/en/blog/wet-or-dry-inflatable-guide
+https://www.splashrep.com/en/blog/what-affects-water-slide-rental-prices
+https://www.splashrep.com/en/blog/what-is-included-in-a-water-slide-rental
+https://www.splashrep.com/en/blog/what-size-water-slide-should-you-rent
+https://www.splashrep.com/en/blog/what-to-do-before-water-slide-rental-arrives
+https://www.splashrep.com/en/blog/when-to-book-summer-water-slide
+
+# --------------------------------------------------------------------------
+# DAY 6-7 — rental product pages.
+# 53 URLs
+# --------------------------------------------------------------------------
+https://www.splashrep.com/en/rent/amethyst-18
+https://www.splashrep.com/en/rent/big-top-bouncer
+https://www.splashrep.com/en/rent/blossom-keep-bouncer
+https://www.splashrep.com/en/rent/bluepoint-18
+https://www.splashrep.com/en/rent/breakwater-18
+https://www.splashrep.com/en/rent/cape-fin-18
+https://www.splashrep.com/en/rent/carnival-16
+https://www.splashrep.com/en/rent/cascade-15
+https://www.splashrep.com/en/rent/coastline-18
+https://www.splashrep.com/en/rent/crown-court-combo
+https://www.splashrep.com/en/rent/crown-keep-bouncer
+https://www.splashrep.com/en/rent/deepwater-18
+https://www.splashrep.com/en/rent/dreamfield-bouncer
+https://www.splashrep.com/en/rent/ember-ridge-18
+https://www.splashrep.com/en/rent/everglade-18
+https://www.splashrep.com/en/rent/fossil-ridge-18
+https://www.splashrep.com/en/rent/frost-and-ember-18
+https://www.splashrep.com/en/rent/glacier-run-18
+https://www.splashrep.com/en/rent/grand-waterworks-combo
+https://www.splashrep.com/en/rent/highwater-tower-27
+https://www.splashrep.com/en/rent/homestead-bouncer
+https://www.splashrep.com/en/rent/humpback-16
+https://www.splashrep.com/en/rent/keep-and-splash-combo
+https://www.splashrep.com/en/rent/launchpad-18
+https://www.splashrep.com/en/rent/liberty-16
+https://www.splashrep.com/en/rent/little-harbor-junior
+https://www.splashrep.com/en/rent/longboard-18
+https://www.splashrep.com/en/rent/metro-heroes-combo
+https://www.splashrep.com/en/rent/nightglow-combo
+https://www.splashrep.com/en/rent/orchard-16
+https://www.splashrep.com/en/rent/palmetto-coast-24
+https://www.splashrep.com/en/rent/prism-combo
+https://www.splashrep.com/en/rent/prism-splash-combo
+https://www.splashrep.com/en/rent/privateer-18
+https://www.splashrep.com/en/rent/rainforest-19
+https://www.splashrep.com/en/rent/redstone-18
+https://www.splashrep.com/en/rent/reefline-18
+https://www.splashrep.com/en/rent/regatta-18
+https://www.splashrep.com/en/rent/rose-keep-bouncer
+https://www.splashrep.com/en/rent/safari-station-combo
+https://www.splashrep.com/en/rent/sandbar-18
+https://www.splashrep.com/en/rent/siren-cove-18
+https://www.splashrep.com/en/rent/stampede-bull
+https://www.splashrep.com/en/rent/stargazer-18
+https://www.splashrep.com/en/rent/sugarhouse-18
+https://www.splashrep.com/en/rent/sugarhouse-bouncer
+https://www.splashrep.com/en/rent/sundown-16
+https://www.splashrep.com/en/rent/sundown-18
+https://www.splashrep.com/en/rent/surge-20
+https://www.splashrep.com/en/rent/thunderhead-28
+https://www.splashrep.com/en/rent/tidepool-18
+https://www.splashrep.com/en/rent/twin-falls-22
+https://www.splashrep.com/en/rent/vortex-peak-26
+
+# --------------------------------------------------------------------------
+# DAY 8-9 — shop product pages.
+# 52 URLs
+# --------------------------------------------------------------------------
+https://www.splashrep.com/en/shop/amethyst-18
+https://www.splashrep.com/en/shop/big-top-bouncer
+https://www.splashrep.com/en/shop/blossom-keep-bouncer
+https://www.splashrep.com/en/shop/bluepoint-18
+https://www.splashrep.com/en/shop/breakwater-18
+https://www.splashrep.com/en/shop/cape-fin-18
+https://www.splashrep.com/en/shop/carnival-16
+https://www.splashrep.com/en/shop/cascade-15
+https://www.splashrep.com/en/shop/coastline-18
+https://www.splashrep.com/en/shop/crown-court-combo
+https://www.splashrep.com/en/shop/crown-keep-bouncer
+https://www.splashrep.com/en/shop/deepwater-18
+https://www.splashrep.com/en/shop/dreamfield-bouncer
+https://www.splashrep.com/en/shop/ember-ridge-18
+https://www.splashrep.com/en/shop/everglade-18
+https://www.splashrep.com/en/shop/fossil-ridge-18
+https://www.splashrep.com/en/shop/frost-and-ember-18
+https://www.splashrep.com/en/shop/glacier-run-18
+https://www.splashrep.com/en/shop/grand-waterworks-combo
+https://www.splashrep.com/en/shop/highwater-tower-27
+https://www.splashrep.com/en/shop/homestead-bouncer
+https://www.splashrep.com/en/shop/humpback-16
+https://www.splashrep.com/en/shop/keep-and-splash-combo
+https://www.splashrep.com/en/shop/launchpad-18
+https://www.splashrep.com/en/shop/liberty-16
+https://www.splashrep.com/en/shop/little-harbor-junior
+https://www.splashrep.com/en/shop/longboard-18
+https://www.splashrep.com/en/shop/metro-heroes-combo
+https://www.splashrep.com/en/shop/nightglow-combo
+https://www.splashrep.com/en/shop/orchard-16
+https://www.splashrep.com/en/shop/palmetto-coast-24
+https://www.splashrep.com/en/shop/prism-combo
+https://www.splashrep.com/en/shop/prism-splash-combo
+https://www.splashrep.com/en/shop/privateer-18
+https://www.splashrep.com/en/shop/rainforest-19
+https://www.splashrep.com/en/shop/redstone-18
+https://www.splashrep.com/en/shop/reefline-18
+https://www.splashrep.com/en/shop/regatta-18
+https://www.splashrep.com/en/shop/rose-keep-bouncer
+https://www.splashrep.com/en/shop/safari-station-combo
+https://www.splashrep.com/en/shop/sandbar-18
+https://www.splashrep.com/en/shop/siren-cove-18
+https://www.splashrep.com/en/shop/stargazer-18
+https://www.splashrep.com/en/shop/sugarhouse-18
+https://www.splashrep.com/en/shop/sugarhouse-bouncer
+https://www.splashrep.com/en/shop/sundown-16
+https://www.splashrep.com/en/shop/sundown-18
+https://www.splashrep.com/en/shop/surge-20
+https://www.splashrep.com/en/shop/thunderhead-28
+https://www.splashrep.com/en/shop/tidepool-18
+https://www.splashrep.com/en/shop/twin-falls-22
+https://www.splashrep.com/en/shop/vortex-peak-26
+
+# --------------------------------------------------------------------------
+# LOW PRIORITY — state hubs and bounce-house pages. Thin by design (they are
+#          navigation, not destinations). Submit only if the pages above are
+#          indexed and you still have quota spare.
+# 133 URLs
+# --------------------------------------------------------------------------
+https://www.splashrep.com/en/water-slide-rentals/california/los-angeles
+https://www.splashrep.com/en/water-slide-rentals/california/san-diego
+https://www.splashrep.com/en/water-slide-rentals/florida/miami
+https://www.splashrep.com/en/water-slide-rentals/florida/tampa
+https://www.splashrep.com/en/water-slide-rentals/louisiana/new-orleans
+https://www.splashrep.com/en/water-slide-rentals/north-carolina/charlotte
+https://www.splashrep.com/en/water-slide-rentals/oklahoma/oklahoma-city
+https://www.splashrep.com/en/water-slide-rentals/south-carolina/charleston
+https://www.splashrep.com/en/water-slide-rentals/tennessee/nashville
+https://www.splashrep.com/en/water-slide-rentals/texas/austin
+https://www.splashrep.com/en/water-slide-rentals/texas/san-antonio
+https://www.splashrep.com/en/bounce-house-rentals/alabama
+https://www.splashrep.com/en/bounce-house-rentals/alaska
+https://www.splashrep.com/en/bounce-house-rentals/arizona
+https://www.splashrep.com/en/bounce-house-rentals/arizona/phoenix
+https://www.splashrep.com/en/bounce-house-rentals/arkansas
+https://www.splashrep.com/en/bounce-house-rentals/california
+https://www.splashrep.com/en/bounce-house-rentals/california/los-angeles
+https://www.splashrep.com/en/bounce-house-rentals/california/san-diego
+https://www.splashrep.com/en/bounce-house-rentals/colorado
+https://www.splashrep.com/en/bounce-house-rentals/connecticut
+https://www.splashrep.com/en/bounce-house-rentals/delaware
+https://www.splashrep.com/en/bounce-house-rentals/florida
+https://www.splashrep.com/en/bounce-house-rentals/florida/miami
+https://www.splashrep.com/en/bounce-house-rentals/florida/orlando
+https://www.splashrep.com/en/bounce-house-rentals/florida/tampa
+https://www.splashrep.com/en/bounce-house-rentals/georgia
+https://www.splashrep.com/en/bounce-house-rentals/georgia/atlanta
+https://www.splashrep.com/en/bounce-house-rentals/hawaii
+https://www.splashrep.com/en/bounce-house-rentals/idaho
+https://www.splashrep.com/en/bounce-house-rentals/illinois
+https://www.splashrep.com/en/bounce-house-rentals/indiana
+https://www.splashrep.com/en/bounce-house-rentals/iowa
+https://www.splashrep.com/en/bounce-house-rentals/kansas
+https://www.splashrep.com/en/bounce-house-rentals/kentucky
+https://www.splashrep.com/en/bounce-house-rentals/louisiana
+https://www.splashrep.com/en/bounce-house-rentals/louisiana/new-orleans
+https://www.splashrep.com/en/bounce-house-rentals/maine
+https://www.splashrep.com/en/bounce-house-rentals/maryland
+https://www.splashrep.com/en/bounce-house-rentals/massachusetts
+https://www.splashrep.com/en/bounce-house-rentals/michigan
+https://www.splashrep.com/en/bounce-house-rentals/minnesota
+https://www.splashrep.com/en/bounce-house-rentals/mississippi
+https://www.splashrep.com/en/bounce-house-rentals/missouri
+https://www.splashrep.com/en/bounce-house-rentals/montana
+https://www.splashrep.com/en/bounce-house-rentals/nebraska
+https://www.splashrep.com/en/bounce-house-rentals/nevada
+https://www.splashrep.com/en/bounce-house-rentals/nevada/las-vegas
+https://www.splashrep.com/en/bounce-house-rentals/new-hampshire
+https://www.splashrep.com/en/bounce-house-rentals/new-jersey
+https://www.splashrep.com/en/bounce-house-rentals/new-mexico
+https://www.splashrep.com/en/bounce-house-rentals/new-york
+https://www.splashrep.com/en/bounce-house-rentals/north-carolina
+https://www.splashrep.com/en/bounce-house-rentals/north-carolina/charlotte
+https://www.splashrep.com/en/bounce-house-rentals/north-dakota
+https://www.splashrep.com/en/bounce-house-rentals/ohio
+https://www.splashrep.com/en/bounce-house-rentals/oklahoma
+https://www.splashrep.com/en/bounce-house-rentals/oklahoma/oklahoma-city
+https://www.splashrep.com/en/bounce-house-rentals/oregon
+https://www.splashrep.com/en/bounce-house-rentals/pennsylvania
+https://www.splashrep.com/en/bounce-house-rentals/rhode-island
+https://www.splashrep.com/en/bounce-house-rentals/south-carolina
+https://www.splashrep.com/en/bounce-house-rentals/south-carolina/charleston
+https://www.splashrep.com/en/bounce-house-rentals/south-dakota
+https://www.splashrep.com/en/bounce-house-rentals/tennessee
+https://www.splashrep.com/en/bounce-house-rentals/tennessee/nashville
+https://www.splashrep.com/en/bounce-house-rentals/texas
+https://www.splashrep.com/en/bounce-house-rentals/texas/austin
+https://www.splashrep.com/en/bounce-house-rentals/texas/dallas
+https://www.splashrep.com/en/bounce-house-rentals/texas/houston
+https://www.splashrep.com/en/bounce-house-rentals/texas/san-antonio
+https://www.splashrep.com/en/bounce-house-rentals/utah
+https://www.splashrep.com/en/bounce-house-rentals/vermont
+https://www.splashrep.com/en/bounce-house-rentals/virginia
+https://www.splashrep.com/en/bounce-house-rentals/washington
+https://www.splashrep.com/en/bounce-house-rentals/washington-dc
+https://www.splashrep.com/en/bounce-house-rentals/west-virginia
+https://www.splashrep.com/en/bounce-house-rentals/wisconsin
+https://www.splashrep.com/en/bounce-house-rentals/wyoming
+https://www.splashrep.com/en/privacy-policy
+https://www.splashrep.com/en/terms-of-service
+https://www.splashrep.com/en/water-slide-rentals/alabama
+https://www.splashrep.com/en/water-slide-rentals/alaska
+https://www.splashrep.com/en/water-slide-rentals/arizona
+https://www.splashrep.com/en/water-slide-rentals/arkansas
+https://www.splashrep.com/en/water-slide-rentals/california
+https://www.splashrep.com/en/water-slide-rentals/colorado
+https://www.splashrep.com/en/water-slide-rentals/connecticut
+https://www.splashrep.com/en/water-slide-rentals/delaware
+https://www.splashrep.com/en/water-slide-rentals/florida
+https://www.splashrep.com/en/water-slide-rentals/georgia
+https://www.splashrep.com/en/water-slide-rentals/hawaii
+https://www.splashrep.com/en/water-slide-rentals/idaho
+https://www.splashrep.com/en/water-slide-rentals/illinois
+https://www.splashrep.com/en/water-slide-rentals/indiana
+https://www.splashrep.com/en/water-slide-rentals/iowa
+https://www.splashrep.com/en/water-slide-rentals/kansas
+https://www.splashrep.com/en/water-slide-rentals/kentucky
+https://www.splashrep.com/en/water-slide-rentals/louisiana
+https://www.splashrep.com/en/water-slide-rentals/maine
+https://www.splashrep.com/en/water-slide-rentals/maryland
+https://www.splashrep.com/en/water-slide-rentals/massachusetts
+https://www.splashrep.com/en/water-slide-rentals/michigan
+https://www.splashrep.com/en/water-slide-rentals/minnesota
+https://www.splashrep.com/en/water-slide-rentals/mississippi
+https://www.splashrep.com/en/water-slide-rentals/missouri
+https://www.splashrep.com/en/water-slide-rentals/montana
+https://www.splashrep.com/en/water-slide-rentals/nebraska
+https://www.splashrep.com/en/water-slide-rentals/nevada
+https://www.splashrep.com/en/water-slide-rentals/new-hampshire
+https://www.splashrep.com/en/water-slide-rentals/new-jersey
+https://www.splashrep.com/en/water-slide-rentals/new-mexico
+https://www.splashrep.com/en/water-slide-rentals/new-york
+https://www.splashrep.com/en/water-slide-rentals/north-carolina
+https://www.splashrep.com/en/water-slide-rentals/north-dakota
+https://www.splashrep.com/en/water-slide-rentals/ohio
+https://www.splashrep.com/en/water-slide-rentals/oklahoma
+https://www.splashrep.com/en/water-slide-rentals/oregon
+https://www.splashrep.com/en/water-slide-rentals/pennsylvania
+https://www.splashrep.com/en/water-slide-rentals/rhode-island
+https://www.splashrep.com/en/water-slide-rentals/south-carolina
+https://www.splashrep.com/en/water-slide-rentals/south-dakota
+https://www.splashrep.com/en/water-slide-rentals/tennessee
+https://www.splashrep.com/en/water-slide-rentals/texas
+https://www.splashrep.com/en/water-slide-rentals/utah
+https://www.splashrep.com/en/water-slide-rentals/vermont
+https://www.splashrep.com/en/water-slide-rentals/virginia
+https://www.splashrep.com/en/water-slide-rentals/washington
+https://www.splashrep.com/en/water-slide-rentals/washington-dc
+https://www.splashrep.com/en/water-slide-rentals/west-virginia
+https://www.splashrep.com/en/water-slide-rentals/wisconsin
+https://www.splashrep.com/en/water-slide-rentals/wyoming
+https://www.splashrep.com/en/water-slides-for
+
+# Total: 343 URLs
