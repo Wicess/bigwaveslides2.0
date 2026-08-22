@@ -1,0 +1,47 @@
+# Splash Republic — manual indexing priority
+#
+# Google Search Console -> URL Inspection -> paste -> Request Indexing.
+# Roughly 10-15 requests per property per day; work down in order and stop
+# when GSC refuses rather than retrying (repeats can get the quota throttled).
+#
+# All verified: HTTP 200, present in sitemap.xml, meta robots "index, follow".
+# ---------------------------------------------------------------------------
+
+# DAY 1 — entity + commercial + seasonal
+https://www.splashrep.com/en
+https://www.splashrep.com/en/rent
+https://www.splashrep.com/en/shop
+https://www.splashrep.com/en/blog/water-slide-rental-cost-guide
+https://www.splashrep.com/en/water-slides-for/fall-festivals
+https://www.splashrep.com/en/water-slide-rentals/texas/houston
+https://www.splashrep.com/en/water-slide-rentals/texas/dallas
+https://www.splashrep.com/en/water-slide-rentals/florida/orlando
+https://www.splashrep.com/en/water-slide-rentals/arizona/phoenix
+https://www.splashrep.com/en/about
+https://www.splashrep.com/en/water-slides-for/trunk-or-treat
+https://www.splashrep.com/en/answers
+https://www.splashrep.com/en/water-slides-for/school-carnivals
+https://www.splashrep.com/en/water-slide-rentals/nevada/las-vegas
+https://www.splashrep.com/en/water-slide-rentals/georgia/atlanta
+
+# DAY 2 — remaining profiled cities (real local content behind each)
+https://www.splashrep.com/en/water-slide-rentals/texas/austin
+https://www.splashrep.com/en/water-slide-rentals/texas/san-antonio
+https://www.splashrep.com/en/water-slide-rentals/florida/tampa
+https://www.splashrep.com/en/water-slide-rentals/florida/miami
+https://www.splashrep.com/en/water-slide-rentals/california/los-angeles
+https://www.splashrep.com/en/water-slide-rentals/california/san-diego
+https://www.splashrep.com/en/water-slide-rentals/north-carolina/charlotte
+https://www.splashrep.com/en/water-slide-rentals/tennessee/nashville
+https://www.splashrep.com/en/water-slide-rentals/louisiana/new-orleans
+https://www.splashrep.com/en/water-slide-rentals/south-carolina/charleston
+https://www.splashrep.com/en/water-slide-rentals/oklahoma/oklahoma-city
+https://www.splashrep.com/en/water-slides-for/halloween-parties
+https://www.splashrep.com/en/water-slides-for/harvest-festivals
+https://www.splashrep.com/en/water-slides-for/corporate-fall-family-day
+https://www.splashrep.com/en/services
+
+# DAY 3+ — everything else is in indexing-urls.txt (343 URLs, full sitemap
+# mirror). You do NOT need to submit them all by hand: once Google crawls the
+# pages above and sees real content, it allocates budget to the rest by
+# following your internal links. Manual submission is a kickstart, not the fix.
