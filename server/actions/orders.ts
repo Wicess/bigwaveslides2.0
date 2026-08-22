@@ -198,9 +198,23 @@ export async function createOrderRequest(
       const enriched = await geoFromIp(ip);
       if (enriched) geo = enriched;
     }
+    // Persist whatever we have, INCLUDING a bare IP with no location.
+    // This previously stored nothing unless a country/region/city resolved, so
+    // an order placed where the edge headers were absent and the IP lookup
+    // failed lost the IP too — leaving the admin a dash and no way to recover
+    // the location later. Keeping the IP lets the order page resolve it on
+    // demand afterwards (see the admin order detail).
     const orderGeo =
-      geo.country || geo.region || geo.city
-        ? { country: geo.country, region: geo.region, city: geo.city, ip }
+      geo.country || geo.region || geo.city || ip
+        ? {
+            country: geo.country,
+            region: geo.region,
+            city: geo.city,
+            countryCode: geo.countryCode,
+            regionCode: geo.regionCode,
+            ...(geo.datacenter != null ? { datacenter: geo.datacenter } : {}),
+            ip,
+          }
         : undefined;
 
     // The client-facing journey starts at the QUOTE stage: quote emailed +

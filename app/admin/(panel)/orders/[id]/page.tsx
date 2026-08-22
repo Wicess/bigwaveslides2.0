@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { geoFromIp } from "@/lib/analytics/geo";
 import { Package, User, Settings, MapPin } from "lucide-react";
 import { requirePermission } from "@/lib/admin-auth";
 import { getAdminOrder } from "@/server/data/admin";
@@ -29,16 +30,30 @@ export default async function AdminOrderDetail({ params }: Props) {
     (order.deliveryAddress as { address?: string; city?: string } | null) ?? {};
   const geo =
     (order.geo as {
-      country?: string;
-      region?: string;
-      city?: string;
-      ip?: string;
+      country?: string | null;
+      region?: string | null;
+      city?: string | null;
+      ip?: string | null;
+      datacenter?: boolean;
+      /** Set when the location was matched from the browsing session rather
+       *  than captured at checkout — see scripts/backfill-order-geo.ts. */
+      fromSession?: boolean;
     } | null) ?? null;
-  const placedFrom =
-    geo && (geo.city || geo.region || geo.country)
-      ? [geo.city, geo.region, geo.country].filter(Boolean).join(", ") +
-        (geo.ip ? ` · ${geo.ip}` : "")
-      : "—";
+
+  // Orders placed where the edge geo headers were absent land here with an IP
+  // and nothing else. Rather than showing a bare address, resolve it now —
+  // best-effort, in-process cached, and it never throws — so historical orders
+  // display a location too instead of staying blank forever.
+  let place = [geo?.city, geo?.region, geo?.country].filter(Boolean).join(", ");
+  let datacenter = geo?.datacenter;
+  if (!place && geo?.ip) {
+    const late = await geoFromIp(geo.ip);
+    if (late) {
+      place = [late.city, late.region, late.country].filter(Boolean).join(", ");
+      datacenter = late.datacenter;
+    }
+  }
+  const placedFrom = place || (geo?.ip ? "Location unavailable" : "—");
 
   return (
     <div>
@@ -115,7 +130,25 @@ export default async function AdminOrderDetail({ params }: Props) {
                   <p className="text-muted-foreground flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
                     <MapPin className="size-3.5" /> Placed from (IP location)
                   </p>
-                  <p className="text-foreground/80 mt-0.5">{placedFrom}</p>
+                  <p className="text-foreground/80 mt-0.5">
+                    {placedFrom}
+                    {geo?.ip ? (
+                      <span className="text-muted-foreground font-mono text-xs">
+                        {" · "}
+                        {geo.ip}
+                      </span>
+                    ) : null}
+                    {geo?.fromSession ? (
+                      <span className="text-muted-foreground ml-2 text-xs italic">
+                        matched from the browsing session
+                      </span>
+                    ) : null}
+                    {datacenter ? (
+                      <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800">
+                        datacenter / VPN — not the customer&apos;s real location
+                      </span>
+                    ) : null}
+                  </p>
                 </div>
               </div>
               {order.notes ? (
