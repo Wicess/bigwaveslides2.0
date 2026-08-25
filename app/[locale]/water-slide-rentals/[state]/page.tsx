@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Sparkles, Truck, MapPin } from "lucide-react";
 import { routing } from "@/i18n/routing";
+import { getStateProfile } from "@/lib/state-profiles";
 import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
@@ -97,6 +98,10 @@ export default async function StateRentalPage({ params }: Props) {
   const anchorNearby = loc.cities.slice(1, 4).join(", ");
 
   // A few nearby states (same region) for internal linking.
+  // Hand-written, genuinely per-state facts. Without this the 51 hubs were
+  // 96-97% identical to each other and Google declined to index them.
+  const profile = getStateProfile(loc.slug);
+
   const nearby = US_STATES.filter(
     (s) => s.region === loc.region && s.slug !== loc.slug,
   ).slice(0, 6);
@@ -117,21 +122,33 @@ export default async function StateRentalPage({ params }: Props) {
   const guides = pickN(allGuides, seed, 4);
 
   const faqs = [
+    ...(profile
+      ? [
+          {
+            q: `When is water slide season in ${loc.name}?`,
+            a: `${profile.season}. ${profile.climate}`,
+          },
+          {
+            q: `What does the ground in ${loc.name} mean for setup?`,
+            a: profile.ground,
+          },
+          {
+            q: `How far ahead should I book in ${loc.name}?`,
+            a: profile.demand,
+          },
+          {
+            q: `Do I need a permit for an inflatable in ${loc.name}?`,
+            a: `${profile.permits} A private yard rarely needs anything, and we can provide a certificate of insurance naming your venue if it asks for one — request it when you book rather than in the final week.`,
+          },
+        ]
+      : []),
     {
       q: `Do you deliver water slides anywhere in ${loc.name}?`,
-      a: `Yes — Splash Republic delivers, sets up, and picks up across ${loc.name}, including ${cityList}. Tell us your venue and date and we'll confirm delivery in your free quote.`,
+      a: `Yes — Splash Republic delivers, sets up, anchors and collects across ${loc.name}, including ${cityList}. Tell us your venue and date and we'll confirm delivery in your free quote.`,
     },
     {
       q: `How much does a water slide rental cost in ${loc.name}?`,
-      a: `Pricing depends on the slide size, rental length, and your location in ${loc.name}. Most backyard rentals start around $295/day with delivery and setup included. Request a free, no-obligation quote for exact pricing.`,
-    },
-    {
-      q: `How far in advance should I book in ${loc.name}?`,
-      a: `Summer weekends in ${loc.name} book up fast. We recommend reserving 2–4 weeks ahead, though we'll always try to accommodate last-minute requests.`,
-    },
-    {
-      q: `Are your slides insured and sanitized?`,
-      a: `Every rental is fully insured and cleaned & sanitized before delivery, and installed by a trained crew with proper anchoring — so your ${loc.name} event is safe from start to finish.`,
+      a: `Daily rates run $155 to $570 depending on the unit, plus a flat $30 delivery fee per order — not per mile. A mid-range tall slide is $330 for the day, so $360 delivered, set up, anchored and collected. A refundable deposit is quoted separately.`,
     },
   ];
 
@@ -213,6 +230,46 @@ export default async function StateRentalPage({ params }: Props) {
                   insured, sanitized fleet.
                 </p>
               </Reveal>
+
+              {/* The genuinely per-state part. Season, ground and demand differ
+                  enormously between, say, Vermont and Arizona, and this is what
+                  stops the 51 hubs reading as one page with the name swapped. */}
+              {profile ? (
+                <>
+                  <Reveal className="mt-8" delay={0.05}>
+                    <h2 className="text-foreground font-display text-xl font-bold">
+                      Water slide season in {loc.name}
+                    </h2>
+                    <p className="text-muted-foreground mt-2 leading-relaxed">
+                      <strong className="text-foreground/90">
+                        {profile.season}.
+                      </strong>{" "}
+                      {profile.climate}
+                    </p>
+                  </Reveal>
+
+                  <Reveal className="mt-6" delay={0.05}>
+                    <h2 className="text-foreground font-display text-xl font-bold">
+                      Ground, anchoring and access
+                    </h2>
+                    <p className="text-muted-foreground mt-2 leading-relaxed">
+                      {profile.ground}
+                    </p>
+                  </Reveal>
+
+                  <Reveal className="mt-6" delay={0.05}>
+                    <h2 className="text-foreground font-display text-xl font-bold">
+                      When {loc.name} dates fill
+                    </h2>
+                    <p className="text-muted-foreground mt-2 leading-relaxed">
+                      {profile.demand}
+                    </p>
+                    <p className="text-muted-foreground mt-3 leading-relaxed">
+                      {profile.permits}
+                    </p>
+                  </Reveal>
+                </>
+              ) : null}
 
               {/* Three concrete slides from the fleet, linked inline. */}
               {picks.length === 3 ? (

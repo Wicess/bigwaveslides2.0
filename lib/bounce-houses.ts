@@ -28,6 +28,7 @@
 // no hydration mismatch.
 // -----------------------------------------------------------------------------
 
+import type { StateProfile } from "@/lib/state-profiles";
 import type { StateLocation } from "@/lib/locations";
 
 export type BounceFaq = { q: string; a: string };
@@ -163,20 +164,46 @@ export function getBounceContent(
   place: string,
   wider: string,
   region: StateLocation["region"],
+  /**
+   * Hand-written facts for this state, when the page is a state (or a city
+   * inside one). Without it the 51 bounce hubs shared four regional seasonal
+   * paragraphs between them and came out 96.8% identical — Google indexed
+   * almost none of them. With it, the seasonal section and the two leading
+   * FAQs are genuinely different in every state, and different again from the
+   * water-slide hub for the same state, which is what `dry` is for.
+   */
+  profile?: StateProfile,
 ): BounceContent {
   const seed = hashStr(slug);
+  const localFaqs: BounceFaq[] = profile
+    ? [
+        {
+          q: `Can I use a bounce house year-round in ${place}?`,
+          a: `${profile.dry} For reference, the outdoor wet season here is ${profile.season.toLowerCase()}.`,
+        },
+        {
+          q: `What does the ground in ${place} mean for anchoring?`,
+          a: profile.ground,
+        },
+      ]
+    : [];
   return {
     hero: pick(HERO_POOL, seed),
     // `>>>`, never `>>` — the unsigned shift keeps the hash in 0..2^32-1. The
     // signed variant flips large hashes negative (see `pick`).
     heroDescription: pick(HERO_DESCRIPTIONS, seed >>> 2)(place),
     intro: pick(INTROS, seed >>> 3)(place, wider),
-    seasonal: REGION_SEASONAL[region](place),
+    // A real per-state paragraph when we have one; the four regional variants
+    // are the fallback for the national hub only.
+    seasonal: profile ? profile.dry : REGION_SEASONAL[region](place),
     // Rotate which question leads, so the 100+ pages don't all open on the same
     // accordion item, while every page still carries the full set.
-    faqs: CORE_FAQS.map((_, i) =>
-      CORE_FAQS[(i + (seed % CORE_FAQS.length)) % CORE_FAQS.length]!(place),
-    ),
+    faqs: [
+      ...localFaqs,
+      ...CORE_FAQS.map((_, i) =>
+        CORE_FAQS[(i + (seed % CORE_FAQS.length)) % CORE_FAQS.length]!(place),
+      ),
+    ],
   };
 }
 

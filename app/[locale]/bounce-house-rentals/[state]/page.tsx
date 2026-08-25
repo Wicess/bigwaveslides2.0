@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { getStateProfile } from "@/lib/state-profiles";
 import { routing } from "@/i18n/routing";
 import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
 import { getBounceContent, bounceKeywords } from "@/lib/bounce-houses";
@@ -68,7 +69,13 @@ export default async function StateBouncePage({ params }: Props) {
 
   const path = `/bounce-house-rentals/${loc.slug}`;
   const canonical = absoluteUrl(locale, path);
-  const content = getBounceContent(loc.slug, loc.name, loc.region, loc.region);
+  const content = getBounceContent(
+    loc.slug,
+    loc.name,
+    loc.region,
+    loc.region,
+    getStateProfile(loc.slug),
+  );
   const guides = pickN(allGuides, hashSeed(`bounce-${loc.slug}`), 4);
 
   return (

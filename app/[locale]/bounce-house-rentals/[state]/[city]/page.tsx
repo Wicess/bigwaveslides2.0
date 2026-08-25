@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { getStateProfile } from "@/lib/state-profiles";
 import { routing } from "@/i18n/routing";
 import {
   getAllCities,
@@ -79,7 +80,13 @@ export default async function CityBouncePage({ params }: Props) {
   const key = `${st.slug}/${loc.slug}`;
   const path = `/bounce-house-rentals/${key}`;
   const canonical = absoluteUrl(locale, path);
-  const content = getBounceContent(key, name, st.name, st.region);
+  const content = getBounceContent(
+    key,
+    name,
+    st.name,
+    st.region,
+    getStateProfile(st.slug),
+  );
   const guides = pickN(allGuides, hashSeed(`bounce-${key}`), 4);
 
   // Real neighbouring suburbs for the priority metros — the strongest "this
