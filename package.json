@@ -22,6 +22,7 @@
     "db:remove-fake-testimonials": "dotenv -e .env.local -- tsx scripts/remove-fake-testimonials.ts",
     "db:fix-desc-names": "dotenv -e .env.local -- tsx scripts/fix-description-names.ts",
     "db:rewrite-product-copy": "dotenv -e .env.local -- tsx scripts/rewrite-product-copy.ts",
+    "db:write-fall-posts": "dotenv -e .env.local -- tsx scripts/write-fall-posts.ts",
     "db:write-blog-cluster": "dotenv -e .env.local -- tsx scripts/write-blog-cluster.ts",
     "db:retire-dup-cost-guide": "dotenv -e .env.local -- tsx scripts/retire-duplicate-cost-guide.ts",
     "db:align-fees-address": "dotenv -e .env.local -- tsx scripts/align-fees-and-address.ts",
