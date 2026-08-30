@@ -703,6 +703,16 @@ export const STATE_PROFILES: Record<string, StateProfile> = {
   },
 };
 
+/**
+ * A season window for use mid-sentence ("Season runs late June through
+ * August"). Only the first character is lowered — `.toLowerCase()` on the
+ * whole string mangles the month names into "late june through august", which
+ * is visible in search snippets.
+ */
+export function lowerSeason(season: string): string {
+  return season.charAt(0).toLowerCase() + season.slice(1);
+}
+
 /** True when a state has a hand-written profile. */
 export function hasStateProfile(slug: string): boolean {
   return Boolean(STATE_PROFILES[slug]);

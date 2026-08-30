@@ -28,7 +28,7 @@
 // no hydration mismatch.
 // -----------------------------------------------------------------------------
 
-import type { StateProfile } from "@/lib/state-profiles";
+import { lowerSeason, type StateProfile } from "@/lib/state-profiles";
 import type { StateLocation } from "@/lib/locations";
 
 export type BounceFaq = { q: string; a: string };
@@ -179,7 +179,7 @@ export function getBounceContent(
     ? [
         {
           q: `Can I use a bounce house year-round in ${place}?`,
-          a: `${profile.dry} For reference, the outdoor wet season here is ${profile.season.toLowerCase()}.`,
+          a: `${profile.dry} For reference, the outdoor wet season here is ${lowerSeason(profile.season)}.`,
         },
         {
           q: `What does the ground in ${place} mean for anchoring?`,

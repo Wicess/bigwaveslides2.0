@@ -4,7 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Sparkles, Truck, MapPin } from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { getStateProfile } from "@/lib/state-profiles";
+import { getStateProfile, lowerSeason } from "@/lib/state-profiles";
 import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // with the name and a city list swapped, which is what Bing §13 flags as a
     // duplicate-description problem.
     description: metaProfile
-      ? `Water slide rentals across ${loc.name} from $155/day. Season runs ${metaProfile.season.toLowerCase()} — delivered, set up and insured in ${cities3} and statewide.`
+      ? `Water slide rentals across ${loc.name} from $155/day. Season runs ${lowerSeason(metaProfile.season)} — delivered, set up and insured in ${cities3} and statewide.`
       : `Water slide & bounce house rentals across ${loc.name} from $155/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,
     og: {
       eyebrow: loc.name,
