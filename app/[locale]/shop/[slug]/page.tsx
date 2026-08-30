@@ -22,7 +22,12 @@ import {
   getRenamedProductSlug,
 } from "@/server/data/products";
 import { getLocalized } from "@/lib/localized";
-import { buildMetadata, saleProductSeo, productKindLabel } from "@/lib/seo";
+import {
+  buildMetadata,
+  saleProductSeo,
+  productKindLabel,
+  heightFromDimensions,
+} from "@/lib/seo";
 import { saleFaqs } from "@/lib/product-faq";
 import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
@@ -74,6 +79,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ? formatPrice(product.salePriceCents, locale)
         : undefined,
     kind: productKindLabel(product.category?.slug),
+    heightFt: heightFromDimensions(product.dimensions),
+    age: product.ageRange,
+    space: (product.spaceRequired as { value?: string } | null)?.value ?? null,
+    summary: getLocalized(product.shortDescription, locale),
   });
   const customTitle = product.metaTitle
     ? getLocalized(product.metaTitle, locale)

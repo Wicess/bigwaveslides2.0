@@ -10,6 +10,7 @@ import {
   getBlogCategoryBySlug,
 } from "@/server/data/blog";
 import { getLocalized } from "@/lib/localized";
+import { buildMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/ui/page-header";
 import { BlogView } from "@/components/blog/blog-view";
 
@@ -31,7 +32,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const category = await getBlogCategoryBySlug(slug);
   if (!category) return {};
-  return { title: getLocalized(category.name, locale) };
+  const name = getLocalized(category.name, locale);
+  // Was `{ title: name }` alone — which produced a four-character title
+  // ("Guides"), no description, and no canonical, on 7 pages. Worse, the tag
+  // of the same name produced a byte-identical title, so Search Console saw
+  // two URLs competing with one title. Both now say which surface they are.
+  return buildMetadata({
+    locale,
+    path: `/blog/category/${slug}`,
+    title: `${name} — Water Slide Rental Guides & Advice`,
+    description: `Every ${name.toLowerCase()} article from Splash Republic — practical, US-specific guidance on renting inflatable water slides, bounce houses and combo units.`,
+  });
 }
 
 export default async function BlogCategoryPage({

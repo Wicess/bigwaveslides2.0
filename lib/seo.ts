@@ -95,14 +95,100 @@ export function productKindLabel(
   }
 }
 
-type ProductSeoOpts = { price?: string; kind?: string };
+/**
+ * Facts read straight off a product row, used to build meta that is unique per
+ * product AND different between the rent and shop surfaces.
+ *
+ * This lives here rather than in the database because a product has ONE
+ * metaTitle column but TWO pages — /rent/<slug> and /shop/<slug>. Writing a
+ * generated title into that column made both surfaces identical, which is the
+ * duplicate-title problem Bing §13 warns about, self-inflicted. Generating per
+ * surface keeps them distinct and means new products need no backfill.
+ */
+export type ProductFacts = {
+  price?: string;
+  kind?: string;
+  /** Height in feet, parsed from `dimensions.size`. */
+  heightFt?: number | null;
+  age?: string | null;
+  /** e.g. "39 × 20 ft level area". */
+  space?: string | null;
+  /** The hand-written short description; supplies the distinguishing sentence. */
+  summary?: string | null;
+};
+
+/** Height in feet from "34 ft L × 15 ft W × 18 ft H". */
+export function heightFromDimensions(dimensions: unknown): number | null {
+  const size = (dimensions as { size?: string } | null)?.size ?? "";
+  const m = /(\d+)\s*ft\s*H/i.exec(size);
+  return m ? Number(m[1]) : null;
+}
+
+/**
+ * The lead sentence of a summary, cut at a real boundary.
+ *
+ * A plain character clip produced "...sits with a pool rather. Ages 5+" — a
+ * dangling clause welded to the next fragment. Search results print this text
+ * verbatim, so it has to end where a human would end it.
+ */
+function leadSentence(s: string, max: number): string {
+  const clean = s.replace(/\s+/g, " ").trim();
+  if (!clean) return "";
+  const stop = clean.search(/\.\s|\.$/);
+  let lead = stop > 0 ? clean.slice(0, stop + 1) : clean;
+  if (lead.length > max) {
+    const dash = lead.lastIndexOf(" — ", max);
+    const comma = lead.lastIndexOf(", ", max);
+    const cut =
+      dash > 28 ? dash : comma > 28 ? comma : lead.lastIndexOf(" ", max);
+    lead = lead.slice(0, cut);
+  }
+  return /[.!?]$/.test(lead) ? lead : lead + ".";
+}
+
+/** Join clauses, dropping from `optional` until the whole thing fits `max`. */
+function fit(lead: string, optional: string[], max: number): string {
+  let out = [lead, ...optional].join(" ");
+  for (let d = 1; out.length > max && d <= optional.length; d++) {
+    out = [lead, ...optional.slice(d)].join(" ");
+  }
+  return out.replace(/\s+/g, " ").trim();
+}
+
+/** Don't repeat a category the product name already states. */
+function kindForTitle(name: string, kind: string): string | null {
+  return /\b(combo|bouncer|bounce house)\b/i.test(name) ? null : kind;
+}
+
+type ProductSeoOpts = ProductFacts;
 
 export function rentProductSeo(name: string, opts?: ProductSeoOpts) {
   const kind = opts?.kind ?? "inflatable water slide";
-  const priceHook = opts?.price ? ` from ${opts.price}/day` : "";
+  const short = kindForTitle(name, shortKindLabel(kind));
+  const h = opts?.heightFt ?? null;
+  const titleBits = [
+    [h ? `${h} ft` : null, short].filter(Boolean).join(" ") || null,
+    opts?.price ? `${opts.price}/day` : null,
+  ].filter(Boolean);
+
+  const lead = leadSentence(opts?.summary ?? "", 88);
+  const description = lead
+    ? fit(
+        lead,
+        [
+          opts?.age ? `Ages ${opts.age}.` : "",
+          opts?.space ? `Needs ${opts.space}.` : "",
+          opts?.price ? `${opts.price}/day, delivered and set up.` : "",
+        ].filter(Boolean),
+        158,
+      )
+    : `Rent the ${name} ${kind}${opts?.price ? ` from ${opts.price}/day` : ""} — delivered, set up, sanitized and fully insured. Free quote.`;
+
   return {
-    title: `Rent the ${name} — Delivered, Set Up & Insured`,
-    description: `Rent the ${name} ${kind}${priceHook} — delivered, set up, sanitized and fully insured for birthdays, pool parties, school and church events. Free quote.`,
+    title: titleBits.length
+      ? `${name} Rental — ${titleBits.join(", ")}`
+      : `${name} Rental`,
+    description,
     keywords: [
       `${name} rental`,
       `${kind} rental`,
@@ -114,13 +200,41 @@ export function rentProductSeo(name: string, opts?: ProductSeoOpts) {
   };
 }
 
+/** Short, human label used inside titles. */
+function shortKindLabel(kind: string): string {
+  if (/bounce house/i.test(kind)) return "Bounce House";
+  if (/combo/i.test(kind)) return "Bounce & Slide Combo";
+  if (/attraction/i.test(kind)) return "Party Attraction";
+  return "Water Slide";
+}
+
 /** Keyword-rich SEO copy for a SALE product page (buying intent). */
 export function saleProductSeo(name: string, opts?: ProductSeoOpts) {
   const kind = opts?.kind ?? "inflatable water slide";
-  const priceHook = opts?.price ? ` — ${opts.price}` : "";
+  const bare = kind.replace(/^inflatable /, "");
+  const h = opts?.heightFt ?? null;
+
+  // Deliberately shaped differently from the rental title: buying intent reads
+  // "for sale / commercial", renting reads "rental / per day". Same product,
+  // two genuinely different pages.
+  const title = `${name} for Sale — Commercial ${h ? `${h} ft ` : ""}${bare}`;
+
+  const lead = leadSentence(opts?.summary ?? "", 84);
+  const description = lead
+    ? fit(
+        lead,
+        [
+          `Commercial-grade${h ? `, ${h} ft` : ""}.`,
+          opts?.age ? `Ages ${opts.age}.` : "",
+          "Delivered anywhere in the USA — request a price.",
+        ].filter(Boolean),
+        158,
+      )
+    : `Buy the ${name} commercial ${kind} — heavy-duty, built for rentals and resale, delivered anywhere in the USA. Request a price quote.`;
+
   return {
-    title: `${name} for Sale — Commercial ${kind.replace(/^inflatable /, "")}`,
-    description: `Buy the ${name} commercial ${kind}${priceHook} — heavy-duty, built for rentals and resale, delivered anywhere in the USA. Request a price quote.`,
+    title,
+    description,
     keywords: [
       `buy ${name}`,
       `commercial ${kind} for sale`,

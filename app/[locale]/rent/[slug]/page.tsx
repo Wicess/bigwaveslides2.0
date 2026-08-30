@@ -25,7 +25,12 @@ import {
 import { getGuideLinks } from "@/server/data/blog";
 import { serviceAreaLinks, pickN, hashSeed } from "@/lib/internal-links";
 import { getLocalized } from "@/lib/localized";
-import { buildMetadata, rentProductSeo, productKindLabel } from "@/lib/seo";
+import {
+  buildMetadata,
+  rentProductSeo,
+  productKindLabel,
+  heightFromDimensions,
+} from "@/lib/seo";
 import { rentalFaqs } from "@/lib/product-faq";
 import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
 import { Container } from "@/components/ui/container";
@@ -74,6 +79,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ? formatPrice(product.dailyRateCents, locale)
         : undefined,
     kind: productKindLabel(product.category?.slug),
+    heightFt: heightFromDimensions(product.dimensions),
+    age: product.ageRange,
+    space: (product.spaceRequired as { value?: string } | null)?.value ?? null,
+    summary: getLocalized(product.shortDescription, locale),
   });
   const customTitle = product.metaTitle
     ? getLocalized(product.metaTitle, locale)

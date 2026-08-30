@@ -10,6 +10,7 @@ import {
   getTagBySlug,
 } from "@/server/data/blog";
 import { getLocalized } from "@/lib/localized";
+import { buildMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/ui/page-header";
 import { BlogView } from "@/components/blog/blog-view";
 
@@ -31,7 +32,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const tag = await getTagBySlug(slug);
   if (!tag) return {};
-  return { title: getLocalized(tag.name, locale) };
+  const name = getLocalized(tag.name, locale);
+  // Distinct from the same-named CATEGORY page: a tag is a cross-cutting
+  // index, a category is the section a post lives in. Previously both emitted
+  // the identical one-word title with no description and no canonical.
+  return buildMetadata({
+    locale,
+    path: `/blog/tag/${slug}`,
+    title: `Articles tagged "${name}" — Splash Republic`,
+    description: `Posts tagged ${name.toLowerCase()}: water slide and bounce house rental advice covering cost, space, safety, weather and booking across the US.`,
+  });
 }
 
 export default async function BlogTagPage({ params, searchParams }: Props) {
