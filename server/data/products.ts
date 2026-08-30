@@ -309,7 +309,7 @@ export async function getProductSlugs() {
   return withRetry(() =>
     prisma.product.findMany({
       where: { type: { in: ["SALE", "BOTH"] } },
-      select: { slug: true },
+      select: { slug: true, updatedAt: true },
     }),
   );
 }

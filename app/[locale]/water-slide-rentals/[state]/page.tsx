@@ -53,11 +53,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const loc = getStateBySlug(state);
   if (!loc) return {};
   const cities3 = loc.cities.slice(0, 3).join(", ");
+  const metaProfile = getStateProfile(loc.slug);
   return buildMetadata({
     locale,
     path: `/water-slide-rentals/${loc.slug}`,
     title: `Water Slide Rentals in ${loc.name} — From $155/Day`,
-    description: `Water slide & bounce house rentals across ${loc.name} from $155/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,
+    // The season window is the one fact that genuinely differs state to state,
+    // so it leads. Before this every state's description was the same sentence
+    // with the name and a city list swapped, which is what Bing §13 flags as a
+    // duplicate-description problem.
+    description: metaProfile
+      ? `Water slide rentals across ${loc.name} from $155/day. Season runs ${metaProfile.season.toLowerCase()} — delivered, set up and insured in ${cities3} and statewide.`
+      : `Water slide & bounce house rentals across ${loc.name} from $155/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,
     og: {
       eyebrow: loc.name,
       subtitle: "Delivered, set up & fully insured statewide",

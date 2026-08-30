@@ -282,7 +282,7 @@ export async function getRentalSlugs() {
   return withRetry(() =>
     prisma.product.findMany({
       where: { type: { in: ["RENTAL", "BOTH"] } },
-      select: { slug: true },
+      select: { slug: true, updatedAt: true },
     }),
   );
 }

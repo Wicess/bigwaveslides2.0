@@ -84,11 +84,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getPopularTags().catch(() => []),
   ]);
 
-  const paths = [
+  // Per-URL lastModified where we genuinely know it. Bing's guidelines (§3)
+  // ask for accurate lastmod because it is how it decides what to re-crawl,
+  // and a single site-wide date is a worse signal than a real one: it claims
+  // every URL changed whenever any did. Products and posts carry updatedAt, so
+  // those are exact. Static, location and use-case pages have no per-row date
+  // and keep CONTENT_UPDATED, which is what that constant is actually for.
+  const dated: { path: string; lastModified: Date }[] = [
+    ...products.map((p) => ({
+      path: `/shop/${p.slug}`,
+      lastModified: p.updatedAt,
+    })),
+    ...rentals.map((p) => ({
+      path: `/rent/${p.slug}`,
+      lastModified: p.updatedAt,
+    })),
+    ...posts.map((p) => ({
+      path: `/blog/${p.slug}`,
+      lastModified: p.updatedAt,
+    })),
+  ];
+
+  const undated = [
     ...STATIC_PATHS,
-    ...products.map((p) => `/shop/${p.slug}`),
-    ...rentals.map((p) => `/rent/${p.slug}`),
-    ...posts.map((p) => `/blog/${p.slug}`),
     // NOTE: /shop?category=… is deliberately NOT listed. Those pages
     // self-canonicalise to /shop, and Google drops non-canonical sitemap
     // entries as "Alternate page with proper canonical tag" while still
@@ -100,13 +118,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...BOUNCE_STATE_PATHS,
     ...BOUNCE_CITY_PATHS,
     ...USE_CASE_PATHS,
-  ];
+  ].map((path) => ({ path, lastModified: CONTENT_UPDATED }));
+
+  const entries = [...undated, ...dated];
 
   // No `alternates` — with a single language there is nothing to point at, and
   // a self-only hreflang is ignored by Google (see lib/seo.ts).
-  return paths.map((path) => ({
-    url: `${SITE}/${EN}${path === "/" ? "" : path}`,
-    lastModified: CONTENT_UPDATED,
+  return entries.map(({ path, lastModified }) => ({
+    url: `${SITE}/${EN}${path === "" ? "" : path}`,
+    lastModified,
     changeFrequency: "weekly" as const,
     priority: path === "" ? 1 : 0.7,
   }));

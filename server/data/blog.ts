@@ -119,7 +119,7 @@ export async function getPostSlugs() {
   return withRetry(() =>
     prisma.blogPost.findMany({
       where: { status: "PUBLISHED" },
-      select: { slug: true },
+      select: { slug: true, updatedAt: true },
     }),
   ).catch(() => []);
 }
