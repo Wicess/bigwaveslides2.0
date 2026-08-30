@@ -40,6 +40,11 @@ const DRY = process.argv.includes("--dry");
  * bare "Big Wave" pattern can bite into it and leave a stray "Slides".
  */
 const REPLACEMENTS: [RegExp, string][] = [
+  // Strip the title suffix rather than rebranding it. " | Big Wave Slides"
+  // exists only as branding, and re-adding " | Splash Republic" pushes these
+  // titles past the ~60 characters Google displays for no gain — the brand is
+  // already in the URL and the site name.
+  [/\s*[|–—-]\s*Big Wave Slides\s*$/g, ""],
   [/Big Wave Slides'/g, `${BRAND_NAME}'`],
   [/Big Wave Slides/g, BRAND_NAME],
   [/Big Wave Team/g, `${BRAND_NAME} Team`],
@@ -53,11 +58,22 @@ const REPLACEMENTS: [RegExp, string][] = [
     /typically \$250[–-]\$550\/day, from \$199/g,
     "typically $155–$570/day across the catalog",
   ],
+  // The bare range survived the first sweep because only the "typically ...,
+  // from $199" phrasing was matched. Same wrong numbers, different sentence.
+  [/\$250\s*[–-]\s*\$550/g, "$230–$570"],
 ];
 
 async function main() {
   const posts = await prisma.blogPost.findMany({
-    select: { id: true, slug: true, title: true, excerpt: true, content: true },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      excerpt: true,
+      content: true,
+      metaTitle: true,
+      metaDescription: true,
+    },
   });
 
   const text = (v: unknown) =>
@@ -71,12 +87,23 @@ async function main() {
       title: text(post.title),
       excerpt: text(post.excerpt),
       content: text(post.content),
+      metaTitle: text(post.metaTitle),
+      metaDescription: text(post.metaDescription),
     };
 
     const next = { ...fields };
     let postHits = 0;
 
-    for (const key of ["title", "excerpt", "content"] as const) {
+    // metaTitle/metaDescription were missed on the first pass, and that is
+    // where the leak survived longest: 9 published posts were still telling
+    // Google "How Big Wave Slides keeps every party safe" in the snippet.
+    for (const key of [
+      "title",
+      "excerpt",
+      "content",
+      "metaTitle",
+      "metaDescription",
+    ] as const) {
       let value = next[key];
       for (const [pattern, replacement] of REPLACEMENTS) {
         const found = value.match(pattern);
@@ -102,6 +129,10 @@ async function main() {
           title: { en: next.title },
           excerpt: { en: next.excerpt },
           content: { en: next.content },
+          ...(next.metaTitle ? { metaTitle: { en: next.metaTitle } } : {}),
+          ...(next.metaDescription
+            ? { metaDescription: { en: next.metaDescription } }
+            : {}),
         },
       });
     }

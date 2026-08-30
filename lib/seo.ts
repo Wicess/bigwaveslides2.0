@@ -217,7 +217,10 @@ export function saleProductSeo(name: string, opts?: ProductSeoOpts) {
   // Deliberately shaped differently from the rental title: buying intent reads
   // "for sale / commercial", renting reads "rental / per day". Same product,
   // two genuinely different pages.
-  const title = `${name} for Sale — Commercial ${h ? `${h} ft ` : ""}${bare}`;
+  // "bounce & slide combo" is long enough to push the title past the ~60
+  // Google displays, and the name already ends in "Combo". Short label only.
+  const label = kindForTitle(name, shortKindLabel(kind).toLowerCase());
+  const title = `${name} for Sale — Commercial ${[h ? `${h} ft` : null, label].filter(Boolean).join(" ") || bare}`;
 
   const lead = leadSentence(opts?.summary ?? "", 84);
   const description = lead

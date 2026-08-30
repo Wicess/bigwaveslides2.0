@@ -63,7 +63,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // with the name and a city list swapped, which is what Bing §13 flags as a
     // duplicate-description problem.
     description: metaProfile
-      ? `Water slide rentals across ${loc.name} from $155/day. Season runs ${lowerSeason(metaProfile.season)} — delivered, set up and insured in ${cities3} and statewide.`
+      ? // Season + two cities. Three cities plus a long season window pushed
+        // 74 of these past the ~160 characters Google renders, so the tail was
+        // being cut mid-city-name.
+        `Water slide rentals across ${loc.name} from $155/day. Season runs ${lowerSeason(metaProfile.season)} — delivered, set up and insured in ${loc.cities.slice(0, 2).join(" and ")}.`
       : `Water slide & bounce house rentals across ${loc.name} from $155/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,
     og: {
       eyebrow: loc.name,

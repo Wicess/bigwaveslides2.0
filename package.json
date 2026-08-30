@@ -28,6 +28,7 @@
     "db:retire-dup-cost-guide": "dotenv -e .env.local -- tsx scripts/retire-duplicate-cost-guide.ts",
     "db:align-fees-address": "dotenv -e .env.local -- tsx scripts/align-fees-and-address.ts",
     "db:fix-blog-product-links": "dotenv -e .env.local -- tsx scripts/fix-blog-product-links.ts",
+    "db:trim-blog-meta": "dotenv -e .env.local -- tsx scripts/trim-blog-meta.ts",
     "db:fix-blog-brand-leaks": "dotenv -e .env.local -- tsx scripts/fix-blog-brand-leaks.ts",
     "db:strip-fr": "dotenv -e .env.local -- tsx scripts/strip-retired-locale.ts",
     "db:sync-ratings": "dotenv -e .env.local -- tsx scripts/sync-product-ratings.ts",
