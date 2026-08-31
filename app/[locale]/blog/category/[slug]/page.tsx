@@ -25,8 +25,19 @@ export async function generateStaticParams() {
   return categories.map((c) => ({ slug: c.slug }));
 }
 
-// ISR: surface admin content edits on the live site within this window.
-export const revalidate = 600;
+// Neon bills by how long the database stays awake and only suspends after ~5
+// minutes with zero queries. Every ISR regeneration runs server queries, and
+// this site has 345 indexable pages being crawled steadily — at a 10-minute
+// window the staggered regenerations alone were enough to keep the database
+// from ever getting a quiet 5 minutes.
+//
+// Widened deliberately, not blindly: correctness comes from explicit
+// invalidation, not from a short timer. Publishing or editing a post calls
+// revalidateTag("blog") (server/actions/admin-blog.ts) and catalog edits call
+// revalidateTag("products"), so an edit is live immediately regardless of this
+// number. A deploy busts everything as well. The window is now only a backstop
+// for changes made straight in the database by a script.
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;

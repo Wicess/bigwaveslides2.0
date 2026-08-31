@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requirePermission, logActivity } from "@/lib/admin-auth";
 import { submitToIndexNow, localizedUrls } from "@/lib/indexnow";
@@ -76,6 +76,13 @@ export async function savePost(
       entityId: id,
       summary: `${d.id ? "Updated" : "Created"} post ${d.titleEn}`,
     });
+    // Bust the PUBLIC blog too, not just the admin list. Without this the
+    // reader-facing pages waited for whichever cache expired last — the page's
+    // own ISR window and the ["blog"] unstable_cache — so a publish could take
+    // up to an hour to appear. Tagging here is also what makes it safe to widen
+    // those windows for cost: correctness now comes from the invalidation, not
+    // from a short timer.
+    revalidateTag("blog");
     revalidatePath("/admin/blog");
     // Notify search engines instantly when a post is published/updated.
     if (d.status === "PUBLISHED") {
@@ -98,6 +105,7 @@ export async function deletePost(id: string): Promise<AdminActionResult> {
       entityType: "BlogPost",
       entityId: id,
     });
+    revalidateTag("blog");
     revalidatePath("/admin/blog");
     return { ok: true };
   } catch {
@@ -151,6 +159,7 @@ export async function saveTaxonomy(
     await logActivity(session.id, "blog.taxonomy", {
       summary: `${editing ? "Updated" : "Added"} ${kind} ${nameEn}`,
     });
+    revalidateTag("blog");
     revalidatePath("/admin/blog/taxonomy");
     return { ok: true };
   } catch {
@@ -171,6 +180,7 @@ export async function deleteTaxonomy(
     await logActivity(session.id, "blog.taxonomy", {
       summary: `Deleted ${kind}`,
     });
+    revalidateTag("blog");
     revalidatePath("/admin/blog/taxonomy");
     return { ok: true };
   } catch {

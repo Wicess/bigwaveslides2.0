@@ -35,9 +35,9 @@ import {
 import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
 
-// ISR: serve the cached page (stale-while-revalidate) so it stays up even
-// when the serverless DB is asleep, and refreshes catalog data within the hour.
-export const revalidate = 3600;
+// See the note on the blog pages: widened because revalidateTag("products")
+// makes catalog edits appear immediately, so this window is only a backstop.
+export const revalidate = 21600;
 
 type Props = { params: Promise<{ locale: string; state: string }> };
 

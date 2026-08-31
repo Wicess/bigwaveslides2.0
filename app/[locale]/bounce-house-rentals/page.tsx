@@ -31,7 +31,9 @@ import {
 import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
 
-export const revalidate = 3600;
+// See the note on the blog pages: widened because revalidateTag("products")
+// makes catalog edits appear immediately, so this window is only a backstop.
+export const revalidate = 21600;
 
 type Props = { params: Promise<{ locale: string }> };
 

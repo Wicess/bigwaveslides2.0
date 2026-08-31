@@ -30,9 +30,9 @@ import { JsonLd } from "@/components/seo/json-ld";
 
 type Props = { params: Promise<{ locale: string }> };
 
-// ISR: serve the cached page (stale-while-revalidate) so it stays up even when
-// the serverless DB is asleep, and refreshes the featured slides within the hour.
-export const revalidate = 3600;
+// See the note on the blog pages: widened because revalidateTag("products")
+// makes catalog edits appear immediately, so this window is only a backstop.
+export const revalidate = 21600;
 
 const HERO =
   "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782479234273-ipwk85-overview-dream-space-water-park-chongqing-china-photo01-2048x1277.jpg";

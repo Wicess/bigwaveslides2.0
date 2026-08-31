@@ -21,9 +21,9 @@ import {
 import { JsonLd } from "@/components/seo/json-ld";
 import { BounceLocationPage } from "@/components/sections/bounce/bounce-location-page";
 
-// ISR: serve the cached page even when the serverless DB is asleep, and refresh
-// the catalog within the hour.
-export const revalidate = 3600;
+// See the note on the blog pages: widened because revalidateTag("products")
+// makes catalog edits appear immediately, so this window is only a backstop.
+export const revalidate = 21600;
 
 type Props = { params: Promise<{ locale: string; state: string }> };
 
