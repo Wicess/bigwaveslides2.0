@@ -14,6 +14,16 @@ const PRIVACY_HERO =
 
 type Props = { params: Promise<{ locale: string }> };
 
+/** First whole sentence when the source runs past display width. */
+function metaSnippet(text: string, max = 158): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const stop = clean.indexOf(". ");
+  return stop > 60 && stop + 1 <= max
+    ? clean.slice(0, stop + 1)
+    : clean.slice(0, clean.lastIndexOf(" ", max)) + "…";
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const data = PRIVACY;
@@ -23,7 +33,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     path: "/privacy-policy",
     title: data.title,
-    description: data.intro,
+    // data.intro is visible page copy, so it is not shortened — the snippet
+    // takes its first sentence when the whole thing overruns what Google
+    // renders. Same reasoning as the use-case hero descriptions.
+    description: metaSnippet(data.intro),
   });
 }
 

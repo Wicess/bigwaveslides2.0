@@ -48,6 +48,25 @@ export function generateStaticParams() {
   return US_STATES.map((s) => ({ state: s.slug }));
 }
 
+/**
+ * Season windows vary from "Year-round, peaking March through November" to
+ * "March through October", so a fixed template overflows for the long ones —
+ * Florida and Pennsylvania both landed past what Google renders. Build it, then
+ * drop the city clause if it does not fit, rather than guessing a city count
+ * that happens to work for most states.
+ */
+function stateDescription(
+  name: string,
+  season: string,
+  cities: readonly string[],
+): string {
+  const head = `Water slide rentals across ${name} from $155/day. Season runs ${season}`;
+  const withCities = `${head} — delivered, set up and insured in ${cities.slice(0, 2).join(" and ")}.`;
+  return withCities.length <= 158
+    ? withCities
+    : `${head} — delivered, set up and fully insured.`;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, state } = await params;
   const loc = getStateBySlug(state);
@@ -63,10 +82,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // with the name and a city list swapped, which is what Bing §13 flags as a
     // duplicate-description problem.
     description: metaProfile
-      ? // Season + two cities. Three cities plus a long season window pushed
-        // 74 of these past the ~160 characters Google renders, so the tail was
-        // being cut mid-city-name.
-        `Water slide rentals across ${loc.name} from $155/day. Season runs ${lowerSeason(metaProfile.season)} — delivered, set up and insured in ${loc.cities.slice(0, 2).join(" and ")}.`
+      ? stateDescription(loc.name, lowerSeason(metaProfile.season), loc.cities)
       : `Water slide & bounce house rentals across ${loc.name} from $155/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,
     og: {
       eyebrow: loc.name,

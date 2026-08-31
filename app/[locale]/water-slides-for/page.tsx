@@ -25,8 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/water-slides-for",
-    title:
-      "Inflatable Rentals for Every Occasion — Fall Festivals to Birthdays",
+    title: "Inflatable Rentals by Occasion — Fall, School & Birthdays",
     og: {
       eyebrow: "By occasion",
       subtitle: "Fall festivals, trunk-or-treats, schools, churches, birthdays",
@@ -34,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       price: "From $155/day",
     },
     description:
-      "Fall festivals, trunk-or-treats, school carnivals, birthdays and corporate family days — find the right inflatable for your event. October dates book 3–4 weeks ahead.",
+      "Fall festivals, trunk-or-treats, school carnivals, birthdays and corporate family days — find the right inflatable for your event. October books early.",
     keywords: [
       "fall festival inflatable rentals",
       "trunk or treat inflatable rentals",
