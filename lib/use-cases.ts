@@ -39,6 +39,13 @@ export type UseCase = {
   phrase: string;
   heroTitle: string;
   heroDescription: string;
+  /**
+   * Search-snippet description, when heroDescription runs past the ~160
+   * characters Google renders. The hero line is visible page copy and is
+   * written to read well on the page, so it is not trimmed — this is set
+   * instead and the page prefers it for metadata only.
+   */
+  metaDescription?: string;
   intro: string;
   keywords: string[];
   benefits: UseCaseBenefit[];
@@ -458,6 +465,8 @@ export const USE_CASES: UseCase[] = [
     heroTitle: "Fall Festival Inflatable Rentals",
     heroDescription:
       "Slides, combos and bounce houses for community fall festivals — delivered, set up, and run dry for cool-weather crowds. Book three to four weeks out; October weekends fill first.",
+    metaDescription:
+      "Slides, combos and bounce houses for community fall festivals — delivered, set up and run dry for cool-weather crowds. October weekends fill first.",
     intro:
       "A fall festival lives or dies on how long families stay, and an inflatable is the single easiest way to hold a crowd on site for an extra hour. Splash Republic delivers commercial-grade slides, combo units and bounce houses to community festivals across the country, sets them up and anchors them, and collects them when the last pumpkin's gone. Every wet slide in our fleet runs perfectly dry in autumn weather — same unit, no hose, no cold kids — so you get the same headline attraction the summer events had. Most festivals book six to seven pieces; tell us your footprint and expected headcount and we'll size the mix for you.",
     keywords: [

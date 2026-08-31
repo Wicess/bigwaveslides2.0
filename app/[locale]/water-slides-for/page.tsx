@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       price: "From $155/day",
     },
     description:
-      "Fall festivals, trunk-or-treats, school carnivals, Halloween parties, birthdays and corporate family days — find the right inflatable rental for your event. October dates book 3–4 weeks ahead.",
+      "Fall festivals, trunk-or-treats, school carnivals, birthdays and corporate family days — find the right inflatable for your event. October dates book 3–4 weeks ahead.",
     keywords: [
       "fall festival inflatable rentals",
       "trunk or treat inflatable rentals",

@@ -35,12 +35,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, state } = await params;
   const loc = getStateBySlug(state);
   if (!loc) return {};
-  const cities3 = loc.cities.slice(0, 3).join(", ");
   return buildMetadata({
     locale,
     path: `/bounce-house-rentals/${loc.slug}`,
     title: `Bounce House Rentals in ${loc.name} — From $165/Day`,
-    description: `Bounce house & combo rentals across ${loc.name} from $165/day — delivered, set up, sanitized & insured in ${cities3} and statewide. Free quote.`,
+    // Two cities, not three. The water-slide side was shortened for the same
+    // reason: three city names pushed all 51 of these past what Google renders.
+    description: `Bounce house & combo rentals across ${loc.name} from $165/day — delivered, set up, sanitized and insured in ${loc.cities.slice(0, 2).join(" and ")}.`,
     og: {
       eyebrow: loc.name,
       subtitle: "Bounce houses & combos — indoor or out, all year round",

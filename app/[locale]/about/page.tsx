@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: "/about",
     title: "About Us — Water Slide Rentals & Sales Across the USA",
     description:
-      "Family-run water slide rental and sales specialists — delivered, set up, sanitized, and fully insured in all 50 states from $155/day. Here's who we are and how we work.",
+      "Family-run water slide rental and sales specialists — delivered, set up, sanitized and fully insured in all 50 states from $155/day.",
     keywords: [
       "water slide rental company",
       "inflatable rental company",

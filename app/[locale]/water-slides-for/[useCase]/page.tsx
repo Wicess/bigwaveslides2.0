@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     path: `/water-slides-for/${uc.slug}`,
     title: uc.heroTitle,
-    description: uc.heroDescription,
+    description: uc.metaDescription ?? uc.heroDescription,
     image: uc.hero,
     keywords: uc.keywords,
   });
