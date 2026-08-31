@@ -13,6 +13,7 @@
  */
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useLivePoll } from "@/lib/use-live-poll";
 
 /** Shared contract with <PendingOrderFlag />: JSON { number, email }. */
 const PENDING_ORDER_KEY = "bws_pending_order";
@@ -22,7 +23,12 @@ const PENDING_ORDER_KEY = "bws_pending_order";
  */
 const ANNOUNCE_KEY = "bws_payment_announce";
 
-const POLL_MS = 6_000;
+// 20s, not 6s. The old cadence billed 600 invocations an hour per open tab and
+// woke Postgres on each one. A buyer waiting on payment details does not need
+// six-second granularity — and the poll now pauses entirely when the tab is
+// hidden or idle, with an immediate check on return, so returning to the tab
+// is FASTER than the old always-on loop rather than slower.
+const POLL_MS = 20_000;
 /**
  * Stop watching an order 25 minutes after we FIRST saw its flag. Tracked in
  * a Map keyed by order number (not a mount-time constant) because the layout
@@ -42,6 +48,8 @@ export function PaymentWatcher() {
   pathRef.current = pathname;
   const firstSeen = useRef<Map<string, number>>(new Map());
   const inFlight = useRef(false);
+  // Effect-scoped `check` is published here so the poll hook can call it.
+  const checkRef = useRef<null | (() => void | Promise<void>)>(null);
 
   useEffect(() => {
     // SSR / non-browser guard — this effect only makes sense with real
@@ -133,19 +141,16 @@ export function PaymentWatcher() {
       }
     };
 
-    const id = window.setInterval(() => void check(), POLL_MS);
-    // Returning to the tab re-checks immediately: a buyer who tabbed away
-    // shouldn't wait up to 6 extra seconds for a reveal that already landed.
-    const onVisibility = () => {
-      if (document.visibilityState === "visible") void check();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-
-    return () => {
-      window.clearInterval(id);
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
+    checkRef.current = check;
   }, [router]);
+
+  // Pauses on hidden/idle, resumes with an immediate check. See useLivePoll.
+  // idleMs is generous here (10 min) because a buyer genuinely waiting on
+  // payment details may sit still without touching the page.
+  useLivePoll(() => checkRef.current?.(), {
+    intervalMs: POLL_MS,
+    idleMs: 10 * 60_000,
+  });
 
   return null;
 }

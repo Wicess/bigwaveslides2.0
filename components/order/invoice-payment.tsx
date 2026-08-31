@@ -35,6 +35,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toaster";
+import { useLivePoll } from "@/lib/use-live-poll";
 
 type Details = {
   label: string;
@@ -399,6 +400,10 @@ function AwaitingDetails({
   orderNumber: string;
   email: string;
 }) {
+  // Effect-scoped status check, published so the poll hook can call it.
+  const statusCheckRef = React.useRef<null | (() => void | Promise<void>)>(
+    null,
+  );
   const t = useTranslations("OrderFlow");
   const router = useRouter();
 
@@ -436,18 +441,20 @@ function AwaitingDetails({
         /* transient network error — next tick will retry */
       }
     };
-    check();
-    const id = setInterval(check, 30000);
-    const onVisible = () => {
-      if (document.visibilityState === "visible") check();
-    };
-    document.addEventListener("visibilitychange", onVisible);
+    statusCheckRef.current = check;
     return () => {
       stopped = true;
-      clearInterval(id);
-      document.removeEventListener("visibilitychange", onVisible);
     };
   }, [orderNumber, email, router]);
+
+  // 45s, and paused whenever the tab is hidden or the buyer has gone idle.
+  // The old loop ran every 30s forever — including in a backgrounded tab — and
+  // each tick is a serverless invocation plus a Postgres read. Resuming fires
+  // an immediate check, so returning to the tab is faster than it used to be.
+  useLivePoll(() => statusCheckRef.current?.(), {
+    intervalMs: 45_000,
+    idleMs: 10 * 60_000,
+  });
 
   React.useEffect(() => {
     const onReady = (e: Event) => {
