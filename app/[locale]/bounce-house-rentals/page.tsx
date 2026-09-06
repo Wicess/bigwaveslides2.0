@@ -4,7 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Truck, Home, MapPin, Sparkles } from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { US_STATES, getPriorityCities } from "@/lib/locations";
+import { US_STATES, getFeaturedCities } from "@/lib/locations";
 import { getBounceContent, bounceKeywords } from "@/lib/bounce-houses";
 import { getLandingBounceHouses } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
@@ -71,7 +71,9 @@ export default async function BounceHubPage({ params }: Props) {
   const items = await getLandingBounceHouses();
   const path = "/bounce-house-rentals";
   const canonical = absoluteUrl(locale, path);
-  const cities = getPriorityCities();
+  // Featured, not every city — see getFeaturedCities(). Every city stays
+  // reachable through its state hub below.
+  const cities = getFeaturedCities();
   // Reuse the shared FAQ set so the hub answers the same questions the location
   // pages do — one source of truth, and the answers stay consistent wherever an
   // answer engine picks them up.

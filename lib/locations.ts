@@ -5,6 +5,8 @@
 // ("water slide rentals in <city>, <ST>"). Add a city to a state's list and a
 // new landing page is generated automatically.
 
+import { LOCAL_CITY_KEYS } from "@/lib/city-local";
+
 export type StateLocation = {
   slug: string;
   name: string;
@@ -1246,4 +1248,27 @@ export function isPriorityCity(stateSlug: string, cSlug: string): boolean {
 /** The wave-1 priority cities, resolved to real CityLocation records. */
 export function getPriorityCities(): CityLocation[] {
   return getAllCities().filter((c) => isPriorityCity(c.state.slug, c.slug));
+}
+
+/**
+ * The cities the national hubs link to directly — NOT the same thing as the
+ * indexable set above.
+ *
+ * These two were the same list until every city became indexable. The hub pages
+ * render a card per city returned here, so widening indexability to all 752
+ * cities silently widened the hub grid too: /water-slide-rentals ballooned to
+ * 869 KB, 58% of it the React payload for city cards nobody scrolls to. A page
+ * that heavy is slow to render, slow to crawl, and divides its outgoing link
+ * equity 752 ways.
+ *
+ * Nothing is lost by narrowing it. Every state hub lists all of its own cities
+ * (verified: the Texas hub links all 28 Texas pages), so every city is still
+ * two clicks from the homepage and still in the sitemap — the hub simply
+ * features the ones with real local content instead of listing the lot.
+ */
+export function getFeaturedCities(): CityLocation[] {
+  const featured = new Set(LOCAL_CITY_KEYS);
+  return getAllCities().filter((c) =>
+    featured.has(`${c.state.slug}/${c.slug}`),
+  );
 }

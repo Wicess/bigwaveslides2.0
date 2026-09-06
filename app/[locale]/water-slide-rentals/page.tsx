@@ -4,7 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Truck, Sparkles, MapPin } from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { US_STATES, getPriorityCities } from "@/lib/locations";
+import { US_STATES, getFeaturedCities } from "@/lib/locations";
 import { getLandingRentals } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -106,7 +106,9 @@ export default async function LocationsHubPage({ params }: Props) {
 
   const items = await getLandingRentals();
   const canonical = absoluteUrl(locale, "/water-slide-rentals");
-  const cities = getPriorityCities();
+  // Featured, not every city — see getFeaturedCities(). Every city stays
+  // reachable through its state hub below.
+  const cities = getFeaturedCities();
 
   return (
     <main>
