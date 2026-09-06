@@ -2,7 +2,8 @@ import Script from "next/script";
 import { env } from "@/lib/env";
 
 /**
- * GA4 + Microsoft Clarity, loaded only when their IDs are configured.
+ * GA4, Microsoft Clarity and Ahrefs Web Analytics, each loaded only when its
+ * ID is configured.
  *
  * `lazyOnload` defers both to browser idle time — AFTER the page is interactive
  * — so these third-party tags (Clarity in particular is main-thread heavy) stop
@@ -12,7 +13,8 @@ import { env } from "@/lib/env";
 export function Analytics() {
   const ga = env.NEXT_PUBLIC_GA_ID;
   const clarity = env.NEXT_PUBLIC_CLARITY_ID;
-  if (!ga && !clarity) return null;
+  const ahrefs = env.NEXT_PUBLIC_AHREFS_KEY;
+  if (!ga && !clarity && !ahrefs) return null;
 
   return (
     <>
@@ -26,6 +28,18 @@ export function Analytics() {
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${ga}');`}
           </Script>
         </>
+      ) : null}
+
+      {ahrefs ? (
+        // Ahrefs ships this as a plain <script async> for <head>. next/script
+        // with lazyOnload is the same thing deferred to idle: it is a pageview
+        // beacon, so firing after interactive costs no data and keeps a third
+        // party off the critical path.
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key={ahrefs}
+          strategy="lazyOnload"
+        />
       ) : null}
 
       {clarity ? (

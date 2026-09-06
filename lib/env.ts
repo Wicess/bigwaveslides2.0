@@ -11,7 +11,7 @@ import { canonicalSiteUrl } from "@/lib/site";
  *   - SMTP_* ......................... Phase 17 (Hostinger email)
  *   - NEXTAUTH_* ..................... Phase 14 (auth)
  *   - WHATSAPP_* ..................... Phase 17
- *   - NEXT_PUBLIC_GA_ID / CLARITY .... Phase 17
+ *   - NEXT_PUBLIC_GA_ID / CLARITY / AHREFS ... analytics tags
  */
 const EnvSchema = z.object({
   NODE_ENV: z
@@ -77,6 +77,12 @@ const EnvSchema = z.object({
   // Analytics (Phase 17)
   NEXT_PUBLIC_GA_ID: z.string().optional(),
   NEXT_PUBLIC_CLARITY_ID: z.string().optional(),
+  /**
+   * Ahrefs Web Analytics site key. Public by design — it ships in the page
+   * source — but kept in env so the tag can be turned off without a deploy,
+   * matching how GA4 and Clarity are handled.
+   */
+  NEXT_PUBLIC_AHREFS_KEY: z.string().optional(),
 
   // Secures cron-triggered jobs (e.g. abandoned-cart sweep)
   CRON_SECRET: z.string().optional(),
