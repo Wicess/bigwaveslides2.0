@@ -30,10 +30,15 @@ export const PROMOS: Promo[] = [
     expiresAt: "2026-12-31T23:59:59.000Z",
   },
   {
+    // Was pinned to "tropical-wave-18", which rebrand-catalog renamed to
+    // "breakwater-18" — so this code silently matched nothing for months.
+    // Anyone handed it got no discount and no error, because a promo that
+    // matches no line is indistinguishable from one that isn't applied.
+    // tests/promo-slugs guards the whole table against the next rename.
     code: "WAVE25",
-    label: "25% off the Tropical Wave 18 (2+ day rentals)",
+    label: "25% off the Breakwater 18 (2+ day rentals)",
     pct: 0.25,
-    productSlug: "tropical-wave-18",
+    productSlug: "breakwater-18",
     minRentDays: 2,
     expiresAt: "2026-09-30T23:59:59.000Z",
   },
