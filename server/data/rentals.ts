@@ -32,21 +32,29 @@ const cardSelect = {
   },
 } satisfies Prisma.ProductSelect;
 
+/**
+ * Ordering for the paginated rental listing.
+ *
+ * The trailing `id: "asc"` is load-bearing — see the same note in
+ * server/data/products.ts. None of these keys is unique, ties come back in
+ * arbitrary order, and with OFFSET pagination that silently drops products from
+ * every page of the listing. It cost the shop seven of its 52 products.
+ */
 function orderForSort(
   sort: ShopSort,
 ): Prisma.ProductOrderByWithRelationInput[] {
   switch (sort) {
     case "newest":
-      return [{ createdAt: "desc" }];
+      return [{ createdAt: "desc" }, { id: "asc" }];
     case "price-asc":
-      return [{ dailyRateCents: "asc" }];
+      return [{ dailyRateCents: "asc" }, { id: "asc" }];
     case "price-desc":
-      return [{ dailyRateCents: "desc" }];
+      return [{ dailyRateCents: "desc" }, { id: "asc" }];
     case "rating":
-      return [{ ratingAvg: "desc" }, { ratingCount: "desc" }];
+      return [{ ratingAvg: "desc" }, { ratingCount: "desc" }, { id: "asc" }];
     case "featured":
     default:
-      return [{ featured: "desc" }, { ratingAvg: "desc" }];
+      return [{ featured: "desc" }, { ratingAvg: "desc" }, { id: "asc" }];
   }
 }
 
@@ -123,6 +131,11 @@ async function fetchRentalProducts(query: RentalQuery = {}) {
         createdAt: true,
         _count: { select: { bookingItems: true, orderItems: true } },
       },
+      // Deterministic base order. Array.prototype.sort is stable, so ranking a
+      // stably-ordered list keeps equal-score products in the same slots on
+      // every request — without this, tied slides swap places between the
+      // page-1 and page-2 requests and some are never dealt onto any page.
+      orderBy: { id: "asc" },
       take: 500,
     }),
   ).catch(() => []);

@@ -81,6 +81,10 @@ export async function SiteFooter({
     // Google crawls it far more slowly and passes it almost no equity.
     { href: "/bounce-house-rentals", label: "Bounce House Rentals" },
     { href: "/water-slides-for", label: "Occasions" },
+    // The reviews page had zero inbound links — the homepage carousel shows
+    // testimonials but never links to the page that holds them, so nothing on
+    // the site pointed at it and crawlers only ever saw it in the sitemap.
+    { href: "/testimonials", label: "Customer Reviews" },
     { href: "/blog", label: tn("blog") },
     { href: "/about", label: tn("about") },
     { href: "/contact", label: tn("contact") },

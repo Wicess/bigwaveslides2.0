@@ -640,7 +640,9 @@
     "submit": "Submit testimonial",
     "moderationNote": "Testimonials are reviewed before they appear.",
     "successTitle": "Thank you! 🌊",
-    "successBody": "Your testimonial has been submitted and is awaiting moderation."
+    "successBody": "Your testimonial has been submitted and is awaiting moderation.",
+    "metaTitle": "Splash Republic Reviews — What Customers Say After the Event",
+    "metaDesc": "Reviews from customers who booked a water slide or bounce house with us — on delivery, setup, how clean the units arrived, and whether the day ran on time."
   },
   "Auth": {
     "signIn": "Sign in",

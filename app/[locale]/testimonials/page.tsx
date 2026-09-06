@@ -26,8 +26,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/testimonials",
-    title: t("title"),
-    description: t("desc"),
+    // Deliberately NOT t("title")/t("desc") — those are hero copy, written to
+    // be read on the page. The meta pair is written for a search result.
+    title: t("metaTitle"),
+    description: t("metaDesc"),
   });
 }
 

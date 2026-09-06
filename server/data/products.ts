@@ -45,21 +45,44 @@ const cardSelect = {
   },
 } satisfies Prisma.ProductSelect;
 
+/**
+ * Ordering for the paginated listings.
+ *
+ * Every branch ends with `id: "asc"` and that is not decoration — it is what
+ * makes OFFSET pagination correct. None of these sort keys is unique: most
+ * products share the same `featured` and `ratingAvg`, and Postgres is free to
+ * return tied rows in a different order for each query. Page 1 and page 5 are
+ * separate queries, so without a total order a product can be returned on two
+ * pages and another on none at all.
+ *
+ * That is not hypothetical here. Of 52 products matching the shop filter, only
+ * 45 were reachable by walking every page, and `redstone-18` — active, priced,
+ * in the sitemap — appeared on no page of the listing, which is why an external
+ * crawl reported it as an orphan with zero internal links.
+ */
 function orderForSort(
   sort: ShopSort,
 ): Prisma.ProductOrderByWithRelationInput[] {
   switch (sort) {
     case "newest":
-      return [{ createdAt: "desc" }];
+      return [{ createdAt: "desc" }, { id: "asc" }];
     case "price-asc":
-      return [{ salePriceCents: "asc" }, { dailyRateCents: "asc" }];
+      return [
+        { salePriceCents: "asc" },
+        { dailyRateCents: "asc" },
+        { id: "asc" },
+      ];
     case "price-desc":
-      return [{ salePriceCents: "desc" }, { dailyRateCents: "desc" }];
+      return [
+        { salePriceCents: "desc" },
+        { dailyRateCents: "desc" },
+        { id: "asc" },
+      ];
     case "rating":
-      return [{ ratingAvg: "desc" }, { ratingCount: "desc" }];
+      return [{ ratingAvg: "desc" }, { ratingCount: "desc" }, { id: "asc" }];
     case "featured":
     default:
-      return [{ featured: "desc" }, { ratingAvg: "desc" }];
+      return [{ featured: "desc" }, { ratingAvg: "desc" }, { id: "asc" }];
   }
 }
 

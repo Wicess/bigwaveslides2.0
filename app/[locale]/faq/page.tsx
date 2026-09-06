@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/faq",
-    title: "Water Slide Rental FAQ — Delivery, Setup, Pricing & Booking",
-    description: data.intro,
+    title: data.metaTitle,
+    description: data.metaDescription,
     keywords: [
       "water slide rental FAQ",
       "inflatable water slide questions",

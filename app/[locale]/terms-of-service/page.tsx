@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/terms-of-service",
-    title: data.title,
-    description: data.intro,
+    title: data.metaTitle,
+    description: data.metaDescription,
   });
 }
 

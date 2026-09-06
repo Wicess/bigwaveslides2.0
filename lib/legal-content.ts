@@ -4,8 +4,24 @@
 export type Section = { heading: string; body: string };
 export type Faq = { q: string; a: string };
 
-export const PRIVACY: { title: string; intro: string; sections: Section[] } = {
+/**
+ * `title` is the visible H1. `metaTitle` and `metaDescription` are for search
+ * results only, and exist because the two jobs pull in opposite directions: a
+ * heading reads best short ("Privacy Policy"), while Google gives ~60 title and
+ * ~155 description characters and treats a 14-character title as a page with
+ * nothing to say. Optional — pages without them fall back to title/intro.
+ */
+export const PRIVACY: {
+  title: string;
+  metaTitle: string;
+  metaDescription: string;
+  intro: string;
+  sections: Section[];
+} = {
   title: "Privacy Policy",
+  metaTitle: "Privacy Policy — What Splash Republic Collects and Why",
+  metaDescription:
+    "What Splash Republic collects when you book or enquire, how long we keep it, who we share it with, and how to have it deleted. No data is sold, ever.",
   intro:
     "This policy explains what information Splash Republic collects, how we use it, and your choices. We never take payment online — requests are handled by our team.",
   sections: [
@@ -40,8 +56,17 @@ export const PRIVACY: { title: string; intro: string; sections: Section[] } = {
   ],
 };
 
-export const TERMS: { title: string; intro: string; sections: Section[] } = {
+export const TERMS: {
+  title: string;
+  metaTitle: string;
+  metaDescription: string;
+  intro: string;
+  sections: Section[];
+} = {
   title: "Terms of Service",
+  metaTitle: "Terms of Service — Bookings, Deposits and Cancellations",
+  metaDescription:
+    "The terms covering Splash Republic bookings: what a deposit secures, how cancellations and weather calls work, delivery and setup, and who is liable for what.",
   intro:
     "These terms govern your use of the Splash Republic website and our request-based ordering, rental, and event services.",
   sections: [
@@ -80,8 +105,17 @@ export const TERMS: { title: string; intro: string; sections: Section[] } = {
   ],
 };
 
-export const FAQS: { title: string; intro: string; items: Faq[] } = {
+export const FAQS: {
+  title: string;
+  metaTitle: string;
+  metaDescription: string;
+  intro: string;
+  items: Faq[];
+} = {
   title: "Frequently asked questions",
+  metaTitle: "Water Slide Rental FAQ — Delivery, Setup, Pricing & Booking",
+  metaDescription:
+    "How far in advance to book, what delivery and setup include, how much space a slide needs, what happens if it rains, and how payment works. Answered plainly.",
   intro:
     "Everything you need to know about renting, buying, and booking with Splash Republic.",
   items: [
