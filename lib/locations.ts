@@ -1,5 +1,6 @@
 // lib/locations.ts
 import { PROFILED_CITY_KEYS } from "@/lib/city-profiles";
+import { LOCAL_CITY_KEYS } from "@/lib/city-local";
 // US states + major cities for the programmatic location landing pages. Big
 // Wave Slides delivers nationwide, so every state gets its own SEO page
 // ("water slide rentals in <state>") and every city gets its own page
@@ -1216,17 +1217,28 @@ export function getCity(
  * it, so 123 spun pages went into the sitemap — the same four paragraphs with
  * the city name swapped, identical to a second site running this codebase.
  *
- * A city is now indexable if, and only if, someone has written a genuine local
- * profile for it in lib/city-profiles.ts: season length, ground conditions,
- * real venues, the local permit authority, when dates actually book. That makes
- * the guarantee structural rather than a promise — you cannot add a city to the
- * sitemap without first writing content that justifies it.
+ * A city is indexable if, and only if, someone has written real local detail
+ * for it — either a full profile in lib/city-profiles.ts (season length, ground
+ * conditions, venues, permit authority, when dates book) or, at minimum, its
+ * actual delivery suburbs in lib/city-local.ts. Both lists are DERIVED from the
+ * data with Object.keys, never hand-maintained, so the guarantee stays
+ * structural: a city cannot reach the sitemap until someone writes something
+ * true and specific about it.
+ *
+ * Suburbs alone are enough to clear the bar. "We cover Naperville, Aurora and
+ * Schaumburg" is a fact about Chicago that is false for every other city, which
+ * is the whole difference between a local page and a doorway page. Restricting
+ * the index to the 17 fully-profiled metros left Chicago, Kansas City, Denver,
+ * Seattle and 100 other real markets out of the sitemap while their genuine
+ * local data sat unused in the repo.
  *
  * Everything else still renders (a visitor searching their town finds a useful
  * page) but is noindex and absent from the sitemap, so it cannot dilute the
  * domain or duplicate the other site.
  */
-export const PRIORITY_CITY_KEYS: readonly string[] = PROFILED_CITY_KEYS;
+export const PRIORITY_CITY_KEYS: readonly string[] = Array.from(
+  new Set([...PROFILED_CITY_KEYS, ...LOCAL_CITY_KEYS]),
+);
 
 const PRIORITY_SET = new Set(PRIORITY_CITY_KEYS);
 

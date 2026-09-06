@@ -1457,3 +1457,12 @@ export function getCityLocal(
 ): CityLocal | null {
   return CITY_LOCAL[`${stateSlug}/${cSlug}`] ?? null;
 }
+
+/**
+ * Every city we have written real local detail for.
+ *
+ * Drives indexability alongside the fuller profiles — see PRIORITY_CITY_KEYS.
+ * Membership is derived from the data, never hand-listed, so a city cannot
+ * reach the sitemap without someone first writing its actual suburbs here.
+ */
+export const LOCAL_CITY_KEYS: readonly string[] = Object.keys(CITY_LOCAL);

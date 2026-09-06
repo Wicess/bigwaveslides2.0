@@ -77,23 +77,48 @@ export function getCityContent(loc: CityLocation): CityContent {
   // lands here than 600 words of generated filler, and it is not pretending to
   // be a local business page it cannot back up.
   if (!profile) {
+    // The suburbs were being fetched and thrown away here, which is why metros
+    // with real local data — Chicago, Kansas City, Denver — read as generically
+    // as a town we know nothing about. Naming the actual places we deliver to
+    // is the one fact that is true of this city and false of every other, so it
+    // is what makes the page worth indexing at all.
+    const covers = areas.length
+      ? ` We cover ${list(areas.slice(0, 8))} as well as ${name} itself.`
+      : "";
+
     return {
       hero,
-      heroDescription: `Water slide and bounce house rentals delivered to ${place}.`,
-      intro: `We deliver inflatable water slides, bounce houses and combo units to ${place} and the surrounding area — set up, anchored, sanitized and fully insured, from $155 a day. Tell us your date and where you are and we'll confirm what we can get to you.`,
+      heroDescription: areas.length
+        ? `Water slide and bounce house rentals delivered across ${place} and nearby — ${list(areas.slice(0, 3))} included.`
+        : `Water slide and bounce house rentals delivered to ${place}.`,
+      intro: `We deliver inflatable water slides, bounce houses and combo units to ${place} — set up, anchored, sanitized and fully insured, from $155 a day.${covers} Tell us your date and where you are and we'll confirm what we can get to you.`,
       seasonal: "",
       faqs: [
         {
           q: `Do you deliver to ${name}?`,
-          a: `Yes. Give us your address and event date when you request a quote and we'll confirm delivery and any travel cost for ${place} before you commit to anything.`,
+          a: areas.length
+            ? `Yes — across ${name} and the surrounding area, including ${list(areas.slice(0, 6))}. Give us your address and event date and we'll confirm delivery and any travel cost for ${place} before you commit to anything.`
+            : `Yes. Give us your address and event date and we'll confirm delivery and any travel cost for ${place} before you commit to anything.`,
+        },
+        {
+          q: `How far in advance should I book in ${name}?`,
+          a: `Summer Saturdays go first — three to four weeks out is safe, and longer if your date is a holiday weekend. Midweek and off-season dates are usually available on shorter notice.`,
         },
         {
           q: "What does the price include?",
-          a: "Delivery, professional setup and safe anchoring, sanitizing before every booking, and collection afterwards. You'll get one all-in number in your quote — nothing is charged online.",
+          a: "Delivery, professional setup and safe anchoring, sanitizing before every booking, and collection afterwards. You'll get one all-in number — nothing is charged online.",
+        },
+        {
+          q: `Can you set up on grass or a driveway in ${name}?`,
+          a: `Both. Grass is simplest — the unit is staked. On concrete, asphalt or any surface we cannot stake, we ballast with weighted bags instead. Tell us which you have when you book so the right anchoring comes on the truck.`,
         },
       ],
       venues: [],
       setup: "",
+      // Cities with written suburbs carry real local content, so they are
+      // indexable; see PRIORITY_CITY_KEYS. `profiled` stays false because that
+      // flag means "has a full written profile", which drives the richer
+      // seasonal and venue sections below.
       profiled: false,
     };
   }
