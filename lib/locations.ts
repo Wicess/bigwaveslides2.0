@@ -1,8 +1,6 @@
 // lib/locations.ts
-import { PROFILED_CITY_KEYS } from "@/lib/city-profiles";
-import { LOCAL_CITY_KEYS } from "@/lib/city-local";
-// US states + major cities for the programmatic location landing pages. Big
-// Wave Slides delivers nationwide, so every state gets its own SEO page
+// US states + major cities for the programmatic location landing pages. Splash
+// Republic delivers nationwide, so every state gets its own SEO page
 // ("water slide rentals in <state>") and every city gets its own page
 // ("water slide rentals in <city>, <ST>"). Add a city to a state's list and a
 // new landing page is generated automatically.
@@ -1212,32 +1210,30 @@ export function getCity(
 /**
  * Which city pages are indexable.
  *
- * This used to be a hand-maintained list of 123 metros. The list was the wrong
- * mechanism: nothing tied membership to whether the page had anything real on
- * it, so 123 spun pages went into the sitemap — the same four paragraphs with
- * the city name swapped, identical to a second site running this codebase.
+ * ALL of them, by the owner's explicit decision (2026-09-06), after being shown
+ * the trade twice. Previously this gated on written local content: 17 cities
+ * with full profiles, later 123 that at least had real delivery suburbs.
  *
- * A city is indexable if, and only if, someone has written real local detail
- * for it — either a full profile in lib/city-profiles.ts (season length, ground
- * conditions, venues, permit authority, when dates book) or, at minimum, its
- * actual delivery suburbs in lib/city-local.ts. Both lists are DERIVED from the
- * data with Object.keys, never hand-maintained, so the guarantee stays
- * structural: a city cannot reach the sitemap until someone writes something
- * true and specific about it.
+ * What that gate was protecting against, recorded here so the reasoning is not
+ * lost if rankings move: the ~629 cities with no written data differ only by a
+ * name swapped into a fixed sentence. Bing names "automatically generated
+ * content at scale" in its abuse list, and thin pages published at volume do
+ * not merely fail to rank — they consume crawl budget that would otherwise
+ * reach the pages that can. On a domain days old with no inbound links, that
+ * budget is the scarce resource.
  *
- * Suburbs alone are enough to clear the bar. "We cover Naperville, Aurora and
- * Schaumburg" is a fact about Chicago that is false for every other city, which
- * is the whole difference between a local page and a doorway page. Restricting
- * the index to the 17 fully-profiled metros left Chicago, Kansas City, Denver,
- * Seattle and 100 other real markets out of the sitemap while their genuine
- * local data sat unused in the repo.
+ * The counter-argument, which is not nothing: every page is a real service
+ * offer for a real town, returns 200, and is useful to the one visitor who
+ * searches it. Google is also better at ignoring thin pages than at penalising
+ * whole domains for them.
  *
- * Everything else still renders (a visitor searching their town finds a useful
- * page) but is noindex and absent from the sitemap, so it cannot dilute the
- * domain or duplicate the other site.
+ * If organic performance stalls or Search Console reports a manual action,
+ * narrow this back first — re-import LOCAL_CITY_KEYS from lib/city-local and
+ * assign it here. That is the 123 cities with real delivery suburbs, the last
+ * setting that had content behind every indexed page.
  */
-export const PRIORITY_CITY_KEYS: readonly string[] = Array.from(
-  new Set([...PROFILED_CITY_KEYS, ...LOCAL_CITY_KEYS]),
+export const PRIORITY_CITY_KEYS: readonly string[] = getAllCities().map(
+  (c) => `${c.state.slug}/${c.slug}`,
 );
 
 const PRIORITY_SET = new Set(PRIORITY_CITY_KEYS);

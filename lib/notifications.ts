@@ -13,6 +13,7 @@ import { notifyAdminNtfy } from "@/lib/ntfy";
 import { generateQuotePdf, type QuotePdfInput } from "@/lib/pdf/quote-pdf";
 import { orderSecurityCode } from "@/lib/security-code";
 import { env } from "@/lib/env";
+import { BRAND_NAME } from "@/lib/brand";
 
 const CONTACT_EMAIL = "sales@splashrep.com";
 
@@ -37,15 +38,26 @@ export async function adminRecipients(): Promise<string[]> {
 
 /** Best-effort PDF generation — never blocks the email if it fails.
  *  Filename matches the document type (no docType = invoice, the PDF default). */
+/**
+ * Brand slug for attachment filenames: "Splash Republic" -> "Splash-Republic".
+ *
+ * Derived from BRAND_NAME rather than written out, because the literal string
+ * was left behind at the rebrand and every invoice a customer downloaded
+ * arrived named after a different company — which, on an invoice asking for
+ * money, reads as a scam signal rather than an oversight.
+ */
+const BRAND_FILE = BRAND_NAME.replace(/[^A-Za-z0-9]+/g, "-").replace(
+  /^-|-$/g,
+  "",
+);
+
 async function buildQuoteAttachment(
   input: QuotePdfInput,
 ): Promise<EmailAttachment[]> {
   try {
     const content = await generateQuotePdf(input);
     const doc = input.docType === "quote" ? "Quote" : "Invoice";
-    return [
-      { filename: `Big-Wave-Slides-${doc}-${input.number}.pdf`, content },
-    ];
+    return [{ filename: `${BRAND_FILE}-${doc}-${input.number}.pdf`, content }];
   } catch (error) {
     console.error("[pdf error]", error);
     return [];
@@ -682,7 +694,7 @@ export async function sendInvoiceIssuedEmails(
   try {
     const pdf = await generateQuotePdf(await orderToPdfInput(o, "invoice"));
     attachments = [
-      { filename: `Big-Wave-Slides-Invoice-${inv}.pdf`, content: pdf },
+      { filename: `${BRAND_FILE}-Invoice-${inv}.pdf`, content: pdf },
     ];
   } catch (e) {
     console.error("[pdf error] invoice", e);

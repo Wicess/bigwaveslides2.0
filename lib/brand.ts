@@ -50,7 +50,12 @@ export const BRAND_DESCRIPTION =
  * Change here and nowhere else.
  */
 export const BRAND_EMAIL = "sales@splashrep.com";
-export const BRAND_PHONE = "+1 (614) 302-5899";
+
+// There is deliberately NO BRAND_PHONE here. The phone number the site shows
+// comes from Settings -> Contact in the database, and nothing imported this
+// constant — it just sat here holding the pre-rebrand number, waiting for
+// someone to wire it up and quietly publish a disconnected line. One source of
+// truth for a number that changes: the admin panel.
 
 /** Brand marks. See public/brand/ — the wordmark is a plain SVG, no webfont. */
 export const BRAND_LOGO = "/brand/splash-republic-logo.svg";
