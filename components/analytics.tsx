@@ -31,14 +31,23 @@ export function Analytics() {
       ) : null}
 
       {ahrefs ? (
-        // Ahrefs ships this as a plain <script async> for <head>. next/script
-        // with lazyOnload is the same thing deferred to idle: it is a pageview
-        // beacon, so firing after interactive costs no data and keeps a third
-        // party off the critical path.
-        <Script
+        // A PLAIN <script async>, not next/script — deliberately.
+        //
+        // With next/script the tag never reaches the HTML: for a server
+        // component the props are serialised into the RSC payload and the
+        // element is created client-side at idle. Ahrefs verifies by fetching
+        // the page and looking for the tag, executes no JavaScript, and so
+        // reported "Script isn't found" even though the key was present in the
+        // payload. Any third party that verifies by scanning source has the
+        // same problem.
+        //
+        // `async` keeps it off the critical path, which was the point of
+        // deferring in the first place. React hoists this into <head>, so it
+        // is exactly the snippet Ahrefs documents.
+        <script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key={ahrefs}
-          strategy="lazyOnload"
+          async
         />
       ) : null}
 
