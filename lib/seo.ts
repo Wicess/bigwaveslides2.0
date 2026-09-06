@@ -131,6 +131,13 @@ export function heightFromDimensions(dimensions: unknown): number | null {
  * dangling clause welded to the next fragment. Search results print this text
  * verbatim, so it has to end where a human would end it.
  */
+/**
+ * Function words a truncated sentence must not end on. Repeated so "and a" and
+ * "with the" come off together.
+ */
+const DANGLING_TAIL =
+  /(?:\s+(?:a|an|and|the|with|for|of|to|in|on|at|or|but|from|that|this|its|their|your|by|as|plus|per))+[,;:]?$/i;
+
 function leadSentence(s: string, max: number): string {
   const clean = s.replace(/\s+/g, " ").trim();
   if (!clean) return "";
@@ -142,17 +149,55 @@ function leadSentence(s: string, max: number): string {
     const cut =
       dash > 28 ? dash : comma > 28 ? comma : lead.lastIndexOf(" ", max);
     lead = lead.slice(0, cut);
+    // The word-boundary fallback cuts wherever the character budget runs out,
+    // which lands mid-thought as often as not — /shop/launchpad-18 was shipping
+    // "...with airbrushed planets and." as its Google snippet. Peel any trailing
+    // conjunctions, articles and prepositions back off so the fragment ends on
+    // something it makes sense to put a full stop after. Guarded so a short lead
+    // is left alone rather than eroded to nothing.
+    const trimmed = lead.replace(DANGLING_TAIL, "");
+    if (trimmed.length > 28) lead = trimmed;
   }
   return /[.!?]$/.test(lead) ? lead : lead + ".";
 }
 
 /** Join clauses, dropping from `optional` until the whole thing fits `max`. */
-function fit(lead: string, optional: string[], max: number): string {
+/**
+ * Assemble a meta description from a lead sentence plus optional clauses,
+ * dropping clauses from the front until the result fits inside `max` — then,
+ * if what survived is shorter than `min`, appending `filler`.
+ *
+ * The floor is the part that was missing. This only ever enforced a ceiling, so
+ * a product with a terse summary and no age or space data produced a very short
+ * description: /rent/stampede-bull shipped 109 characters. Search engines treat
+ * a description that short as an incomplete answer and are more likely to write
+ * their own snippet from the page instead, which wastes the one line of copy on
+ * the results page we actually control. Ahrefs flags them for the same reason.
+ *
+ * `filler` is only appended when it still fits under `max`, so the ceiling
+ * always wins over the floor.
+ */
+function fit(
+  lead: string,
+  optional: string[],
+  max: number,
+  min = 0,
+  filler: string[] = [],
+): string {
   let out = [lead, ...optional].join(" ");
   for (let d = 1; out.length > max && d <= optional.length; d++) {
     out = [lead, ...optional.slice(d)].join(" ");
   }
-  return out.replace(/\s+/g, " ").trim();
+  out = out.replace(/\s+/g, " ").trim();
+  // Append filler clauses one at a time until the floor is cleared. A single
+  // clause is not enough on its own: a product with no space requirement and no
+  // price still has almost nothing to say, so the floor has to be reachable from
+  // the worst case, not just the common one.
+  for (const clause of filler) {
+    if (out.length >= min) break;
+    if (`${out} ${clause}`.length <= max) out = `${out} ${clause}`;
+  }
+  return out;
 }
 
 /** Don't repeat a category the product name already states. */
@@ -181,13 +226,24 @@ export function rentProductSeo(name: string, opts?: ProductSeoOpts) {
           opts?.price ? `${opts.price}/day, delivered and set up.` : "",
         ].filter(Boolean),
         158,
+        115,
+        [
+          "Fully insured and sanitized before delivery.",
+          "Delivery, setup and pickup are included.",
+        ],
       )
     : `Rent the ${name} ${kind}${opts?.price ? ` from ${opts.price}/day` : ""} — delivered, set up, sanitized and fully insured. Free quote.`;
 
   return {
+    // With no height and no price there is nothing to qualify the name with, and
+    // "Prism Combo Rental" is 18 characters — short enough that Google pads the
+    // title with the site name and Ahrefs flags it. Fall back to the service
+    // promise instead, but only while it still fits the ~60 Google displays.
     title: titleBits.length
       ? `${name} Rental — ${titleBits.join(", ")}`
-      : `${name} Rental`,
+      : `${name} Rental — Delivered, Set Up & Insured`.length <= 60
+        ? `${name} Rental — Delivered, Set Up & Insured`
+        : `${name} Rental`,
     description,
     keywords: [
       `${name} rental`,
@@ -232,6 +288,11 @@ export function saleProductSeo(name: string, opts?: ProductSeoOpts) {
           "Delivered anywhere in the USA — request a price.",
         ].filter(Boolean),
         158,
+        115,
+        [
+          "Built for rental fleets and resale.",
+          "Heavy-duty commercial build, nationwide US delivery.",
+        ],
       )
     : `Buy the ${name} commercial ${kind} — heavy-duty, built for rentals and resale, delivered anywhere in the USA. Request a price quote.`;
 
