@@ -256,6 +256,21 @@ export function rentProductSeo(name: string, opts?: ProductSeoOpts) {
   };
 }
 
+/**
+ * Join a title to its optional tail, dropping the tail when the pair would run
+ * past what Google displays.
+ *
+ * The city page titles are built from a template, so their length is whatever
+ * the city name happens to be. Four of the 1,815 pages tipped over 60 characters
+ * on long names — "Hilton Head Island", "North Little Rock", "Arlington
+ * Heights" — and a template is not something you fix one page at a time. The
+ * price tail is the least valuable part of the title, so it is what gives way.
+ */
+export function fitTitle(base: string, tail: string, max = 60): string {
+  const full = `${base}${tail}`;
+  return full.length <= max ? full : base;
+}
+
 /** Short, human label used inside titles. */
 function shortKindLabel(kind: string): string {
   if (/bounce house/i.test(kind)) return "Bounce House";

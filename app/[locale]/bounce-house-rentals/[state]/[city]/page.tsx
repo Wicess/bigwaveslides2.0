@@ -16,7 +16,7 @@ import { getLandingBounceHouses } from "@/server/data/rentals";
 import { getGuideLinksOnce } from "@/server/data/blog";
 import { getSettingsOnce } from "@/server/data/settings";
 import { pickN, hashSeed } from "@/lib/internal-links";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, fitTitle } from "@/lib/seo";
 import {
   localBusinessAreaLd,
   breadcrumbLd,
@@ -53,7 +53,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     noindex,
     path: `/bounce-house-rentals/${st.slug}/${loc.slug}`,
-    title: `Bounce House Rentals in ${name}, ${st.abbr} — From $165/Day`,
+    title: fitTitle(
+      `Bounce House Rentals in ${name}, ${st.abbr}`,
+      " — From $165/Day",
+    ),
     description: `Bounce house & combo rentals in ${name}, ${st.abbr} from $165/day — delivered, set up, sanitized & insured. Indoor or outdoor. Free quote.`,
     og: {
       eyebrow: `${name}, ${st.abbr}`,
