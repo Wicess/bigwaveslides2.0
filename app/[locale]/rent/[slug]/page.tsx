@@ -287,8 +287,13 @@ export default async function RentalDetailPage({ params }: Props) {
                   ) : null}
                 </div>
 
+                {/* Qualified for the same reason as the /shop heading — see
+                    the note there. */}
                 <h1 className="mt-3 text-3xl leading-tight font-bold sm:text-4xl">
-                  {name}
+                  {name}{" "}
+                  <span className="text-muted-foreground font-medium">
+                    Rental
+                  </span>
                 </h1>
 
                 <div className="mt-3 flex items-center gap-2">

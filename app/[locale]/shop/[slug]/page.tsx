@@ -321,8 +321,19 @@ export default async function ProductDetailPage({ params }: Props) {
                 ) : null}
               </div>
 
+              {/* The 52 products sold AND rented each have a /shop and a /rent
+                  page. Both are indexed and both carried the bare product name
+                  as their H1, which is the one heading a crawler weighs most —
+                  two URLs, same product, same H1. The titles and descriptions
+                  were already written apart on purpose; this finishes the job,
+                  and tells a visitor arriving from a "buy" search which of the
+                  two pages they landed on. Muted and lighter so the product
+                  name still carries the heading. */}
               <h1 className="mt-3 text-3xl leading-tight font-bold sm:text-4xl">
-                {name}
+                {name}{" "}
+                <span className="text-muted-foreground font-medium">
+                  for Sale
+                </span>
               </h1>
 
               <div className="mt-3 flex items-center gap-2">
