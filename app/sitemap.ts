@@ -65,14 +65,14 @@ const LOCATION_PATHS = US_STATES.map((s) => `/water-slide-rentals/${s.slug}`);
 const CITY_PATHS = getPriorityCities().map(
   (c) => `/water-slide-rentals/${c.state.slug}/${c.slug}`,
 );
-// The bounce-house family mirrors the water-slide one exactly — same states,
-// same wave-1 metros — because it is gated by the same indexing discipline.
+// The bounce-house family keeps its 51 state hubs and drops its city tier. It
+// used to mirror the water-slide family city for city, which put two
+// near-identical pages about the same town in the sitemap and made bounce
+// houses 44% of it — on a water-slide business. See isBounceCity().
 const BOUNCE_STATE_PATHS = US_STATES.map(
   (s) => `/bounce-house-rentals/${s.slug}`,
 );
-const BOUNCE_CITY_PATHS = getPriorityCities().map(
-  (c) => `/bounce-house-rentals/${c.state.slug}/${c.slug}`,
-);
+const BOUNCE_CITY_PATHS: string[] = [];
 const USE_CASE_PATHS = USE_CASES.map((u) => `/water-slides-for/${u.slug}`);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

@@ -107,13 +107,6 @@ async function main() {
       locales: EN,
     },
     {
-      title: "BOUNCE HOUSE PRIORITY CITIES",
-      paths: getPriorityCities().map(
-        (c) => `/bounce-house-rentals/${c.state.slug}/${c.slug}`,
-      ),
-      locales: EN,
-    },
-    {
       title: "USE-CASE PAGES",
       paths: USE_CASES.map((u) => `/water-slides-for/${u.slug}`),
       locales: EN,

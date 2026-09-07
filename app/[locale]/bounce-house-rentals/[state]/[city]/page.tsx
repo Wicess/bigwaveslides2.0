@@ -4,12 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getStateProfile } from "@/lib/state-profiles";
 import { routing } from "@/i18n/routing";
-import {
-  getAllCities,
-  getCity,
-  citySlug,
-  isPriorityCity,
-} from "@/lib/locations";
+import { getCity, citySlug, isBounceCity } from "@/lib/locations";
 import { getCityLocal } from "@/lib/city-local";
 import { getBounceContent, bounceKeywords } from "@/lib/bounce-houses";
 import { getLandingBounceHouses } from "@/server/data/rentals";
@@ -36,7 +31,11 @@ type Props = {
 };
 
 export function generateStaticParams() {
-  return getAllCities().map((c) => ({ state: c.state.slug, city: c.slug }));
+  // Deliberately empty. These 752 pages are noindex (see isBounceCity), so
+  // prebuilding them spent build minutes and deployment storage on pages no
+  // crawler is invited to fetch. They still render on demand for a visitor who
+  // searches their town, and ISR caches whichever ones anyone actually opens.
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -48,7 +47,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // priority metros are indexable. Every other city page stays crawlable and
   // linked — so it still passes equity and still serves a real visitor — but
   // doesn't spend crawl budget competing for terms the domain can't win yet.
-  const noindex = !isPriorityCity(st.slug, loc.slug);
+  // Always true — the city tier is not offered to search engines. See
+  // isBounceCity() in lib/locations.ts for why.
+  const noindex = !isBounceCity();
   return buildMetadata({
     locale,
     noindex,
