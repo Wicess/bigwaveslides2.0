@@ -48,6 +48,31 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // The three listing pages await searchParams, which makes them dynamic.
+        // Next then sends "private, no-cache, no-store" on every response, so
+        // nothing in front of them ever caches: each crawl and each visit runs a
+        // serverless render. They are also three of the most-crawled URLs on the
+        // site, which is the worst possible combination.
+        //
+        // Safe to cache because nothing in the server render is per-viewer: the
+        // pages read no cookies, headers or session, and the account chip is a
+        // client component that reads its cookie in the browser. The homepage is
+        // already prerendered and served to everyone from the same HTML.
+        //
+        // 5 minutes is deliberately much tighter than the rest of the site (the
+        // product and city pages sit on 6-hour ISR). Admin edits call
+        // revalidateTag("products"), which clears the data cache immediately, so
+        // this window is the only lag an edit can pick up — and s-maxage applies
+        // to the shared CDN copy only, never the visitor's own browser.
+        source: "/:locale(en)/:page(shop|rent|blog)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=300, stale-while-revalidate=86400",
+          },
+        ],
+      },
+      {
         source: "/:path*",
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
