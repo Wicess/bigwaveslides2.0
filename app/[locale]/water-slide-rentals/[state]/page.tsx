@@ -5,7 +5,12 @@ import { notFound } from "next/navigation";
 import { ShieldCheck, Sparkles, Truck, MapPin } from "lucide-react";
 import { routing } from "@/i18n/routing";
 import { getStateProfile, lowerSeason } from "@/lib/state-profiles";
-import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
+import {
+  US_STATES,
+  getStateBySlug,
+  citySlug,
+  isBounceState,
+} from "@/lib/locations";
 import { getLocalized } from "@/lib/localized";
 import { getLandingRentals } from "@/server/data/rentals";
 import { getGuideLinksOnce } from "@/server/data/blog";
@@ -476,16 +481,23 @@ export default async function StateRentalPage({ params }: Props) {
               <Button asChild size="lg" variant="gradient">
                 <Link href="/contact">Request a free quote</Link>
               </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
-              >
-                <Link href={`/bounce-house-rentals/${loc.slug}`}>
-                  Bounce houses in {loc.name}
-                </Link>
-              </Button>
+              {/* Only where a bounce-house hub still exists. Most states no
+                  longer have one (BOUNCE_STATE_KEYS), and a water-slide page —
+                  the pages this site is actually trying to rank — should not
+                  spend a link on a redirect. Bounce houses stay reachable from
+                  the footer on every page. */}
+              {isBounceState(loc.slug) ? (
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                >
+                  <Link href={`/bounce-house-rentals/${loc.slug}`}>
+                    Bounce houses in {loc.name}
+                  </Link>
+                </Button>
+              ) : null}
             </div>
           </div>
 

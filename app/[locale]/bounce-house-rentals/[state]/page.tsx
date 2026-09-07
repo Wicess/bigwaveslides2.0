@@ -4,7 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getStateProfile } from "@/lib/state-profiles";
 import { routing } from "@/i18n/routing";
-import { US_STATES, getStateBySlug, citySlug } from "@/lib/locations";
+import { BOUNCE_STATE_KEYS, citySlug, getStateBySlug } from "@/lib/locations";
 import { getBounceContent, bounceKeywords } from "@/lib/bounce-houses";
 import { getLandingBounceHouses } from "@/server/data/rentals";
 import { getGuideLinksOnce } from "@/server/data/blog";
@@ -28,7 +28,10 @@ export const revalidate = 21600;
 type Props = { params: Promise<{ locale: string; state: string }> };
 
 export function generateStaticParams() {
-  return US_STATES.map((s) => ({ state: s.slug }));
+  // Only the states that keep a bounce-house hub — see BOUNCE_STATE_KEYS.
+  // Everything else is redirected to the national hub in middleware and never
+  // reaches this route.
+  return BOUNCE_STATE_KEYS.map((state) => ({ state }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -69,6 +72,11 @@ export default async function StateBouncePage({ params }: Props) {
   ]);
 
   const path = `/bounce-house-rentals/${loc.slug}`;
+
+  // "Cities we serve" now links to the WATER-SLIDE page for each town. The
+  // bounce-house city pages are gone (see BOUNCE_STATE_KEYS), and pointing at
+  // a real page about that town beats pointing at a redirect. The bounce-house
+  // offer for those cities is this page.
   const canonical = absoluteUrl(locale, path);
   const content = getBounceContent(
     loc.slug,
@@ -117,7 +125,7 @@ export default async function StateBouncePage({ params }: Props) {
         ]}
         chipsTitle={`Cities we serve in ${loc.name}`}
         chips={loc.cities.map((c) => ({
-          href: `/bounce-house-rentals/${loc.slug}/${citySlug(c)}`,
+          href: `/water-slide-rentals/${loc.slug}/${citySlug(c)}`,
           label: c,
         }))}
         waterSlideHref={`/water-slide-rentals/${loc.slug}`}

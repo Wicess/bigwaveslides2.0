@@ -6,6 +6,7 @@
 // new landing page is generated automatically.
 
 import { LOCAL_CITY_KEYS } from "@/lib/city-local";
+import { PROFILED_CITY_KEYS } from "@/lib/city-profiles";
 
 export type StateLocation = {
   slug: string;
@@ -1267,27 +1268,35 @@ export function getPriorityCities(): CityLocation[] {
  * features the ones with real local content instead of listing the lot.
  */
 /**
- * Bounce-house city pages are NOT indexable, deliberately — this is why there
- * is no getBounceCities() beside getPriorityCities().
+ * The only states that keep a bounce-house location page.
  *
- * The two families were mirrored: 752 water-slide city pages and 752
- * bounce-house city pages, one pair per city, together 44% of the sitemap. For
- * any given city the two pages say close to the same thing about the same
- * place, differing only in which inflatable is named — which is the shape Bing
- * calls "automatically generated content at scale", and it does not merely fail
- * to rank. Crawl budget spent on the second copy is budget not spent on the
- * first, so the bounce-house set was competing with the water-slide set for the
- * same finite attention, on a domain that has very little of it to spend.
+ * The bounce-house tree used to mirror the water-slide tree exactly — 51 state
+ * hubs and 752 city pages — which made bounce houses 44% of the sitemap on a
+ * water-slide business. Worse, each city had two pages saying close to the same
+ * thing about the same place, differing only in which inflatable is named. That
+ * is the shape Bing calls "automatically generated content at scale", and the
+ * cost is not merely that the copy fails to rank: crawl budget spent on it is
+ * budget not spent on the water-slide page for the same town. The two sets were
+ * competing with each other for attention this domain has very little of.
  *
- * This is a water-slide business. Bounce houses keep their national hub, all 51
- * state hubs, and every product page; only the city tier goes noindex. The
- * pages still render for a visitor who searches their town — they are simply
- * not offered to search engines as 752 separate destinations.
+ * So the city tier is gone entirely and the state tier is cut to the markets
+ * that are actually ours. Derived from PROFILED_CITY_KEYS rather than typed out
+ * by hand: a state earns a bounce-house page when someone has written a real
+ * local profile for a city in it. That keeps the rule honest — you cannot widen
+ * this list without first writing content that justifies it — and it means the
+ * list follows the profiles automatically instead of drifting from them.
  *
- * To reverse: give this the same body as isPriorityCity.
+ * Everything removed is redirected in middleware, never 404'd.
  */
-export function isBounceCity(): boolean {
-  return false;
+export const BOUNCE_STATE_KEYS: readonly string[] = [
+  ...new Set(PROFILED_CITY_KEYS.map((k) => k.split("/")[0] ?? "")),
+].sort();
+
+const BOUNCE_STATE_SET = new Set(BOUNCE_STATE_KEYS);
+
+/** True if this state keeps a bounce-house hub. */
+export function isBounceState(stateSlug: string): boolean {
+  return BOUNCE_STATE_SET.has(stateSlug);
 }
 
 export function getFeaturedCities(): CityLocation[] {

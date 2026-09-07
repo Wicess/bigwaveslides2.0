@@ -8,7 +8,11 @@ import {
   getBlogCategories,
   getPopularTags,
 } from "@/server/data/blog";
-import { US_STATES, getPriorityCities } from "@/lib/locations";
+import {
+  BOUNCE_STATE_KEYS,
+  US_STATES,
+  getPriorityCities,
+} from "@/lib/locations";
 import { USE_CASES } from "@/lib/use-cases";
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -69,8 +73,8 @@ const CITY_PATHS = getPriorityCities().map(
 // used to mirror the water-slide family city for city, which put two
 // near-identical pages about the same town in the sitemap and made bounce
 // houses 44% of it — on a water-slide business. See isBounceCity().
-const BOUNCE_STATE_PATHS = US_STATES.map(
-  (s) => `/bounce-house-rentals/${s.slug}`,
+const BOUNCE_STATE_PATHS = BOUNCE_STATE_KEYS.map(
+  (s) => `/bounce-house-rentals/${s}`,
 );
 const BOUNCE_CITY_PATHS: string[] = [];
 const USE_CASE_PATHS = USE_CASES.map((u) => `/water-slides-for/${u.slug}`);

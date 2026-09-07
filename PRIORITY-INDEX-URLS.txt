@@ -5,11 +5,11 @@
 # GSC refuses and continue tomorrow. Never retry the same URL — repeats
 # can throttle the quota without indexing anything.
 #
-# 1063 URLs. Every one is in the live sitemap, returns 200, and
+# 1023 URLs. Every one is in the live sitemap, returns 200, and
 # serves meta robots "index, follow" — verified by crawling all of them.
 #
 # READ THIS BEFORE STARTING: manual submission is a kickstart, not the
-# method. You are not going to submit 1063 URLs by hand and you
+# method. You are not going to submit 1023 URLs by hand and you
 # do not need to. Once Google crawls the pages at the top and finds real
 # content, it follows your internal links to the rest on its own. What
 # actually raises crawl budget is a Google Business Profile and the first
@@ -126,64 +126,26 @@ https://www.splashrep.com/en/water-slide-rentals/wisconsin
 https://www.splashrep.com/en/water-slide-rentals/wyoming
 
 # ------------------------------------------------------------------------
-# DAY 7-10 — BOUNCE HOUSE RENTALS BY STATE (all 51)
-#   Same structure, second product family.
-# 51 URLs
+# DAY 7 — BOUNCE HOUSE RENTALS BY STATE
+#   Only the states with real local content keep a bounce-house hub. The
+#   other 40, and every bounce-house city page, now redirect here — do not
+#   submit them, a redirect spends quota to be told to go somewhere else.
+# 11 URLs
 # ------------------------------------------------------------------------
-https://www.splashrep.com/en/bounce-house-rentals/alabama
-https://www.splashrep.com/en/bounce-house-rentals/alaska
 https://www.splashrep.com/en/bounce-house-rentals/arizona
-https://www.splashrep.com/en/bounce-house-rentals/arkansas
 https://www.splashrep.com/en/bounce-house-rentals/california
-https://www.splashrep.com/en/bounce-house-rentals/colorado
-https://www.splashrep.com/en/bounce-house-rentals/connecticut
-https://www.splashrep.com/en/bounce-house-rentals/delaware
 https://www.splashrep.com/en/bounce-house-rentals/florida
 https://www.splashrep.com/en/bounce-house-rentals/georgia
-https://www.splashrep.com/en/bounce-house-rentals/hawaii
-https://www.splashrep.com/en/bounce-house-rentals/idaho
-https://www.splashrep.com/en/bounce-house-rentals/illinois
-https://www.splashrep.com/en/bounce-house-rentals/indiana
-https://www.splashrep.com/en/bounce-house-rentals/iowa
-https://www.splashrep.com/en/bounce-house-rentals/kansas
-https://www.splashrep.com/en/bounce-house-rentals/kentucky
 https://www.splashrep.com/en/bounce-house-rentals/louisiana
-https://www.splashrep.com/en/bounce-house-rentals/maine
-https://www.splashrep.com/en/bounce-house-rentals/maryland
-https://www.splashrep.com/en/bounce-house-rentals/massachusetts
-https://www.splashrep.com/en/bounce-house-rentals/michigan
-https://www.splashrep.com/en/bounce-house-rentals/minnesota
-https://www.splashrep.com/en/bounce-house-rentals/mississippi
-https://www.splashrep.com/en/bounce-house-rentals/missouri
-https://www.splashrep.com/en/bounce-house-rentals/montana
-https://www.splashrep.com/en/bounce-house-rentals/nebraska
 https://www.splashrep.com/en/bounce-house-rentals/nevada
-https://www.splashrep.com/en/bounce-house-rentals/new-hampshire
-https://www.splashrep.com/en/bounce-house-rentals/new-jersey
-https://www.splashrep.com/en/bounce-house-rentals/new-mexico
-https://www.splashrep.com/en/bounce-house-rentals/new-york
 https://www.splashrep.com/en/bounce-house-rentals/north-carolina
-https://www.splashrep.com/en/bounce-house-rentals/north-dakota
-https://www.splashrep.com/en/bounce-house-rentals/ohio
 https://www.splashrep.com/en/bounce-house-rentals/oklahoma
-https://www.splashrep.com/en/bounce-house-rentals/oregon
-https://www.splashrep.com/en/bounce-house-rentals/pennsylvania
-https://www.splashrep.com/en/bounce-house-rentals/rhode-island
 https://www.splashrep.com/en/bounce-house-rentals/south-carolina
-https://www.splashrep.com/en/bounce-house-rentals/south-dakota
 https://www.splashrep.com/en/bounce-house-rentals/tennessee
 https://www.splashrep.com/en/bounce-house-rentals/texas
-https://www.splashrep.com/en/bounce-house-rentals/utah
-https://www.splashrep.com/en/bounce-house-rentals/vermont
-https://www.splashrep.com/en/bounce-house-rentals/virginia
-https://www.splashrep.com/en/bounce-house-rentals/washington
-https://www.splashrep.com/en/bounce-house-rentals/washington-dc
-https://www.splashrep.com/en/bounce-house-rentals/west-virginia
-https://www.splashrep.com/en/bounce-house-rentals/wisconsin
-https://www.splashrep.com/en/bounce-house-rentals/wyoming
 
 # ------------------------------------------------------------------------
-# DAY 11-16 — blog
+# DAY 8-13 — blog
 #   Original long-form; your strongest long-tail surface.
 # 74 URLs
 # ------------------------------------------------------------------------
@@ -263,7 +225,7 @@ https://www.splashrep.com/en/blog/tag/seasonal
 https://www.splashrep.com/en/blog/tag/tips
 
 # ------------------------------------------------------------------------
-# DAY 17-20 — rental products
+# DAY 14-17 — rental products
 # 53 URLs
 # ------------------------------------------------------------------------
 https://www.splashrep.com/en/rent/amethyst-18
@@ -321,7 +283,7 @@ https://www.splashrep.com/en/rent/twin-falls-22
 https://www.splashrep.com/en/rent/vortex-peak-26
 
 # ------------------------------------------------------------------------
-# DAY 21-24 — shop products
+# DAY 18-21 — shop products
 # 52 URLs
 # ------------------------------------------------------------------------
 https://www.splashrep.com/en/shop/amethyst-18

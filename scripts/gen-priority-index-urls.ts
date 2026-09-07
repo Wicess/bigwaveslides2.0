@@ -23,7 +23,11 @@
 import { writeFileSync } from "node:fs";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pkg from "@prisma/client";
-import { US_STATES, getPriorityCities } from "../lib/locations";
+import {
+  US_STATES,
+  getPriorityCities,
+  BOUNCE_STATE_KEYS,
+} from "../lib/locations";
 
 const { PrismaClient } = pkg;
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
@@ -141,12 +145,16 @@ async function main() {
       urls: states.map((s) => u(`/water-slide-rentals/${s.slug}`)),
     },
     {
-      title: "DAY 7-10 — BOUNCE HOUSE RENTALS BY STATE (all 51)",
-      note: ["Same structure, second product family."],
-      urls: states.map((s) => u(`/bounce-house-rentals/${s.slug}`)),
+      title: "DAY 7 — BOUNCE HOUSE RENTALS BY STATE",
+      note: [
+        "Only the states with real local content keep a bounce-house hub. The",
+        "other 40, and every bounce-house city page, now redirect here — do not",
+        "submit them, a redirect spends quota to be told to go somewhere else.",
+      ],
+      urls: BOUNCE_STATE_KEYS.map((s) => u(`/bounce-house-rentals/${s}`)),
     },
     {
-      title: "DAY 11-16 — blog",
+      title: "DAY 8-13 — blog",
       note: ["Original long-form; your strongest long-tail surface."],
       urls: [
         ...posts.map((p) => u(`/blog/${p.slug}`)),
@@ -155,11 +163,11 @@ async function main() {
       ],
     },
     {
-      title: "DAY 17-20 — rental products",
+      title: "DAY 14-17 — rental products",
       urls: rent.map((p) => u(`/rent/${p.slug}`)),
     },
     {
-      title: "DAY 21-24 — shop products",
+      title: "DAY 18-21 — shop products",
       urls: shop.map((p) => u(`/shop/${p.slug}`)),
     },
     {

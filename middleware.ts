@@ -2,6 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { CANONICAL_HOST, isAliasHost } from "./lib/site";
+import { isBounceState } from "./lib/locations";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -95,6 +96,30 @@ export default function middleware(req: NextRequest) {
     if (retired) {
       path = `/${EN}${retired}`;
       status = 301;
+    }
+
+    // ─── Retired bounce-house location pages ────────────────────────────────
+    // The bounce-house tree used to mirror the water-slide tree: 51 state hubs
+    // and 752 city pages, on a business that sells water slides. The city tier
+    // is gone and the state tier is cut to the markets with real local content
+    // (BOUNCE_STATE_KEYS). Those URLs were in the sitemap and some may be
+    // indexed, so they must not start 404ing — a 404 throws away whatever the
+    // URL accumulated, while a 301 hands it to the page that now covers it.
+    //
+    // A removed city folds into its state hub when that state kept one, and
+    // into the national hub otherwise. Runs before the locale prefix is added,
+    // so the whole thing is still one redirect.
+    const bounce =
+      /^(?:\/en)?\/bounce-house-rentals\/([^/]+)(?:\/([^/]+))?\/?$/.exec(path);
+    if (bounce) {
+      const [, st, city] = bounce;
+      if (city || !isBounceState(st ?? "")) {
+        path =
+          st && isBounceState(st)
+            ? `/bounce-house-rentals/${st}`
+            : "/bounce-house-rentals";
+        status = 301;
+      }
     }
 
     // ─── Locale prefix ──────────────────────────────────────────────────────

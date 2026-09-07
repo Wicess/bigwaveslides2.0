@@ -15,6 +15,7 @@ import {
   getCity,
   citySlug,
   isPriorityCity,
+  isBounceState,
 } from "@/lib/locations";
 import { getCityContent } from "@/lib/city-content";
 import { getCityLocal } from "@/lib/city-local";
@@ -489,16 +490,21 @@ export default async function CityRentalPage({ params }: Props) {
               <Button asChild size="lg" variant="gradient">
                 <Link href="/contact">Request a free quote</Link>
               </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
-              >
-                <Link href={`/bounce-house-rentals/${st.slug}/${loc.slug}`}>
-                  Bounce houses in {name}
-                </Link>
-              </Button>
+              {/* Pointed at the state hub, not the city: bounce-house city
+                  pages no longer exist. Rendered only where that state kept a
+                  hub, so this never links into a redirect. */}
+              {isBounceState(st.slug) ? (
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                >
+                  <Link href={`/bounce-house-rentals/${st.slug}`}>
+                    Bounce houses in {st.name}
+                  </Link>
+                </Button>
+              ) : null}
             </div>
           </div>
 

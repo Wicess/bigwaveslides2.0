@@ -4,7 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Truck, Home, MapPin, Sparkles } from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { US_STATES, getFeaturedCities } from "@/lib/locations";
+import { US_STATES, isBounceState } from "@/lib/locations";
 import { getBounceContent, bounceKeywords } from "@/lib/bounce-houses";
 import { getLandingBounceHouses } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
@@ -71,9 +71,9 @@ export default async function BounceHubPage({ params }: Props) {
   const items = await getLandingBounceHouses();
   const path = "/bounce-house-rentals";
   const canonical = absoluteUrl(locale, path);
-  // Featured, not every city — see getFeaturedCities(). Every city stays
-  // reachable through its state hub below.
-  const cities = getFeaturedCities();
+  // The states that kept a bounce-house hub. Everything else in this family
+  // redirects to this page — see BOUNCE_STATE_KEYS.
+  const bounceStates = US_STATES.filter((s) => isBounceState(s.slug));
   // Reuse the shared FAQ set so the hub answers the same questions the location
   // pages do — one source of truth, and the answers stay consistent wherever an
   // answer engine picks them up.
@@ -160,18 +160,21 @@ export default async function BounceHubPage({ params }: Props) {
 
             <div className="lg:col-span-5">
               <Reveal delay={0.05}>
+                {/* States, not metros: the bounce-house city pages are gone
+                    (see BOUNCE_STATE_KEYS) and these chips pointed straight at
+                    them. */}
                 <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-                  Popular metros
+                  Where we deliver most
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {cities.slice(0, 28).map((c) => (
+                  {bounceStates.map((s) => (
                     <Link
-                      key={`${c.state.slug}/${c.slug}`}
-                      href={`/bounce-house-rentals/${c.state.slug}/${c.slug}`}
+                      key={s.slug}
+                      href={`/bounce-house-rentals/${s.slug}`}
                       className="border-border bg-background hover:border-primary hover:text-primary inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors"
                     >
                       <MapPin className="text-primary size-3.5" />
-                      {c.name}, {c.state.abbr}
+                      {s.name}
                     </Link>
                   ))}
                 </div>
@@ -232,22 +235,29 @@ export default async function BounceHubPage({ params }: Props) {
         <Container className="max-w-[84rem]">
           <SectionHeader title="Bounce house rentals by state" />
           <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {REGIONS.map((region) => (
+            {/* Only regions that still have a state hub — filtering the states
+                without this would leave the Midwest and Northeast columns as a
+                heading over nothing. */}
+            {REGIONS.filter((r) =>
+              bounceStates.some((s) => s.region === r),
+            ).map((region) => (
               <div key={region}>
                 <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
                   {region}
                 </p>
                 <ul className="mt-3 space-y-1.5">
-                  {US_STATES.filter((s) => s.region === region).map((s) => (
-                    <li key={s.slug}>
-                      <Link
-                        href={`/bounce-house-rentals/${s.slug}`}
-                        className="hover:text-primary text-sm transition-colors"
-                      >
-                        {s.name}
-                      </Link>
-                    </li>
-                  ))}
+                  {bounceStates
+                    .filter((s) => s.region === region)
+                    .map((s) => (
+                      <li key={s.slug}>
+                        <Link
+                          href={`/bounce-house-rentals/${s.slug}`}
+                          className="hover:text-primary text-sm transition-colors"
+                        >
+                          {s.name}
+                        </Link>
+                      </li>
+                    ))}
                 </ul>
               </div>
             ))}

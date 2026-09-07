@@ -12,7 +12,11 @@
 import { writeFileSync } from "node:fs";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pkg from "@prisma/client";
-import { US_STATES, getPriorityCities } from "../lib/locations";
+import {
+  US_STATES,
+  getPriorityCities,
+  BOUNCE_STATE_KEYS,
+} from "../lib/locations";
 import { USE_CASES } from "../lib/use-cases";
 
 const { PrismaClient } = pkg;
@@ -103,7 +107,7 @@ async function main() {
     },
     {
       title: "BOUNCE HOUSE STATES",
-      paths: US_STATES.map((s) => `/bounce-house-rentals/${s.slug}`),
+      paths: BOUNCE_STATE_KEYS.map((s) => `/bounce-house-rentals/${s}`),
       locales: EN,
     },
     {
