@@ -4,8 +4,9 @@
  *
  * The site is English-only (see i18n/routing.ts); the old /fr URLs 301 to /en
  * and must never be submitted — you only ever submit final, canonical, 200-OK
- * URLs. Only the wave-1 PRIORITY cities are listed: the other city pages are
- * deliberately noindexed until the domain earns authority.
+ * URLs. Every water-slide city is indexable; the bounce-house family is cut to
+ * its national hub and 11 state hubs, and the rest of it redirects, so none of
+ * those URLs belong here either.
  *
  * Run:  npm run gen:indexing-urls
  */
@@ -151,7 +152,10 @@ async function main() {
     `# Total indexable URLs: ${total}. English (en-US) only — the site has one language.`,
     "# The retired /fr URLs are NOT listed: they 301 to /en, and submitting a",
     "# redirect wastes crawl budget (Search Console reports it as 'Page with redirect').",
-    "# Only pages we WANT indexed are here: priority cities only. Do NOT submit others.",
+    "# Only pages we WANT indexed are here. Every water-slide city is indexable",
+    "# now; the bounce-house family is cut to its national hub and 11 state hubs",
+    "# (see BOUNCE_STATE_KEYS) and everything else in it redirects, so none of",
+    "# those URLs appear below. Do NOT submit anything that is not in this file.",
     "",
     "## FASTEST PATH — submit this ONE sitemap in GSC > Sitemaps and Bing > Sitemaps",
     `${BASE}/sitemap.xml`,
