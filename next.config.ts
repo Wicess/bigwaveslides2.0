@@ -70,6 +70,10 @@ const nextConfig: NextConfig = {
             key: "Cache-Control",
             value: "public, s-maxage=300, stale-while-revalidate=86400",
           },
+          // Marker: proves whether this block reached the response at all, so a
+          // missing Cache-Control can be read as "Next overrode it" rather than
+          // "the deploy has not landed". Removed once that is settled.
+          { key: "X-Listing-Cache", value: "config" },
         ],
       },
       {

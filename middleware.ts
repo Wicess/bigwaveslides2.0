@@ -31,6 +31,13 @@ const RETIRED_POSTS: Record<string, string> = {
 // prefixing them with a locale would 404 the two files Google reads first.
 const UNLOCALIZED = new Set(["/sitemap.xml", "/robots.txt"]);
 
+/** Listing pages that are dynamic only because they read searchParams. */
+const CACHEABLE_LISTINGS = new Set([
+  `/${routing.defaultLocale}/shop`,
+  `/${routing.defaultLocale}/rent`,
+  `/${routing.defaultLocale}/blog`,
+]);
+
 export default function middleware(req: NextRequest) {
   // Every rule below rewrites some part of the URL, and until now each one
   // returned its own redirect. That built chains: http://splashrep.com/ cost
@@ -127,7 +134,27 @@ export default function middleware(req: NextRequest) {
 
   if (UNLOCALIZED.has(pathname)) return NextResponse.next();
 
-  return intlMiddleware(req);
+  const res = intlMiddleware(req);
+
+  // ─── Let the CDN hold the listing pages ───────────────────────────────────
+  // These three await searchParams, so Next renders them dynamically and sends
+  // "private, no-cache, no-store" — nothing in front of them ever caches, and
+  // they are three of the most-crawled URLs on the site. Setting the header
+  // here rather than in next.config because Next overwrites Cache-Control for
+  // page routes set that way.
+  //
+  // Safe: nothing in their server render is per-viewer. They read no cookies,
+  // headers or session, and the account chip is a client component reading its
+  // cookie in the browser. s-maxage applies to the shared CDN copy only.
+  if (CACHEABLE_LISTINGS.has(pathname)) {
+    res.headers.set(
+      "Cache-Control",
+      "public, s-maxage=300, stale-while-revalidate=86400",
+    );
+    res.headers.set("X-Listing-Cache", "middleware");
+  }
+
+  return res;
 }
 
 export const config = {
