@@ -40,6 +40,7 @@ const ALLOWED: ReadonlySet<AnalyticsEventType> = new Set([
   "CONTACT",
   "NEWSLETTER_SUBSCRIBE",
   "APP_INSTALL",
+  "APP_UNINSTALL",
 ]);
 
 export async function POST(req: NextRequest) {
@@ -104,6 +105,20 @@ export async function POST(req: NextRequest) {
       // loyalty flag — no security value.
       res.cookies.set(APP_INSTALLED_COOKIE, "1", {
         maxAge: ONE_YEAR,
+        httpOnly: false,
+        sameSite: "lax",
+        secure,
+        path: "/",
+      });
+    }
+    if (type === "APP_UNINSTALL") {
+      // The cookie IS the discount — checkout reads nothing else to decide the
+      // +5% app bonus (server/actions/orders.ts, reservations.ts). Deleting it
+      // here is what actually revokes the perk; the event row is the audit
+      // trail. Same attributes as the set above so the browser matches and
+      // removes the right cookie rather than shadowing it.
+      res.cookies.set(APP_INSTALLED_COOKIE, "", {
+        maxAge: 0,
         httpOnly: false,
         sameSite: "lax",
         secure,

@@ -119,6 +119,14 @@ const EVENT_META: Record<
     label: "Installed the app",
     color: "text-lime-700 bg-lime-50",
   },
+  // Red, not neutral: this is the moment the visitor stopped qualifying for the
+  // +5% app discount, so it needs to read as a reversal on the timeline rather
+  // than as one more thing that happened.
+  APP_UNINSTALL: {
+    icon: Trash2,
+    label: "Removed the app",
+    color: "text-rose-700 bg-rose-50",
+  },
 };
 
 function metaSummary(meta: unknown): string | null {

@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { notifyNewsletterSignup } from "@/lib/notifications";
+import { readUnsubscribeToken } from "@/lib/newsletter-token";
 
 const schema = z.object({
   email: z.string().email(),
@@ -60,5 +61,46 @@ export async function subscribeNewsletter(input: {
     return { ok: true };
   } catch {
     return { ok: false, error: "Subscription failed" };
+  }
+}
+
+/**
+ * Opt an address out, from the signed link in an email footer.
+ *
+ * The mirror image of subscribeNewsletter, and it has to be: subscribing sets
+ * `marketingOptIn` on the customer record and unlocks a 15% loyalty discount at
+ * checkout, so an opt-out that only flipped the newsletter row would leave the
+ * customer still flagged as opted-in and still being given the discount. Both
+ * places are cleared here.
+ *
+ * Idempotent. People click these links twice, and mail clients pre-fetch them.
+ */
+export async function unsubscribeNewsletter(input: {
+  token: string;
+  via?: string;
+}): Promise<{ ok: boolean; email?: string; error?: string }> {
+  const email = await readUnsubscribeToken(input.token);
+  if (!email) return { ok: false, error: "This link is invalid or expired." };
+
+  try {
+    // updateMany, not update: an address with no row is already not subscribed,
+    // and that should read as success rather than "not found".
+    await prisma.newsletterSubscriber.updateMany({
+      where: { email: { equals: email, mode: "insensitive" } },
+      data: {
+        status: "UNSUBSCRIBED",
+        unsubscribedAt: new Date(),
+        unsubscribedVia: input.via ?? "email-link",
+      },
+    });
+    await prisma.customer
+      .updateMany({
+        where: { email: { equals: email, mode: "insensitive" } },
+        data: { marketingOptIn: false },
+      })
+      .catch(() => {});
+    return { ok: true, email };
+  } catch {
+    return { ok: false, error: "Could not process that right now." };
   }
 }

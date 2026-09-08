@@ -13,7 +13,8 @@ export type ClientEventType =
   | "QUOTE_REQUEST"
   | "CONTACT"
   | "NEWSLETTER_SUBSCRIBE"
-  | "APP_INSTALL";
+  | "APP_INSTALL"
+  | "APP_UNINSTALL";
 
 export type ClientEventPayload = {
   type: ClientEventType;

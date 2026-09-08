@@ -171,6 +171,11 @@ export function renderEmail(opts: {
   /** Contact phone for the footer. Omitted when unset, so emails never print a
       number that Settings → Contact doesn't currently publish on the site. */
   phone?: string | null;
+  /** Signed opt-out link. Set it on MARKETING mail only — US CAN-SPAM requires
+      a working opt-out on promotional messages, and deliberately not on
+      transactional ones: an unsubscribe link under an invoice invites someone
+      to switch off the mail that carries their booking and payment details. */
+  unsubscribeUrl?: string | null;
 }): string {
   const preheader = opts.preheader ?? opts.intro;
 
@@ -253,6 +258,11 @@ export function renderEmail(opts: {
             }
             ${siteLink}
           </p>
+          ${
+            opts.unsubscribeUrl?.trim()
+              ? `<p style="margin:10px 0 0;color:#94a3b8;font-size:11px;line-height:1.6">You're receiving this because you subscribed to Splash Republic emails.&nbsp;<a href="${escape(opts.unsubscribeUrl)}" style="color:#94a3b8;text-decoration:underline">Unsubscribe</a></p>`
+              : ""
+          }
         </td></tr>
       </table>
     </td></tr>

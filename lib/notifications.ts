@@ -14,6 +14,7 @@ import { generateQuotePdf, type QuotePdfInput } from "@/lib/pdf/quote-pdf";
 import { orderSecurityCode } from "@/lib/security-code";
 import { env } from "@/lib/env";
 import { BRAND_NAME } from "@/lib/brand";
+import { unsubscribeUrl } from "@/lib/newsletter-token";
 
 const CONTACT_EMAIL = "sales@splashrep.com";
 
@@ -589,6 +590,10 @@ export async function sendAbandonedCartReminder(opts: {
       cta: { label: "Finish my booking", url: siteUrl("/cart") },
       outro:
         "Enter COMEBACK10 at checkout for 10% off. Summer weekends fill fast — grab your date before it's gone.",
+      // The one promotional message this site sends, so the one that needs an
+      // opt-out. Sent on a cron to people who left a cart, which is marketing
+      // under CAN-SPAM however friendly it reads.
+      unsubscribeUrl: await unsubscribeUrl(opts.email, siteUrl()),
     }),
   });
 }

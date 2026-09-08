@@ -67,6 +67,7 @@ export function InstallApp({
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const deferredRef = React.useRef<BeforeInstallPromptEvent | null>(null);
   const recordedRef = React.useRef(false);
+  const uninstalledRef = React.useRef(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -119,6 +120,37 @@ export function InstallApp({
     compute();
     mq.addEventListener?.("change", compute);
 
+    // Revoke the install when the browser says the app is gone.
+    //
+    // This is the other half of recordInstall, and without it the +5% app
+    // discount was permanent: the cookie is set once, lasts a year, and nothing
+    // ever cleared it — so installing the PWA, taking the discount and
+    // uninstalling the same minute kept 5% off every order for the next twelve
+    // months. The install flag was write-once.
+    //
+    // A PWA is never told it has been uninstalled, so this is the only reliable
+    // signal there is: getInstalledRelatedApps() answers about the manifest, not
+    // about the current tab, so an EMPTY array from a browser that implements it
+    // means the app really is not installed any more. Chromium-only, which is
+    // where installs actually happen; on Safari/iOS there is no such API and the
+    // cookie's one-year expiry remains the only backstop.
+    const recordUninstall = () => {
+      if (uninstalledRef.current) return;
+      uninstalledRef.current = true;
+      try {
+        localStorage.removeItem(INSTALLED_KEY);
+      } catch {
+        /* ignore */
+      }
+      // The server clears the discount cookie when it sees this event.
+      trackEvent({
+        type: "APP_UNINSTALL",
+        path: window.location.pathname,
+        meta: { reason: "related-apps-empty", platform: navigator.platform },
+      });
+      setStandalone(false);
+    };
+
     // Already installed from a previous session? Ask the browser directly so we
     // can hide the button even in a normal tab (Android Chrome).
     (
@@ -136,7 +168,15 @@ export function InstallApp({
           }
           setStandalone(true);
           recordInstall("related-apps");
+          return;
         }
+        // Empty result. Only meaningful if we currently believe it IS
+        // installed — and never while running inside the app itself, which
+        // would be the API contradicting the window it is answering in.
+        const believedInstalled =
+          isInstalledFlag() ||
+          document.cookie.includes(`${APP_INSTALLED_COOKIE}=1`);
+        if (believedInstalled && !mq.matches) recordUninstall();
       })
       .catch(() => {});
 
