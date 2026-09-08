@@ -14,9 +14,10 @@
  * together put all 51 bounce URLs first and buried the water-slide states 300
  * lines down, where they read as missing.
  *
- * Bounce-house CITY pages are absent by design, not by oversight: they are
- * noindex now (see isBounceCity in lib/locations.ts) and submitting a noindex
- * URL spends quota to be told no.
+ * Bounce-house CITY pages are absent by design, not by oversight: that route is
+ * deleted and the state tier is cut to the 11 markets in BOUNCE_STATE_KEYS.
+ * Everything removed redirects, and submitting a redirect spends quota to be
+ * told to go somewhere else.
  *
  * Run:  npx tsx scripts/gen-priority-index-urls.ts
  */

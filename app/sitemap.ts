@@ -72,7 +72,7 @@ const CITY_PATHS = getPriorityCities().map(
 // The bounce-house family keeps its 51 state hubs and drops its city tier. It
 // used to mirror the water-slide family city for city, which put two
 // near-identical pages about the same town in the sitemap and made bounce
-// houses 44% of it — on a water-slide business. See isBounceCity().
+// houses 44% of it — on a water-slide business. See BOUNCE_STATE_KEYS.
 const BOUNCE_STATE_PATHS = BOUNCE_STATE_KEYS.map(
   (s) => `/bounce-house-rentals/${s}`,
 );
