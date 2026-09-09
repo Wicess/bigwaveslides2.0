@@ -5,11 +5,11 @@
 # GSC refuses and continue tomorrow. Never retry the same URL — repeats
 # can throttle the quota without indexing anything.
 #
-# 1023 URLs. Every one is in the live sitemap, returns 200, and
+# 1025 URLs. Every one is in the live sitemap, returns 200, and
 # serves meta robots "index, follow" — verified by crawling all of them.
 #
 # READ THIS BEFORE STARTING: manual submission is a kickstart, not the
-# method. You are not going to submit 1023 URLs by hand and you
+# method. You are not going to submit 1025 URLs by hand and you
 # do not need to. Once Google crawls the pages at the top and finds real
 # content, it follows your internal links to the rest on its own. What
 # actually raises crawl budget is a Google Business Profile and the first
@@ -147,7 +147,7 @@ https://www.splashrep.com/en/bounce-house-rentals/texas
 # ------------------------------------------------------------------------
 # DAY 8-13 — blog
 #   Original long-form; your strongest long-tail surface.
-# 74 URLs
+# 76 URLs
 # ------------------------------------------------------------------------
 https://www.splashrep.com/en/blog/are-inflatable-water-slides-safe
 https://www.splashrep.com/en/blog/are-water-slide-rentals-insured
@@ -166,10 +166,12 @@ https://www.splashrep.com/en/blog/commercial-water-slide-buying-guide
 https://www.splashrep.com/en/blog/do-water-slide-rentals-need-a-generator
 https://www.splashrep.com/en/blog/do-water-slide-rentals-need-electricity
 https://www.splashrep.com/en/blog/do-you-have-to-pay-a-deposit-to-rent-a-water-slide
+https://www.splashrep.com/en/blog/do-you-need-a-permit-for-a-water-slide-rental
 https://www.splashrep.com/en/blog/fall-festival-inflatable-rentals
 https://www.splashrep.com/en/blog/fourth-of-july-water-slide-party
 https://www.splashrep.com/en/blog/graduation-party-water-slide-ideas
 https://www.splashrep.com/en/blog/how-are-water-slides-cleaned-and-sanitized
+https://www.splashrep.com/en/blog/how-long-does-a-commercial-water-slide-last
 https://www.splashrep.com/en/blog/how-long-does-water-slide-setup-take
 https://www.splashrep.com/en/blog/how-much-space-water-slide
 https://www.splashrep.com/en/blog/how-much-water-does-a-water-slide-use
