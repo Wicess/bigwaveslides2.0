@@ -50,7 +50,13 @@ export async function getPosts(query: BlogQuery = {}) {
       prisma.blogPost.findMany({
         where,
         select: cardSelect,
-        orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
+        // The trailing `id` is load-bearing — same reason as the note in
+        // server/data/products.ts. Neither `featured` nor `publishedAt` is
+        // unique, ties come back in arbitrary order, and with OFFSET pagination
+        // that drops posts from the listing entirely. It has not bitten here
+        // only because every publishedAt happens to be distinct today; two
+        // posts published in the same second would be enough.
+        orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { id: "asc" }],
         skip: (page - 1) * pageSize,
         take: pageSize,
       }),
@@ -96,7 +102,7 @@ export async function getRelatedPosts(
       ? await prisma.blogPost.findMany({
           where: { status: "PUBLISHED", id: { not: postId }, categoryId },
           select: cardSelect,
-          orderBy: { publishedAt: "desc" },
+          orderBy: [{ publishedAt: "desc" }, { id: "asc" }],
           take: limit,
         })
       : [];
@@ -108,7 +114,7 @@ export async function getRelatedPosts(
     const fillers = await prisma.blogPost.findMany({
       where: { status: "PUBLISHED", id: { notIn: exclude } },
       select: cardSelect,
-      orderBy: { publishedAt: "desc" },
+      orderBy: [{ publishedAt: "desc" }, { id: "asc" }],
       take: limit - sameCategory.length,
     });
     return [...sameCategory, ...fillers];
