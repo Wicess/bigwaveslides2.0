@@ -140,8 +140,38 @@ export default async function CityRentalPage({ params }: Props) {
   // Deterministically-varied per-city content (hero image, opening copy,
   // a region/season paragraph, and the FAQ set) — differentiates the 750+
   // programmatic pages so they don't read as one identical template.
-  const { hero, heroDescription, intro, seasonal, faqs, venues, setup } =
-    getCityContent(loc);
+  const {
+    hero,
+    heroDescription,
+    intro,
+    seasonal,
+    faqs,
+    venues,
+    setup,
+    climate,
+    nearby,
+  } = getCityContent(loc);
+
+  // Short month names for the climate table, and which months are in season.
+  const MONTH_ABBR = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const inSeason = (i: number) =>
+    climate?.season === "all" ||
+    (Array.isArray(climate?.season) &&
+      i >= climate.season[0] &&
+      i <= climate.season[1]);
 
   // Real, verifiable delivery suburbs/neighborhoods for this metro (priority
   // cities only) — the strongest "genuinely about this city" signal.
@@ -328,6 +358,86 @@ export default async function CityRentalPage({ params }: Props) {
             </div>
 
             <div className="lg:col-span-5">
+              {/* Month-by-month water slide weather, from NOAA normals for the
+                  nearest station. The single most city-specific thing on these
+                  pages: two cities in the same state get genuinely different
+                  numbers, where the old template gave them the same words. A
+                  real <table> rather than styled divs, so it reads correctly to
+                  screen readers and to search engines alike. */}
+              {climate ? (
+                <Reveal delay={0.05} className="mb-8">
+                  <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                    Water slide weather in {name}
+                  </p>
+                  <div className="border-border mt-3 overflow-hidden rounded-2xl border">
+                    <table className="w-full text-sm">
+                      <caption className="sr-only">
+                        Average daily high and days reaching 80°F each month in{" "}
+                        {name}, {st.abbr}
+                      </caption>
+                      <thead className="bg-muted/40 text-muted-foreground text-xs">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-4 py-2 text-left font-medium"
+                          >
+                            Month
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-4 py-2 text-right font-medium"
+                          >
+                            Avg high
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-4 py-2 text-right font-medium"
+                          >
+                            Days 80°F+
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {climate.high.map((h, i) => (
+                          <tr
+                            key={MONTH_ABBR[i]}
+                            className={`border-border border-t ${
+                              inSeason(i) ? "bg-primary/5" : ""
+                            }`}
+                          >
+                            <th
+                              scope="row"
+                              className={`px-4 py-1.5 text-left font-normal ${
+                                inSeason(i)
+                                  ? "text-foreground font-medium"
+                                  : "text-muted-foreground"
+                              }`}
+                            >
+                              {MONTH_ABBR[i]}
+                            </th>
+                            <td className="text-foreground px-4 py-1.5 text-right tabular-nums">
+                              {h}°F
+                            </td>
+                            <td className="text-muted-foreground px-4 py-1.5 text-right tabular-nums">
+                              {climate.d80[i]}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
+                    {climate.season === "all"
+                      ? "Every month is in season. "
+                      : climate.season
+                        ? "Shaded months are in season. "
+                        : ""}
+                    NOAA 1991–2020 climate normals, {climate.station} station,{" "}
+                    {climate.stationMi} mi away.
+                  </p>
+                </Reveal>
+              ) : null}
+
               {/* Neighborhoods & nearby areas we serve (local trust signal). */}
               {local ? (
                 <Reveal delay={0.05}>
@@ -348,8 +458,37 @@ export default async function CityRentalPage({ params }: Props) {
                 </Reveal>
               ) : null}
 
+              {/* Other cities with their own page, and real straight-line
+                  distances. Links, so the city tier is connected sideways
+                  rather than reachable only through its state hub. */}
+              {nearby.length > 0 ? (
+                <Reveal className={local ? "mt-8" : ""} delay={0.05}>
+                  <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                    Nearby cities we also serve
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {nearby.map((n) => (
+                      <Link
+                        key={n.href}
+                        href={n.href}
+                        className="border-border bg-background hover:border-primary hover:text-primary inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors"
+                      >
+                        <MapPin className="text-primary size-3.5" />
+                        {n.name}
+                        <span className="text-muted-foreground text-xs tabular-nums">
+                          {n.miles} mi
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </Reveal>
+              ) : null}
+
               {/* Occasions */}
-              <Reveal className={local ? "mt-8" : ""} delay={0.05}>
+              <Reveal
+                className={local || nearby.length > 0 ? "mt-8" : ""}
+                delay={0.05}
+              >
                 <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
                   Water slides in {name} for every occasion
                 </p>
