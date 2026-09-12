@@ -5,11 +5,11 @@
 # GSC refuses and continue tomorrow. Never retry the same URL — repeats
 # can throttle the quota without indexing anything.
 #
-# 1025 URLs. Every one is in the live sitemap, returns 200, and
+# 1030 URLs. Every one is in the live sitemap, returns 200, and
 # serves meta robots "index, follow" — verified by crawling all of them.
 #
 # READ THIS BEFORE STARTING: manual submission is a kickstart, not the
-# method. You are not going to submit 1025 URLs by hand and you
+# method. You are not going to submit 1030 URLs by hand and you
 # do not need to. Once Google crawls the pages at the top and finds real
 # content, it follows your internal links to the rest on its own. What
 # actually raises crawl budget is a Google Business Profile and the first
@@ -147,7 +147,7 @@ https://www.splashrep.com/en/bounce-house-rentals/texas
 # ------------------------------------------------------------------------
 # DAY 8-13 — blog
 #   Original long-form; your strongest long-tail surface.
-# 76 URLs
+# 81 URLs
 # ------------------------------------------------------------------------
 https://www.splashrep.com/en/blog/are-inflatable-water-slides-safe
 https://www.splashrep.com/en/blog/are-water-slide-rentals-insured
@@ -155,6 +155,7 @@ https://www.splashrep.com/en/blog/are-water-slide-rentals-worth-it
 https://www.splashrep.com/en/blog/best-age-for-inflatable-water-slides
 https://www.splashrep.com/en/blog/best-inflatable-water-slides-to-buy-2026
 https://www.splashrep.com/en/blog/best-water-slide-rentals-birthday-party
+https://www.splashrep.com/en/blog/buying-a-used-commercial-water-slide
 https://www.splashrep.com/en/blog/can-a-water-slide-fit-in-a-small-backyard
 https://www.splashrep.com/en/blog/can-adults-use-inflatable-water-slides
 https://www.splashrep.com/en/blog/can-you-book-a-water-slide-rental-last-minute
@@ -173,11 +174,14 @@ https://www.splashrep.com/en/blog/graduation-party-water-slide-ideas
 https://www.splashrep.com/en/blog/how-are-water-slides-cleaned-and-sanitized
 https://www.splashrep.com/en/blog/how-long-does-a-commercial-water-slide-last
 https://www.splashrep.com/en/blog/how-long-does-water-slide-setup-take
+https://www.splashrep.com/en/blog/how-much-does-a-commercial-water-slide-weigh
 https://www.splashrep.com/en/blog/how-much-space-water-slide
 https://www.splashrep.com/en/blog/how-much-water-does-a-water-slide-use
+https://www.splashrep.com/en/blog/how-to-patch-an-inflatable-water-slide
 https://www.splashrep.com/en/blog/how-to-prepare-your-yard-for-a-water-slide-rental
 https://www.splashrep.com/en/blog/how-to-rent-a-water-slide
 https://www.splashrep.com/en/blog/how-windy-is-too-windy-for-a-water-slide
+https://www.splashrep.com/en/blog/inflatable-water-slide-next-to-a-pool
 https://www.splashrep.com/en/blog/perfect-backyard-water-slide-party
 https://www.splashrep.com/en/blog/questions-to-ask-before-renting-a-water-slide
 https://www.splashrep.com/en/blog/rent-or-buy-water-slide
@@ -204,6 +208,7 @@ https://www.splashrep.com/en/blog/what-size-water-slide-should-you-rent
 https://www.splashrep.com/en/blog/what-to-do-before-water-slide-rental-arrives
 https://www.splashrep.com/en/blog/what-to-rent-when-its-too-cold-for-a-water-slide
 https://www.splashrep.com/en/blog/when-to-book-summer-water-slide
+https://www.splashrep.com/en/blog/will-a-water-slide-damage-your-lawn
 https://www.splashrep.com/en/blog/category/buying
 https://www.splashrep.com/en/blog/category/events
 https://www.splashrep.com/en/blog/category/guides

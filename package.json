@@ -25,6 +25,7 @@
     "db:rewrite-product-copy": "dotenv -e .env.local -- tsx scripts/rewrite-product-copy.ts",
     "db:write-fall-posts": "dotenv -e .env.local -- tsx scripts/write-fall-posts.ts",
     "db:write-blog-cluster": "dotenv -e .env.local -- tsx scripts/write-blog-cluster.ts",
+    "db:write-september-posts": "dotenv -e .env.local -- tsx scripts/write-september-posts.ts",
     "db:retire-dup-cost-guide": "dotenv -e .env.local -- tsx scripts/retire-duplicate-cost-guide.ts",
     "db:align-fees-address": "dotenv -e .env.local -- tsx scripts/align-fees-and-address.ts",
     "db:fix-blog-product-links": "dotenv -e .env.local -- tsx scripts/fix-blog-product-links.ts",
