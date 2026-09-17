@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/unsubscribe",
-    title: "Email preferences | Splash Republic",
+    title: "Splash Republic Email Preferences",
     description:
       "Unsubscribe from Splash Republic emails. You will still receive booking confirmations and invoices for any order you place.",
     // Not a destination — it exists for one signed link in an email footer, and

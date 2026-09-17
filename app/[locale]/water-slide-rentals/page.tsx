@@ -79,7 +79,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/water-slide-rentals",
-    title: "Water Slide Rentals Near You from $155/Day — All 50 States",
+    title: "Water Slide Rentals in All 50 States",
     og: {
       eyebrow: "All 50 states",
       subtitle: "Find your city, check your date, book in minutes",

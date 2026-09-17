@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/answers",
-    title: "Water Slide Rental Questions Answered — Cost, Space & Power",
+    title: "Water Slide Rental Questions About Cost, Space and Power",
     description:
       "Straight answers on water slide rental cost, space, water and power needs, safety, weather and booking. Nationwide US delivery from $155/day.",
     og: {

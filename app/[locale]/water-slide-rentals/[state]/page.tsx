@@ -81,7 +81,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: `/water-slide-rentals/${loc.slug}`,
-    title: `Water Slide Rentals in ${loc.name} — From $155/Day`,
+    title: `Water Slide Rentals in ${loc.name}`,
     // The season window is the one fact that genuinely differs state to state,
     // so it leads. Before this every state's description was the same sentence
     // with the name and a city list swapped, which is what Bing §13 flags as a

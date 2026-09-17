@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/services",
-    title: "Water Slide Installation, Delivery & Setup Services",
+    title: "Water Slide Installation, Delivery and Setup Services",
     description:
       "Water slide delivery, setup, cleaning and custom builds for parties, events and water parks nationwide. Book online in one page — nothing charged online.",
     keywords: [

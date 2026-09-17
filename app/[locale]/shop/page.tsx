@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/shop",
-    title: "Commercial Water Slides for Sale | Buy Inflatable Slides",
+    title: "Commercial Inflatable Water Slides for Sale",
     description:
       "Buy commercial inflatable water slides built for rentals and resale — heavy-duty, nationwide US delivery. Browse slides for sale and request a quote.",
     og: {

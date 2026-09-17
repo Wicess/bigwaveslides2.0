@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/about",
-    title: "About Us — Water Slide Rentals & Sales Across the USA",
+    title: "About Splash Republic, Water Slide Rentals and Sales",
     description:
       "Family-run water slide rental and sales specialists — delivered, set up, sanitized and fully insured in all 50 states from $155/day.",
     keywords: [

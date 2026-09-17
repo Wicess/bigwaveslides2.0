@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/bounce-house-rentals",
-    title: "Bounce House Rentals Near You — From $165/Day, USA",
+    title: "Bounce House Rentals Near You in the USA",
     description:
       "Bounce house & bounce-and-slide combo rentals from $165/day in all 50 states — delivered, set up, sanitized & insured. Indoor or outdoor, all year.",
     og: {

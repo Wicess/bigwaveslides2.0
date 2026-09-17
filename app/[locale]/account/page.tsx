@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Your account — Splash Republic",
+  title: "Your Splash Republic Account",
   robots: { index: false, follow: false },
 };
 

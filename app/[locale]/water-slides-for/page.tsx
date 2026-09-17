@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/water-slides-for",
-    title: "Inflatable Rentals by Occasion — Fall, School & Birthdays",
+    title: "Inflatable Rentals for Every Occasion",
     og: {
       eyebrow: "By occasion",
       subtitle: "Fall festivals, trunk-or-treats, schools, churches, birthdays",

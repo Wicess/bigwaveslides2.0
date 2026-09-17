@@ -19,7 +19,7 @@ export const PRIVACY: {
   sections: Section[];
 } = {
   title: "Privacy Policy",
-  metaTitle: "Privacy Policy — What Splash Republic Collects and Why",
+  metaTitle: "Privacy Policy, What We Collect and Why",
   metaDescription:
     "What Splash Republic collects when you book or enquire, how long we keep it, who we share it with, and how to have it deleted. No data is sold, ever.",
   intro:
@@ -64,7 +64,7 @@ export const TERMS: {
   sections: Section[];
 } = {
   title: "Terms of Service",
-  metaTitle: "Terms of Service — Bookings, Deposits and Cancellations",
+  metaTitle: "Terms of Service for Bookings and Cancellations",
   metaDescription:
     "The terms covering Splash Republic bookings: what a deposit secures, how cancellations and weather calls work, delivery and setup, and who is liable for what.",
   intro:
@@ -113,7 +113,7 @@ export const FAQS: {
   items: Faq[];
 } = {
   title: "Frequently asked questions",
-  metaTitle: "Water Slide Rental FAQ — Delivery, Setup, Pricing & Booking",
+  metaTitle: "Water Slide Rental FAQ on Delivery, Setup and Pricing",
   metaDescription:
     "How far in advance to book, what delivery and setup include, how much space a slide needs, what happens if it rains, and how payment works. Answered plainly.",
   intro:

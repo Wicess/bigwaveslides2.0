@@ -24,7 +24,7 @@ import { getLandingRentals } from "@/server/data/rentals";
 import { getGuideLinksOnce } from "@/server/data/blog";
 import { getSettingsOnce } from "@/server/data/settings";
 import { pickN } from "@/lib/internal-links";
-import { buildMetadata, fitTitle } from "@/lib/seo";
+import { buildMetadata } from "@/lib/seo";
 import {
   localBusinessAreaLd,
   breadcrumbLd,
@@ -89,10 +89,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // reason this page exists — never gets truncated away. The old title ran to
     // 83 characters, which meant "…from $155/Day — Delivered & Insured" was cut
     // and Google was free to rewrite the title with its own guess.
-    title: fitTitle(
-      `Water Slide Rentals in ${name}, ${st.abbr}`,
-      " — From $155/Day",
-    ),
+    // Plain words: the phrase someone actually types. The price used to hang
+    // off an em dash here ("— From $155/Day"); it now lives in the description,
+    // where it reads as a sentence rather than a fragment of punctuation.
+    title: `Water Slide Rentals in ${name}, ${st.abbr}`,
     description: `Water slide & bounce house rentals in ${name}, ${st.abbr} from $155/day — delivered, set up, sanitized & insured. Free quote in minutes.`,
     og: {
       eyebrow: `${name}, ${st.abbr}`,

@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/rent",
-    title: "Water Slide Rentals from $155/Day — Delivered & Insured",
+    title: "Water Slide Rentals Delivered and Insured",
     description:
       "Rent inflatable water slides & bounce houses near you from $155/day — delivered, set up & fully insured for birthdays, pools, schools & churches.",
     og: {

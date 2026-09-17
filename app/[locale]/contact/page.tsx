@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: "/contact",
-    title: "Get a Free Water Slide Rental Quote — Contact Us",
+    title: "Contact Splash Republic for a Free Rental Quote",
     description:
       "Request a free water slide rental or purchase quote. Tell us your date, location and event — we reply within hours. Book your inflatable water slide today.",
     og: {

@@ -209,12 +209,6 @@ type ProductSeoOpts = ProductFacts;
 
 export function rentProductSeo(name: string, opts?: ProductSeoOpts) {
   const kind = opts?.kind ?? "inflatable water slide";
-  const short = kindForTitle(name, shortKindLabel(kind));
-  const h = opts?.heightFt ?? null;
-  const titleBits = [
-    [h ? `${h} ft` : null, short].filter(Boolean).join(" ") || null,
-    opts?.price ? `${opts.price}/day` : null,
-  ].filter(Boolean);
 
   const lead = leadSentence(opts?.summary ?? "", 88);
   const description = lead
@@ -239,11 +233,12 @@ export function rentProductSeo(name: string, opts?: ProductSeoOpts) {
     // "Prism Combo Rental" is 18 characters — short enough that Google pads the
     // title with the site name and Ahrefs flags it. Fall back to the service
     // promise instead, but only while it still fits the ~60 Google displays.
-    title: titleBits.length
-      ? `${name} Rental — ${titleBits.join(", ")}`
-      : `${name} Rental — Delivered, Set Up & Insured`.length <= 60
-        ? `${name} Rental — Delivered, Set Up & Insured`
-        : `${name} Rental`,
+    // Plain words only. This used to read "Breakwater 18 Rental — 18 ft Water
+    // Slide, $280/day": an em dash, a dollar sign and a slash doing work that
+    // words should do. Nobody searches in punctuation, and Google rewrites
+    // titles it reads as machine-assembled. The price moved to the description,
+    // where it sits in a sentence instead of a fragment.
+    title: rentTitle(name, kind),
     description,
     keywords: [
       `${name} rental`,
@@ -257,18 +252,19 @@ export function rentProductSeo(name: string, opts?: ProductSeoOpts) {
 }
 
 /**
- * Join a title to its optional tail, dropping the tail when the pair would run
- * past what Google displays.
+ * Spell out the ampersand for anything going into a page title.
  *
- * The city page titles are built from a template, so their length is whatever
- * the city name happens to be. Four of the 1,815 pages tipped over 60 characters
- * on long names — "Hilton Head Island", "North Little Rock", "Arlington
- * Heights" — and a template is not something you fix one page at a time. The
- * price tail is the least valuable part of the title, so it is what gives way.
+ * Applied to names that come from the database rather than from a template —
+ * "Frost & Ember 18", "Racing & dual-lane" — so a title never carries a symbol
+ * even when the stored name does. The product itself keeps its name: renaming
+ * it would change the heading, the cards and the wording on past invoices, and
+ * the slug already reads frost-and-ember-18, so "and" is the intended word.
  */
-export function fitTitle(base: string, tail: string, max = 60): string {
-  const full = `${base}${tail}`;
-  return full.length <= max ? full : base;
+function plainWords(s: string): string {
+  return s
+    .replace(/\s*&\s*/g, " and ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 /** Short, human label used inside titles. */
@@ -279,10 +275,25 @@ function shortKindLabel(kind: string): string {
   return "Water Slide";
 }
 
+/**
+ * "Rent the Breakwater 18 Water Slide, Delivered and Set Up".
+ *
+ * The promise is appended only while the whole thing still fits what Google
+ * displays, so a long product name shortens the title rather than truncating
+ * mid-word. kindForTitle drops the product type when the name already carries
+ * it, so there is no "Big Top Bouncer Bounce House".
+ */
+function rentTitle(rawName: string, kind: string): string {
+  const name = plainWords(rawName);
+  const short = kindForTitle(name, shortKindLabel(kind));
+  const base = short ? `Rent the ${name} ${short}` : `Rent the ${name}`;
+  const full = `${base}, Delivered and Set Up`;
+  return full.length <= 60 ? full : base;
+}
+
 /** Keyword-rich SEO copy for a SALE product page (buying intent). */
 export function saleProductSeo(name: string, opts?: ProductSeoOpts) {
   const kind = opts?.kind ?? "inflatable water slide";
-  const bare = kind.replace(/^inflatable /, "");
   const h = opts?.heightFt ?? null;
 
   // Deliberately shaped differently from the rental title: buying intent reads
@@ -290,8 +301,11 @@ export function saleProductSeo(name: string, opts?: ProductSeoOpts) {
   // two genuinely different pages.
   // "bounce & slide combo" is long enough to push the title past the ~60
   // Google displays, and the name already ends in "Combo". Short label only.
-  const label = kindForTitle(name, shortKindLabel(kind).toLowerCase());
-  const title = `${name} for Sale — Commercial ${[h ? `${h} ft` : null, label].filter(Boolean).join(" ") || bare}`;
+  const label = kindForTitle(name, shortKindLabel(kind));
+  const plain = plainWords(name);
+  const title = label
+    ? `${plain} Commercial ${label} for Sale`
+    : `${plain} for Sale, Commercial Grade`;
 
   const lead = leadSentence(opts?.summary ?? "", 84);
   const description = lead
@@ -327,7 +341,7 @@ export function saleProductSeo(name: string, opts?: ProductSeoOpts) {
 /** Keyword-rich SEO copy for a product category listing page. */
 export function categorySeo(name: string) {
   return {
-    title: `${name} — Rentals & For Sale | Inflatable Water Slides`,
+    title: `${plainWords(name)} to Rent or Buy Nationwide`,
     description: `Browse ${name.toLowerCase()} to rent or buy — inflatable water slides delivered, set up, and insured nationwide. Get a fast, free water slide rental quote.`,
     keywords: [
       `${name.toLowerCase()} rentals`,

@@ -160,7 +160,7 @@ export const USE_CASES: UseCase[] = [
     slug: "school-events",
     name: "School Events & Field Days",
     phrase: "school event",
-    heroTitle: "Water Slide Rentals for School Events & Field Days",
+    heroTitle: "Water Slide Rentals for School Events and Field Days",
     heroDescription:
       "Make field day, end-of-year, or a fundraiser unforgettable. Insured, high-throughput water slides delivered and set up on your school grounds.",
     intro:
@@ -209,7 +209,7 @@ export const USE_CASES: UseCase[] = [
     slug: "church-events",
     name: "Church & Community Events",
     phrase: "church event",
-    heroTitle: "Water Slide Rentals for Church & Community Events",
+    heroTitle: "Water Slide Rentals for Church and Community Events",
     heroDescription:
       "Draw a crowd to your festival, VBS, or community day with an insured water slide. Delivered, set up, and supervised-ready by our team.",
     intro:
@@ -356,7 +356,7 @@ export const USE_CASES: UseCase[] = [
     slug: "hoa-neighborhood-events",
     name: "HOA & Neighborhood Events",
     phrase: "neighborhood event",
-    heroTitle: "Water Slide Rentals for HOA & Neighborhood Events",
+    heroTitle: "Water Slide Rentals for HOA and Neighborhood Events",
     heroDescription:
       "Bring the block together with a water slide at your HOA pool day or neighborhood block party. Insured, delivered, and set up for the whole community.",
     intro:
@@ -405,7 +405,7 @@ export const USE_CASES: UseCase[] = [
     slug: "summer-camps-daycares",
     name: "Summer Camps & Daycares",
     phrase: "summer camp",
-    heroTitle: "Water Slide Rentals for Summer Camps & Daycares",
+    heroTitle: "Water Slide Rentals for Summer Camps and Daycares",
     heroDescription:
       "Give campers a day they'll beg to repeat. Insured, age-appropriate water slides delivered and set up at your camp or daycare.",
     intro:
@@ -532,7 +532,7 @@ export const USE_CASES: UseCase[] = [
     slug: "trunk-or-treat",
     name: "Trunk-or-Treat Events",
     phrase: "trunk-or-treat",
-    heroTitle: "Trunk-or-Treat Inflatable Rentals",
+    heroTitle: "Trunk or Treat Inflatable Rentals",
     heroDescription:
       "Bounce houses and dry slides for church and school trunk-or-treats — anchored for asphalt, set up before dusk, and gone before you lock the lot.",
     intro:
@@ -600,7 +600,7 @@ export const USE_CASES: UseCase[] = [
     slug: "school-carnivals",
     name: "School Carnivals",
     phrase: "school carnival",
-    heroTitle: "School Carnival & Fall Field Day Rentals",
+    heroTitle: "School Carnival and Fall Field Day Rentals",
     heroDescription:
       "Inflatables for PTA carnivals, fall field days and school fundraisers — insured for districts, invoiced on a PO, and sized to move a whole grade level.",
     intro:
@@ -736,7 +736,7 @@ export const USE_CASES: UseCase[] = [
     slug: "harvest-festivals",
     name: "Harvest Festivals",
     phrase: "harvest festival",
-    heroTitle: "Harvest Festival & Pumpkin Patch Rentals",
+    heroTitle: "Harvest Festival and Pumpkin Patch Rentals",
     heroDescription:
       "Multi-day inflatable rentals for pumpkin patches, corn mazes and harvest weekends — priced by the weekend, installed on uneven farm ground.",
     intro:
