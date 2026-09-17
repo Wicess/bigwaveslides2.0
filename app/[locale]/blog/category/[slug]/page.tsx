@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: `/blog/category/${slug}`,
-    title: `${name} — Water Slide Rental Guides & Advice`,
+    title: `${name} Water Slide Rental Guides and Advice`,
     description: `Every ${name.toLowerCase()} article from Splash Republic — practical, US-specific guidance on renting inflatable water slides, bounce houses and combo units.`,
   });
 }

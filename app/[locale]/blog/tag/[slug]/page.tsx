@@ -50,7 +50,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: `/blog/tag/${slug}`,
-    title: `Articles tagged "${name}" — Splash Republic`,
+    // Quotation marks and an em dash around a tag name read as machine output.
+    // "Water Slide Articles About Planning" is the same thing in words. Tag
+    // names are stored lowercase for the chips, so capitalise it here — a
+    // lowercase word mid-title reads like a bug.
+    title: `Water Slide Articles About ${name.charAt(0).toUpperCase()}${name.slice(1)}`,
     description: `Posts tagged ${name.toLowerCase()}: water slide and bounce house rental advice covering cost, space, safety, weather and booking across the US.`,
   });
 }
