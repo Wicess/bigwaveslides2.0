@@ -7,6 +7,8 @@
 // Rule: only real, well-known places. No invented venues, no fabricated
 // reviews. A metro with no entry falls back to the region-level copy.
 
+import { CITY_AREAS } from "@/lib/city-areas";
+
 export type CityLocal = {
   /** Real neighboring suburbs / neighborhoods we deliver to. */
   areas: string[];
@@ -1455,7 +1457,17 @@ export function getCityLocal(
   stateSlug: string,
   cSlug: string,
 ): CityLocal | null {
-  return CITY_LOCAL[`${stateSlug}/${cSlug}`] ?? null;
+  const key = `${stateSlug}/${cSlug}`;
+  const written = CITY_LOCAL[key];
+  if (written) return written;
+  // Nobody has written this city up, so fall back to the neighbouring places
+  // derived from Census data (lib/city-areas.ts). Naming the towns around a
+  // place is the one fact true of that page and false of every other, and 629
+  // cities had none of it — including 179 of the 189 in the states where the
+  // small-town pages actually rank. Hand-written entries always win: this is
+  // only consulted when there is nothing above it.
+  const derived = CITY_AREAS[key];
+  return derived?.length ? { areas: derived } : null;
 }
 
 /**

@@ -354,6 +354,14 @@ def main():
     if missing:
         sys.exit(f"Could not place {len(missing)} cities on the map: {', '.join(missing)}")
 
+    # Publish the resolved coordinates. Working out where each city actually is
+    # took Census aliases for 24 consolidated and township names and six manual
+    # overrides for places whose official point is offshore or up a mountain;
+    # scripts/gen-city-areas.py reuses the answer rather than repeating it.
+    (CACHE / "city-coords.json").write_text(
+        json.dumps({c["key"]: [c["lat"], c["lon"]] for c in located})
+    )
+
     data, inventory, complete = load_normals()
     stations = [(sid, inventory[sid]) for sid in complete]
     print(f"  {len(located)} cities located, {len(stations)} complete stations", file=sys.stderr)
