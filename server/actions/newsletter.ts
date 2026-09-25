@@ -25,31 +25,47 @@ export async function subscribeNewsletter(input: {
   }
 
   try {
-    // Detect whether this is a brand-new (or re-activated) subscription so we
-    // only fire the welcome/admin emails when it's meaningful.
     const existing = await prisma.newsletterSubscriber.findUnique({
       where: { email: parsed.data.email },
       select: { status: true },
     });
-    const isNew = !existing || existing.status !== "SUBSCRIBED";
 
-    await prisma.newsletterSubscriber.upsert({
-      where: { email: parsed.data.email },
-      update: { status: "SUBSCRIBED" },
-      create: {
-        email: parsed.data.email,
-        locale: parsed.data.locale,
-        source: parsed.data.source,
-      },
-    });
+    // An opt-out is not reversed by this form.
+    //
+    // It used to upsert `status: "SUBSCRIBED"`, so submitting an address that
+    // had unsubscribed put it straight back on the list — and anyone can type
+    // anyone's address into a footer box. Someone who clicked the signed
+    // unsubscribe link in an email should not be re-added by a form that never
+    // proves who is filling it in. Re-subscribing is deliberately a manual step
+    // (Admin → Newsletter) so it is a decision someone makes, not a side effect.
+    //
+    // Reports success either way: telling the visitor "that address opted out"
+    // would turn this box into a way of checking who is on the list.
+    if (existing?.status === "UNSUBSCRIBED") return { ok: true };
 
-    // Fold the subscription into the customer's account when one exists.
-    await prisma.customer
-      .updateMany({
-        where: { email: { equals: parsed.data.email, mode: "insensitive" } },
-        data: { marketingOptIn: true },
-      })
-      .catch(() => {});
+    const isNew = !existing;
+
+    if (isNew) {
+      await prisma.newsletterSubscriber.create({
+        data: {
+          email: parsed.data.email,
+          locale: parsed.data.locale,
+          source: parsed.data.source,
+        },
+      });
+    }
+
+    // Fold the subscription into the customer's account when one exists. Only
+    // for a genuinely new opt-in — an address already on the list is already
+    // flagged, and one that opted out returned above.
+    if (isNew) {
+      await prisma.customer
+        .updateMany({
+          where: { email: { equals: parsed.data.email, mode: "insensitive" } },
+          data: { marketingOptIn: true },
+        })
+        .catch(() => {});
+    }
 
     if (isNew) {
       // Best-effort: never fail the subscription if email sending hiccups.

@@ -81,6 +81,21 @@ function popularityScore(p: {
     Cached (tag "products", 1h) so the dynamic /rent and /shop listing pages
     don't read the DB on every request and let the serverless compute sleep;
     admin product edits call revalidateTag("products") to refresh it. */
+/*
+ * Why the queries in these two fetchers do NOT swallow their errors.
+ *
+ * Both are wrapped in unstable_cache. A `.catch(() => [])` inside a cached
+ * function does not degrade one request — it caches the empty result, so a
+ * single database hiccup during a cache miss serves "no rentals available" on
+ * the rent pages for the whole revalidate window, and keeps doing it long after
+ * the database has recovered. That has happened on the sister site running this
+ * codebase: it froze an empty catalog site-wide.
+ *
+ * Letting the error through is the better failure. unstable_cache stores
+ * nothing, the route keeps serving its last good ISR copy, and the next request
+ * retries. withRetry already absorbs the transient case, which on Neon is
+ * usually just the database waking up.
+ */
 async function fetchRentalProducts(query: RentalQuery = {}) {
   const {
     category,
@@ -108,7 +123,7 @@ async function fetchRentalProducts(query: RentalQuery = {}) {
         }),
         prisma.product.count({ where }),
       ]),
-    ).catch(() => [[], 0] as const);
+    );
     return {
       items,
       total,
@@ -138,7 +153,7 @@ async function fetchRentalProducts(query: RentalQuery = {}) {
       orderBy: { id: "asc" },
       take: 500,
     }),
-  ).catch(() => []);
+  );
 
   const orderedIds = [...ranking]
     .sort(
@@ -155,7 +170,7 @@ async function fetchRentalProducts(query: RentalQuery = {}) {
       where: { id: { in: pageIds } },
       select: cardSelect,
     }),
-  ).catch(() => []);
+  );
   const byId = new Map(cards.map((c) => [c.id, c]));
   const items = pageIds
     .map((id) => byId.get(id))
@@ -219,7 +234,7 @@ async function fetchBounceHouseRentals() {
       ],
       take: 12,
     }),
-  ).catch(() => [] as RentalListing["items"]);
+  );
   return cards;
 }
 
