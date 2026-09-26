@@ -15,6 +15,7 @@ import {
 } from "@/lib/locations";
 import { USE_CASES } from "@/lib/use-cases";
 import { PROFILED_CITY_KEYS } from "@/lib/city-profiles";
+import { CITY_AREAS } from "@/lib/city-areas";
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const EN = routing.defaultLocale;
@@ -55,6 +56,8 @@ const d = (iso: string) => new Date(`${iso}T00:00:00Z`);
 
 /** City pages rewritten around NOAA climate data (lib/city-climate.ts). */
 const CITIES_UPDATED = d("2026-09-13");
+/** ...and the 578 that later gained their real neighbouring towns. */
+const CITY_AREAS_UPDATED = d("2026-09-25");
 /** The 17 hand-profiled cities: not rewritten on Sep 13, re-linked on Sep 7. */
 const PROFILED_CITIES_UPDATED = d("2026-09-07");
 /** State hubs: bounce-house cross-links gated to surviving pages. */
@@ -114,12 +117,20 @@ const STATIC_PATHS = [
 // the domain earns authority and we widen the net in waves.
 const LOCATION_PATHS = US_STATES.map((s) => `/water-slide-rentals/${s.slug}`);
 const PROFILED = new Set(PROFILED_CITY_KEYS);
-const CITY_ENTRIES = getPriorityCities().map((c) => ({
-  path: `/water-slide-rentals/${c.state.slug}/${c.slug}`,
-  lastModified: PROFILED.has(`${c.state.slug}/${c.slug}`)
-    ? PROFILED_CITIES_UPDATED
-    : CITIES_UPDATED,
-}));
+// Three dates, because these pages genuinely changed on three different days.
+// Giving all 752 the newest would claim a change for the 174 that did not get
+// one, and a lastmod that over-claims is how a crawler learns to discount it.
+const CITY_ENTRIES = getPriorityCities().map((c) => {
+  const key = `${c.state.slug}/${c.slug}`;
+  return {
+    path: `/water-slide-rentals/${key}`,
+    lastModified: PROFILED.has(key)
+      ? PROFILED_CITIES_UPDATED
+      : CITY_AREAS[key]
+        ? CITY_AREAS_UPDATED
+        : CITIES_UPDATED,
+  };
+});
 // The bounce-house family keeps its 51 state hubs and drops its city tier. It
 // used to mirror the water-slide family city for city, which put two
 // near-identical pages about the same town in the sitemap and made bounce
