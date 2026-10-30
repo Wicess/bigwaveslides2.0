@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     og: {
       eyebrow: "Answers",
       subtitle: "Cost, space, water, power, safety, weather and booking",
-      badge: "25 answers",
+      badge: `${allQA().length} answers`,
       price: "From $155/day",
     },
     keywords: [

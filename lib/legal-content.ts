@@ -1,6 +1,9 @@
 /** Static legal + FAQ copy (kept out of i18n message files due to length).
  *  English only — the site serves the United States and has no other locale. */
 
+import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
+
 export type Section = { heading: string; body: string };
 export type Faq = { q: string; a: string };
 
@@ -129,7 +132,7 @@ export const FAQS: {
     },
     {
       q: "Do you deliver and set up?",
-      a: "Yes. Delivery, setup, safety checks, and pickup are available. Delivery fees depend on your location and are confirmed in your quote.",
+      a: `Yes. Delivery, setup, safety checks and pickup are part of every rental. The only added charge is one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order, shown on your quote before you book.`,
     },
     {
       q: "Is everything insured and cleaned?",
@@ -149,7 +152,7 @@ export const FAQS: {
     },
     {
       q: "Do you sell slides too?",
-      a: "Yes — browse the shop for commercial-grade slides to purchase, with the same request-based, no-online-payment process.",
+      a: "Yes — browse the shop for commercial-grade slides to purchase, booked the same way: we confirm your order first, then invoice it.",
     },
   ],
 };

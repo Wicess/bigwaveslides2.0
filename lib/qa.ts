@@ -6,6 +6,9 @@
 // wording). All facts are real: pricing, delivery fees, and requirements match
 // the business; no invented policies (e.g. no deposit claims).
 
+import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
+
 export type QAItem = { q: string; a: string };
 export type QACategory = { title: string; slug: string; items: QAItem[] };
 
@@ -24,7 +27,10 @@ export const QA_CATEGORIES: QACategory[] = [
       },
       {
         q: "How much are delivery fees for a water slide rental?",
-        a: "Delivery starts with a $49 base fee, and the first 15 miles from our service area are included. Beyond that it is $2.50 per mile, plus a $29 pickup fee. Your exact delivery cost is calculated for your address and shown in your free quote.",
+        // Derived from the constant the checkout charges, so it cannot drift
+        // again: this answer quoted a $49 base + $2.50/mile + $29 pickup for
+        // months after the checkout moved to one flat transportation line.
+        a: `Splash Republic charges one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order — not per item and not per mile — anywhere it delivers in the United States. Delivery, setup, anchoring and pickup are covered, and the fee is its own line on your quote before you book.`,
       },
       {
         q: "Do I pay online to book a water slide?",
