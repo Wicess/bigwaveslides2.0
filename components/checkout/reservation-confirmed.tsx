@@ -146,7 +146,7 @@ export function ReservationConfirmed({
           </div>
 
           <p className="text-muted-foreground text-center text-xs">
-            Saved to your account · nothing charged online.
+            Saved to your account
           </p>
         </div>
       </div>

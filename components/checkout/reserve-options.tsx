@@ -180,8 +180,8 @@ export function ReserveOptions({
           someone handing over their details. */}
       <p className="text-muted-foreground text-xs leading-relaxed">
         {isRent
-          ? "Fully insured & sanitized. We verify availability and confirm your booking first — nothing is charged online."
-          : "Commercial-grade & warrantied. We confirm your order and delivery first — nothing is charged online."}
+          ? "Fully insured & sanitized. We verify availability and confirm your booking first."
+          : "Commercial-grade & warrantied. We confirm your order and delivery first."}
       </p>
     </div>
   );

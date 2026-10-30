@@ -351,11 +351,15 @@ export function CartCheckoutForm({
           applied server-side only if the email really is a subscriber. */}
       <p className="flex flex-wrap items-baseline gap-x-1.5 rounded-[var(--radius)] bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
         <span className="font-semibold">
-          Subscribers save {Math.round(LOYALTY_SUBSCRIBE_RATE * 100)}%
+          Subscribe to save {Math.round(LOYALTY_SUBSCRIBE_RATE * 100)}%
         </span>
         <span className="text-emerald-800/80">
-          (20% with our app) — up to −
-          {formatPrice(Math.round(subtotalCents * 0.2), locale)} on this order.
+          — up to −
+          {formatPrice(
+            Math.round(subtotalCents * LOYALTY_SUBSCRIBE_RATE),
+            locale,
+          )}{" "}
+          on this order.
         </span>
       </p>
 

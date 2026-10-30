@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: "/services",
     title: "Water Slide Installation, Delivery and Setup Services",
     description:
-      "Water slide delivery, setup, cleaning and custom builds for parties, events and water parks nationwide. Book online in one page — nothing charged online.",
+      "Water slide delivery, setup, cleaning and custom builds for parties, events and water parks nationwide. Book online in one page — we confirm your date, then send a quote.",
     keywords: [
       "water slide installation",
       "professional water slide installation",

@@ -354,8 +354,8 @@ async function placeReservation({
         heading: isRent ? "Booking received" : "Order received",
         // "Confirm", never "payment details" — see the note at the top.
         intro: isRent
-          ? `Thanks ${data.name}! We've got your reservation${dateLabel ? ` for ${dateLabel}` : ""} and we'll contact you shortly to confirm it. Nothing is charged online.`
-          : `Thanks ${data.name}! We've got your order and we'll contact you shortly to confirm it. Nothing is charged online.`,
+          ? `Thanks ${data.name}! We've got your reservation${dateLabel ? ` for ${dateLabel}` : ""} and we'll contact you shortly to confirm it.`
+          : `Thanks ${data.name}! We've got your order and we'll contact you shortly to confirm it.`,
         rows: [
           { label: isRent ? "Booking" : "Order", value: order.orderNumber },
           ...(dateLabel ? [{ label: "Event date", value: dateLabel }] : []),

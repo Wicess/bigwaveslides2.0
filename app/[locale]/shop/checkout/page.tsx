@@ -55,7 +55,7 @@ export default async function ShopCheckoutPage({
             </h1>
             <p className="text-muted-foreground mx-auto mt-3 max-w-xl leading-relaxed">
               Place your order now — we confirm availability and delivery, then
-              get in touch to finalize your purchase. Nothing is charged online.
+              get in touch to finalize your purchase.
             </p>
           </header>
 

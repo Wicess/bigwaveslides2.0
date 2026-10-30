@@ -28,7 +28,7 @@ export const QA_CATEGORIES: QACategory[] = [
       },
       {
         q: "Do I pay online to book a water slide?",
-        a: "No. Splash Republic is quote-based with no online checkout. You request a free quote, we confirm your date, delivery window, and exact price, and payment is arranged directly with our team. No card is charged on the website.",
+        a: "No. Splash Republic is quote-based. You request a free quote, we confirm your date, delivery window, and exact price, and payment is arranged directly with our team.",
       },
       {
         q: "Is it cheaper to rent or buy an inflatable water slide?",
@@ -46,7 +46,7 @@ export const QA_CATEGORIES: QACategory[] = [
       },
       {
         q: "How does booking a water slide rental work?",
-        a: "It is three steps: choose your slide, date, and city and request a free quote; we confirm availability, the delivery window, and your exact price; then you approve and pay offline. There is no online checkout — our team confirms every detail with you directly.",
+        a: "It is three steps: choose your slide, date, and city and request a free quote; we confirm availability, the delivery window, and your exact price; then you approve and we arrange payment with you directly. Our team confirms every detail before your event.",
       },
       {
         q: "What areas do you deliver water slides to?",

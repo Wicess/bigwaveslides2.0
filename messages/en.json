@@ -182,7 +182,7 @@
     "how1Title": "Pick your date and book it",
     "how1Desc": "Pick your slide and your date and fill in one page. Availability is live, so a date you can select is a date we actually have.",
     "how2Title": "Confirm and lock it in",
-    "how2Desc": "Book it there and then. Pay half now to lock the date, or pay in full — nothing is charged online, and we confirm your booking before any money moves.",
+    "how2Desc": "Book it there and then. Choose to pay half now to lock the date or pay in full, and we confirm your booking before any money moves.",
     "how3Title": "We deliver the fun",
     "how3Desc": "Our crew delivers, sets up, anchors and safety-checks before your start time, then comes back to take it down.",
     "whereTitle": "Where we work",
@@ -233,7 +233,7 @@
     "crumb": "Contact Us",
     "infoEyebrow": "Need more information?",
     "infoHeading": "Get in <hl>touch</hl> with us",
-    "infoLead": "Tell us your date and where you are, and we'll confirm what we can get to you. Nothing is charged online.",
+    "infoLead": "Tell us your date and where you are, and we'll confirm what we can get to you.",
     "phoneLabel": "Phone Number",
     "emailLabel": "Email",
     "addressLabel": "Address",
@@ -296,7 +296,7 @@
     "spaceNeeded": "Space needed",
     "deposit": "Refundable deposit: {amount}",
     "requestQuote": "Book now",
-    "noPaymentNote": "Nothing is charged online — book your date and we'll confirm it.",
+    "noPaymentNote": "Book your date and we'll confirm it.",
     "trustInsured": "Fully insured",
     "trustClean": "Sanitized before delivery",
     "trustDelivery": "Delivery & setup available",
@@ -385,7 +385,7 @@
     "promoApplied": "Code {code} applied 🎉",
     "promoOn": "Code {code} applied",
     "promoRemove": "Remove",
-    "noPaymentNote": "Nothing is charged online. We confirm your booking first."
+    "noPaymentNote": "We confirm your booking first."
   },
   "Quote": {
     "eyebrow": "Get a quote",
@@ -404,7 +404,7 @@
     "message": "Tell us about your event",
     "submit": "Request quote",
     "submitting": "Sending…",
-    "noPaymentNote": "No payment online — quotes are free and no-obligation.",
+    "noPaymentNote": "Your quote is free and no-obligation.",
     "successTitle": "Quote requested! 🎉",
     "successBody": "Thanks! We’ll review your request and email your personalized quote shortly.",
     "ref": "Reference"
@@ -451,10 +451,10 @@
     "quotedByLocation": "Quoted by location",
     "refundableDeposit": "Refundable deposit",
     "estTotal": "Estimated total",
-    "estNote": "Final pricing is confirmed in your quote. No payment online.",
+    "estNote": "Final pricing is confirmed in your quote.",
     "unavailableHint": "Those dates are booked. Pick other dates, or send a request and we’ll suggest alternatives.",
     "requestBooking": "Request this booking",
-    "noPaymentNote": "Nothing is charged online — book your date and we'll confirm it."
+    "noPaymentNote": "Book your date and we'll confirm it."
   },
   "Availability": {
     "prevMonth": "Previous month",
@@ -500,7 +500,7 @@
     "notesPlaceholder": "Access notes, timing, special requests…",
     "submitting": "Sending…",
     "submit": "Submit booking request",
-    "noPaymentNote": "Nothing is charged online. We confirm your booking before anything is paid.",
+    "noPaymentNote": "We confirm your booking first.",
     "successTitle": "Booking requested! 🌊",
     "successBody": "We’ve tentatively held your dates. Review and sign your rental agreement to speed things up.",
     "bookingRef": "Booking reference",

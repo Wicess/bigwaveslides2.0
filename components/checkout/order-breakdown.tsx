@@ -53,9 +53,7 @@ export function OrderBreakdown({
   const money = (c: number) => formatPrice(c, "en");
   const due = amountDueCents(plan, totalCents);
   const rest = balanceCents(plan, totalCents);
-  const loyaltyMax = Math.round(
-    subtotalCents * (LOYALTY_SUBSCRIBE_RATE + 0.05),
-  );
+  const loyaltyMax = Math.round(subtotalCents * LOYALTY_SUBSCRIBE_RATE);
 
   return (
     <div className="border-border rounded-2xl border bg-white p-4">
@@ -120,7 +118,7 @@ export function OrderBreakdown({
 
       {loyaltyMax > 0 ? (
         <p className="mt-3 rounded-xl bg-emerald-50 px-3 py-2 text-xs leading-relaxed text-emerald-800">
-          Newsletter subscribers save 15% (20% with our app) — up to{" "}
+          Subscribe to save 15% — up to{" "}
           <span className="font-bold">−{money(loyaltyMax)}</span> on this order.
         </p>
       ) : null}

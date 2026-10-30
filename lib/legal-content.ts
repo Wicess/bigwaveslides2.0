@@ -121,7 +121,7 @@ export const FAQS: {
   items: [
     {
       q: "Do I pay online?",
-      a: "No. Everything on the site is request-based — we'll email you a personalized quote and payment details to confirm. No card is charged online.",
+      a: "No. Everything on the site is request-based — we'll email you a personalized quote and payment details to confirm.",
     },
     {
       q: "How do I check if my date is available?",

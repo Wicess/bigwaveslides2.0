@@ -65,8 +65,7 @@ export default async function RentCheckoutPage({
             </h1>
             <p className="text-muted-foreground mx-auto mt-3 max-w-xl leading-relaxed">
               Check your date, tell us where the party is, and lock it in. We
-              verify availability and confirm your booking first. Nothing is
-              charged online.
+              verify availability and confirm your booking first.
             </p>
           </header>
 

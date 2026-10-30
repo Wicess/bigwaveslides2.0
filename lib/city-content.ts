@@ -243,7 +243,7 @@ export function getCityContent(loc: CityLocation): CityContent {
         },
         {
           q: "What does the price include?",
-          a: "Delivery, professional setup and safe anchoring, sanitizing before every booking, and collection afterwards. You'll get one all-in number — nothing is charged online.",
+          a: "Delivery, professional setup and safe anchoring, sanitizing before every booking, and collection afterwards. You'll get one all-in number.",
         },
         {
           q: `Can you set up on grass or a driveway in ${name}?`,
@@ -298,7 +298,7 @@ export function getCityContent(loc: CityLocation): CityContent {
       : []),
     {
       q: "What is included in the price?",
-      a: "Delivery, setup, safe anchoring, sanitizing and collection — one all-in number, quoted before you commit. Nothing is charged online.",
+      a: "Delivery, setup, safe anchoring, sanitizing and collection — one all-in number, quoted before you commit.",
     },
   ];
 
