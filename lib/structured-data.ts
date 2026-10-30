@@ -1,12 +1,13 @@
 import { env } from "@/lib/env";
+import { BRAND_EMAIL, BRAND_NAME } from "@/lib/brand";
 
 const SITE = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const NAME = "Splash Republic";
+const NAME = BRAND_NAME;
 // Real business facts (match lib/email.ts + site settings) — shown in rich
 // results, so keep them in lockstep with the NAP used everywhere else. The
 // phone deliberately has no constant here: it comes from Settings → Contact so
 // schema never advertises a number the site itself doesn't show.
-const EMAIL = "sales@splashrep.com";
+const EMAIL = BRAND_EMAIL;
 // Spans the WHOLE rentable catalog, not just the water slides: the cheapest
 // unit is the Little Harbor Junior at $155/day and the dearest the Grand
 // Waterworks Combo at $570. Markup that disagrees with the visible page price
