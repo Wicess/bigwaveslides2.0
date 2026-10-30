@@ -29,6 +29,8 @@ import {
   heightFromDimensions,
 } from "@/lib/seo";
 import { saleFaqs } from "@/lib/product-faq";
+import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
@@ -185,6 +187,11 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const canonical = absoluteUrl(locale, `/shop/${product.slug}`);
 
+  // Cached (1h, tag "settings") — only to know whether the flat
+  // transportation line is switched on, so the FAQ never quotes a fee the
+  // checkout isn't charging.
+  const settings = await getSettings().catch((): SiteSettings => ({}));
+  const transportOn = settings.fees?.transportEnabled !== false;
   const faqs = saleFaqs({
     name,
     price:
@@ -192,6 +199,20 @@ export default async function ProductDetailPage({ params }: Props) {
         ? formatPrice(product.salePriceCents, locale)
         : undefined,
     kind: productKindLabel(product.category?.slug),
+    dailyRate:
+      product.dailyRateCents != null && product.type !== "SALE"
+        ? formatPrice(product.dailyRateCents, locale)
+        : undefined,
+    daysOfRental:
+      product.salePriceCents && product.dailyRateCents
+        ? Math.round(product.salePriceCents / product.dailyRateCents)
+        : undefined,
+    dims: dimText || undefined,
+    space: space?.value ?? null,
+    power: product.powerRequired,
+    capacity: product.capacity,
+    age: product.ageRange,
+    transport: transportOn ? formatPrice(TRANSPORT_CENTS, locale) : undefined,
   });
 
   return (

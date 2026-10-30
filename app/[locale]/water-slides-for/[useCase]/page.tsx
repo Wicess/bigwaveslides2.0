@@ -13,6 +13,11 @@ import {
 import { routing } from "@/i18n/routing";
 import { USE_CASES, getUseCaseBySlug } from "@/lib/use-cases";
 import { getRentalProducts } from "@/server/data/rentals";
+import { getFactsData } from "@/server/data/catalog-facts";
+import { getSettings, type SiteSettings } from "@/server/data/settings";
+import { rentalCostFaq, summarizeCatalog } from "@/lib/business-facts";
+import { CURATED_POST_SLUGS } from "@/lib/llms-content";
+import { TRANSPORT_CENTS } from "@/lib/pricing";
 import { buildMetadata } from "@/lib/seo";
 import {
   serviceLd,
@@ -73,6 +78,24 @@ export default async function UseCasePage({ params }: Props) {
   );
   const items = listing.items.slice(0, 8);
 
+  // One answer-first cost Q&A from the live catalog (daily-cached, shared with
+  // /llms.txt) — appended after the hand-written FAQs so the visible order and
+  // the first open answer are unchanged. Omitted if the DB is unreachable.
+  const [facts, settings] = await Promise.all([
+    getFactsData(CURATED_POST_SLUGS).catch(() => null),
+    getSettings().catch((): SiteSettings => ({})),
+  ]);
+  const costFaq = facts
+    ? rentalCostFaq(uc.phrase, summarizeCatalog(facts.products), {
+        dryFirst: Boolean(uc.season),
+        transportCents:
+          settings.fees?.transportEnabled !== false
+            ? TRANSPORT_CENTS
+            : undefined,
+      })
+    : null;
+  const faqs = costFaq ? [...uc.faqs, costFaq] : uc.faqs;
+
   const path = `/water-slides-for/${uc.slug}`;
   const canonical = absoluteUrl(locale, path);
 
@@ -105,7 +128,7 @@ export default async function UseCasePage({ params }: Props) {
           { name: uc.name, url: canonical },
         ])}
       />
-      <JsonLd data={faqLd(uc.faqs)} />
+      <JsonLd data={faqLd(faqs)} />
 
       <PhotoHero
         image={uc.hero}
@@ -242,7 +265,7 @@ export default async function UseCasePage({ params }: Props) {
             defaultValue={["q0"]}
             className="border-border mt-8 rounded-[var(--radius-lg)] border"
           >
-            {uc.faqs.map((f, i) => (
+            {faqs.map((f, i) => (
               <AccordionItem
                 key={i}
                 value={`q${i}`}

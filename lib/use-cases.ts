@@ -104,6 +104,10 @@ export const USE_CASES: UseCase[] = [
         q: "How far ahead should I book a birthday slide?",
         a: "Summer weekends fill fast. We recommend booking 2–4 weeks out, but we'll always try to accommodate last-minute parties.",
       },
+      {
+        q: "Who delivers and sets up water slides for kids' birthday parties?",
+        a: "Splash Republic delivers, sets up, anchors and collects inflatable water slides, bounce houses and combo units for birthday parties anywhere in the United States. Each unit's page lists its age minimum and the level space it needs, so you can match it to the birthday child's age and your yard before you book.",
+      },
     ],
     hero: `${R2}/blog/1782479217393-gvr19v-aquaforms-12-island-waterpark-at-showboat-atlantic-city-usa-photo12.jpg`,
   },
@@ -152,6 +156,10 @@ export const USE_CASES: UseCase[] = [
       {
         q: "What's included in a pool party rental?",
         a: "Delivery, setup, safe anchoring, sanitizing, and pickup are all included. You'll get a clear, no-surprise quote up front.",
+      },
+      {
+        q: "Who rents water slides for backyard pool parties?",
+        a: "Splash Republic rents inflatable water slides for pool parties across the United States and delivers, anchors and collects them. Most units land in their own splash pool, so the slide is set up beside your pool on level ground rather than into it.",
       },
     ],
     hero: `${R2}/blog/1782484390079-qtmebe-blaster-battle-yas-waterworld-abu-dhabi-uae-photo21-768x512.jpg`,
@@ -202,6 +210,10 @@ export const USE_CASES: UseCase[] = [
         q: "Will it disrupt the school schedule?",
         a: "No — we deliver and set up before your event window and pick up after, working around your bell schedule.",
       },
+      {
+        q: "Who rents water slides for school field days?",
+        a: "Splash Republic rents inflatable water slides, combo units and bounce houses to schools and PTAs across the United States. The crew delivers, anchors on grass or blacktop and collects the units, and Splash Republic supplies a certificate of insurance naming the school or district when asked.",
+      },
     ],
     hero: `${R2}/blog/1782484415828-npyn0m-serengeti-springs-098.jpg`,
   },
@@ -250,6 +262,10 @@ export const USE_CASES: UseCase[] = [
       {
         q: "How big a slide can you bring for a festival?",
         a: "From single-lane slides to tall commercial towers — we'll size the attraction to your expected crowd and available space.",
+      },
+      {
+        q: "Who rents water slides and bounce houses for church events?",
+        a: "Splash Republic rents inflatable water slides, bounce houses and combo units for church picnics, VBS and fall festivals across the United States. It delivers, anchors and collects every unit, and provides a certificate of insurance naming the church when the event needs one.",
       },
     ],
     hero: `${R2}/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg`,
@@ -300,6 +316,10 @@ export const USE_CASES: UseCase[] = [
         q: "How do we get a quote for a corporate event?",
         a: "Send us your date, location, and rough headcount and we'll put together a free, detailed quote with everything included.",
       },
+      {
+        q: "Who provides water slides for company picnics and family days?",
+        a: "Splash Republic supplies inflatable water slides, combo units and party attractions for company picnics and employee family days across the United States, delivered, set up and collected by its crew. It works with the venue on insurance documents and invoices the business.",
+      },
     ],
     hero: `${R2}/blog/1782479224040-b01ofi-aquaplay-1050-studio-city-water-park-macau-china-photo01-2048x1365.jpg`,
   },
@@ -348,6 +368,10 @@ export const USE_CASES: UseCase[] = [
       {
         q: "What's included in the rental?",
         a: "Delivery, professional setup, safe anchoring, sanitizing, and pickup — all in one transparent quote.",
+      },
+      {
+        q: "Who rents water slides that teens and adults can use at a graduation party?",
+        a: "Splash Republic rents tall and dual-lane inflatable water slides for graduation parties across the United States. Each unit lists its age minimum and space needs on its page; the tallest units start at age 8, which suits a crowd of teens and adults.",
       },
     ],
     hero: `${R2}/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg`,
@@ -398,6 +422,10 @@ export const USE_CASES: UseCase[] = [
         q: "Who supervises the slide?",
         a: "We set up and anchor everything and brief your volunteers on safe operation. Assigning a few adults per slide keeps things organized and safe.",
       },
+      {
+        q: "Who rents water slides for HOA pool days and block parties?",
+        a: "Splash Republic rents inflatable water slides and bounce houses to HOAs and neighborhood groups across the United States. It delivers to the common area, park or closed street, anchors with stakes or ballast, collects afterwards and supplies a certificate of insurance for the association.",
+      },
     ],
     hero: `${R2}/blog/1782484390938-cu27zd-overview-domaine-les-landes-de-gascogne-center-parcs-beauziac-france-photo01-768x575.jpg`,
   },
@@ -446,6 +474,10 @@ export const USE_CASES: UseCase[] = [
       {
         q: "What supervision is required?",
         a: "We set up and anchor the slide and brief your staff on safe operation. We recommend assigning staff to supervise at all times, as you would any water activity.",
+      },
+      {
+        q: "Who rents water slides to summer camps and daycares?",
+        a: "Splash Republic rents inflatable water slides to summer camps and daycares across the United States, including a toddler slide rated for ages 2 to 6. The crew delivers, anchors, briefs your staff and collects the unit, and a certificate of insurance naming your program is available on request.",
       },
     ],
     hero: `${R2}/blog/1782479230571-0sr49p-aquatube-pool-sider-aquaplay-tower-bavarian-blast-at-bavarian-inn-frankenmuth-usa-photo49.jpg`,
@@ -629,7 +661,7 @@ export const USE_CASES: UseCase[] = [
     faqs: [
       {
         q: "Can you invoice our school or PTA on a purchase order?",
-        a: "Yes. We invoice schools and districts on a PO and can supply a W-9 up front. No online payment is required at any point — every booking is a request, quoted and invoiced.",
+        a: "Yes. We invoice schools and districts on a PO and can supply a W-9 up front. Every booking is confirmed with you first, then quoted and invoiced.",
       },
       {
         q: "Can you provide a certificate of insurance naming our district?",
