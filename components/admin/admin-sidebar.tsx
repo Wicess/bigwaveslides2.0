@@ -16,6 +16,7 @@ import {
   Star,
   MessageSquareQuote,
   Inbox,
+  MessageCircle,
   Mail,
   Newspaper,
   Settings,
@@ -56,6 +57,7 @@ const GROUPS = [
   {
     label: "CRM & comms",
     items: [
+      { href: "/admin/messages", label: "Messages", icon: MessageCircle },
       { href: "/admin/reviews", label: "Reviews", icon: Star },
       {
         href: "/admin/testimonials",

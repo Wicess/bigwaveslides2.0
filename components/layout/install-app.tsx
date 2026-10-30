@@ -204,6 +204,13 @@ export function InstallApp({
       recordInstall("appinstalled");
     };
     window.addEventListener("appinstalled", onInstalled);
+    // The live chat asks for this sheet when an iPhone needs the app installed
+    // before it can show reply notifications (components/chat/install-store.ts).
+    // Only the header chip answers, so the sheet never opens twice.
+    const onGuide = () => {
+      if (variant === "chip") setSheetOpen(true);
+    };
+    window.addEventListener("splash:open-install-guide", onGuide);
 
     // The service worker that makes the site installable.
     if ("serviceWorker" in navigator) {
@@ -213,9 +220,10 @@ export function InstallApp({
     return () => {
       window.removeEventListener("beforeinstallprompt", onPrompt);
       window.removeEventListener("appinstalled", onInstalled);
+      window.removeEventListener("splash:open-install-guide", onGuide);
       mq.removeEventListener?.("change", compute);
     };
-  }, []);
+  }, [variant]);
 
   if (!mounted || standalone) return null;
 

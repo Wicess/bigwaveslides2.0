@@ -907,3 +907,143 @@ model AnalyticsEvent {
   @@index([type, createdAt])
   @@index([createdAt])
 }
+
+// ─── Live chat ─────────────────────────────────────────────────────────────
+// Ported from MIMOSALSD (2026-10-30): one inbox for the site's live chat, with
+// attachments in R2, an IP blocklist, admin presence, and web-push reply
+// notifications for customers (keys generated on first use, kept in PushKey).
+
+model SupportThread {
+  id     String  @id @default(cuid())
+
+  email     String?
+  subject   String?
+  isOpen    Boolean @default(true)
+  /// Anonymous visitor key so context survives before sign-in.
+  visitorId String?
+
+  // ── Live chat. Ported from WHAM's ChatThread onto this existing table, so the
+  //    contact form, bulk enquiries and live chat are ONE inbox rather than two.
+
+  /// Short quotable handle — "SG-7K3M9". Every thread gets one, anonymous visitors
+  /// included: without it an unidentified visitor is unaddressable, and there is no
+  /// way to refer to them in an alert or in conversation. Not a credential — the
+  /// thread is found by the visitor cookie, never by this.
+  publicId    String? @unique
+  /// What the operator sees in the inbox. Derived: given name > email local-part >
+  /// publicId. Recomputed as identity is learned.
+  displayName String?
+  name        String?
+  /// Last client IP seen sending here. The Visitor row keeps no raw IP by design, so
+  /// the thread is where an actionable one lives — it feeds BlockedIp.
+  lastIp      String?
+
+  // Denormalised summary, written in the SAME transaction as the message, so the
+  // inbox preview can never disagree with the last message behind it.
+  lastMessageAt   DateTime @default(now())
+  lastMessageText String?  @db.Text
+  /// CUSTOMER | ADMIN
+  lastSender      String?
+
+  unreadForAdmin    Int @default(0)
+  unreadForCustomer Int @default(0)
+
+  customerLastSeenAt DateTime?
+  adminLastSeenAt    DateTime?
+  /// Set while the customer is typing; stale after a few seconds.
+  customerTypingAt   DateTime?
+  /// What they have typed so far — WHAM's live preview in the operator inbox.
+  customerTypingText String?   @db.Text
+
+  messages SupportMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isOpen, updatedAt])
+  @@index([visitorId])
+  @@index([lastMessageAt])
+  @@index([email])
+}
+
+model SupportMessage {
+  id       String        @id @default(cuid())
+  threadId String
+  thread   SupportThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  fromCustomer Boolean
+  authorName   String?
+  body         String   @db.Text
+
+  /// A message written by the system rather than a person — the first-contact
+  /// welcome, "an order was placed". Rendered centred and unattributed.
+  isSystem Boolean @default(false)
+
+  /// Reached the other side's device. One tick.
+  deliveredAt DateTime?
+  /// They had the conversation open. Two ticks — shown to the operator only: telling
+  /// a buyer exactly when the shop read their message and had not yet replied
+  /// creates pressure the shop cannot always answer.
+  readAt      DateTime?
+
+  /// PRIVATE R2 key under `private/chat/`. Never a public URL: WHAM stores chat
+  /// attachments publicly, and a photo sent in a support chat is as private as the
+  /// conversation around it.
+  attachmentKey  String?
+  attachmentType String?
+  attachmentName String?
+
+  /// Operator corrected it after sending.
+  editedAt  DateTime?
+  /// Soft delete — render "removed", never vanish silently from a record.
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([threadId, createdAt])
+}
+
+model BlockedIp {
+  ip        String   @id
+  reason    String?
+  threadId  String?
+  publicId  String?
+  createdAt DateTime @default(now())
+  createdBy String?
+
+  @@index([createdAt])
+}
+
+model AdminPresence {
+  adminId    String   @id
+  lastSeenAt DateTime @default(now())
+}
+
+model PushSubscription {
+  id         String    @id @default(cuid())
+  /// The push service URL. Only the known browser push services are accepted.
+  endpoint   String    @unique
+  /// The browser's public key and auth secret, which encrypt every message.
+  p256dh     String
+  auth       String
+  visitorId  String?
+  /// ios | android | desktop
+  platform   String?
+  /// Subscribed from the installed app rather than a browser tab.
+  installed  Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  lastSeenAt DateTime  @default(now())
+  lastSentAt DateTime?
+  /// Consecutive failed deliveries. Reset by a success; a gone endpoint is deleted.
+  failures   Int       @default(0)
+
+  @@index([visitorId])
+  @@index([createdAt])
+}
+
+model PushKey {
+  id         String   @id
+  publicKey  String
+  privateKey String
+  createdAt  DateTime @default(now())
+}
