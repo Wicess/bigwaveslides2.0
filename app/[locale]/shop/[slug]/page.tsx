@@ -31,7 +31,7 @@ import {
 import { saleFaqs } from "@/lib/product-faq";
 import { TRANSPORT_CENTS } from "@/lib/pricing";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
-import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
+import { formatPrice } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
@@ -138,9 +138,17 @@ export default async function ProductDetailPage({ params }: Props) {
     alt: getLocalized(m.alt, locale, name),
   }));
 
-  const priceCents =
-    product.type === "SALE" ? product.salePriceCents : product.dailyRateCents;
-  const isRental = product.type !== "SALE";
+  // A /shop page sells the unit, so it shows the PURCHASE price. It showed the
+  // daily rate for every unit that is also rented ("Siren Cove 18 for Sale —
+  // $440/day" for a $5,825 slide), and the Product schema followed it. The
+  // daily rate is only a fallback for a unit with no sale price; the rental
+  // option is linked separately below.
+  const priceCents = product.salePriceCents ?? product.dailyRateCents;
+  const isRental = product.salePriceCents == null;
+  const alsoRents =
+    product.type !== "SALE" && product.dailyRateCents != null
+      ? product.dailyRateCents
+      : null;
 
   const dims =
     (product.dimensions as { size?: string; weight?: string } | null) ?? null;
@@ -225,7 +233,7 @@ export default async function ProductDetailPage({ params }: Props) {
           url: canonical,
           priceCents,
           // Matches the price the page shows ("$X/day" for a rental rate).
-          perDay: product.type !== "SALE",
+          perDay: isRental,
           ratingAvg: product.ratingAvg,
           ratingCount: product.ratingCount,
           sku: product.sku,
@@ -387,14 +395,18 @@ export default async function ProductDetailPage({ params }: Props) {
                       </span>
                     ) : null}
                   </div>
-                  <div className="mt-2.5 flex items-center gap-2.5 text-sm">
-                    <span className="text-muted-foreground/60 tabular-nums line-through decoration-1">
-                      {formatPrice(compareAtCents(priceCents), locale)}
-                    </span>
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-emerald-700 uppercase ring-1 ring-emerald-600/20 ring-inset">
-                      {`Save ${savingsPercent(priceCents)}%`}
-                    </span>
-                  </div>
+                  {alsoRents != null ? (
+                    <p className="text-muted-foreground mt-2.5 text-sm">
+                      Also for rent at{" "}
+                      <Link
+                        href={`/rent/${product.slug}`}
+                        className="text-primary font-semibold hover:underline"
+                      >
+                        {formatPrice(alsoRents, locale)}
+                        {tp("perDay")}
+                      </Link>
+                    </p>
+                  ) : null}
                 </div>
               ) : null}
 

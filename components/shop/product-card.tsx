@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getLocalized } from "@/lib/localized";
-import { formatPrice, compareAtCents } from "@/lib/format";
+import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { MediaImage } from "@/components/ui/media-image";
 import { Stars } from "@/components/ui/stars";
@@ -54,8 +54,8 @@ export async function ProductCard({
 
   const priceCents = isRental ? product.dailyRateCents : product.salePriceCents;
   const price = priceCents != null ? formatPrice(priceCents, locale) : null;
-  const compareAt =
-    priceCents != null ? formatPrice(compareAtCents(priceCents), locale) : null;
+  // No struck-through "was" price: it was the real price +20%, a previous
+  // price that never existed.
 
   return (
     // The whole card lifts on hover; the photo + text link to the detail page,
@@ -117,11 +117,6 @@ export async function ProductCard({
             {isRental ? (
               <span className="text-muted-foreground text-xs font-medium">
                 {t("perDay")}
-              </span>
-            ) : null}
-            {compareAt ? (
-              <span className="text-muted-foreground/55 text-sm tabular-nums line-through decoration-1">
-                {compareAt}
               </span>
             ) : null}
           </div>

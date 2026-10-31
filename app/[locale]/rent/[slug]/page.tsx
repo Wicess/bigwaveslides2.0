@@ -34,7 +34,7 @@ import {
 import { rentalFaqs } from "@/lib/product-faq";
 import { TRANSPORT_CENTS } from "@/lib/pricing";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
-import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
+import { formatPrice } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
@@ -328,17 +328,6 @@ export default async function RentalDetailPage({ params }: Props) {
                       </span>
                       <span className="text-muted-foreground text-sm font-medium">
                         {tp("perDay")}
-                      </span>
-                    </div>
-                    <div className="mt-2.5 flex items-center gap-2.5 text-sm">
-                      <span className="text-muted-foreground/60 tabular-nums line-through decoration-1">
-                        {formatPrice(
-                          compareAtCents(product.dailyRateCents),
-                          locale,
-                        )}
-                      </span>
-                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-emerald-700 uppercase ring-1 ring-emerald-600/20 ring-inset">
-                        {`Save ${savingsPercent(product.dailyRateCents)}%`}
                       </span>
                     </div>
                   </div>

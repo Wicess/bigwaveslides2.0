@@ -35,21 +35,9 @@ export function formatPrice(
   }).format(cents / 100);
 }
 
-/**
- * The struck-through "compare-at" price shown next to the real price — set 20%
- * above it so the actual price reads as a deal. Rounded to a whole dollar for a
- * clean figure. Used on product cards and detail pages (rent + shop).
- */
-export function compareAtCents(priceCents: number): number {
-  return Math.round((priceCents * 1.2) / 100) * 100;
-}
-
-/** Whole-percent discount from the compare-at price down to the real price (~17%). */
-export function savingsPercent(priceCents: number): number {
-  const compare = compareAtCents(priceCents);
-  if (compare <= 0) return 0;
-  return Math.round((1 - priceCents / compare) * 100);
-}
+// compareAtCents / savingsPercent removed 2026-10-31: they invented a "was"
+// price 20% above the real one and a "Save 17%" badge. Show a compare-at
+// price only if it is a real previous price stored on the product.
 
 /** Format a date for display. `_locale` is vestigial — see formatPrice. */
 export function formatDate(
