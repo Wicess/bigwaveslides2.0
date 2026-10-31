@@ -8,9 +8,15 @@
 // primary Vercel domain). If the host redirects (apex⇄www), IndexNow can't
 // verify the key.
 import { routing } from "@/i18n/routing";
+import { canonicalSiteUrl } from "@/lib/site";
 
 const KEY = "a6c8a198654f4812ae52d2692674c8a2";
-const SITE = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
+// Normalised onto the canonical host (lib/site.ts): if the env var holds the
+// apex or the old alias domain, the submitted host would not match the URLs
+// or the host serving the key file, and IndexNow rejects the batch.
+const SITE = process.env.NEXT_PUBLIC_SITE_URL
+  ? canonicalSiteUrl(process.env.NEXT_PUBLIC_SITE_URL)
+  : "";
 
 /**
  * Submit one or more absolute URLs to IndexNow. Fire-and-forget: failures are

@@ -54,30 +54,42 @@ const CONTENT_UPDATED = new Date("2026-08-15T00:00:00Z");
 // When you change what one of these pages SAYS, update its date here.
 const d = (iso: string) => new Date(`${iso}T00:00:00Z`);
 
+/**
+ * 2026-10-31: what crawlers read changed on every template below. All FAQ
+ * answers are now in the server HTML (Radix had unmounted the closed ones);
+ * seeded ratings and the "5,000+ events / 12 years / 4.9★" stats are gone;
+ * "from $X/day" comes from the live catalog; city and state pages link to the
+ * occasion pages and /answers; shop, rent and use-case pages carry new
+ * answer-first Q&As. Pages that only gained JSON-LD (contact, testimonials,
+ * legal, blog) are deliberately NOT bumped.
+ */
+const TEMPLATES_UPDATED = d("2026-10-31");
+const later = (a: Date, b: Date) => (a > b ? a : b);
+
 /** City pages rewritten around NOAA climate data (lib/city-climate.ts). */
-const CITIES_UPDATED = d("2026-09-13");
+const CITIES_UPDATED = later(d("2026-09-13"), TEMPLATES_UPDATED);
 /** ...and the 578 that later gained their real neighbouring towns. */
-const CITY_AREAS_UPDATED = d("2026-09-25");
+const CITY_AREAS_UPDATED = later(d("2026-09-25"), TEMPLATES_UPDATED);
 /** The 17 hand-profiled cities: not rewritten on Sep 13, re-linked on Sep 7. */
-const PROFILED_CITIES_UPDATED = d("2026-09-07");
+const PROFILED_CITIES_UPDATED = later(d("2026-09-07"), TEMPLATES_UPDATED);
 /** State hubs: bounce-house cross-links gated to surviving pages. */
-const STATE_HUBS_UPDATED = d("2026-09-07");
+const STATE_HUBS_UPDATED = later(d("2026-09-07"), TEMPLATES_UPDATED);
 /** Use-case pages: meta fitted to display width. */
-const USE_CASES_UPDATED = d("2026-08-31");
+const USE_CASES_UPDATED = later(d("2026-08-31"), TEMPLATES_UPDATED);
 
 /** Static pages, each from its own last content commit. */
 const STATIC_UPDATED: Record<string, Date> = {
-  "": CONTENT_UPDATED,
-  "/about": d("2026-08-31"),
-  "/services": CONTENT_UPDATED,
+  "": TEMPLATES_UPDATED,
+  "/about": TEMPLATES_UPDATED,
+  "/services": TEMPLATES_UPDATED,
   "/testimonials": d("2026-09-06"),
   "/contact": CONTENT_UPDATED,
-  "/faq": d("2026-09-06"),
-  "/answers": CONTENT_UPDATED,
+  "/faq": TEMPLATES_UPDATED,
+  "/answers": TEMPLATES_UPDATED,
   // Its city grid was cut from 752 links to the 123 with local data. That
   // commit was labelled perf, but it changed what the page lists.
-  "/water-slide-rentals": d("2026-09-06"),
-  "/bounce-house-rentals": d("2026-09-07"),
+  "/water-slide-rentals": TEMPLATES_UPDATED,
+  "/bounce-house-rentals": TEMPLATES_UPDATED,
   "/water-slides-for": USE_CASES_UPDATED,
   "/privacy-policy": d("2026-09-06"),
   "/terms-of-service": d("2026-09-06"),
@@ -156,13 +168,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // those are exact. Static, location and use-case pages have no per-row date
   // and keep CONTENT_UPDATED, which is what that constant is actually for.
   const dated: { path: string; lastModified: Date }[] = [
+    // A product page changes when its row does OR when its template's text
+    // does (2026-10-31: new FAQ answers, stars removed) — whichever is later.
     ...products.map((p) => ({
       path: `/shop/${p.slug}`,
-      lastModified: p.updatedAt,
+      lastModified: later(p.updatedAt, TEMPLATES_UPDATED),
     })),
     ...rentals.map((p) => ({
       path: `/rent/${p.slug}`,
-      lastModified: p.updatedAt,
+      lastModified: later(p.updatedAt, TEMPLATES_UPDATED),
     })),
     ...posts.map((p) => ({
       path: `/blog/${p.slug}`,
@@ -178,8 +192,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       CONTENT_UPDATED,
     );
   const listingDates: Record<string, Date> = {
-    "/shop": newest(products),
-    "/rent": newest(rentals),
+    "/shop": later(newest(products), TEMPLATES_UPDATED),
+    "/rent": later(newest(rentals), TEMPLATES_UPDATED),
     "/blog": newest(posts),
   };
 
