@@ -3,6 +3,8 @@
 // to the programmatic location pages). Each entry renders a unique, non-thin
 // page at /water-slides-for/[slug] with its own copy, benefits, and FAQs.
 
+import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
 export type UseCaseFaq = { q: string; a: string };
 export type UseCaseBenefit = { title: string; body: string };
 
@@ -98,7 +100,7 @@ export const USE_CASES: UseCase[] = [
       },
       {
         q: "Do you set it up at my house?",
-        a: "Yes. Delivery, professional setup, safe anchoring, and pickup are all included. You just point us to the yard.",
+        a: `Yes. Professional setup, safe anchoring and pickup are included, and delivery is one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order. You just point us to the yard.`,
       },
       {
         q: "How far ahead should I book a birthday slide?",
@@ -155,7 +157,7 @@ export const USE_CASES: UseCase[] = [
       },
       {
         q: "What's included in a pool party rental?",
-        a: "Delivery, setup, safe anchoring, sanitizing, and pickup are all included. You'll get a clear, no-surprise quote up front.",
+        a: `Setup, safe anchoring, sanitizing and pickup are included, plus one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order. You'll see the full price before you book.`,
       },
       {
         q: "Who rents water slides for backyard pool parties?",

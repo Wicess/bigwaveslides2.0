@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { TRANSPORT_CENTS, TRANSPORT_TRUST_LABEL } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
 import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
@@ -207,7 +209,7 @@ export default async function CityRentalPage({ params }: Props) {
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
     { icon: Sparkles, label: "Sanitized before delivery" },
-    { icon: Truck, label: "Delivery & setup included" },
+    { icon: Truck, label: TRANSPORT_TRUST_LABEL },
   ];
 
   // Contact comes from Settings → Contact so schema only advertises a phone
@@ -649,7 +651,9 @@ export default async function CityRentalPage({ params }: Props) {
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-white/75">
               Tell us your date and venue in {name} — we'll send a free,
-              no-obligation quote with delivery, setup, and insurance included.
+              no-obligation quote: setup, anchoring and pickup included, plus
+              one flat {formatPrice(TRANSPORT_CENTS)} transportation fee per
+              order.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" variant="gradient">

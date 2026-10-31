@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { formatPrice } from "@/lib/format";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -17,7 +18,7 @@ import { getFactsData } from "@/server/data/catalog-facts";
 import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { rentalCostFaq, summarizeCatalog } from "@/lib/business-facts";
 import { CURATED_POST_SLUGS } from "@/lib/llms-content";
-import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { TRANSPORT_CENTS, TRANSPORT_TRUST_LABEL } from "@/lib/pricing";
 import { buildMetadata } from "@/lib/seo";
 import {
   serviceLd,
@@ -107,7 +108,7 @@ export default async function UseCasePage({ params }: Props) {
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
     { icon: Sparkles, label: "Sanitized before delivery" },
-    { icon: Truck, label: "Delivery & setup included" },
+    { icon: Truck, label: TRANSPORT_TRUST_LABEL },
   ];
 
   return (
@@ -293,7 +294,8 @@ export default async function UseCasePage({ params }: Props) {
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-white/75">
               Tell us your date and venue — we'll send a free, no-obligation
-              quote with delivery, setup, and insurance included.
+              quote: setup, anchoring and pickup included, plus one flat{" "}
+              {formatPrice(TRANSPORT_CENTS)} transportation fee per order.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" variant="gradient">

@@ -6,6 +6,8 @@ import {
   MapPin,
   Waves,
 } from "lucide-react";
+import { TRANSPORT_CENTS, TRANSPORT_TRUST_LABEL } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
 import type { BounceContent } from "@/lib/bounce-houses";
 import { getLocalized } from "@/lib/localized";
 import type { RentalListing } from "@/server/data/rentals";
@@ -27,7 +29,7 @@ import { Reveal } from "@/components/motion/reveal";
 const TRUST = [
   { icon: ShieldCheck, label: "Fully insured" },
   { icon: Sparkles, label: "Sanitized before delivery" },
-  { icon: Truck, label: "Delivery, setup & pickup included" },
+  { icon: Truck, label: TRANSPORT_TRUST_LABEL },
   { icon: Home, label: "Indoor or outdoor" },
 ];
 
@@ -253,7 +255,9 @@ export function BounceLocationPage({
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-white/75">
               Tell us your date and venue — we&apos;ll send a free,
-              no-obligation quote with delivery, setup and insurance included.
+              no-obligation quote: setup, anchoring and pickup included, plus
+              one flat {formatPrice(TRANSPORT_CENTS)} transportation fee per
+              order.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" variant="gradient">

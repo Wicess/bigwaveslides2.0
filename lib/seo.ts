@@ -223,7 +223,7 @@ export function rentProductSeo(name: string, opts?: ProductSeoOpts) {
         115,
         [
           "Fully insured and sanitized before delivery.",
-          "Delivery, setup and pickup are included.",
+          "Setup and pickup included; flat delivery fee.",
         ],
       )
     : `Rent the ${name} ${kind}${opts?.price ? ` from ${opts.price}/day` : ""} — delivered, set up, sanitized and fully insured. Free quote.`;

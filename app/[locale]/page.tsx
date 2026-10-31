@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     path: "/",
     title: "Water Slide Rentals Near You Across the USA",
-    description: `Rent or buy inflatable water slides anywhere in the USA from ${rentFrom}/day — delivery, setup & insurance included. Free quote in minutes; summer books fast.`,
+    description: `Rent or buy inflatable water slides anywhere in the USA from ${rentFrom}/day — setup and pickup included, flat delivery fee. Free quote in minutes.`,
     og: {
       eyebrow: "Nationwide USA",
       subtitle: "Delivered, set up, sanitized & fully insured — free quote",

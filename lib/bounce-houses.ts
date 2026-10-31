@@ -28,6 +28,8 @@
 // no hydration mismatch.
 // -----------------------------------------------------------------------------
 
+import { TRANSPORT_CENTS, TRANSPORT_TRUST_LABEL } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
 import { lowerSeason, type StateProfile } from "@/lib/state-profiles";
 import type { StateLocation } from "@/lib/locations";
 
@@ -110,7 +112,7 @@ const REGION_SEASONAL: Record<StateLocation["region"], (p: string) => string> =
 const CORE_FAQS: readonly ((place: string) => BounceFaq)[] = [
   (place) => ({
     q: `How much does it cost to rent a bounce house in ${place}?`,
-    a: `Bounce house rentals in ${place} start at $165 per day, with most themed castles running about $240–$295 and bounce-and-slide combos about $280–$570. Delivery, professional setup and anchoring, sanitizing and pickup are included in every price. Your exact rate is confirmed in a free quote.`,
+    a: `Bounce house rentals in ${place} start at $165 per day, with most themed castles running about $240–$295 and bounce-and-slide combos about $280–$570. Professional setup and anchoring, sanitizing and pickup are included in every price, plus one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order. Your exact rate is confirmed in a free quote.`,
   }),
   (place) => ({
     q: `Can a bounce house be set up indoors in ${place}?`,
@@ -230,6 +232,6 @@ export function bounceKeywords(place: string, abbr?: string): string[] {
 export const BOUNCE_TRUST = [
   "Fully insured",
   "Sanitized before delivery",
-  "Delivery, setup & pickup included",
+  TRANSPORT_TRUST_LABEL,
   "Indoor or outdoor",
 ] as const;

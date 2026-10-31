@@ -51,7 +51,6 @@ export const FACTS = {
       left out of the machine-readable files on purpose: nothing on file
       (policy, carrier, limits) lets a reader verify the claim. */
   included: [
-    "delivery",
     "professional setup with anchoring",
     "a commercial blower",
     "sanitizing before delivery",
@@ -191,6 +190,6 @@ export function rentalCostFaq(
     : "";
   return {
     q: `How much does it cost to rent a water slide for a ${phrase}?`,
-    a: `${FACTS.name} rents ${s.rentable} units at ${rangeText(s.daily)} per day: ${parts.join(", ")}. Delivery, setup with anchoring, sanitizing and pickup are included.${fee}`,
+    a: `${FACTS.name} rents ${s.rentable} units at ${rangeText(s.daily)} per day: ${parts.join(", ")}. Setup with anchoring, sanitizing and pickup are included.${fee}`,
   };
 }

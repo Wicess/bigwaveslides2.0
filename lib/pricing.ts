@@ -21,3 +21,11 @@ export const BALANCE_DUE_HOURS = 48;
  * rents at.
  */
 export const RENTAL_FROM_CENTS = 15500;
+
+/**
+ * Short trust-row label. Replaces "Delivery & setup included", which
+ * contradicted the flat transportation line the checkout adds. Setup,
+ * anchoring and pickup are included per the rental terms; delivery is the
+ * flat fee.
+ */
+export const TRANSPORT_TRUST_LABEL = `Setup & pickup included · flat $${TRANSPORT_CENTS / 100} delivery`;

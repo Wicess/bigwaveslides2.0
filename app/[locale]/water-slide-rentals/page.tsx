@@ -7,7 +7,7 @@ import { routing } from "@/i18n/routing";
 import { US_STATES, getAllCities, getFeaturedCities } from "@/lib/locations";
 import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import { formatPrice } from "@/lib/format";
-import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { TRANSPORT_CENTS, TRANSPORT_TRUST_LABEL } from "@/lib/pricing";
 import { getLandingRentals } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -59,7 +59,7 @@ const hubFaqs = (rentFrom: string, cityCount: number) => [
   },
   {
     q: "Is delivery and setup included?",
-    a: "Yes. Our team delivers, sets up, anchors, and safety-checks your slide, then returns to pack it all up. You just enjoy the day.",
+    a: `Setup is. Our team sets up, anchors and safety-checks your slide, then returns to pack it all up and collect it. Getting it to you is one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order — not per item or per mile.`,
   },
   {
     q: "How far in advance should I book a water slide rental?",
@@ -78,7 +78,7 @@ const hubFaqs = (rentFrom: string, cityCount: number) => [
 const TRUST = [
   { icon: ShieldCheck, label: "Fully insured" },
   { icon: Sparkles, label: "Sanitized before every delivery" },
-  { icon: Truck, label: "Delivery, setup & pickup included" },
+  { icon: Truck, label: TRANSPORT_TRUST_LABEL },
 ];
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

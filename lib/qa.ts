@@ -41,7 +41,7 @@ export function qaCategories(f: QAFacts = DEFAULT_FACTS): QACategory[] {
         },
         {
           q: "What is included in the water slide rental price?",
-          a: "Every Splash Republic rental includes delivery, professional setup and anchoring, sanitizing before drop-off, insurance, and end-of-event pickup. You only provide the space, a water hookup, and power. There is nothing to haul, install, or clean up yourself.",
+          a: `Every Splash Republic rental includes professional setup and anchoring, sanitizing before drop-off, insurance and end-of-event pickup; delivery is one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order. You only provide the space, a water hookup, and power. There is nothing to haul, install, or clean up yourself.`,
         },
         {
           q: "How much are delivery fees for a water slide rental?",

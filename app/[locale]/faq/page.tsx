@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -83,9 +85,7 @@ export default async function FaqPage({ params }: Props) {
               Ready to book your water slide?
             </h2>
             <p className="text-muted-foreground mx-auto mt-2 max-w-lg">
-              {
-                "Check your date free — delivery, setup & pickup always included."
-              }
+              {`Check your date free — setup & pickup included, one flat ${formatPrice(TRANSPORT_CENTS)} delivery fee.`}
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" variant="gradient">

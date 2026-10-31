@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { TRANSPORT_CENTS, TRANSPORT_TRUST_LABEL } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -82,7 +84,7 @@ export default async function BounceHubPage({ params }: Props) {
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
     { icon: Sparkles, label: "Sanitized before delivery" },
-    { icon: Truck, label: "Delivery, setup & pickup included" },
+    { icon: Truck, label: TRANSPORT_TRUST_LABEL },
     { icon: Home, label: "Indoor or outdoor" },
   ];
 
@@ -138,9 +140,10 @@ export default async function BounceHubPage({ params }: Props) {
                   circus, farm, candy, royal — run about $240–$295, and
                   bounce-and-slide combo units, which add a slide and often a
                   basketball hoop to the same footprint, run about $280–$570.
-                  Every price includes delivery, professional setup and
-                  anchoring, sanitizing before drop-off, full insurance and
-                  pickup. Nothing is added at the door.
+                  Every price includes professional setup and anchoring,
+                  sanitizing before drop-off and pickup; the only addition is
+                  one flat {formatPrice(TRANSPORT_CENTS)} transportation fee per
+                  order.
                 </p>
               </Reveal>
               <Reveal className="mt-4" delay={0.05}>
