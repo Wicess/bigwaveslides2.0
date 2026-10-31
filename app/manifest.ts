@@ -19,7 +19,7 @@ export default function manifest(): MetadataRoute.Manifest {
     display_override: ["standalone", "minimal-ui"],
     background_color: "#0a1a2f",
     // Installed app: the status bar in the brand blue, as in the browser.
-    theme_color: "#0099ff",
+    theme_color: "#003366",
     orientation: "portrait",
     // Lets an installed instance be detected from the browser tab via
     // navigator.getInstalledRelatedApps(), so we can hide the install button
