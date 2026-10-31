@@ -840,7 +840,7 @@ export const USE_CASES: UseCase[] = [
     heroDescription:
       "Inflatables for employee appreciation days and company family events — invoiced to the business, insured for your venue, and staffed around a workday schedule.",
     intro:
-      "A company family day has a guest list that runs from toddlers to grandparents, a venue that usually belongs to someone else, and a finance process that needs an invoice rather than a card. Splash Republic handles all three. We supply a mix that gives the under-tens somewhere to burn an afternoon and gives the older kids something worth queueing for, we deal directly with venue and facilities teams on insurance and access, and we invoice the business on standard terms with no online payment at any stage.",
+      "A company family day has a guest list that runs from toddlers to grandparents, a venue that usually belongs to someone else, and a finance process that needs an invoice rather than a card. Splash Republic handles all three. We supply a mix that gives the under-tens somewhere to burn an afternoon and gives the older kids something worth queueing for, we deal directly with venue and facilities teams on insurance and access, and we invoice the business on standard terms.",
     keywords: [
       "corporate family day rentals",
       "employee appreciation event rentals",

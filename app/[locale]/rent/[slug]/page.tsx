@@ -32,6 +32,8 @@ import {
   heightFromDimensions,
 } from "@/lib/seo";
 import { rentalFaqs } from "@/lib/product-faq";
+import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { getSettings, type SiteSettings } from "@/server/data/settings";
 import { formatPrice, compareAtCents, savingsPercent } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeader } from "@/components/ui/section";
@@ -183,7 +185,13 @@ export default async function RentalDetailPage({ params }: Props) {
     { icon: Truck, label: t("trustDelivery") },
   ];
 
+  // Cached (1h): only to know whether the flat transportation line is on.
+  const settings = await getSettings().catch((): SiteSettings => ({}));
   const faqs = rentalFaqs({
+    transport:
+      settings.fees?.transportEnabled !== false
+        ? formatPrice(TRANSPORT_CENTS, locale)
+        : undefined,
     name,
     price:
       product.dailyRateCents != null
@@ -202,6 +210,8 @@ export default async function RentalDetailPage({ params }: Props) {
           image: gallery[0]?.url,
           url: absoluteUrl(locale, `/rent/${product.slug}`),
           priceCents: product.dailyRateCents,
+          // Matches the price the page shows ("$X/day" for a rental rate).
+          perDay: true,
           ratingAvg: product.ratingAvg,
           ratingCount: product.ratingCount,
           sku: product.sku,
@@ -296,13 +306,17 @@ export default async function RentalDetailPage({ params }: Props) {
                   </span>
                 </h1>
 
-                <div className="mt-3 flex items-center gap-2">
-                  <Stars rating={product.ratingAvg} />
-                  <span className="text-muted-foreground text-sm">
-                    {product.ratingAvg.toFixed(1)} · {product.ratingCount}{" "}
-                    {tp("reviews")}
-                  </span>
-                </div>
+                {/* Only with approved reviews behind it — "0.0 · 0 reviews" is not a
+                    rating, and a seeded one would be a fabricated trust signal. */}
+                {product.ratingCount > 0 ? (
+                  <div className="mt-3 flex items-center gap-2">
+                    <Stars rating={product.ratingAvg} />
+                    <span className="text-muted-foreground text-sm">
+                      {product.ratingAvg.toFixed(1)} · {product.ratingCount}{" "}
+                      {tp("reviews")}
+                    </span>
+                  </div>
+                ) : null}
 
                 <p className="text-muted-foreground mt-4">{shortDescription}</p>
 

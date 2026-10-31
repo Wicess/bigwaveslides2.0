@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
+import { formatPrice } from "@/lib/format";
+import {
+  DEPOSIT_RATE,
+  REFUND_NOTICE_DAYS,
+  TRANSPORT_CENTS,
+} from "@/lib/pricing";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -64,8 +71,9 @@ function stateDescription(
   name: string,
   season: string,
   cities: readonly string[],
+  rentFrom: string,
 ): string {
-  const head = `Water slide rentals across ${name} from $155/day. Season runs ${season}`;
+  const head = `Water slide rentals across ${name} from ${rentFrom}/day. Season runs ${season}`;
   const withCities = `${head} — delivered, set up and insured in ${cities.slice(0, 2).join(" and ")}.`;
   return withCities.length <= 158
     ? withCities
@@ -73,6 +81,7 @@ function stateDescription(
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale, state } = await params;
   const loc = getStateBySlug(state);
   if (!loc) return {};
@@ -87,13 +96,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // with the name and a city list swapped, which is what Bing §13 flags as a
     // duplicate-description problem.
     description: metaProfile
-      ? stateDescription(loc.name, lowerSeason(metaProfile.season), loc.cities)
-      : `Water slide & bounce house rentals across ${loc.name} from $155/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,
+      ? stateDescription(
+          loc.name,
+          lowerSeason(metaProfile.season),
+          loc.cities,
+          rentFrom,
+        )
+      : `Water slide & bounce house rentals across ${loc.name} from ${rentFrom}/day — delivered, set up & insured in ${cities3} and statewide. Free quote.`,
     og: {
       eyebrow: loc.name,
       subtitle: "Delivered, set up & fully insured statewide",
       badge: "Free quote",
-      price: "From $155/day",
+      price: `From ${rentFrom}/day`,
     },
     keywords: [
       `water slide rentals ${loc.name}`,
@@ -114,9 +128,10 @@ export default async function StateRentalPage({ params }: Props) {
   const loc = getStateBySlug(state);
   if (!loc) notFound();
 
-  const [items, allGuides] = await Promise.all([
+  const [items, allGuides, headline] = await Promise.all([
     getLandingRentals(),
     getGuideLinksOnce(),
+    getCatalogHeadline(),
   ]);
 
   const cityList = loc.cities.join(", ");
@@ -150,7 +165,15 @@ export default async function StateRentalPage({ params }: Props) {
 
   // Rotating blog guides — different per state — so this hub links into the
   // blog and spreads ranking equity across the whole site.
-  const guides = pickN(allGuides, seed, 4);
+  // Three guides plus the /answers hub (cost, setup, safety, booking) — the
+  // page AI assistants cite most, which no location page linked to.
+  const guides = [
+    ...pickN(allGuides, seed, 3).map((g) => ({
+      href: `/blog/${g.slug}`,
+      title: getLocalized(g.title, locale),
+    })),
+    { href: "/answers", title: "Water slide rental questions, answered" },
+  ];
 
   const faqs = [
     ...(profile
@@ -179,7 +202,10 @@ export default async function StateRentalPage({ params }: Props) {
     },
     {
       q: `How much does a water slide rental cost in ${loc.name}?`,
-      a: `Daily rates run $155 to $570 depending on the unit, plus a flat $30 delivery fee per order — not per mile. A mid-range tall slide is $330 for the day, so $360 delivered, set up, anchored and collected. A refundable deposit is quoted separately.`,
+      // Range from the live catalog; fee and deposit from the constants the
+      // checkout and the rental terms use (this said "a refundable deposit is
+      // quoted separately", which the terms contradict).
+      a: `Daily rates run ${headline.rentTo ? `${headline.rentFrom} to ${headline.rentTo}` : `from ${headline.rentFrom}`} depending on the unit, plus a flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order — not per mile. ${Math.round(DEPOSIT_RATE * 100)}% of the total acts as a refundable deposit, refunded in full when you cancel at least ${REFUND_NOTICE_DAYS} days before the event.`,
     },
   ];
 
@@ -448,12 +474,12 @@ export default async function StateRentalPage({ params }: Props) {
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {guides.map((g) => (
                 <Link
-                  key={g.slug}
-                  href={`/blog/${g.slug}`}
+                  key={g.href}
+                  href={g.href}
                   className="border-border hover:border-primary group flex items-start justify-between gap-3 rounded-2xl border p-5 transition-colors"
                 >
                   <span className="text-sm leading-snug font-semibold">
-                    {getLocalized(g.title, locale)}
+                    {g.title}
                   </span>
                   <MapPin className="text-primary/70 size-4 shrink-0" />
                 </Link>

@@ -154,17 +154,17 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Possédez des toboggans de qualité commerciale conçus pour des années d'été.",
         ),
         body: l(
-          "Use a slide often? Buying can be the smarter call. We sell commercial-grade inflatable water slides and combos — the same durable, certified units we trust in our own rental fleet — to HOAs, camps, schools, churches, and operators.\n\nTell us how you'll use it and we'll recommend the right model, then handle ordering, delivery, and first-time setup so you start on solid footing.",
-          "Vous utilisez un toboggan souvent ? L'achat peut être plus judicieux. Nous vendons des toboggans et combos gonflables de qualité commerciale — les mêmes unités durables et certifiées que celles de notre flotte de location — aux associations, camps, écoles, églises et exploitants.\n\nDites-nous comment vous l'utiliserez et nous recommanderons le bon modèle, puis nous gérons la commande, la livraison et la première installation pour bien démarrer.",
+          "Use a slide often? Buying can be the smarter call. We sell commercial-grade inflatable water slides and combos — the same durable units we rent from our own fleet — to HOAs, camps, schools, churches, and operators.\n\nTell us how you'll use it and we'll recommend the right model, then handle ordering, delivery, and first-time setup so you start on solid footing.",
+          "Vous utilisez un toboggan souvent ? L'achat peut être plus judicieux. Nous vendons des toboggans et combos gonflables de qualité commerciale — les mêmes unités durables que celles de notre flotte de location — aux associations, camps, écoles, églises et exploitants.\n\nDites-nous comment vous l'utiliserez et nous recommanderons le bon modèle, puis nous gérons la commande, la livraison et la première installation pour bien démarrer.",
         ),
         highlights: [
-          l(
-            "Commercial-grade, certified units",
-            "Unités certifiées de qualité commerciale",
-          ),
+          l("Commercial-grade units", "Unités de qualité commerciale"),
           l("Guidance on the right model", "Conseils sur le bon modèle"),
           l("Delivery & first setup", "Livraison et première installation"),
-          l("Warranty-backed", "Garantie incluse"),
+          l(
+            "Any manufacturer's warranty passes to you",
+            "Toute garantie du fabricant vous est transmise",
+          ),
         ],
         cta: {
           kind: "shop",
@@ -185,8 +185,8 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "D'une pièce maîtresse de jardin à des attractions de parc aquatique à grande échelle — nous concevons et construisons.",
         ),
         body: l(
-          "Beyond rentals, Splash Republic takes on contract builds: custom water slides and permanent aquatic attractions for resorts, campgrounds, municipalities, hotels, and large private estates. If you can picture it, our team can engineer it.\n\nWe manage the whole project — concept and design, engineering, manufacturing, permitting, installation, and commissioning — and stand behind it with ongoing maintenance. Every build is engineered to code and safety-certified.",
-          "Au-delà de la location, Splash Republic réalise des projets sous contrat : toboggans sur mesure et attractions aquatiques permanentes pour complexes, campings, municipalités, hôtels et grandes propriétés privées. Si vous pouvez l'imaginer, notre équipe peut le concevoir.\n\nNous gérons tout le projet — concept et design, ingénierie, fabrication, permis, installation et mise en service — et l'appuyons d'un entretien continu. Chaque réalisation est conçue selon les normes et certifiée sécuritaire.",
+          "Beyond rentals, Splash Republic takes on contract builds: custom water slides and permanent aquatic attractions for resorts, campgrounds, municipalities, hotels, and large private estates. If you can picture it, our team can engineer it.\n\nWe manage the whole project — concept and design, engineering, manufacturing, permitting, installation, and commissioning — and stand behind it with ongoing maintenance.",
+          "Au-delà de la location, Splash Republic réalise des projets sous contrat : toboggans sur mesure et attractions aquatiques permanentes pour complexes, campings, municipalités, hôtels et grandes propriétés privées. Si vous pouvez l'imaginer, notre équipe peut le concevoir.\n\nNous gérons tout le projet — concept et design, ingénierie, fabrication, permis, installation et mise en service — et l'appuyons d'un entretien continu.",
         ),
         highlights: [
           l("Concept, design & engineering", "Concept, design et ingénierie"),

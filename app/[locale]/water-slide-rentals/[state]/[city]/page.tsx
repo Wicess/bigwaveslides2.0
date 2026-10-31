@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -56,16 +57,18 @@ type Props = {
   params: Promise<{ locale: string; state: string; city: string }>;
 };
 
-// Occasions woven into the copy + keywords (event-based long-tail).
-const OCCASIONS = [
-  "backyard parties",
-  "birthday parties",
-  "church events",
-  "school events",
-  "corporate events",
-  "community events",
-  "family reunions",
-  "summer camps",
+// Occasions woven into the copy + keywords (event-based long-tail). Those
+// with a /water-slides-for page link to it, so the ranking city pages pass
+// equity to the occasion pages, which had almost no inbound links.
+const OCCASIONS: { label: string; slug?: string }[] = [
+  { label: "backyard parties" },
+  { label: "birthday parties", slug: "birthday-parties" },
+  { label: "church events", slug: "church-events" },
+  { label: "school events", slug: "school-events" },
+  { label: "corporate events", slug: "corporate-events" },
+  { label: "community events", slug: "hoa-neighborhood-events" },
+  { label: "family reunions" },
+  { label: "summer camps", slug: "summer-camps-daycares" },
 ];
 
 export function generateStaticParams() {
@@ -73,6 +76,7 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale, state, city } = await params;
   const loc = getCity(state, city);
   if (!loc) return {};
@@ -87,18 +91,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: `/water-slide-rentals/${st.slug}/${loc.slug}`,
     // Kept inside Google's ~60-character render width so the city — the whole
     // reason this page exists — never gets truncated away. The old title ran to
-    // 83 characters, which meant "…from $155/Day — Delivered & Insured" was cut
+    // 83 characters, which meant `…from $155/Day — Delivered & Insured` was cut
     // and Google was free to rewrite the title with its own guess.
     // Plain words: the phrase someone actually types. The price used to hang
-    // off an em dash here ("— From $155/Day"); it now lives in the description,
+    // off an em dash here (`— From $155/Day`); it now lives in the description,
     // where it reads as a sentence rather than a fragment of punctuation.
     title: `Water Slide Rentals in ${name}, ${st.abbr}`,
-    description: `Water slide & bounce house rentals in ${name}, ${st.abbr} from $155/day — delivered, set up, sanitized & insured. Free quote in minutes.`,
+    description: `Water slide & bounce house rentals in ${name}, ${st.abbr} from ${rentFrom}/day — delivered, set up, sanitized & insured. Free quote in minutes.`,
     og: {
       eyebrow: `${name}, ${st.abbr}`,
       subtitle: "Delivered, set up, sanitized & fully insured",
       badge: "Free quote",
-      price: "From $155/day",
+      price: `From ${rentFrom}/day`,
     },
     keywords: [
       `water slide rentals in ${name} ${st.abbr}`,
@@ -190,7 +194,15 @@ export default async function CityRentalPage({ params }: Props) {
 
   // A rotating handful of blog guides — different per city — so this ranking
   // location page passes equity across the whole blog (and back to itself).
-  const guides = pickN(allGuides, seed, 4);
+  // Three guides plus the /answers hub (cost, setup, safety, booking) — the
+  // page AI assistants cite most, which no location page linked to.
+  const guides = [
+    ...pickN(allGuides, seed, 3).map((g) => ({
+      href: `/blog/${g.slug}`,
+      title: getLocalized(g.title, locale),
+    })),
+    { href: "/answers", title: "Water slide rental questions, answered" },
+  ];
 
   const trust = [
     { icon: ShieldCheck, label: "Fully insured" },
@@ -493,15 +505,29 @@ export default async function CityRentalPage({ params }: Props) {
                   Water slides in {name} for every occasion
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {OCCASIONS.map((o) => (
-                    <span
-                      key={o}
-                      className="border-border bg-background inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm capitalize"
-                    >
-                      <PartyPopper className="text-primary size-3.5" />
-                      {o}
-                    </span>
-                  ))}
+                  {OCCASIONS.map((o) => {
+                    const cls =
+                      "border-border bg-background inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm capitalize";
+                    const inner = (
+                      <>
+                        <PartyPopper className="text-primary size-3.5" />
+                        {o.label}
+                      </>
+                    );
+                    return o.slug ? (
+                      <Link
+                        key={o.label}
+                        href={`/water-slides-for/${o.slug}`}
+                        className={`${cls} hover:border-primary hover:text-primary transition-colors`}
+                      >
+                        {inner}
+                      </Link>
+                    ) : (
+                      <span key={o.label} className={cls}>
+                        {inner}
+                      </span>
+                    );
+                  })}
                 </div>
               </Reveal>
             </div>
@@ -596,12 +622,12 @@ export default async function CityRentalPage({ params }: Props) {
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {guides.map((g) => (
                 <Link
-                  key={g.slug}
-                  href={`/blog/${g.slug}`}
+                  key={g.href}
+                  href={g.href}
                   className="border-border hover:border-primary group flex items-start justify-between gap-3 rounded-2xl border p-5 transition-colors"
                 >
                   <span className="text-sm leading-snug font-semibold">
-                    {getLocalized(g.title, locale)}
+                    {g.title}
                   </span>
                   <PartyPopper className="text-primary/70 size-4 shrink-0" />
                 </Link>

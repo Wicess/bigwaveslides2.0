@@ -19,20 +19,22 @@ type Opts = {
   kind?: string;
 };
 
-/** Booking-intent FAQs for a rental product page. */
-export function rentalFaqs(opts: Opts): ProductFaq[] {
+/** Booking-intent FAQs for a rental product page. `transport` is the
+    formatted flat fee when the checkout charges it — these answers said
+    "delivery included" beside a checkout that adds that line. */
+export function rentalFaqs(opts: Opts & { transport?: string }): ProductFaq[] {
   const { name, price, dims, age } = opts;
   const faqs: ProductFaq[] = [];
 
   faqs.push({
     q: `Do you deliver and set up the ${name}?`,
-    a: `Yes — we deliver, professionally set up, anchor and pick up the ${name} for you. Delivery, setup and pickup are all included, so all you do is enjoy the day.`,
+    a: `Yes — we deliver, professionally set up, anchor and pick up the ${name} for you.${opts.transport ? ` The only added charge is one flat ${opts.transport} transportation fee per order.` : " Delivery, setup and pickup are all included."} All you do is enjoy the day.`,
   });
 
   if (price) {
     faqs.push({
       q: `How much does it cost to rent the ${name}?`,
-      a: `The ${name} rents from ${price} per day with delivery, setup and insurance included. Request a free, no-obligation quote for your date and venue.`,
+      a: `The ${name} rents for ${price} per day, with setup, anchoring, sanitizing and pickup included${opts.transport ? ` and one flat ${opts.transport} transportation fee per order` : ""}. Check your date and book it online; the team confirms before any payment.`,
     });
   }
 

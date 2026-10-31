@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { RENTAL_FROM_CENTS } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
 
 export const runtime = "edge";
 
@@ -33,7 +35,11 @@ export function GET(request: Request) {
     clamp(searchParams.get("subtitle"), 120) ||
     "Delivered, set up, sanitized & fully insured";
   const badge = clamp(searchParams.get("badge"), 24);
-  const price = clamp(searchParams.get("price"), 28) || "From $155/day";
+  // Pages pass their live floor as ?price=; this fallback is the commented
+  // constant in lib/pricing.ts (edge runtime — no DB here).
+  const price =
+    clamp(searchParams.get("price"), 28) ||
+    `From ${formatPrice(RENTAL_FROM_CENTS)}/day`;
 
   // Long headlines need a smaller size or they overflow the card.
   const titleSize = title.length > 78 ? 54 : title.length > 48 ? 64 : 76;

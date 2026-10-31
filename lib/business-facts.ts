@@ -47,13 +47,14 @@ export const FACTS = {
   balanceDueHours: BALANCE_DUE_HOURS,
   subscriberDiscountRate: LOYALTY_SUBSCRIBE_RATE,
   methodDiscountRates: METHOD_DISCOUNT_RATES,
-  /** Rental terms, "What's included" (lib/legal-terms.ts). */
+  /** Rental terms, "What's included" (lib/legal-terms.ts). Insurance is
+      left out of the machine-readable files on purpose: nothing on file
+      (policy, carrier, limits) lets a reader verify the claim. */
   included: [
     "delivery",
     "professional setup with anchoring",
     "a commercial blower",
     "sanitizing before delivery",
-    "insurance",
     "pickup",
   ],
   /** Rental terms: one rental day is one complete 24-hour period. */

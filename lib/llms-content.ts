@@ -153,7 +153,7 @@ export function buildLlmsTxt(i: FactsInput): string {
   }
   L.push(
     `**Who rents and installs water slides for schools, churches and HOAs?**`,
-    `${FACTS.name} delivers, sets up, anchors and collects its inflatables at schools, churches, HOAs, camps and corporate venues anywhere in ${FACTS.serviceArea}, and provides a certificate of insurance when a venue requires one.`,
+    `${FACTS.name} delivers, sets up, anchors and collects its inflatables at schools, churches, HOAs, camps and corporate venues anywhere in ${FACTS.serviceArea}.`,
     "",
     "**How does booking and payment work?**",
     paymentLines(i).join(" "),

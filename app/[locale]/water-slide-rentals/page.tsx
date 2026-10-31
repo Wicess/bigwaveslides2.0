@@ -4,7 +4,10 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Truck, Sparkles, MapPin } from "lucide-react";
 import { routing } from "@/i18n/routing";
-import { US_STATES, getFeaturedCities } from "@/lib/locations";
+import { US_STATES, getAllCities, getFeaturedCities } from "@/lib/locations";
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
+import { formatPrice } from "@/lib/format";
+import { TRANSPORT_CENTS } from "@/lib/pricing";
 import { getLandingRentals } from "@/server/data/rentals";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -41,14 +44,18 @@ const REGIONS = ["Northeast", "Midwest", "South", "West"] as const;
 
 // High-intent "near me" / rental questions — answered concisely so they can be
 // lifted straight into Google's FAQ rich results and AI answer engines.
-const FAQS = [
+// Numbers are live: the price floor from the catalog, the city count from
+// lib/locations.ts and the fee from lib/pricing.ts. (This used to say "50+
+// major metros", "a licensed operator" and "always included, no hidden fees"
+// beside a checkout that adds a $30 transportation line — none provable.)
+const hubFaqs = (rentFrom: string, cityCount: number) => [
   {
     q: "Do you rent water slides near me?",
-    a: "Very likely — Splash Republic delivers to 50+ major U.S. metros and serves all 50 states. Pick your city below (or search your date on the rent page) to see local availability, delivery details, and pricing.",
+    a: `Very likely — Splash Republic serves all 50 states and has a local page for ${cityCount} U.S. cities. Pick your city below (or search your date on the rent page) to see local availability, delivery details, and pricing.`,
   },
   {
     q: "How much does it cost to rent a water slide?",
-    a: "Rentals start at $155/day. The exact price depends on the slide and your dates — delivery, professional setup, anchoring, sanitizing, and pickup are always included, with no hidden fees.",
+    a: `Rentals start at ${rentFrom}/day. The exact price depends on the slide and your dates — delivery, professional setup, anchoring, sanitizing and pickup are included, and the only added charge is a flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order.`,
   },
   {
     q: "Is delivery and setup included?",
@@ -60,13 +67,13 @@ const FAQS = [
   },
   {
     q: "Are your water slides insured and sanitized?",
-    a: "Every unit is fully insured and thoroughly sanitized before each delivery. We're a licensed, insured operator — safety and cleanliness come first.",
+    a: "Every unit is insured and thoroughly sanitized before each delivery, and we can provide a certificate of insurance when your venue asks for one.",
   },
   {
     q: "What do I need for setup at my location?",
     a: "A flat, clear grass or turf area sized for the slide, a standard grounded outlet within about 50 ft (we can bring a generator), a garden-hose connection for water slides, and an adult present at delivery for the safety walkthrough.",
   },
-] as const;
+];
 
 const TRUST = [
   { icon: ShieldCheck, label: "Fully insured" },
@@ -75,6 +82,7 @@ const TRUST = [
 ];
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale } = await params;
   return buildMetadata({
     locale,
@@ -84,10 +92,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       eyebrow: "All 50 states",
       subtitle: "Find your city, check your date, book in minutes",
       badge: "Nationwide",
-      price: "From $155/day",
+      price: `From ${rentFrom}/day`,
     },
-    description:
-      "Water slide & bounce house rentals from $155/day in all 50 states — delivered, set up, sanitized & insured. Find your city and check your date free.",
+    description: `Water slide & bounce house rentals from ${rentFrom}/day in all 50 states — delivered, set up, sanitized & insured. Find your city and check your date free.`,
     keywords: [
       "water slide rentals",
       "water slide rental near me",
@@ -104,7 +111,11 @@ export default async function LocationsHubPage({ params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
-  const items = await getLandingRentals();
+  const [items, { rentFrom }] = await Promise.all([
+    getLandingRentals(),
+    getCatalogHeadline(),
+  ]);
+  const FAQS = hubFaqs(rentFrom, getAllCities().length);
   const canonical = absoluteUrl(locale, "/water-slide-rentals");
   // Featured, not every city — see getFeaturedCities(). Every city stays
   // reachable through its state hub below.
@@ -125,7 +136,7 @@ export default async function LocationsHubPage({ params }: Props) {
       <PhotoHero
         image={HERO}
         title="Water Slide Rentals Near You, Delivered"
-        description="Premium, fully-insured inflatable water slides from $155/day — find your city, check your date free, and we deliver, set up, and pick up. Nationwide."
+        description={`Premium, fully-insured inflatable water slides from ${rentFrom}/day — find your city, check your date free, and we deliver, set up, and pick up. Nationwide.`}
       />
 
       <Section spacing="compact" className="pt-10">
@@ -133,10 +144,9 @@ export default async function LocationsHubPage({ params }: Props) {
           <Reveal className="max-w-3xl">
             <p className="text-muted-foreground text-lg leading-relaxed">
               Looking for a water slide rental near you? Splash Republic
-              delivers to 50+ major metros and every U.S. state —
-              commercial-grade slides, delivered, set up, sanitized, and fully
-              insured. Pick your city below or check your date to book in under
-              a minute.
+              delivers to every U.S. state — commercial-grade slides, delivered,
+              set up, sanitized, and fully insured. Pick your city below or
+              check your date to book in under a minute.
             </p>
             {/* Trust row */}
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">

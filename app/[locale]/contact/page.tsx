@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, breadcrumbLd } from "@/lib/structured-data";
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -10,6 +13,7 @@ import { ContactExperience } from "@/components/contact/contact-experience";
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale } = await params;
   return buildMetadata({
     locale,
@@ -21,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       eyebrow: "Free quote",
       subtitle: "Tell us your date, city and event — we reply within hours",
       badge: "No obligation",
-      price: "From $155/day",
+      price: `From ${rentFrom}/day`,
     },
     keywords: [
       "water slide rental quote",
@@ -46,6 +50,12 @@ export default async function ContactPage({ params }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          { name: "Contact", url: absoluteUrl(locale, "/contact") },
+        ])}
+      />
       <ContactExperience
         info={{
           email: contact.email,

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -17,7 +18,11 @@ const RENT_HERO_IMAGE =
 import { Pagination } from "@/components/shop/pagination";
 import { Reveal } from "@/components/motion/reveal";
 import { buildMetadata } from "@/lib/seo";
-import { rentalItemListLd } from "@/lib/structured-data";
+import {
+  rentalItemListLd,
+  absoluteUrl,
+  breadcrumbLd,
+} from "@/lib/structured-data";
 import { JsonLd } from "@/components/seo/json-ld";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -27,18 +32,18 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale } = await params;
   return buildMetadata({
     locale,
     path: "/rent",
     title: "Water Slide Rentals Delivered and Insured",
-    description:
-      "Rent inflatable water slides & bounce houses near you from $155/day — delivered, set up & fully insured for birthdays, pools, schools & churches.",
+    description: `Rent inflatable water slides & bounce houses near you from ${rentFrom}/day — delivered, set up & fully insured for birthdays, pools, schools & churches.`,
     og: {
       eyebrow: "Rent",
       subtitle: "Water slides, bounce houses & combos — delivered and insured",
       badge: "Free quote",
-      price: "From $155/day",
+      price: `From ${rentFrom}/day`,
     },
     keywords: [
       "water slide rentals",
@@ -75,6 +80,12 @@ export default async function RentPage({ params, searchParams }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          { name: "Rent a Water Slide", url: absoluteUrl(locale, "/rent") },
+        ])}
+      />
       {listing.items.length > 0 ? (
         <JsonLd data={rentalItemListLd(locale, listing.items)} />
       ) : null}
