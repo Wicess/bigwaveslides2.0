@@ -147,7 +147,9 @@ export const viewport: Viewport = {
   // Edge-to-edge: let the app paint under the status bar / notch on mobile so
   // it feels like a native app. Safe-area insets keep content clear of it.
   viewportFit: "cover",
-  themeColor: "#ffffff",
+  // The brand blue (--color-primary), so the phone's status bar (clock, battery,
+  // signal) and the browser chrome take the site's colour instead of white.
+  themeColor: "#0099ff",
   width: "device-width",
   initialScale: 1,
 };
