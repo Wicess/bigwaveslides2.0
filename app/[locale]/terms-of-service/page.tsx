@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, breadcrumbLd } from "@/lib/structured-data";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -35,6 +37,15 @@ export default async function TermsPage({ params }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          {
+            name: "Terms of Service",
+            url: absoluteUrl(locale, "/terms-of-service"),
+          },
+        ])}
+      />
       <PhotoHero
         image={TERMS_HERO}
         title={data.title}

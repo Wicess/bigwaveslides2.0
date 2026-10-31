@@ -224,6 +224,8 @@ export default async function ProductDetailPage({ params }: Props) {
           image: gallery[0]?.url,
           url: canonical,
           priceCents,
+          // Matches the price the page shows ("$X/day" for a rental rate).
+          perDay: product.type !== "SALE",
           ratingAvg: product.ratingAvg,
           ratingCount: product.ratingCount,
           sku: product.sku,
@@ -357,13 +359,17 @@ export default async function ProductDetailPage({ params }: Props) {
                 </span>
               </h1>
 
-              <div className="mt-3 flex items-center gap-2">
-                <Stars rating={product.ratingAvg} />
-                <span className="text-muted-foreground text-sm">
-                  {product.ratingAvg.toFixed(1)} · {product.ratingCount}{" "}
-                  {tp("reviews")}
-                </span>
-              </div>
+              {/* Only with approved reviews behind it — "0.0 · 0 reviews" is not a
+                  rating, and a seeded one would be a fabricated trust signal. */}
+              {product.ratingCount > 0 ? (
+                <div className="mt-3 flex items-center gap-2">
+                  <Stars rating={product.ratingAvg} />
+                  <span className="text-muted-foreground text-sm">
+                    {product.ratingAvg.toFixed(1)} · {product.ratingCount}{" "}
+                    {tp("reviews")}
+                  </span>
+                </div>
+              ) : null}
 
               <p className="text-muted-foreground mt-4 text-lg">
                 {shortDescription}

@@ -93,4 +93,10 @@ describe("business facts", () => {
     const text = JSON.stringify(allQA());
     expect(text).not.toMatch(/\$49|\$2\.50 per mile|\$29 pickup/);
   });
+
+  it("/answers cost answers quote the live catalog range", () => {
+    const text = JSON.stringify(allQA({ rentFrom: "$155", rentTo: "$570" }));
+    expect(text).toContain("$155 to $570");
+    expect(text).toContain("Should I rent a water slide or a bounce house?");
+  });
 });

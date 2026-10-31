@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, breadcrumbLd } from "@/lib/structured-data";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -84,6 +86,12 @@ export default async function ServicesPage({ params }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          { name: "Services", url: absoluteUrl(locale, "/services") },
+        ])}
+      />
       {/* Hero — centered animated title (shared PhotoHero). */}
       <PhotoHero
         image={SERVICES_HERO_IMAGE}

@@ -12,7 +12,7 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { PhotoHero } from "@/components/ui/photo-hero";
 import { JsonLd } from "@/components/seo/json-ld";
-import { faqLd } from "@/lib/structured-data";
+import { faqLd, absoluteUrl, breadcrumbLd } from "@/lib/structured-data";
 
 const FAQ_HERO =
   "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782484385557-8bhjem-turnstiles-island-h2o-live-kissimmee-usa-1.jpg";
@@ -45,6 +45,12 @@ export default async function FaqPage({ params }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          { name: "FAQ", url: absoluteUrl(locale, "/faq") },
+        ])}
+      />
       <JsonLd data={faqLd(data.items.map((i) => ({ q: i.q, a: i.a })))} />
       <PhotoHero image={FAQ_HERO} title={data.title} description={data.intro} />
       <Section spacing="compact" className="bg-muted/30 pb-16">

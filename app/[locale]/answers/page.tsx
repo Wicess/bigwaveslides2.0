@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { QA_CATEGORIES, allQA } from "@/lib/qa";
+import { allQA, qaCategories } from "@/lib/qa";
+import { formatPrice } from "@/lib/format";
+import { TRANSPORT_CENTS } from "@/lib/pricing";
 import { buildMetadata } from "@/lib/seo";
 import { faqLd, breadcrumbLd, absoluteUrl } from "@/lib/structured-data";
 import { Link } from "@/i18n/navigation";
@@ -20,18 +23,18 @@ const HERO =
   "https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/blog/1782484391964-6c8hz5-overview-epic-waters-indoor-waterpark-grand-prairie-usa-photo06-1536x1024.jpg";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale } = await params;
   return buildMetadata({
     locale,
     path: "/answers",
     title: "Water Slide Rental Questions About Cost, Space and Power",
-    description:
-      "Straight answers on water slide rental cost, space, water and power needs, safety, weather and booking. Nationwide US delivery from $155/day.",
+    description: `Straight answers on water slide rental cost, space, water and power needs, safety, weather and booking. Nationwide US delivery from ${rentFrom}/day.`,
     og: {
       eyebrow: "Answers",
       subtitle: "Cost, space, water, power, safety, weather and booking",
       badge: `${allQA().length} answers`,
-      price: "From $155/day",
+      price: `From ${rentFrom}/day`,
     },
     keywords: [
       "water slide rental questions",
@@ -50,11 +53,17 @@ export default async function AnswersPage({ params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
+  // Live floor/ceiling (daily cache) so the cost answers quote the catalog.
+  const headline = await getCatalogHeadline();
+  const facts = { rentFrom: headline.rentFrom, rentTo: headline.rentTo };
+  const categories = qaCategories(facts);
+
   return (
     <main>
-      <JsonLd data={faqLd(allQA())} />
+      <JsonLd data={faqLd(allQA(facts))} />
       <JsonLd
         data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
           { name: "Answers", url: absoluteUrl(locale, "/answers") },
         ])}
       />
@@ -62,22 +71,28 @@ export default async function AnswersPage({ params }: Props) {
       <PhotoHero
         image={HERO}
         title="Water Slide Rental Questions & Answers"
-        description="Clear, straight answers to the questions renters ask most — cost, space and setup, safety, weather, and booking. Splash Republic delivers nationwide from $155/day, fully insured."
+        description={`Clear, straight answers to the questions renters ask most — cost, space and setup, safety, weather, and booking. Splash Republic delivers nationwide from ${headline.rentFrom}/day.`}
       />
 
       <Section spacing="compact" className="pt-10 pb-16">
         <Container className="max-w-3xl">
           <Reveal>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              Everything you need to know before you rent an inflatable water
-              slide or bounce house — with real numbers on pricing, space, and
-              requirements. Still have a question? Get a free, no-obligation
-              quote and we'll answer it directly.
+              Renting an inflatable water slide, bounce house or combo from
+              Splash Republic costs{" "}
+              {headline.rentTo
+                ? `${headline.rentFrom} to ${headline.rentTo}`
+                : `from ${headline.rentFrom}`}{" "}
+              a day, with delivery, setup, anchoring, sanitizing and pickup
+              included and one flat {formatPrice(TRANSPORT_CENTS)}{" "}
+              transportation fee per order. Below are straight answers on cost,
+              space, water and power, safety, weather and booking — still have a
+              question? Ask us and we&apos;ll answer it directly.
             </p>
           </Reveal>
 
           <div className="mt-12 space-y-12">
-            {QA_CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <section
                 key={cat.slug}
                 id={cat.slug}

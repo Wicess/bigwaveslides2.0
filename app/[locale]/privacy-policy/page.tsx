@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, breadcrumbLd } from "@/lib/structured-data";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -38,6 +40,15 @@ export default async function PrivacyPage({ params }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          {
+            name: "Privacy Policy",
+            url: absoluteUrl(locale, "/privacy-policy"),
+          },
+        ])}
+      />
       <PhotoHero
         image={PRIVACY_HERO}
         title={data.title}

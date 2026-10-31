@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, breadcrumbLd } from "@/lib/structured-data";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -59,6 +61,12 @@ export default async function ShopPage({ params, searchParams }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          { name: "Shop", url: absoluteUrl(locale, "/shop") },
+        ])}
+      />
       {/* Photo hero on tablet/desktop only — hidden on phones for a tighter,
           app-like top. A compact text title stands in on mobile. */}
       <PhotoHero

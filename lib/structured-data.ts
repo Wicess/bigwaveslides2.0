@@ -244,6 +244,9 @@ export function rentalItemListLd(
                 "@type": "Offer",
                 price: (p.dailyRateCents / 100).toFixed(2),
                 priceCurrency: "USD",
+                priceSpecification: perDaySpec(
+                  (p.dailyRateCents / 100).toFixed(2),
+                ),
                 availability: "https://schema.org/InStock",
                 url: `${SITE}/${locale}/rent/${p.slug}`,
               },
@@ -260,6 +263,21 @@ export function rentalItemListLd(
           : {}),
       },
     })),
+  };
+}
+
+/**
+ * A daily rental rate as schema.org states it: the price PER DAY. A bare
+ * Offer.price reads as the purchase price, which is wrong for a rental — and
+ * on a shop page that visibly shows "$440/day" it advertised a $440 sale.
+ */
+function perDaySpec(price: string): Json {
+  return {
+    "@type": "UnitPriceSpecification",
+    price,
+    priceCurrency: "USD",
+    unitCode: "DAY",
+    unitText: "day",
   };
 }
 
@@ -306,6 +324,8 @@ export function productLd(p: {
   image?: string | null;
   url: string;
   priceCents?: number | null;
+  /** True when priceCents is a daily rental rate (as the page shows it). */
+  perDay?: boolean;
   ratingAvg?: number;
   ratingCount?: number;
   sku?: string;
@@ -325,6 +345,13 @@ export function productLd(p: {
             "@type": "Offer",
             price: (p.priceCents / 100).toFixed(2),
             priceCurrency: "USD",
+            ...(p.perDay
+              ? {
+                  priceSpecification: perDaySpec(
+                    (p.priceCents / 100).toFixed(2),
+                  ),
+                }
+              : {}),
             availability: "https://schema.org/InStock",
             url: p.url,
           },

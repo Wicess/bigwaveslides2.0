@@ -6,151 +6,179 @@
 // wording). All facts are real: pricing, delivery fees, and requirements match
 // the business; no invented policies (e.g. no deposit claims).
 
-import { TRANSPORT_CENTS } from "@/lib/pricing";
+import { RENTAL_FROM_CENTS, TRANSPORT_CENTS } from "@/lib/pricing";
 import { formatPrice } from "@/lib/format";
 
 export type QAItem = { q: string; a: string };
 export type QACategory = { title: string; slug: string; items: QAItem[] };
 
-export const QA_CATEGORIES: QACategory[] = [
-  {
-    title: "Cost & payment",
-    slug: "cost",
-    items: [
-      {
-        q: "How much does it cost to rent a water slide?",
-        a: "Water slide rentals start at $155 per day. Most backyard water slides and bounce-and-slide combos run about $230–$570 per day, with the exact price confirmed in a free quote. Every rental includes delivery, professional setup, sanitizing, full insurance, and pickup — no hidden fees.",
-      },
-      {
-        q: "What is included in the water slide rental price?",
-        a: "Every Splash Republic rental includes delivery, professional setup and anchoring, sanitizing before drop-off, full insurance, and end-of-event pickup. You only provide the space, a water hookup, and power. There is nothing to haul, install, or clean up yourself.",
-      },
-      {
-        q: "How much are delivery fees for a water slide rental?",
-        // Derived from the constant the checkout charges, so it cannot drift
-        // again: this answer quoted a $49 base + $2.50/mile + $29 pickup for
-        // months after the checkout moved to one flat transportation line.
-        a: `Splash Republic charges one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order — not per item and not per mile — anywhere it delivers in the United States. Delivery, setup, anchoring and pickup are covered, and the fee is its own line on your quote before you book.`,
-      },
-      {
-        q: "Do I pay online to book a water slide?",
-        a: "No. Splash Republic is quote-based. You request a free quote, we confirm your date, delivery window, and exact price, and payment is arranged directly with our team.",
-      },
-      {
-        q: "Is it cheaper to rent or buy an inflatable water slide?",
-        a: "For one-off events, renting is far cheaper — from $155 per day, all-inclusive, versus thousands to buy. Buying a commercial unit makes sense only if you host very often or run a rental business. Splash Republic offers both: rentals nationwide and commercial inflatables for sale.",
-      },
-    ],
-  },
-  {
-    title: "Booking & availability",
-    slug: "booking",
-    items: [
-      {
-        q: "How far in advance should I book a water slide rental?",
-        a: "Book 2–4 weeks ahead for peak summer weekends, holidays, and end-of-school dates, which fill up first. Off-peak and weekday events often book with just a few days' notice. Submit a quote request anytime and we will confirm availability for your date.",
-      },
-      {
-        q: "How does booking a water slide rental work?",
-        a: "It is three steps: choose your slide, date, and city and request a free quote; we confirm availability, the delivery window, and your exact price; then you approve and we arrange payment with you directly. Our team confirms every detail before your event.",
-      },
-      {
-        q: "What areas do you deliver water slides to?",
-        a: "Splash Republic delivers, sets up, and picks up in all 50 U.S. states. Whether it is a backyard, park, school, church, or community venue, we bring the equipment to you and handle installation and pickup nationwide.",
-      },
-      {
-        q: "Can you deliver a water slide to a park or public venue?",
-        a: "Yes. We regularly set up at parks, schools, churches, campgrounds, and community venues. Some public sites require a permit or proof of insurance — we can provide an insurance certificate, and we will help you plan a safe, approved setup.",
-      },
-    ],
-  },
-  {
-    title: "Space, setup & requirements",
-    slug: "setup",
-    items: [
-      {
-        q: "How much space do I need for a water slide?",
-        a: "Most residential water slides need a flat area roughly 20 feet wide by 30–40 feet long, plus a few feet of clearance on all sides and overhead. Exact dimensions vary by slide, are listed with each unit, and are confirmed in your quote.",
-      },
-      {
-        q: "What surface can a water slide be set up on?",
-        a: "Grass is ideal, but we also set up on dirt, artificial turf, concrete, or asphalt. On hard surfaces we anchor with sandbags instead of stakes. Tell us your surface when booking so our crew plans the safest, most secure setup.",
-      },
-      {
-        q: "Do I need water and electricity for a water slide rental?",
-        a: "Yes. You need a standard garden-hose spigot for water and a grounded power outlet within about 100 feet to run the blower, which stays on continuously. No outlet nearby? We can supply a generator — just let us know when booking.",
-      },
-      {
-        q: "Who sets up and takes down the water slide?",
-        a: "Our trained crew handles everything — delivery, setup, anchoring, and a safety check before use — then returns to take it down and pick it up. You do not lift, install, or clean anything at any point.",
-      },
-      {
-        q: "How long does it take to set up a water slide?",
-        a: "Setup typically takes 30–60 minutes depending on the slide's size, and teardown is similar. We schedule delivery so your slide is inflated, anchored, and safety-checked before your event's start time.",
-      },
-    ],
-  },
-  {
-    title: "Safety, cleaning & insurance",
-    slug: "safety",
-    items: [
-      {
-        q: "Are inflatable water slides safe?",
-        a: "Yes, when properly anchored and supervised. Every Splash Republic unit is commercial-grade, sanitized, fully insured, and installed by a trained crew with a safety check. For safe use, an adult should supervise riders and follow the posted rider limits.",
-      },
-      {
-        q: "Do you clean and sanitize the water slides?",
-        a: "Yes. Every water slide is thoroughly cleaned and sanitized before each delivery, so it arrives fresh for your event. Sanitizing is included in the rental price at no extra cost.",
-      },
-      {
-        q: "Are your water slide rentals insured?",
-        a: "Yes — every rental is fully insured. For schools, churches, HOAs, and public venues that require it, we can provide a certificate of insurance. Just ask when you request your quote.",
-      },
-      {
-        q: "Is there a weight or age limit for water slides?",
-        a: "Limits vary by unit — each slide has its own maximum rider count, height, and weight guidelines. We confirm the specifics for the slide you choose so it is a good fit for your guests before your event.",
-      },
-    ],
-  },
-  {
-    title: "Weather & season",
-    slug: "weather",
-    items: [
-      {
-        q: "What happens if it rains on my event day?",
-        a: "Light rain is usually fine, but for safety inflatables must be shut down in high winds (around 15–25 mph) or thunderstorms. If severe weather threatens your date, contact us early and we will work with you on timing or rescheduling.",
-      },
-      {
-        q: "Can water slides be used without water?",
-        a: "Yes — many of our slides run wet or dry, so a cooler day does not cancel the fun. Let us know when you book and we will recommend a unit that works great either way.",
-      },
-      {
-        q: "When is water slide rental season?",
-        a: "It depends on your region. In the South and West the season runs roughly March through October; in the Northeast and Midwest it is about late May through early September. Peak summer weekends book first, so reserve early.",
-      },
-    ],
-  },
-  {
-    title: "Equipment & events",
-    slug: "events",
-    items: [
-      {
-        q: "What kinds of events are water slides good for?",
-        a: "Water slides are a hit at birthday parties, backyard and pool parties, school and church events, corporate and community days, family reunions, summer camps, and festivals. We serve events of every size, from a single backyard to a large community gathering.",
-      },
-      {
-        q: "Do you rent bounce houses and combo units too?",
-        a: "Yes. Along with water slides we rent bounce houses and combo units (a bounce house plus a slide), all commercial-grade and delivered set up. We also sell commercial inflatables for buyers who host often or run a rental business.",
-      },
-      {
-        q: "Can I rent a water slide for a school, church, or community event?",
-        a: "Absolutely. We regularly serve schools, churches, HOAs, camps, municipalities, and corporate events, and can provide insurance certificates when a venue requires one. Tell us your event type and headcount and we will recommend the right setup.",
-      },
-    ],
-  },
-];
+/** Live catalog numbers (server/data/catalog-facts.ts → getCatalogHeadline). */
+export type QAFacts = { rentFrom: string; rentTo: string | null };
+
+/** Fallback when the catalog can't be read — RENTAL_FROM_CENTS, no ceiling. */
+const DEFAULT_FACTS: QAFacts = {
+  rentFrom: formatPrice(RENTAL_FROM_CENTS),
+  rentTo: null,
+};
+
+const rangeOf = (f: QAFacts) =>
+  f.rentTo ? `${f.rentFrom} to ${f.rentTo}` : `from ${f.rentFrom}`;
+
+/**
+ * The Q&A set, with the cost answers built from the live catalog floor and
+ * ceiling (they were hand-typed "$155" / "$230–$570" strings) and the fee from
+ * the checkout constant.
+ */
+export function qaCategories(f: QAFacts = DEFAULT_FACTS): QACategory[] {
+  return [
+    {
+      title: "Cost & payment",
+      slug: "cost",
+      items: [
+        {
+          q: "How much does it cost to rent a water slide?",
+          a: `Splash Republic's water slides, bounce houses and combo units rent for ${rangeOf(f)} per day, depending on the unit. Every rental includes delivery, professional setup and anchoring, sanitizing and pickup; the only added charge is one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order.`,
+        },
+        {
+          q: "What is included in the water slide rental price?",
+          a: "Every Splash Republic rental includes delivery, professional setup and anchoring, sanitizing before drop-off, insurance, and end-of-event pickup. You only provide the space, a water hookup, and power. There is nothing to haul, install, or clean up yourself.",
+        },
+        {
+          q: "How much are delivery fees for a water slide rental?",
+          // Derived from the constant the checkout charges, so it cannot drift
+          // again: this answer quoted a $49 base + $2.50/mile + $29 pickup for
+          // months after the checkout moved to one flat transportation line.
+          a: `Splash Republic charges one flat ${formatPrice(TRANSPORT_CENTS)} transportation fee per order — not per item and not per mile — anywhere it delivers in the United States. Delivery, setup, anchoring and pickup are covered, and the fee is its own line on your quote before you book.`,
+        },
+        {
+          q: "Do I pay online to book a water slide?",
+          a: "No. Splash Republic is quote-based. You request a free quote, we confirm your date, delivery window, and exact price, and payment is arranged directly with our team.",
+        },
+        {
+          q: "Is it cheaper to rent or buy an inflatable water slide?",
+          a: `For one-off events, renting is far cheaper — from ${f.rentFrom} per day versus thousands to buy. Buying a commercial unit makes sense only if you host very often or run a rental business. Splash Republic offers both: rentals nationwide and commercial inflatables for sale.`,
+        },
+      ],
+    },
+    {
+      title: "Booking & availability",
+      slug: "booking",
+      items: [
+        {
+          q: "How far in advance should I book a water slide rental?",
+          a: "Book 2–4 weeks ahead for peak summer weekends, holidays, and end-of-school dates, which fill up first. Off-peak and weekday events often book with just a few days' notice. Submit a quote request anytime and we will confirm availability for your date.",
+        },
+        {
+          q: "How does booking a water slide rental work?",
+          a: "It is three steps: choose your slide, date, and city and request a free quote; we confirm availability, the delivery window, and your exact price; then you approve and we arrange payment with you directly. Our team confirms every detail before your event.",
+        },
+        {
+          q: "What areas do you deliver water slides to?",
+          a: "Splash Republic delivers, sets up, and picks up in all 50 U.S. states. Whether it is a backyard, park, school, church, or community venue, we bring the equipment to you and handle installation and pickup nationwide.",
+        },
+        {
+          q: "Can you deliver a water slide to a park or public venue?",
+          a: "Yes. We regularly set up at parks, schools, churches, campgrounds, and community venues. Some public sites require a permit or proof of insurance — we can provide an insurance certificate, and we will help you plan a safe, approved setup.",
+        },
+      ],
+    },
+    {
+      title: "Space, setup & requirements",
+      slug: "setup",
+      items: [
+        {
+          q: "How much space do I need for a water slide?",
+          a: "Most residential water slides need a flat area roughly 20 feet wide by 30–40 feet long, plus a few feet of clearance on all sides and overhead. Exact dimensions vary by slide, are listed with each unit, and are confirmed in your quote.",
+        },
+        {
+          q: "What surface can a water slide be set up on?",
+          a: "Grass is ideal, but we also set up on dirt, artificial turf, concrete, or asphalt. On hard surfaces we anchor with sandbags instead of stakes. Tell us your surface when booking so our crew plans the safest, most secure setup.",
+        },
+        {
+          q: "Do I need water and electricity for a water slide rental?",
+          a: "Yes. You need a standard garden-hose spigot for water and a grounded power outlet within about 100 feet to run the blower, which stays on continuously. No outlet nearby? We can supply a generator — just let us know when booking.",
+        },
+        {
+          q: "Who sets up and takes down the water slide?",
+          a: "Our trained crew handles everything — delivery, setup, anchoring, and a safety check before use — then returns to take it down and pick it up. You do not lift, install, or clean anything at any point.",
+        },
+        {
+          q: "How long does it take to set up a water slide?",
+          a: "Setup typically takes 30–60 minutes depending on the slide's size, and teardown is similar. We schedule delivery so your slide is inflated, anchored, and safety-checked before your event's start time.",
+        },
+      ],
+    },
+    {
+      title: "Safety, cleaning & insurance",
+      slug: "safety",
+      items: [
+        {
+          q: "Are inflatable water slides safe?",
+          a: "Yes, when properly anchored and supervised. Every Splash Republic unit is commercial-grade, sanitized, insured, and installed by a trained crew with a safety check. For safe use, an adult should supervise riders and follow the posted rider limits.",
+        },
+        {
+          q: "Do you clean and sanitize the water slides?",
+          a: "Yes. Every water slide is thoroughly cleaned and sanitized before each delivery, so it arrives fresh for your event. Sanitizing is included in the rental price at no extra cost.",
+        },
+        {
+          q: "Are your water slide rentals insured?",
+          a: "Yes — every rental is insured. For schools, churches, HOAs, and public venues that require it, we can provide a certificate of insurance. Just ask when you request your quote.",
+        },
+        {
+          q: "Is there a weight or age limit for water slides?",
+          a: "Limits vary by unit — each slide has its own maximum rider count, height, and weight guidelines. We confirm the specifics for the slide you choose so it is a good fit for your guests before your event.",
+        },
+      ],
+    },
+    {
+      title: "Weather & season",
+      slug: "weather",
+      items: [
+        {
+          q: "What happens if it rains on my event day?",
+          a: "Light rain is usually fine, but for safety inflatables must be shut down in high winds (around 15–25 mph) or thunderstorms. If severe weather threatens your date, contact us early and we will work with you on timing or rescheduling.",
+        },
+        {
+          q: "Can water slides be used without water?",
+          a: "Yes — many of our slides run wet or dry, so a cooler day does not cancel the fun. Let us know when you book and we will recommend a unit that works great either way.",
+        },
+        {
+          q: "When is water slide rental season?",
+          a: "It depends on your region. In the South and West the season runs roughly March through October; in the Northeast and Midwest it is about late May through early September. Peak summer weekends book first, so reserve early.",
+        },
+      ],
+    },
+    {
+      title: "Equipment & events",
+      slug: "events",
+      items: [
+        {
+          q: "What kinds of events are water slides good for?",
+          a: "Water slides are a hit at birthday parties, backyard and pool parties, school and church events, corporate and community days, family reunions, summer camps, and festivals. We serve events of every size, from a single backyard to a large community gathering.",
+        },
+        {
+          // Ages from the catalog's own ageRange fields: bounce houses 3+,
+          // combos 3+ (the largest 5+), slides 3+ to 8+, the toddler slide 2–6.
+          q: "Should I rent a water slide or a bounce house?",
+          a: "Rent a water slide for a hot day and kids old enough for it — each slide lists its own minimum age, from 3+ on the smallest backyard units to 8+ on the tallest. Rent a bounce house for children 3 and up, a dry event or a cooler day, and a bounce-and-slide combo (mostly 3+) to get both in one unit. For toddlers, the toddler slide is made for ages 2 to 6.",
+        },
+        {
+          q: "Do you rent bounce houses and combo units too?",
+          a: "Yes. Along with water slides we rent bounce houses and combo units (a bounce house plus a slide), all commercial-grade and delivered set up. We also sell commercial inflatables for buyers who host often or run a rental business.",
+        },
+        {
+          q: "Can I rent a water slide for a school, church, or community event?",
+          a: "Absolutely. We regularly serve schools, churches, HOAs, camps, municipalities, and corporate events, and can provide insurance certificates when a venue requires one. Tell us your event type and headcount and we will recommend the right setup.",
+        },
+      ],
+    },
+  ];
+}
+
+/** Static copy with the fallback numbers, for callers without live facts. */
+export const QA_CATEGORIES: QACategory[] = qaCategories();
 
 /** Every Q&A flattened — used for FAQPage schema and quick lookups. */
-export function allQA(): QAItem[] {
-  return QA_CATEGORIES.flatMap((c) => c.items);
+export function allQA(f?: QAFacts): QAItem[] {
+  return qaCategories(f).flatMap((c) => c.items);
 }

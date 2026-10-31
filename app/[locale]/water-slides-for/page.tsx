@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, breadcrumbLd } from "@/lib/structured-data";
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -21,6 +24,7 @@ const SEASONAL = USE_CASES.filter((u) => u.season);
 const YEAR_ROUND = USE_CASES.filter((u) => !u.season);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale } = await params;
   return buildMetadata({
     locale,
@@ -30,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       eyebrow: "By occasion",
       subtitle: "Fall festivals, trunk-or-treats, schools, churches, birthdays",
       badge: "Free quote",
-      price: "From $155/day",
+      price: `From ${rentFrom}/day`,
     },
     description:
       "Fall festivals, trunk-or-treats, school carnivals, birthdays and corporate family days — find the right inflatable for your event. October books early.",
@@ -52,6 +56,28 @@ export default async function UseCasesHubPage({ params }: Props) {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          {
+            name: "Water Slides by Occasion",
+            url: absoluteUrl(locale, "/water-slides-for"),
+          },
+        ])}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Water slide rentals by occasion",
+          itemListElement: USE_CASES.map((u, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: u.heroTitle,
+            url: absoluteUrl(locale, `/water-slides-for/${u.slug}`),
+          })),
+        }}
+      />
       <PhotoHero
         image={HERO}
         title="An Inflatable for Every Occasion"
