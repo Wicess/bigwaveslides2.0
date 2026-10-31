@@ -7,6 +7,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type CSSProperties,
 } from "react";
 import {
   ArrowLeftIcon,
@@ -133,10 +134,31 @@ function isWide(): boolean {
   return window.matchMedia("(min-width: 1400px)").matches;
 }
 
+/**
+ * Where Splash Republic's admin top bar ends, in px, so the phone inbox can sit right
+ * under it. Measured from the layout (offsetTop + offsetHeight), which ignores the
+ * bar's entrance animation, and again on resize. 88px until the first measurement.
+ */
+function useAdminTopBarBottom(): number {
+  const [bottom, setBottom] = useState(88);
+  useEffect(() => {
+    const measure = () => {
+      const bar = document.querySelector("main.admin-scroll")
+        ?.previousElementSibling as HTMLElement | null;
+      if (bar) setBottom(bar.offsetTop + bar.offsetHeight);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+  return bottom;
+}
+
 export function ChatInbox({
   initialThreadId = null,
 }: { initialThreadId?: string | null } = {}) {
   useViewportHeight();
+  const inboxTop = useAdminTopBarBottom();
   const now = useNow();
 
   // ── The list ──────────────────────────────────────────────────────────────
@@ -804,8 +826,14 @@ export function ChatInbox({
         };
 
   return (
-    // Fills the admin frame's content area under its top bar; only its panes scroll.
-    <div className="bg-background flex h-full min-h-[480px] overflow-hidden rounded-xl border">
+    // Phone: a messaging app, as on MIMOSALSD. Pinned edge to edge under the admin top
+    // bar and sized to the VISIBLE screen (--app-vh), so the open keyboard shrinks it
+    // and the reply box stays above the keyboard. From md: a card filling the admin
+    // frame's content area. Either way only the panes scroll.
+    <div
+      style={{ "--inbox-top": `${inboxTop}px` } as CSSProperties}
+      className="bg-background fixed inset-x-0 top-[calc(var(--inbox-top)+var(--app-vv-top,0px))] z-30 flex h-[calc(var(--app-vh,100svh)-var(--inbox-top))] overflow-hidden border-t md:static md:z-auto md:h-full md:min-h-[480px] md:rounded-xl md:border"
+    >
       {/* ── Thread list ─────────────────────────────────────────────────────── */}
       <aside
         className={`bg-surface w-full min-w-0 flex-col border-r md:flex md:w-[300px] md:shrink-0 lg:w-[320px] xl:w-[360px] ${activeId ? "hidden" : "flex"}`}

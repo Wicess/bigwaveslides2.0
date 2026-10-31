@@ -59,10 +59,22 @@ export function ChatWidget() {
     window.addEventListener("keydown", onKey);
     // On a phone the panel sits over the page; the page behind it must not scroll.
     const phone = window.matchMedia("(max-width: 767px)").matches;
-    if (phone) document.body.style.overflow = "hidden";
+    // Splash Republic's smooth scroller (components/motion/lenis-provider.tsx) drives
+    // the page itself, so locking <body> alone would not hold the page still behind
+    // the chat on a phone. Pause it while the chat is open there.
+    const lenis = (
+      window as Window & { __lenis?: { stop(): void; start(): void } }
+    ).__lenis;
+    if (phone) {
+      document.body.style.overflow = "hidden";
+      lenis?.stop();
+    }
     return () => {
       window.removeEventListener("keydown", onKey);
-      if (phone) document.body.style.overflow = "";
+      if (phone) {
+        document.body.style.overflow = "";
+        lenis?.start();
+      }
     };
   }, [open]);
 
