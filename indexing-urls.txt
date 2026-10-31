@@ -11,11 +11,36 @@
 ## FASTEST PATH — submit this ONE sitemap in GSC > Sitemaps and Bing > Sitemaps
 https://www.splashrep.com/sitemap.xml
 
-## PRIORITY ORDER: MAIN PAGES > HUBS > STATES > PRIORITY CITIES > USE-CASE > the rest
+## PRIORITY ORDER: ANSWERS & HUBS > USE-CASE > MAIN PAGES > STATES > CITIES > the rest
+## Machine-readable files (not for URL Inspection; linked from robots/llms):
+## https://www.splashrep.com/llms.txt  ·  https://www.splashrep.com/pricing.md
 
 ################  1030 URLs  ################
 
-## MAIN PAGES  (11)
+## ANSWERS & HUBS  (5)
+https://www.splashrep.com/en/answers
+https://www.splashrep.com/en/faq
+https://www.splashrep.com/en/water-slides-for
+https://www.splashrep.com/en/water-slide-rentals
+https://www.splashrep.com/en/bounce-house-rentals
+
+## USE-CASE PAGES  (14)
+https://www.splashrep.com/en/water-slides-for/birthday-parties
+https://www.splashrep.com/en/water-slides-for/pool-parties
+https://www.splashrep.com/en/water-slides-for/school-events
+https://www.splashrep.com/en/water-slides-for/church-events
+https://www.splashrep.com/en/water-slides-for/corporate-events
+https://www.splashrep.com/en/water-slides-for/graduation-parties
+https://www.splashrep.com/en/water-slides-for/hoa-neighborhood-events
+https://www.splashrep.com/en/water-slides-for/summer-camps-daycares
+https://www.splashrep.com/en/water-slides-for/fall-festivals
+https://www.splashrep.com/en/water-slides-for/trunk-or-treat
+https://www.splashrep.com/en/water-slides-for/school-carnivals
+https://www.splashrep.com/en/water-slides-for/halloween-parties
+https://www.splashrep.com/en/water-slides-for/harvest-festivals
+https://www.splashrep.com/en/water-slides-for/corporate-fall-family-day
+
+## MAIN PAGES  (10)
 https://www.splashrep.com/en
 https://www.splashrep.com/en/about
 https://www.splashrep.com/en/services
@@ -24,15 +49,8 @@ https://www.splashrep.com/en/rent
 https://www.splashrep.com/en/blog
 https://www.splashrep.com/en/testimonials
 https://www.splashrep.com/en/contact
-https://www.splashrep.com/en/faq
 https://www.splashrep.com/en/privacy-policy
 https://www.splashrep.com/en/terms-of-service
-
-## HUBS & ANSWERS  (4)
-https://www.splashrep.com/en/water-slide-rentals
-https://www.splashrep.com/en/bounce-house-rentals
-https://www.splashrep.com/en/water-slides-for
-https://www.splashrep.com/en/answers
 
 ## STATES  (51)
 https://www.splashrep.com/en/water-slide-rentals/alabama
@@ -853,22 +871,6 @@ https://www.splashrep.com/en/bounce-house-rentals/oklahoma
 https://www.splashrep.com/en/bounce-house-rentals/south-carolina
 https://www.splashrep.com/en/bounce-house-rentals/tennessee
 https://www.splashrep.com/en/bounce-house-rentals/texas
-
-## USE-CASE PAGES  (14)
-https://www.splashrep.com/en/water-slides-for/birthday-parties
-https://www.splashrep.com/en/water-slides-for/pool-parties
-https://www.splashrep.com/en/water-slides-for/school-events
-https://www.splashrep.com/en/water-slides-for/church-events
-https://www.splashrep.com/en/water-slides-for/corporate-events
-https://www.splashrep.com/en/water-slides-for/graduation-parties
-https://www.splashrep.com/en/water-slides-for/hoa-neighborhood-events
-https://www.splashrep.com/en/water-slides-for/summer-camps-daycares
-https://www.splashrep.com/en/water-slides-for/fall-festivals
-https://www.splashrep.com/en/water-slides-for/trunk-or-treat
-https://www.splashrep.com/en/water-slides-for/school-carnivals
-https://www.splashrep.com/en/water-slides-for/halloween-parties
-https://www.splashrep.com/en/water-slides-for/harvest-festivals
-https://www.splashrep.com/en/water-slides-for/corporate-fall-family-day
 
 ## SHOP PRODUCTS  (52)
 https://www.splashrep.com/en/shop/amethyst-18

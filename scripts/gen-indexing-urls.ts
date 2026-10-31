@@ -36,15 +36,15 @@ const CORE_STATIC = [
   "/blog",
   "/testimonials",
   "/contact",
-  "/faq",
   "/privacy-policy",
   "/terms-of-service",
 ];
-const HUB_STATIC = [
+const AIO_FIRST = [
+  "/answers",
+  "/faq",
+  "/water-slides-for",
   "/water-slide-rentals",
   "/bounce-house-rentals",
-  "/water-slides-for",
-  "/answers",
 ];
 
 type Section = {
@@ -91,9 +91,17 @@ async function main() {
     orderBy: { slug: "asc" },
   });
 
+  // AIO pages first: the answer hub, FAQ and occasion pages carry the
+  // answer-first Q&As + FAQPage schema that AI assistants extract, and the
+  // shop pages carry the purchase prices nothing else states.
   const sections: Section[] = [
+    { title: "ANSWERS & HUBS (AIO)", paths: AIO_FIRST, locales: EN },
+    {
+      title: "USE-CASE PAGES (AIO)",
+      paths: USE_CASES.map((u) => `/water-slides-for/${u.slug}`),
+      locales: EN,
+    },
     { title: "MAIN PAGES", paths: CORE_STATIC, locales: EN },
-    { title: "HUBS & ANSWERS", paths: HUB_STATIC, locales: EN },
     {
       title: "STATES",
       paths: US_STATES.map((s) => `/water-slide-rentals/${s.slug}`),
@@ -109,11 +117,6 @@ async function main() {
     {
       title: "BOUNCE HOUSE STATES",
       paths: BOUNCE_STATE_KEYS.map((s) => `/bounce-house-rentals/${s}`),
-      locales: EN,
-    },
-    {
-      title: "USE-CASE PAGES",
-      paths: USE_CASES.map((u) => `/water-slides-for/${u.slug}`),
       locales: EN,
     },
     {
@@ -160,7 +163,9 @@ async function main() {
     "## FASTEST PATH — submit this ONE sitemap in GSC > Sitemaps and Bing > Sitemaps",
     `${BASE}/sitemap.xml`,
     "",
-    "## PRIORITY ORDER: MAIN PAGES > HUBS > STATES > PRIORITY CITIES > USE-CASE > the rest",
+    "## PRIORITY ORDER: ANSWERS & HUBS > USE-CASE > MAIN PAGES > STATES > CITIES > the rest",
+    "## Machine-readable files (not for URL Inspection; linked from robots/llms):",
+    `## ${BASE}/llms.txt  ·  ${BASE}/pricing.md`,
     "",
     `################  ${total} URLs  ################`,
     "",

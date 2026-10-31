@@ -19,52 +19,52 @@
 # Regenerate: npx tsx scripts/gen-priority-index-urls.ts
 
 # ------------------------------------------------------------------------
-# DAY 1 — entity, commercial and seasonal
-#   The homepage first: everything else is discovered through it, and the
-#   fall pages have an October window that closes.
+# DAY 1 — homepage, then the AIO answer pages
+#   The homepage first: everything else is discovered through it. Then the
+#   Q&A pages AI assistants cite (FAQPage schema, live prices).
 # 15 URLs
 # ------------------------------------------------------------------------
 https://www.splashrep.com/en
+https://www.splashrep.com/en/answers
+https://www.splashrep.com/en/faq
+https://www.splashrep.com/en/water-slides-for
+https://www.splashrep.com/en/water-slides-for/school-events
+https://www.splashrep.com/en/water-slides-for/church-events
+https://www.splashrep.com/en/water-slides-for/birthday-parties
+https://www.splashrep.com/en/water-slides-for/hoa-neighborhood-events
+https://www.splashrep.com/en/water-slides-for/summer-camps-daycares
 https://www.splashrep.com/en/rent
 https://www.splashrep.com/en/shop
+https://www.splashrep.com/en/water-slide-rentals
 https://www.splashrep.com/en/blog/water-slide-rental-cost-guide
+https://www.splashrep.com/en/about
+https://www.splashrep.com/en/services
+
+# ------------------------------------------------------------------------
+# DAY 2 — the rest of the occasions, top metros and core pages
+# 21 URLs
+# ------------------------------------------------------------------------
+https://www.splashrep.com/en/water-slides-for/corporate-events
+https://www.splashrep.com/en/water-slides-for/graduation-parties
+https://www.splashrep.com/en/water-slides-for/pool-parties
+https://www.splashrep.com/en/water-slides-for/school-carnivals
 https://www.splashrep.com/en/water-slides-for/fall-festivals
+https://www.splashrep.com/en/water-slides-for/trunk-or-treat
+https://www.splashrep.com/en/water-slides-for/halloween-parties
+https://www.splashrep.com/en/water-slides-for/harvest-festivals
+https://www.splashrep.com/en/water-slides-for/corporate-fall-family-day
 https://www.splashrep.com/en/water-slide-rentals/texas/houston
 https://www.splashrep.com/en/water-slide-rentals/texas/dallas
 https://www.splashrep.com/en/water-slide-rentals/florida/orlando
 https://www.splashrep.com/en/water-slide-rentals/arizona/phoenix
-https://www.splashrep.com/en/about
-https://www.splashrep.com/en/water-slides-for/trunk-or-treat
-https://www.splashrep.com/en/answers
-https://www.splashrep.com/en/water-slides-for/school-carnivals
 https://www.splashrep.com/en/water-slide-rentals/nevada/las-vegas
 https://www.splashrep.com/en/water-slide-rentals/georgia/atlanta
-
-# ------------------------------------------------------------------------
-# DAY 2 — the rest of the fall cluster and the core site pages
-# 21 URLs
-# ------------------------------------------------------------------------
-https://www.splashrep.com/en/water-slides-for/birthday-parties
-https://www.splashrep.com/en/water-slides-for/church-events
-https://www.splashrep.com/en/water-slides-for/corporate-events
-https://www.splashrep.com/en/water-slides-for/corporate-fall-family-day
-https://www.splashrep.com/en/water-slides-for/graduation-parties
-https://www.splashrep.com/en/water-slides-for/halloween-parties
-https://www.splashrep.com/en/water-slides-for/harvest-festivals
-https://www.splashrep.com/en/water-slides-for/hoa-neighborhood-events
-https://www.splashrep.com/en/water-slides-for/pool-parties
-https://www.splashrep.com/en/water-slides-for/school-events
-https://www.splashrep.com/en/water-slides-for/summer-camps-daycares
 https://www.splashrep.com/en/blog
 https://www.splashrep.com/en/bounce-house-rentals
 https://www.splashrep.com/en/contact
-https://www.splashrep.com/en/faq
-https://www.splashrep.com/en/services
 https://www.splashrep.com/en/testimonials
-https://www.splashrep.com/en/water-slide-rentals
 https://www.splashrep.com/en/privacy-policy
 https://www.splashrep.com/en/terms-of-service
-https://www.splashrep.com/en/water-slides-for
 
 # ------------------------------------------------------------------------
 # DAY 3-6 — WATER SLIDE RENTALS BY STATE (all 51)

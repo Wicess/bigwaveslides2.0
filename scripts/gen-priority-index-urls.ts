@@ -42,46 +42,48 @@ const u = (path: string) => `${BASE}${path}`;
  * is a judgement call about the business, not something derivable from the
  * schema. Everything after them is generated.
  */
+// AIO first (2026-10-31): the homepage, then the pages whose answer-first
+// Q&As, FAQPage schema and live prices AI assistants extract and cite.
 const DAY_1 = [
   "",
+  "/answers",
+  "/faq",
+  "/water-slides-for",
+  "/water-slides-for/school-events",
+  "/water-slides-for/church-events",
+  "/water-slides-for/birthday-parties",
+  "/water-slides-for/hoa-neighborhood-events",
+  "/water-slides-for/summer-camps-daycares",
   "/rent",
   "/shop",
+  "/water-slide-rentals",
   "/blog/water-slide-rental-cost-guide",
+  "/about",
+  "/services",
+];
+
+const DAY_2 = [
+  "/water-slides-for/corporate-events",
+  "/water-slides-for/graduation-parties",
+  "/water-slides-for/pool-parties",
+  "/water-slides-for/school-carnivals",
   "/water-slides-for/fall-festivals",
+  "/water-slides-for/trunk-or-treat",
+  "/water-slides-for/halloween-parties",
+  "/water-slides-for/harvest-festivals",
+  "/water-slides-for/corporate-fall-family-day",
   "/water-slide-rentals/texas/houston",
   "/water-slide-rentals/texas/dallas",
   "/water-slide-rentals/florida/orlando",
   "/water-slide-rentals/arizona/phoenix",
-  "/about",
-  "/water-slides-for/trunk-or-treat",
-  "/answers",
-  "/water-slides-for/school-carnivals",
   "/water-slide-rentals/nevada/las-vegas",
   "/water-slide-rentals/georgia/atlanta",
-];
-
-const DAY_2 = [
-  "/water-slides-for/birthday-parties",
-  "/water-slides-for/church-events",
-  "/water-slides-for/corporate-events",
-  "/water-slides-for/corporate-fall-family-day",
-  "/water-slides-for/graduation-parties",
-  "/water-slides-for/halloween-parties",
-  "/water-slides-for/harvest-festivals",
-  "/water-slides-for/hoa-neighborhood-events",
-  "/water-slides-for/pool-parties",
-  "/water-slides-for/school-events",
-  "/water-slides-for/summer-camps-daycares",
   "/blog",
   "/bounce-house-rentals",
   "/contact",
-  "/faq",
-  "/services",
   "/testimonials",
-  "/water-slide-rentals",
   "/privacy-policy",
   "/terms-of-service",
-  "/water-slides-for",
 ];
 
 type Section = { title: string; note?: string[]; urls: string[] };
@@ -125,15 +127,15 @@ async function main() {
 
   const sections: Section[] = [
     {
-      title: "DAY 1 — entity, commercial and seasonal",
+      title: "DAY 1 — homepage, then the AIO answer pages",
       note: [
-        "The homepage first: everything else is discovered through it, and the",
-        "fall pages have an October window that closes.",
+        "The homepage first: everything else is discovered through it. Then the",
+        "Q&A pages AI assistants cite (FAQPage schema, live prices).",
       ],
       urls: DAY_1.map(u),
     },
     {
-      title: "DAY 2 — the rest of the fall cluster and the core site pages",
+      title: "DAY 2 — the rest of the occasions, top metros and core pages",
       urls: DAY_2.map(u),
     },
     {
