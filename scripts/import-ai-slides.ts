@@ -409,8 +409,11 @@ async function main() {
       ageRange: "5+",
       powerRequired:
         s.lane === "dual" ? "Two 20A / 110V outlets" : "One 20A / 110V outlet",
-      ratingAvg: s.rating[0],
-      ratingCount: s.rating[1],
+      // Never seed ratings: they would surface as stars and AggregateRating
+      // with no Review rows behind them. Real ones come from
+      // scripts/sync-product-ratings.ts over APPROVED reviews.
+      ratingAvg: 0,
+      ratingCount: 0,
       shortDescription: L(s.shortEn, s.shortFr),
       description: desc,
       features: features(s),

@@ -4,7 +4,7 @@
  * A homepage section that builds trust. It's a single card split into two
  * halves:
  *   - Left: a large HD photo with a headline and a "Rent now" button.
- *   - Right: a panel of headline stats (events served, slides, years, rating).
+ *   - Right: a panel of headline stats (fleet, states, city pages, rental day).
  *
  * Nice touches for the user:
  *   - The stat numbers animate by counting up from 0 when scrolled into view.
@@ -87,7 +87,15 @@ function Counter({
   );
 }
 
-export function WhyChooseUs() {
+export function WhyChooseUs({
+  rentalCount,
+  cityCount,
+}: {
+  /** Units in the live rental catalog; null hides that stat. */
+  rentalCount: number | null;
+  /** Cities with a local page (lib/locations.ts). */
+  cityCount: number;
+}) {
   // "t" looks up translated text for the current language.
   const t = useTranslations("Home");
   // True if the user has asked their OS to minimize animations. We respect that
@@ -95,11 +103,18 @@ export function WhyChooseUs() {
   const reduce = useReducedMotion();
 
   // The four headline stats. `to` is the target number the Counter animates to.
+  // Each stat is provable: the live rental count, the states served, the
+  // cities with their own local page, and the 24-hour rental day from the
+  // rental terms. The old "5,000+ events", "12 years" and "4.9★" had nothing in
+  // the data behind them (the Review table is empty) — and crawlers, which
+  // don't run the count-up, read them as "0+ events" and "0.0★".
   const stats = [
-    { to: 5000, suffix: "+", decimals: 0, label: t("statEvents") },
-    { to: 40, suffix: "+", decimals: 0, label: t("statSlides") },
-    { to: 12, suffix: "", decimals: 0, label: t("statYears") },
-    { to: 4.9, suffix: "★", decimals: 1, label: t("statRating") },
+    ...(rentalCount
+      ? [{ to: rentalCount, suffix: "", decimals: 0, label: t("statSlides") }]
+      : []),
+    { to: 50, suffix: "", decimals: 0, label: t("statStates") },
+    { to: cityCount, suffix: "", decimals: 0, label: t("statCityPages") },
+    { to: 24, suffix: "", decimals: 0, label: t("statHours") },
   ];
 
   // Helper that returns framer-motion props for a "slide in on scroll" effect.

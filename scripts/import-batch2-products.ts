@@ -487,8 +487,9 @@ async function main() {
       capacity: p.capacity,
       ageRange: p.ageRange,
       powerRequired: p.powerRequired,
-      ratingAvg: p.ratingAvg,
-      ratingCount: p.ratingCount,
+      // Never seed ratings — see scripts/import-ai-slides.ts.
+      ratingAvg: 0,
+      ratingCount: 0,
       featured: p.featured ?? false,
       shortDescription: p.shortDescription,
       description: p.description,

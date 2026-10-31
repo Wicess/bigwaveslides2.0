@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, breadcrumbLd } from "@/lib/structured-data";
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -29,13 +32,13 @@ import { Reveal } from "@/components/motion/reveal";
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale } = await params;
   return buildMetadata({
     locale,
     path: "/about",
     title: "About Splash Republic, Water Slide Rentals and Sales",
-    description:
-      "Family-run water slide rental and sales specialists — delivered, set up, sanitized and fully insured in all 50 states from $155/day.",
+    description: `Water slide rental and sales specialists — delivered, set up, sanitized and insured in all 50 states from ${rentFrom}/day.`,
     keywords: [
       "water slide rental company",
       "inflatable rental company",
@@ -51,17 +54,17 @@ const VALUES: { key: 1 | 2 | 3 | 4; icon: LucideIcon }[] = [
   { key: 4, icon: Heart },
 ];
 
-// Real, defensible numbers only — these are all true of the business today.
-const STATS: {
-  key: "States" | "Fleet" | "Insured" | "Days";
-  to: number;
-  suffix?: string;
-}[] = [
-  { key: "States", to: 50 },
-  { key: "Fleet", to: 55, suffix: "+" },
-  { key: "Insured", to: 100, suffix: "%" },
-  { key: "Days", to: 7 },
-];
+// Provable numbers only. "Fleet" is the live ACTIVE count (it said 55+ while
+// the catalog held 53); "100% insured" became the 24-hour rental day from the
+// terms, a number that can be checked.
+type StatKey = "States" | "Fleet" | "Hours" | "Days";
+const stats = (fleet: number | null) =>
+  [
+    { key: "States", to: 50 },
+    ...(fleet ? [{ key: "Fleet", to: fleet }] : []),
+    { key: "Hours", to: 24 },
+    { key: "Days", to: 7 },
+  ] as { key: StatKey; to: number; suffix?: string }[];
 
 // Flip to true once the real team photos are uploaded — the section stays
 // fully built and translated, it just doesn't render until then.
@@ -100,9 +103,16 @@ export default async function AboutPage({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations("About");
+  const headline = await getCatalogHeadline();
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: absoluteUrl(locale, "") },
+          { name: "About", url: absoluteUrl(locale, "/about") },
+        ])}
+      />
       {/* Hero — centered animated title (shared PhotoHero). */}
       <PhotoHero
         image="https://pub-8ccc6e8df3434a6cb7ee23e5dd2ab541.r2.dev/about/1782501611506-twt9il-aquaforms-1800-island-waterpark-at-showboat-atlantic-city-usa-photo14-1536x1006.jpg"
@@ -178,7 +188,7 @@ export default async function AboutPage({ params }: Props) {
         <Container>
           <SectionHeader title={t("statsTitle")} align="center" />
           <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {STATS.map((s, i) => (
+            {stats(headline.rentalCount).map((s, i) => (
               <Reveal key={s.key} delay={i * 0.05}>
                 <Card className="flex flex-col items-center gap-1 p-6 text-center">
                   <span className="text-primary text-4xl font-bold sm:text-5xl">

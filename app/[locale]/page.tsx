@@ -11,6 +11,8 @@
  * language code (e.g. "en", "es") is captured and passed in via `params`, so
  * the same file serves every supported language.
  */
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
+import { getAllCities } from "@/lib/locations";
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
@@ -35,18 +37,18 @@ type Props = { params: Promise<{ locale: string }> };
 // insurance, free quote), and adds a clear CTA — for a brand-new brand this
 // wins clicks far better than putting the unknown brand name first.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
   const { locale } = await params;
   return buildMetadata({
     locale,
     path: "/",
     title: "Water Slide Rentals Near You Across the USA",
-    description:
-      "Rent or buy inflatable water slides anywhere in the USA from $155/day — delivery, setup & insurance included. Free quote in minutes; summer books fast.",
+    description: `Rent or buy inflatable water slides anywhere in the USA from ${rentFrom}/day — delivery, setup & insurance included. Free quote in minutes; summer books fast.`,
     og: {
       eyebrow: "Nationwide USA",
       subtitle: "Delivered, set up, sanitized & fully insured — free quote",
       badge: "All 50 states",
-      price: "From $155/day",
+      price: `From ${rentFrom}/day`,
     },
     keywords: [
       "water slide rentals",
@@ -90,6 +92,8 @@ export default async function HomePage({ params }: Props) {
   // Fetch all homepage content. If anything goes wrong, fall back to FALLBACK
   // so the page still renders instead of throwing an error.
   const data: HomeData = await getHomeData().catch(() => FALLBACK);
+  // Live fleet size (daily cache) for the stats panel.
+  const headline = await getCatalogHeadline();
 
   return (
     // Each child below is a section component. They render in this order and
@@ -102,7 +106,10 @@ export default async function HomePage({ params }: Props) {
       <TrustBand />
       <FeaturedSlides products={data.featured} locale={locale} />
       <RentalCategories categories={data.categories} locale={locale} />
-      <WhyChooseUs />
+      <WhyChooseUs
+        rentalCount={headline.rentalCount}
+        cityCount={getAllCities().length}
+      />
       <TestimonialsCarousel testimonials={data.testimonials} locale={locale} />
       <LatestBlog posts={data.posts} locale={locale} />
       <FinalCta />

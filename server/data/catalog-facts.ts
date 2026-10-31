@@ -3,6 +3,9 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/retry";
 import type { CatalogProduct } from "@/lib/business-facts";
+import { CURATED_POST_SLUGS } from "@/lib/llms-content";
+import { RENTAL_FROM_CENTS } from "@/lib/pricing";
+import { formatPrice } from "@/lib/format";
 
 export type FactsData = {
   products: CatalogProduct[];
@@ -79,3 +82,55 @@ export const getFactsData = unstable_cache(loadFactsData, ["business-facts"], {
   tags: ["products", "settings", "blog"],
   revalidate: 86400,
 });
+
+export type CatalogHeadline = {
+  /** Cheapest ACTIVE daily rate, in cents. */
+  rentFromCents: number;
+  /** e.g. "$155" — for "from $155/day" copy. */
+  rentFrom: string;
+  /** Dearest ACTIVE daily rate, formatted; null when unknown. */
+  rentTo: string | null;
+  /** Units that rent; null when the catalog could not be read. */
+  rentalCount: number | null;
+};
+
+let headlinePromise: Promise<CatalogHeadline> | null = null;
+let headlineAt = 0;
+/** A warm lambda re-reads (from the daily cache) at most hourly. */
+const HEADLINE_TTL_MS = 60 * 60 * 1000;
+
+/**
+ * Live catalog floor + fleet size for visible copy and metadata ("from
+ * $155/day", the home stats). Rides the daily facts cache, and is memoised per
+ * process so ~750 location pages prerendered in one build worker share one
+ * read instead of each opening a connection (see getSettingsOnce). Falls back
+ * to RENTAL_FROM_CENTS if the catalog can't be read.
+ */
+export function getCatalogHeadline(): Promise<CatalogHeadline> {
+  if (!headlinePromise || Date.now() - headlineAt > HEADLINE_TTL_MS) {
+    headlineAt = Date.now();
+    headlinePromise = getFactsData(CURATED_POST_SLUGS)
+      .then((d) => {
+        const rates = d.products
+          .map((p) => p.dailyRateCents)
+          .filter((c): c is number => c != null && c > 0);
+        const from = rates.length ? Math.min(...rates) : RENTAL_FROM_CENTS;
+        return {
+          rentFromCents: from,
+          rentFrom: formatPrice(from),
+          rentTo: rates.length ? formatPrice(Math.max(...rates)) : null,
+          rentalCount: rates.length || null,
+        };
+      })
+      .catch(() => {
+        headlinePromise = null; // retry next time rather than pin the fallback
+        return {
+          rentFromCents: RENTAL_FROM_CENTS,
+          rentFrom: formatPrice(RENTAL_FROM_CENTS),
+          rentTo: null,
+          rentalCount: null,
+        };
+      });
+  }
+  return headlinePromise;
+}

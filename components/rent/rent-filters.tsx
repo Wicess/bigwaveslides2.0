@@ -67,14 +67,16 @@ export function RentFilters({
         <select
           value={params.get("sort") ?? "featured"}
           onChange={(e) =>
-            setParam("sort", e.target.value === "featured" ? undefined : e.target.value)
+            setParam(
+              "sort",
+              e.target.value === "featured" ? undefined : e.target.value,
+            )
           }
-          className="h-10 rounded-[var(--radius-sm)] border border-border bg-background px-3 text-sm focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+          className="border-border bg-background focus-visible:border-primary focus-visible:ring-ring/40 h-10 rounded-[var(--radius-sm)] border px-3 text-sm focus-visible:ring-2 focus-visible:outline-none"
         >
           <option value="featured">{t("sortFeatured")}</option>
           <option value="price-asc">{t("sortPriceAsc")}</option>
           <option value="price-desc">{t("sortPriceDesc")}</option>
-          <option value="rating">{t("sortRating")}</option>
         </select>
       </label>
     </div>

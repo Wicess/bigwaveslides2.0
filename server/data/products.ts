@@ -4,12 +4,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/retry";
 
-export type ShopSort =
-  | "featured"
-  | "newest"
-  | "price-asc"
-  | "price-desc"
-  | "rating";
+export type ShopSort = "featured" | "newest" | "price-asc" | "price-desc";
 
 export type ShopQuery = {
   /** Filter to a single category slug. */
@@ -19,8 +14,6 @@ export type ShopQuery = {
   sort?: ShopSort;
   minPriceCents?: number;
   maxPriceCents?: number;
-  /** Minimum average rating (1–5). */
-  minRating?: number;
   page?: number;
   pageSize?: number;
 };
@@ -78,11 +71,9 @@ function orderForSort(
         { dailyRateCents: "desc" },
         { id: "asc" },
       ];
-    case "rating":
-      return [{ ratingAvg: "desc" }, { ratingCount: "desc" }, { id: "asc" }];
     case "featured":
     default:
-      return [{ featured: "desc" }, { ratingAvg: "desc" }, { id: "asc" }];
+      return [{ featured: "desc" }, { dailyRateCents: "asc" }, { id: "asc" }];
   }
 }
 
@@ -100,7 +91,6 @@ async function fetchShopProducts(query: ShopQuery = {}) {
     sort = "featured",
     minPriceCents,
     maxPriceCents,
-    minRating,
     page = 1,
     pageSize = PRODUCT_PAGE_SIZE,
   } = query;
@@ -119,7 +109,6 @@ async function fetchShopProducts(query: ShopQuery = {}) {
     status: "ACTIVE",
     type: { in: ["SALE", "BOTH"] },
     ...(category ? { category: { slug: category } } : {}),
-    ...(minRating ? { ratingAvg: { gte: minRating } } : {}),
     ...(searchSlugs ? { slug: { in: searchSlugs } } : {}),
   };
 
@@ -331,7 +320,9 @@ export async function getRelatedProducts(
 export async function getProductSlugs() {
   return withRetry(() =>
     prisma.product.findMany({
-      where: { type: { in: ["SALE", "BOTH"] } },
+      // ACTIVE only: an archived product 404s, so it must not be listed in
+      // the sitemap or prerendered.
+      where: { type: { in: ["SALE", "BOTH"] }, status: "ACTIVE" },
       select: { slug: true, updatedAt: true },
     }),
   );

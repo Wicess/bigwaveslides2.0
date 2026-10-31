@@ -76,14 +76,17 @@ export type HomeData = Awaited<ReturnType<typeof getHomeData>>;
     search). Cached 1h; returns count 0 on error so no rating is ever faked. */
 export const getRatingSummary = unstable_cache(
   async () => {
+    // Straight from APPROVED Review rows, not the Product.rating* rollups:
+    // import scripts once seeded those (4.8–5.0 with 11–24 "reviews"), and
+    // this aggregate feeds the site-wide AggregateRating schema.
     const s = await withRetry(() =>
-      prisma.product.aggregate({
-        where: { status: "ACTIVE", ratingCount: { gt: 0 } },
-        _sum: { ratingCount: true },
-        _avg: { ratingAvg: true },
+      prisma.review.aggregate({
+        where: { status: "APPROVED", product: { status: "ACTIVE" } },
+        _count: { _all: true },
+        _avg: { rating: true },
       }),
     ).catch(() => null);
-    return { count: s?._sum.ratingCount ?? 0, value: s?._avg.ratingAvg ?? 0 };
+    return { count: s?._count._all ?? 0, value: s?._avg.rating ?? 0 };
   },
   ["rating-summary"],
   { tags: ["products", "reviews"], revalidate: 3600 },

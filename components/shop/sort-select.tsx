@@ -5,7 +5,9 @@ import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { Select } from "@/components/ui/select";
 
-const OPTIONS = ["featured", "newest", "price-asc", "price-desc", "rating"] as const;
+// No "Top rated": with no approved reviews it ranked by nothing (or, worse,
+// by ratings an import script once seeded).
+const OPTIONS = ["featured", "newest", "price-asc", "price-desc"] as const;
 
 export function SortSelect() {
   const t = useTranslations("Shop");
@@ -16,7 +18,7 @@ export function SortSelect() {
 
   return (
     <label className="flex items-center gap-2 text-sm">
-      <span className="shrink-0 text-muted-foreground">{t("sortBy")}</span>
+      <span className="text-muted-foreground shrink-0">{t("sortBy")}</span>
       <Select
         value={current}
         onChange={(e) => {

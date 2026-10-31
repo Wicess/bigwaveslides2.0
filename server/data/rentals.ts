@@ -50,11 +50,9 @@ function orderForSort(
       return [{ dailyRateCents: "asc" }, { id: "asc" }];
     case "price-desc":
       return [{ dailyRateCents: "desc" }, { id: "asc" }];
-    case "rating":
-      return [{ ratingAvg: "desc" }, { ratingCount: "desc" }, { id: "asc" }];
     case "featured":
     default:
-      return [{ featured: "desc" }, { ratingAvg: "desc" }, { id: "asc" }];
+      return [{ featured: "desc" }, { dailyRateCents: "asc" }, { id: "asc" }];
   }
 }
 
@@ -309,7 +307,9 @@ export async function getRelatedRentals(
 export async function getRentalSlugs() {
   return withRetry(() =>
     prisma.product.findMany({
-      where: { type: { in: ["RENTAL", "BOTH"] } },
+      // ACTIVE only: an archived product 404s, so it must not be listed in
+      // the sitemap or prerendered.
+      where: { type: { in: ["RENTAL", "BOTH"] }, status: "ACTIVE" },
       select: { slug: true, updatedAt: true },
     }),
   );

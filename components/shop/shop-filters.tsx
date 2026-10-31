@@ -21,8 +21,6 @@ const PRICE_BANDS = [
   { min: 300000, max: undefined, label: "price_300000+" },
 ] as const;
 
-const RATINGS = [4, 3, 2];
-
 export function ShopFilters({
   categories,
   activeCategory,
@@ -57,12 +55,10 @@ export function ShopFilters({
   );
 
   const activePrice = `${params.get("minPrice") ?? ""}-${params.get("maxPrice") ?? ""}`;
-  const activeRating = params.get("minRating");
   const hasFilters =
     activeCategory ||
     params.get("minPrice") ||
     params.get("maxPrice") ||
-    params.get("minRating") ||
     params.get("q");
 
   const categoryHref = (slug?: string) =>
@@ -146,41 +142,6 @@ export function ShopFilters({
                     aria-hidden
                   />
                   {t(band.label)}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      {/* Rating */}
-      <div>
-        <h3 className="text-muted-foreground mb-3 text-sm font-semibold tracking-wide uppercase">
-          {t("filterRating")}
-        </h3>
-        <ul className="space-y-1">
-          {RATINGS.map((r) => {
-            const checked = activeRating === String(r);
-            return (
-              <li key={r}>
-                <button
-                  type="button"
-                  onClick={() =>
-                    apply((sp) => {
-                      if (checked) sp.delete("minRating");
-                      else sp.set("minRating", String(r));
-                    })
-                  }
-                  className={cn(
-                    "hover:bg-muted flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-sm transition-colors",
-                    checked && "bg-primary-50 text-primary font-semibold",
-                  )}
-                >
-                  <span className="text-amber-400" aria-hidden>
-                    {"★".repeat(r)}
-                    <span className="text-border">{"★".repeat(5 - r)}</span>
-                  </span>
-                  {t("ratingUp")}
                 </button>
               </li>
             );

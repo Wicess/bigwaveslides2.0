@@ -10,6 +10,7 @@
  * Unlike `page.tsx`, a layout does NOT re-render when navigating between pages
  * inside it — so the header/footer stay mounted as the user moves around.
  */
+import { getCatalogHeadline } from "@/server/data/catalog-facts";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -65,78 +66,82 @@ const bingVerification =
   process.env.NEXT_PUBLIC_BING_VERIFICATION ||
   "A8C9495020F192A25CD68B7F02D73D38";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  ),
-  title: {
-    // Keyword-first, brand-free: an unknown brand in every title wastes the
-    // most valuable SEO space. Pages set their own complete titles, so the
-    // template is a pass-through (no automatic brand suffix). Kept under ~60
-    // characters so Google renders it whole instead of truncating or (worse)
-    // rewriting it with its own guess.
-    default: "Water Slide Rentals Near You — From $155/Day, USA",
-    template: "%s",
-  },
-  description:
-    "Rent or buy inflatable water slides anywhere in the USA from $155/day — delivered, set up, sanitized and fully insured. Get a free quote in minutes.",
-  openGraph: {
-    type: "website",
-    siteName: "Splash Republic",
-    images: [{ url: "/api/og", width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: ["/api/og"],
-  },
-  // Site-wide crawl defaults. `max-snippet:-1` lifts Google's cap on how much
-  // text it may quote from a page — which is exactly the text AI Overviews and
-  // other answer engines draw on — and `max-image-preview:large` unlocks the
-  // full-size thumbnail in both blue-link and AI results. Pages that need to be
-  // hidden set their own `robots` via buildMetadata({ noindex: true }).
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+// Async only to read the live catalog floor for the "from $X/day" copy
+// (daily cache, memoised per process — no per-request DB work).
+export async function generateMetadata(): Promise<Metadata> {
+  const { rentFrom } = await getCatalogHeadline();
+  return {
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+    ),
+    title: {
+      // Keyword-first, brand-free: an unknown brand in every title wastes the
+      // most valuable SEO space. Pages set their own complete titles, so the
+      // template is a pass-through (no automatic brand suffix). Kept under ~60
+      // characters so Google renders it whole instead of truncating or (worse)
+      // rewriting it with its own guess.
+      default: `Water Slide Rentals Near You — From ${rentFrom}/Day, USA`,
+      template: "%s",
+    },
+    description: `Rent or buy inflatable water slides anywhere in the USA from ${rentFrom}/day — delivered, set up, sanitized and fully insured. Get a free quote in minutes.`,
+    openGraph: {
+      type: "website",
+      siteName: "Splash Republic",
+      images: [{ url: "/api/og", width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: ["/api/og"],
+    },
+    // Site-wide crawl defaults. `max-snippet:-1` lifts Google's cap on how much
+    // text it may quote from a page — which is exactly the text AI Overviews and
+    // other answer engines draw on — and `max-image-preview:large` unlocks the
+    // full-size thumbnail in both blue-link and AI results. Pages that need to be
+    // hidden set their own `robots` via buildMetadata({ noindex: true }).
+    robots: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  // Search-engine ownership verification.
-  //
-  // Intentionally driven by env vars and EMPTY by default. The previous tokens
-  // were hardcoded and belonged to properties verified on the old domain and
-  // the old brand's account; carrying them onto a new domain verifies nothing
-  // and leaves stale meta tags claiming ownership from someone else's console.
-  //
-  // To verify a new property: set NEXT_PUBLIC_GOOGLE_VERIFICATION (and/or
-  // NEXT_PUBLIC_BING_VERIFICATION) in Vercel to the token the console gives
-  // you, redeploy, then click Verify. Prefer the DNS TXT method where you can —
-  // it survives redeploys and domain moves without a code change at all.
-  ...(googleVerification || bingVerification
-    ? {
-        verification: {
-          ...(googleVerification ? { google: googleVerification } : {}),
-          ...(bingVerification
-            ? { other: { "msvalidate.01": bingVerification } }
-            : {}),
-        },
-      }
-    : {}),
-  // iOS home-screen app behavior (Add to Home Screen). "default" keeps a
-  // normal, visible status bar (dark text on light) with the web content
-  // sitting below it — matching Android's standalone display, so the system
-  // chrome (clock, battery, and the swipe-down affordances) stays present
-  // instead of being hidden behind an immersive translucent bar.
-  appleWebApp: {
-    capable: true,
-    title: "Splash Republic",
-    statusBarStyle: "default",
-  },
-};
+    // Search-engine ownership verification.
+    //
+    // Intentionally driven by env vars and EMPTY by default. The previous tokens
+    // were hardcoded and belonged to properties verified on the old domain and
+    // the old brand's account; carrying them onto a new domain verifies nothing
+    // and leaves stale meta tags claiming ownership from someone else's console.
+    //
+    // To verify a new property: set NEXT_PUBLIC_GOOGLE_VERIFICATION (and/or
+    // NEXT_PUBLIC_BING_VERIFICATION) in Vercel to the token the console gives
+    // you, redeploy, then click Verify. Prefer the DNS TXT method where you can —
+    // it survives redeploys and domain moves without a code change at all.
+    ...(googleVerification || bingVerification
+      ? {
+          verification: {
+            ...(googleVerification ? { google: googleVerification } : {}),
+            ...(bingVerification
+              ? { other: { "msvalidate.01": bingVerification } }
+              : {}),
+          },
+        }
+      : {}),
+    // iOS home-screen app behavior (Add to Home Screen). "default" keeps a
+    // normal, visible status bar (dark text on light) with the web content
+    // sitting below it — matching Android's standalone display, so the system
+    // chrome (clock, battery, and the swipe-down affordances) stays present
+    // instead of being hidden behind an immersive translucent bar.
+    appleWebApp: {
+      capable: true,
+      title: "Splash Republic",
+      statusBarStyle: "default",
+    },
+  };
+}
 
 export const viewport: Viewport = {
   // Edge-to-edge: let the app paint under the status bar / notch on mobile so
@@ -181,7 +186,7 @@ export default async function LocaleLayout({
   // Real review aggregate → star ratings on the site-wide LocalBusiness schema.
   const rating = await getRatingSummary().catch(() => ({
     count: 0,
-    value: 4.9,
+    value: 0,
   }));
   // `t` / `tc` are translator functions scoped to a namespace in the messages.
   const t = await getTranslations("Layout");
