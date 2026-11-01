@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { getChatUiOpen } from "@/lib/chat/chat-ui";
+import { getChatUiOpen, openChat } from "@/lib/chat/chat-ui";
 import {
   CHAT_URL,
   showReplyNotification,
@@ -14,18 +14,28 @@ import {
   setUnread,
 } from "@/lib/chat/unread-store";
 
-const EVERY_MS = 60_000;
+const EVERY_MS = 30_000;
 const IDLE_AFTER_MS = 3 * 60_000;
 
 /**
- * Keeps the unread badges current while the chat is closed, and pops a notification
- * when a new staff message arrives (if the visitor turned notifications on).
+ * Keeps the unread badges current while the chat is closed, and when a new staff
+ * message arrives, opens the chat pop-up onto it (owner, 2026-11-01) and pops a
+ * notification if the visitor turned notifications on. On the profile, which has the
+ * full-screen chat a tap away, only the badge counts up.
  *
  * Cost first, as the cost playbook asks: nothing at all for a visitor with no
- * conversation; otherwise one small request a minute, only while the tab is visible
+ * conversation; otherwise one small request every 30s, only while the tab is visible
  * and someone has touched it in the last three minutes, plus one catch-up when they
- * come back to it. Web push covers the site being closed.
+ * come back to it. A web push the service worker receives while the site is open is
+ * passed to the page (public/sw.js), so the check runs the moment a reply is sent.
  */
+/** The profile (`/en/account…`), where the chat is a full-screen tab, not a pop-up. */
+function onProfile(): boolean {
+  return /^\/[a-z]{2}(-[A-Za-z]{2})?\/account(\/|$)/.test(
+    window.location.pathname,
+  );
+}
+
 export function UnreadWatcher() {
   useEffect(() => {
     let lastActivity = Date.now();
@@ -53,6 +63,7 @@ export function UnreadWatcher() {
         }
         const before = getUnread();
         setUnread(data.unread);
+        if (data.unread > before && !onProfile()) openChat();
         if (data.unread > before && storedNotificationsOn()) {
           const n = data.unread;
           void showReplyNotification(
@@ -85,7 +96,13 @@ export function UnreadWatcher() {
       }
     };
 
+    const onWorkerMessage = (event: MessageEvent) => {
+      if ((event.data as { type?: unknown } | null)?.type === "chat-push")
+        void check();
+    };
+
     void tick();
+    navigator.serviceWorker?.addEventListener("message", onWorkerMessage);
     const ACTIVITY = ["pointerdown", "keydown", "touchstart", "wheel"] as const;
     for (const event of ACTIVITY)
       window.addEventListener(event, markActive, { passive: true });
@@ -96,6 +113,7 @@ export function UnreadWatcher() {
       for (const event of ACTIVITY)
         window.removeEventListener(event, markActive);
       document.removeEventListener("visibilitychange", onVisible);
+      navigator.serviceWorker?.removeEventListener("message", onWorkerMessage);
     };
   }, []);
 

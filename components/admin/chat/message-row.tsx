@@ -238,7 +238,6 @@ export function MessageRow({
         >
           {mine ? (
             <>
-              {m.authorName ? <span>{m.authorName} · </span> : null}
               <span title={exactTime(m.createdAt)}>
                 {clockTime(m.createdAt)}
               </span>

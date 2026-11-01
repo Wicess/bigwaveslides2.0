@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   useCallback,
   useEffect,
@@ -15,13 +14,10 @@ import {
   AttachmentViewer,
   type ViewerItem,
 } from "@/components/chat/attachment-viewer";
-import { CANNED_REPLIES, type CannedReply } from "@/lib/chat/canned";
 import {
   AlertIcon,
-  ArrowLeftIcon,
   BellIcon,
   CheckIcon,
-  ChevronRightIcon,
   CrossIcon,
   PaperclipIcon,
   SendIcon,
@@ -41,10 +37,6 @@ import { preparePush, usePushStatus } from "@/components/chat/push-client";
  *
  * Rebuilt on this project's semantic tokens rather than WHAM's hard-coded zinc and
  * brand-blue, so it follows the site into dark mode instead of glowing white in it.
- *
- * Kept from the quick chat this replaces: the four instant answers on first
- * contact. Most people ask one of them, and a correct answer with a link, right now,
- * beats waiting for a person — it costs no request at all.
  */
 
 function timeLabel(iso: string): string {
@@ -245,7 +237,6 @@ export function ChatPanel({
   const [emailError, setEmailError] = useState<string | null>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const [fileError, setFileError] = useState<string | null>(null);
-  const [faq, setFaq] = useState<CannedReply | null>(null);
   const [showEmoji, setShowEmoji] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   // Whether the reader is at the newest message. A photo that finishes loading
@@ -465,34 +456,6 @@ export function ChatPanel({
               </div>
             ))}
           </div>
-        ) : firstContact && faq ? (
-          <div className="px-1 motion-safe:animate-[fade-in_180ms_ease-out]">
-            <button
-              type="button"
-              onClick={() => setFaq(null)}
-              className="text-foreground-muted hover:bg-surface-sunken hover:text-foreground inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-[13px] font-medium"
-            >
-              <ArrowLeftIcon className="size-4" /> All questions
-            </button>
-            <div className="border-border-subtle bg-surface mt-2 rounded-2xl border p-4">
-              <p className="font-product text-foreground text-[15px] font-medium">
-                {faq.question}
-              </p>
-              <p className="text-foreground-muted mt-2 text-[14px] leading-relaxed">
-                {faq.answer}
-              </p>
-              <Link
-                href={faq.href}
-                onClick={onClose}
-                className="text-accent-fg mt-3 inline-flex min-h-10 items-center gap-1 text-[14px] font-medium underline underline-offset-4"
-              >
-                {faq.linkLabel} <ChevronRightIcon className="size-4" />
-              </Link>
-            </div>
-            <p className="text-foreground-subtle mt-3 px-2 text-center text-[12px]">
-              Still need a hand? Write below — a person reads every message.
-            </p>
-          </div>
         ) : firstContact ? (
           <div className="flex min-h-full flex-col justify-center px-2">
             <div className="text-center">
@@ -507,23 +470,6 @@ export function ChatPanel({
                 every message.
               </p>
             </div>
-            <p className="text-foreground-subtle mt-5 px-1 text-[11px] font-semibold tracking-wider uppercase">
-              Answered instantly
-            </p>
-            <ul className="mt-2 space-y-1.5">
-              {CANNED_REPLIES.map((reply) => (
-                <li key={reply.id}>
-                  <button
-                    type="button"
-                    onClick={() => setFaq(reply)}
-                    className="border-border-subtle bg-surface text-foreground hover:border-border-strong flex min-h-11 w-full items-center justify-between gap-3 rounded-xl border px-4 text-left text-[14px]"
-                  >
-                    {reply.question}
-                    <ChevronRightIcon className="text-foreground-subtle size-4 shrink-0" />
-                  </button>
-                </li>
-              ))}
-            </ul>
           </div>
         ) : (
           messages.map((m, i) => {

@@ -73,7 +73,13 @@ self.addEventListener('push', (event) => {
     badgeCount > 0 && self.navigator && typeof self.navigator.setAppBadge === 'function'
       ? self.navigator.setAppBadge(badgeCount).catch(() => {})
       : Promise.resolve()
-  event.waitUntil(Promise.all([shown, badge]))
+  // An open tab of the site checks for the new message at once and opens its chat,
+  // rather than waiting for its next poll (components/chat/unread-watcher.tsx).
+  const tell = self.clients
+    .matchAll({ type: 'window' })
+    .then((windows) => windows.forEach((client) => client.postMessage({ type: 'chat-push' })))
+    .catch(() => {})
+  event.waitUntil(Promise.all([shown, badge, tell]))
 })
 
 self.addEventListener('notificationclick', (event) => {
