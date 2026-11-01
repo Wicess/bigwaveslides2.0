@@ -582,7 +582,7 @@ function MobileMenu({
             href="/"
             onClick={onClose}
             aria-label="Splash Republic — home"
-            className="flex items-center gap-2.5"
+            className="flex min-w-0 items-center gap-2.5"
           >
             <Image
               src="/logo.png"
@@ -592,18 +592,14 @@ function MobileMenu({
               height={127}
               className="h-10 w-auto"
             />
-            <span
-              aria-hidden
-              className="font-brand text-foreground text-xl font-bold tracking-[-0.01em]"
-            >
-              SR
-            </span>
+            {/* No "SR" beside it: the logo carries the wordmark, and the extra text
+                ran under the close button on phones. */}
           </Link>
           <button
             type="button"
             onClick={onClose}
             aria-label={t("closeMenu")}
-            className="text-foreground hover:bg-muted grid size-10 place-items-center rounded-full transition-colors active:scale-95"
+            className="text-foreground hover:bg-muted grid size-10 shrink-0 place-items-center rounded-full transition-colors active:scale-95"
           >
             <X className="size-6" />
           </button>
