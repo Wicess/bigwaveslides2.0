@@ -39,7 +39,7 @@ describe("buildPayload", () => {
         {
           title: " New  reply ",
           body: "Hello\nthere",
-          url: "/en?openchat=1",
+          url: "/en/account/chat",
           tag: "chat-reply",
           badgeCount: 2,
         },
@@ -49,7 +49,7 @@ describe("buildPayload", () => {
     expect(json).toEqual({
       title: "New reply",
       body: "Hello there",
-      url: "/en?openchat=1",
+      url: "/en/account/chat",
       tag: "chat-reply",
       badgeCount: 2,
     });

@@ -9,7 +9,7 @@ import type { PushMessage } from "@/lib/push/payload";
  * second replaces the first instead of stacking.
  */
 export const CHAT_REPLY_TAG = "chat-reply";
-export const CHAT_PATH = "/en?openchat=1";
+export const CHAT_PATH = "/en/account/chat";
 
 export function staffReplyNotification(input: {
   body: string;

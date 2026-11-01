@@ -28,7 +28,7 @@ export function AccountChip({ label }: { label: string }) {
 
   return (
     <Link
-      href="/account"
+      href="/account/chat"
       aria-label={label}
       className={cn(
         "grid size-9 place-items-center rounded-md border text-white transition-colors sm:size-11",

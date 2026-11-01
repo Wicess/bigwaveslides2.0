@@ -84,7 +84,7 @@ function Bubble({
   if (m.sender === "SYSTEM") {
     return (
       <div className="flex justify-center px-2">
-        <p className="bg-surface-sunken text-foreground-muted max-w-[92%] rounded-2xl px-4 py-3 text-center text-[13px] leading-relaxed whitespace-pre-wrap">
+        <p className="text-foreground-muted max-w-[92%] rounded-2xl bg-white px-4 py-3 text-center text-[13px] leading-relaxed whitespace-pre-wrap ring-1 ring-[#003366]/8">
           {m.body}
         </p>
       </div>
@@ -108,7 +108,9 @@ function Bubble({
             "overflow-hidden text-[15px] leading-relaxed",
             // The tail: the corner nearest the sender squares off.
             mine
-              ? "bg-primary text-on-primary rounded-[20px] rounded-br-md"
+              ? // The site's deep blues, not the bright primary: white text on #0099ff
+                // falls short of comfortable contrast, on this gradient it does not.
+                "rounded-[20px] rounded-br-md text-white shadow-[0_6px_16px_-8px_rgba(0,51,102,0.45)] [background:linear-gradient(135deg,#0a4d8c_0%,#0077cc_100%)]"
               : "border-border bg-surface text-foreground rounded-[20px] rounded-bl-md border",
             m.failed ? "opacity-70" : "",
           ].join(" ")}
@@ -331,11 +333,12 @@ export function ChatPanel({
       aria-labelledby={titleId}
       className="bg-background flex h-full min-h-0 flex-col"
     >
-      <header className="border-border bg-surface flex shrink-0 items-center gap-3 border-b px-4 py-3">
+      {/* The header in the site's deep ocean gradient (--gradient-deep). */}
+      <header className="flex shrink-0 items-center gap-3 px-4 py-3 text-white [background:var(--gradient-deep)]">
         <div className="min-w-0 flex-1">
           <h2
             id={titleId}
-            className="font-product text-foreground text-base font-medium"
+            className="font-product text-base font-semibold text-white"
           >
             {BRAND.name}
           </h2>
@@ -348,7 +351,7 @@ export function ChatPanel({
           */}
           <p className="mt-1 flex items-center gap-2.5 text-xs">
             <PresenceDot online blink />
-            <span className="text-presence font-medium tracking-wide">
+            <span className="font-medium tracking-wide text-[#86efac]">
               Admin online
             </span>
           </p>
@@ -384,17 +387,15 @@ export function ChatPanel({
                 ? "Reply notifications on"
                 : "Notify me when the team replies"
             }
-            className={`hover:bg-surface-sunken relative inline-flex size-11 items-center justify-center rounded-full ${
-              notificationsOn
-                ? "text-accent-fg"
-                : "text-foreground-muted hover:text-foreground"
+            className={`relative inline-flex size-11 items-center justify-center rounded-full transition-colors hover:bg-white/12 ${
+              notificationsOn ? "text-white" : "text-white/75 hover:text-white"
             }`}
           >
             <BellIcon className="size-5" />
             {notificationsOn ? (
               <span
                 aria-hidden
-                className="bg-accent absolute top-2.5 right-2.5 size-2 rounded-full"
+                className="absolute top-2.5 right-2.5 size-2 rounded-full bg-[#7fe9ff] ring-2 ring-[#003366]"
               />
             ) : null}
           </button>
@@ -404,7 +405,7 @@ export function ChatPanel({
             type="button"
             onClick={onClose}
             aria-label="Close chat"
-            className="text-foreground-muted hover:bg-surface-sunken hover:text-foreground inline-flex size-11 items-center justify-center rounded-full"
+            className="inline-flex size-11 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/12 hover:text-white"
           >
             <CrossIcon className="size-5" />
           </button>
@@ -427,7 +428,7 @@ export function ChatPanel({
             atBottomRef.current =
               list.scrollHeight - list.scrollTop - list.clientHeight < 80;
         }}
-        className="scrollbar-touch-hidden min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain px-3 py-4"
+        className="scrollbar-touch-hidden min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain bg-[#f5f9fd] px-3 py-4"
       >
         {loading && messages.length === 0 ? (
           <div className="space-y-3" aria-hidden>
@@ -473,7 +474,7 @@ export function ChatPanel({
         ) : firstContact ? (
           <div className="flex min-h-full flex-col justify-center px-2">
             <div className="text-center">
-              <span className="bg-accent-muted text-accent-fg mx-auto grid size-12 place-items-center rounded-2xl">
+              <span className="mx-auto grid size-12 place-items-center rounded-2xl text-white shadow-[var(--shadow-glow)] [background:var(--gradient-wave)]">
                 <SendIcon className="size-5" />
               </span>
               <p className="font-product text-foreground mt-3 text-base font-medium">
@@ -653,7 +654,7 @@ export function ChatPanel({
             type="submit"
             disabled={!draft.trim() || sending || blocked}
             aria-label="Send message"
-            className="bg-primary text-on-primary grid size-11 shrink-0 place-items-center rounded-full disabled:opacity-40"
+            className="grid size-11 shrink-0 place-items-center rounded-full text-white shadow-[0_6px_16px_-6px_rgba(0,51,102,0.5)] transition-[transform,opacity] duration-200 [background:var(--gradient-deep)] active:scale-95 disabled:opacity-40 disabled:shadow-none"
           >
             <SendIcon className="size-4" />
           </button>

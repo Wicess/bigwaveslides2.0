@@ -19,7 +19,7 @@ const STATUS_BAR_BADGE = '/pwa/icon-192.png'
 
 /** A same-site path to open, never another site. Kept pure, and tested. */
 function notificationTarget(data) {
-  const fallback = data && data.tag === 'chat-reply' ? '/en?openchat=1' : '/en'
+  const fallback = data && data.tag === 'chat-reply' ? '/en/account/chat' : '/en'
   const raw = data && typeof data.url === 'string' ? data.url : fallback
   try {
     const url = new URL(raw, self.location.origin)

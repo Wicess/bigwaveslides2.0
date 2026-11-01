@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import {
   closeChat,
   getChatUiOpen,
@@ -78,16 +78,52 @@ export function ChatWidget() {
     };
   }, [open]);
 
+  /*
+    A smooth open AND close. The card stays mounted for its exit, so closing plays
+    the same motion in reverse instead of vanishing; the launcher returns after it.
+    Reduced motion: no animation and no delay.
+  */
+  const [shown, setShown] = useState(open);
+  const [leaving, setLeaving] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setShown(true);
+      setLeaving(false);
+      return;
+    }
+    if (!shown) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(false);
+      return;
+    }
+    setLeaving(true);
+    // The card is removed when its exit animation ENDS (onAnimationEnd below), so a
+    // slow phone still sees the whole motion. This timer is only a backstop, in case
+    // the animation never runs (a hidden tab, for example).
+    const timer = window.setTimeout(() => {
+      setShown(false);
+      setLeaving(false);
+    }, 900);
+    return () => window.clearTimeout(timer);
+  }, [open, shown]);
+
+  const onCardAnimationEnd = (event: React.AnimationEvent<HTMLDivElement>) => {
+    if (!leaving || event.target !== event.currentTarget) return;
+    setShown(false);
+    setLeaving(false);
+  };
+
   return (
     <>
-      {!open ? (
+      {!shown ? (
         <button
           type="button"
           onClick={openChat}
           aria-label="Chat with us"
           // Splash Republic has no bottom tab bar, so the button shows on phones too:
-          // a round icon there, the labelled pill from md. It sits above the explore bar.
-          className="bg-primary text-on-primary fixed right-4 bottom-[calc(1.25rem+var(--explore-bar-h,0px))] z-(--z-drawer) inline-flex size-14 cursor-pointer items-center justify-center gap-2 rounded-full text-sm font-semibold shadow-[var(--shadow-glow)] transition-transform duration-200 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 motion-reduce:transition-none sm:bottom-6 md:size-auto md:min-h-12 md:px-5"
+          // a round icon there, the labelled pill from md. It sits above the explore
+          // bar, in the site's own ocean gradient (as the Rent Now button).
+          className="fixed right-4 bottom-[calc(1.25rem+var(--explore-bar-h,0px))] z-(--z-drawer) inline-flex size-14 cursor-pointer items-center justify-center gap-2 rounded-full text-sm font-semibold text-white shadow-[var(--shadow-glow)] ring-1 ring-white/25 transition-[transform,box-shadow] duration-300 ease-[var(--ease-out-expo)] [background:var(--gradient-wave)] hover:-translate-y-0.5 hover:shadow-[0_14px_44px_-10px_rgba(0,153,255,0.6)] active:scale-95 motion-safe:animate-[chat-launcher-in_320ms_var(--ease-out-expo)] motion-reduce:transition-none sm:bottom-6 md:size-auto md:min-h-12 md:px-5"
         >
           <ChatIcon className="size-6 md:size-5" />
           <span className="hidden md:inline">Chat with us</span>
@@ -95,7 +131,7 @@ export function ChatWidget() {
         </button>
       ) : null}
 
-      {open ? (
+      {shown ? (
         <>
           {/* Phone: the site stays visible beside the panel; tapping it closes the chat. */}
           <button
@@ -103,22 +139,29 @@ export function ChatWidget() {
             tabIndex={-1}
             aria-label="Close chat"
             onClick={closeChat}
-            className="fixed inset-0 z-(--z-drawer) cursor-default bg-stone-950/45 motion-safe:animate-[fade-in_180ms_ease-out] md:hidden"
+            className={`fixed inset-0 z-(--z-drawer) cursor-default bg-[#001a33]/45 backdrop-blur-[2px] md:hidden ${
+              leaving
+                ? "motion-safe:animate-[fade-out_200ms_ease-in_forwards]"
+                : "motion-safe:animate-[fade-in_240ms_ease-out]"
+            }`}
           />
           {/* data-lenis-prevent: the site's smooth scrolling must not swallow the chat's own scroll. */}
           <div
             data-lenis-prevent
+            onAnimationEnd={onCardAnimationEnd}
             className={[
-              "bg-background fixed z-(--z-drawer) overflow-hidden shadow-2xl",
-              // Phone: a side panel over the site, as tall as the visible screen (keyboard
-              // included), so the field stays put while the messages scroll. Desktop: a corner card.
-              // Sizes come from .chat-card in globals.css (phones only), which follow the keyboard.
-              "chat-card border-border right-3 w-[min(22rem,calc(100vw-1.5rem))] rounded-2xl border",
-              "md:top-auto md:right-5 md:bottom-5 md:h-[min(640px,calc(100dvh-2.5rem))] md:w-[380px] md:rounded-2xl md:border",
-              "motion-safe:animate-[fade-in_180ms_ease-out]",
+              "bg-background fixed z-(--z-drawer) origin-bottom-right overflow-hidden",
+              "shadow-[0_28px_70px_-24px_rgba(0,51,102,0.55)] ring-1 ring-[#003366]/10",
+              // Phone: a card above the keyboard, sized by .chat-card in globals.css.
+              // Desktop: a corner card, shorter than before (owner, 2026-10-31).
+              "chat-card right-3 w-[min(22rem,calc(100vw-1.5rem))] rounded-2xl",
+              "md:top-auto md:right-5 md:bottom-5 md:h-[min(560px,calc(100dvh-2.5rem))] md:w-[372px]",
+              leaving
+                ? "motion-safe:animate-[chat-out_200ms_ease-in_forwards]"
+                : "motion-safe:animate-[chat-in_320ms_var(--ease-out-expo)]",
             ].join(" ")}
           >
-            <ChatPanel open={open} onClose={closeChat} />
+            <ChatPanel open={shown} onClose={closeChat} />
           </div>
         </>
       ) : null}

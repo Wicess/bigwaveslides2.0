@@ -2,7 +2,8 @@ import "server-only";
 import { env } from "@/lib/env";
 
 /**
- * The chat's phone alerts, through Splash Republic's ntfy topic (NTFY_TOPIC).
+ * The chat's phone alerts, on the chat's own ntfy topic (NTFY_TOPIC_CHAT, falling
+ * back to the order topic NTFY_TOPIC).
  *
  * Same shape as the rest of the site's ntfy alerts (lib/ntfy.ts): JSON publish, so
  * titles keep their emoji and punctuation. The chat adds what lib/ntfy.ts does not
@@ -40,7 +41,9 @@ export function alertLines(
 const ATTEMPTS = 3;
 
 export async function notify(message: NtfyMessage): Promise<boolean> {
-  const topic = env.NTFY_TOPIC;
+  // The chat has its own topic (owner, 2026-10-31), so chat alerts ring apart from
+  // orders; NTFY_TOPIC until it is set.
+  const topic = env.NTFY_TOPIC_CHAT || env.NTFY_TOPIC;
   if (!topic) {
     console.info(`[ntfy:not-configured] ${message.title}`);
     return false;
@@ -56,14 +59,12 @@ export async function notify(message: NtfyMessage): Promise<boolean> {
     ...(message.clickUrl ? { click: message.clickUrl } : {}),
     ...(message.actions?.length
       ? {
-          actions: message.actions
-            .slice(0, 3)
-            .map((a) => ({
-              action: "view",
-              label: a.label,
-              url: a.url,
-              clear: true,
-            })),
+          actions: message.actions.slice(0, 3).map((a) => ({
+            action: "view",
+            label: a.label,
+            url: a.url,
+            clear: true,
+          })),
         }
       : {}),
     ...(message.attach

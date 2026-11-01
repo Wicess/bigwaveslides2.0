@@ -785,6 +785,31 @@ html {
       color-mix(in oklab, var(--presence) 55%, transparent);
   }
 }
+/* The pop-up chat: rises and settles from the corner it lives in, and leaves the
+   same way. Transform and opacity only, so it stays smooth on a phone. */
+@keyframes chat-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+}
+@keyframes chat-out {
+  to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+}
+@keyframes chat-launcher-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
 @keyframes bubble-in {
   from {
     opacity: 0;
@@ -799,7 +824,8 @@ html {
 */
 @media (width < 48rem) {
   .chat-card {
-    --chat-card-h: min(34rem, calc(var(--app-vh, 100dvh) - 1.5rem));
+    /* Shorter than MIMOSALSD's 34rem (owner, 2026-10-31), still clear of the keyboard. */
+    --chat-card-h: min(30rem, calc(var(--app-vh, 100dvh) - 1.5rem));
     height: var(--chat-card-h);
     top: calc(
       var(--app-vv-top, 0px) + var(--app-vh, 100dvh) - var(--chat-card-h) -

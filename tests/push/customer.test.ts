@@ -11,7 +11,7 @@ describe("customer notifications", () => {
     ).toEqual({
       title: "New reply from Splash Republic",
       body: "Your parcel left this morning.",
-      url: "/en?openchat=1",
+      url: "/en/account/chat",
       tag: "chat-reply",
     });
   });

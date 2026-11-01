@@ -100,11 +100,12 @@ export async function Hero({
             // site is establishing a name nobody recognises yet, so it earns
             // the extra size. Capped so it still clears the CTAs on a laptop.
             className="h-auto w-[min(92vw,900px)]"
-            // Two drop-shadows: a dark one for depth and a cyan glow so the
-            // logo stays readable and on-brand over any background slide.
+            // A lighter dark shadow for depth, a thin white halo that crisps the
+            // edges, and a brighter cyan glow (owner, 2026-10-31: the logo read as
+            // "dark and dull"; the old 0.55 black shadow muddied the letters).
             style={{
               filter:
-                "drop-shadow(0 8px 28px rgba(0,0,0,0.55)) drop-shadow(0 0 48px rgba(127,233,255,0.35))",
+                "drop-shadow(0 6px 18px rgba(0,0,0,0.32)) drop-shadow(0 0 1.5px rgba(255,255,255,0.45)) drop-shadow(0 0 42px rgba(127,233,255,0.5))",
             }}
           />
         </Reveal>

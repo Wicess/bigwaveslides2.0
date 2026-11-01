@@ -11,7 +11,8 @@
  */
 
 export const NOTIFY_STORAGE_KEY = "chat-reply-notifications";
-export const CHAT_URL = "/en?openchat=1";
+// The full-screen chat in the profile (components/account/account-chat.tsx).
+export const CHAT_URL = "/en/account/chat";
 
 export function notificationsSupported(): boolean {
   return typeof window !== "undefined" && "Notification" in window;

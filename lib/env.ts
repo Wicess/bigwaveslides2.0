@@ -68,6 +68,9 @@ const EnvSchema = z.object({
   // NTFY_TOPIC must be long & unguessable — ntfy.sh topics are public to
   // anyone who knows the name. SERVER/TOKEN only for self-hosted servers.
   NTFY_TOPIC: z.string().optional(),
+  // The live chat's own topic, so a customer waiting in the chat rings separately
+  // from orders. Falls back to NTFY_TOPIC when unset. Same rule: long, unguessable.
+  NTFY_TOPIC_CHAT: z.string().optional(),
   NTFY_SERVER: z.string().url().optional(),
   NTFY_TOKEN: z.string().optional(),
 
