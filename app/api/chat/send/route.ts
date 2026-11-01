@@ -16,6 +16,8 @@ import { cleanBody } from "@/lib/chat/rules";
 import { forCustomer } from "@/lib/chat/serialize";
 import { WELCOME_MESSAGE } from "@/lib/chat/welcome";
 import { reportError } from "@/lib/chat/report-error";
+import { getKnownEmail } from "@/lib/chat/known-email";
+import { subscribeNewsletter } from "@/server/actions/newsletter";
 
 /**
  * A customer sends a chat message.
@@ -112,7 +114,10 @@ export async function POST(request: Request) {
     that already has one (an order, a form, an earlier chat) needs nothing more.
   */
   const existing = await findThread(visitor);
-  if (!existing?.email && !parsed.data.email) {
+  // An email the visitor already gave the site (newsletter, an earlier chat) counts.
+  const known = await getKnownEmail();
+  const typed = parsed.data.email || null;
+  if (!existing?.email && !typed && !known) {
     return NextResponse.json(
       {
         ok: false,
@@ -126,9 +131,22 @@ export async function POST(request: Request) {
   try {
     const thread = await ensureThread({
       visitor,
-      email: parsed.data.email || null,
+      email: typed ?? known,
       name: parsed.data.name || null,
     });
+
+    // An email typed into the chat subscribes it too (owner, 2026-11-01), as the
+    // field says. subscribeNewsletter leaves an unsubscribed address alone.
+    let subscribed = false;
+    if (typed && !existing?.email) {
+      subscribed = Boolean(
+        (
+          await subscribeNewsletter({ email: typed, source: "chat" }).catch(
+            () => null,
+          )
+        )?.ok,
+      );
+    }
 
     // Read BEFORE writing: an alert fires only when a thread goes from "nothing
     // waiting" to "something waiting". A customer typing five messages in a row is
@@ -181,6 +199,7 @@ export async function POST(request: Request) {
       message: forCustomer(message),
       publicId: thread.publicId,
       hasEmail: Boolean(thread.email),
+      subscribed,
     });
   } catch (error) {
     await reportError(error, {

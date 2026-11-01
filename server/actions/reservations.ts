@@ -1,6 +1,8 @@
 "use server";
 
 import { after } from "next/server";
+import { visitorId } from "@/lib/chat/core";
+import { sendOrderInvoiceToChat } from "@/lib/chat/order-invoice";
 import { cookies, headers } from "next/headers";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
@@ -240,6 +242,12 @@ async function placeReservation({
   if (customerId) {
     await createCustomerSession(customerId, data.name).catch(() => {});
   }
+
+  // The invoice image, into the customer's chat on the site (owner, 2026-11-01).
+  // Their chat cookie is read now; the drawing and posting happen after the
+  // response, so placing the order is never slowed down or failed by it.
+  const chatVisitor = await visitorId(true).catch(() => null);
+  after(() => sendOrderInvoiceToChat(order.id, { visitor: chatVisitor }));
 
   const money = (c: number) => formatPrice(c, "en");
   const isRent = kind === "rent";

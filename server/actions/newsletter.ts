@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { notifyNewsletterSignup } from "@/lib/notifications";
 import { readUnsubscribeToken } from "@/lib/newsletter-token";
+import { rememberKnownEmail } from "@/lib/chat/known-email";
 
 const schema = z.object({
   email: z.string().email(),
@@ -74,6 +75,8 @@ export async function subscribeNewsletter(input: {
         locale: parsed.data.locale,
       }).catch(() => {});
     }
+    // The chat now knows this visitor's email and will not ask for it again.
+    await rememberKnownEmail(parsed.data.email).catch(() => {});
     return { ok: true };
   } catch {
     return { ok: false, error: "Subscription failed" };

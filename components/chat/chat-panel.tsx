@@ -334,13 +334,35 @@ export function ChatPanel({
       className="bg-background flex h-full min-h-0 flex-col"
     >
       {/* The header in the site's deep ocean gradient (--gradient-deep). */}
-      <header className="flex shrink-0 items-center gap-3 px-4 py-3 text-white [background:var(--gradient-deep)]">
+      {/* touch-none: on a phone the header is the card's drag handle (chat-widget.tsx). */}
+      <header className="relative flex shrink-0 touch-none items-center gap-3 px-4 py-3 text-white [background:var(--gradient-deep)]">
+        {variant === "widget" ? (
+          <span
+            aria-hidden
+            className="absolute top-1.5 left-1/2 h-1 w-9 -translate-x-1/2 rounded-full bg-white/35 md:hidden"
+          />
+        ) : null}
         <div className="min-w-0 flex-1">
-          <h2
-            id={titleId}
-            className="font-product text-base font-semibold text-white"
-          >
-            {BRAND.name}
+          {/* The logo, above "Admin online" (owner, 2026-11-01): the brand tile and the
+              wordmark in the brand font, light on the deep-blue header. */}
+          <h2 id={titleId} className="flex items-center gap-2.5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/splash-republic-mark.svg"
+              alt=""
+              width={34}
+              height={34}
+              className="size-[34px] rounded-[10px] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.45)] ring-1 ring-white/35"
+            />
+            <span aria-hidden className="flex flex-col leading-none">
+              <span className="font-brand text-[17px] font-bold tracking-[0.03em] text-white">
+                SPLASH
+              </span>
+              <span className="font-brand mt-[3px] text-[8.5px] font-semibold tracking-[0.46em] text-white/85">
+                REPUBLIC
+              </span>
+            </span>
+            <span className="sr-only">{BRAND.name}</span>
           </h2>
           {/*
             Always "Admin online" (owner, 2026-09-14): the owner is notified of every
@@ -559,8 +581,8 @@ export function ChatPanel({
               htmlFor={emailId}
               className="text-foreground-muted mb-1.5 block px-1 text-[12px] font-medium"
             >
-              Your email, to start the chat. We reply here, and by email if you
-              leave.
+              Your email, to start the chat. We reply here and by email, and
+              you&apos;ll get our newsletter (unsubscribe anytime).
             </label>
             <input
               ref={emailRef}
@@ -662,7 +684,7 @@ export function ChatPanel({
 
         <p className="text-foreground-subtle mt-2 flex items-center justify-center gap-1.5 text-[10px]">
           <ShieldIcon className="size-3" />
-          Private — only our team sees this conversation and anything you send.
+          Private, encrypted chat. Only our team and you see these messages.
         </p>
       </form>
       <AttachmentViewer item={viewing} onClose={closeViewer} />

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { geoFromIp } from "@/lib/analytics/geo";
-import { Package, User, Settings, MapPin } from "lucide-react";
+import { Package, User, Settings, MapPin, FileText } from "lucide-react";
+import { InvoiceEditor } from "@/components/admin/invoice-editor";
 import { requirePermission } from "@/lib/admin-auth";
 import { getAdminOrder } from "@/server/data/admin";
 import { formatPrice, formatDate } from "@/lib/format";
@@ -183,6 +184,32 @@ export default async function AdminOrderDetail({ params }: Props) {
                   method: m.method,
                   label: m.label,
                 }))}
+              />
+            </AdminCard>
+          </Reveal>
+
+          <Reveal delay={0.13}>
+            <AdminCard className="h-fit p-6">
+              <SectionTitle icon={FileText}>Invoice</SectionTitle>
+              <InvoiceEditor
+                orderId={order.id}
+                items={order.items.map((i) => ({
+                  id: i.id,
+                  name: i.name,
+                  quantity: i.quantity,
+                  unitPriceCents: i.unitPriceCents,
+                }))}
+                deliveryFeeCents={order.deliveryFeeCents}
+                discountCents={
+                  order.loyaltyDiscountCents + order.promoDiscountCents
+                }
+                invoiceNote={order.invoiceNote}
+                locked={
+                  ["PROOF_SUBMITTED", "PAID"].includes(
+                    order.paymentDetailsState,
+                  ) ||
+                  ["DEPOSIT_PAID", "PAID_IN_FULL"].includes(order.paymentStatus)
+                }
               />
             </AdminCard>
           </Reveal>

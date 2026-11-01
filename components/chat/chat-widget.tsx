@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   closeChat,
   getChatUiOpen,
@@ -113,6 +113,55 @@ export function ChatWidget() {
     setLeaving(false);
   };
 
+  /*
+    On a phone the card moves with a finger (owner, 2026-11-01): press the header
+    (not its buttons) and drag. It always stays fully on screen, and opens in its
+    usual place again next time. `translate` is used rather than `transform`, so it
+    never fights the open and close animations.
+  */
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const drag = useRef<{
+    id: number;
+    x: number;
+    y: number;
+    base: { x: number; y: number };
+    rect: DOMRect;
+  } | null>(null);
+  useEffect(() => {
+    if (!shown) setOffset({ x: 0, y: 0 });
+  }, [shown]);
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!window.matchMedia("(max-width: 767px)").matches) return;
+    const target = e.target as Element;
+    if (
+      !target.closest("header") ||
+      target.closest("button, a, input, textarea")
+    )
+      return;
+    drag.current = {
+      id: e.pointerId,
+      x: e.clientX,
+      y: e.clientY,
+      base: offset,
+      rect: e.currentTarget.getBoundingClientRect(),
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    if (!d || d.id !== e.pointerId) return;
+    const clamp = (v: number, lo: number, hi: number) =>
+      Math.min(Math.max(v, lo), hi);
+    const vw = window.visualViewport?.width ?? window.innerWidth;
+    const vh = window.visualViewport?.height ?? window.innerHeight;
+    const dx = clamp(e.clientX - d.x, 6 - d.rect.left, vw - 6 - d.rect.right);
+    const dy = clamp(e.clientY - d.y, 6 - d.rect.top, vh - 6 - d.rect.bottom);
+    setOffset({ x: d.base.x + dx, y: d.base.y + dy });
+  };
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (drag.current?.id === e.pointerId) drag.current = null;
+  };
+
   return (
     <>
       {!shown ? (
@@ -149,12 +198,18 @@ export function ChatWidget() {
           <div
             data-lenis-prevent
             onAnimationEnd={onCardAnimationEnd}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            style={{ translate: `${offset.x}px ${offset.y}px` }}
             className={[
-              "bg-background fixed z-(--z-drawer) origin-bottom-right overflow-hidden",
-              "shadow-[0_28px_70px_-24px_rgba(0,51,102,0.55)] ring-1 ring-[#003366]/10",
+              "chat-wave-border bg-background fixed z-(--z-drawer) origin-bottom-right overflow-hidden",
+              "shadow-[0_28px_70px_-24px_rgba(0,51,102,0.55),0_0_32px_-8px_rgba(0,153,255,0.35)]",
               // Phone: a card above the keyboard, sized by .chat-card in globals.css.
               // Desktop: a corner card, shorter than before (owner, 2026-10-31).
-              "chat-card right-3 w-[min(22rem,calc(100vw-1.5rem))] rounded-2xl",
+              // Wider on a phone (owner, 2026-11-01): nearly the full width.
+              "chat-card right-2 w-[min(30rem,calc(100vw-1rem))] rounded-2xl",
               "md:top-auto md:right-5 md:bottom-5 md:h-[min(560px,calc(100dvh-2.5rem))] md:w-[372px]",
               leaving
                 ? "motion-safe:animate-[chat-out_200ms_ease-in_forwards]"

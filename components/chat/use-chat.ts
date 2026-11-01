@@ -79,6 +79,23 @@ const TYPING_THROTTLE_MS = 2500;
 */
 const HIDDEN_POLL_MS = 30_000;
 const HIDDEN_NOTIFY_WINDOW_MS = 10 * 60_000;
+/**
+ * The newsletter pop-up (components/layout/subscribe-popup.tsx) stops for good once
+ * this browser has subscribed. An email given in the chat subscribes it, so the
+ * chat records the same flag and tells an open pop-up to close at once.
+ */
+export const NEWSLETTER_SUBSCRIBED_KEY = "bws_news_sub";
+export const NEWSLETTER_SUBSCRIBED_EVENT = "bws:subscribed";
+
+function markNewsletterSubscribed(): void {
+  try {
+    localStorage.setItem(NEWSLETTER_SUBSCRIBED_KEY, "1");
+  } catch {
+    // Private mode: the event below still closes the pop-up for this page.
+  }
+  window.dispatchEvent(new Event(NEWSLETTER_SUBSCRIBED_EVENT));
+}
+
 export function useChat({ open }: { open: boolean }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [publicId, setPublicId] = useState<string | null>(null);
@@ -279,6 +296,7 @@ export function useChat({ open }: { open: boolean }) {
               message: ChatMessage;
               publicId: string | null;
               hasEmail?: boolean;
+              subscribed?: boolean;
             }
           | { ok: false; error: string; needsEmail?: boolean }
           | null;
@@ -290,6 +308,7 @@ export function useChat({ open }: { open: boolean }) {
         }
         if (!response.ok || !data || !data.ok) throw new Error("send failed");
         if (data.hasEmail) setHasEmail(true);
+        if (data.subscribed) markNewsletterSubscribed();
         setMessages((prev) =>
           prev.map((m) => (m.id === optimistic.id ? data.message : m)),
         );
@@ -343,9 +362,15 @@ export function useChat({ open }: { open: boolean }) {
           body: form,
         });
         const data = (await response.json().catch(() => null)) as
-          | { ok: true; message: ChatMessage; hasEmail?: boolean }
+          | {
+              ok: true;
+              message: ChatMessage;
+              hasEmail?: boolean;
+              subscribed?: boolean;
+            }
           | { ok: false; error: string; needsEmail?: boolean }
           | null;
+        if (data?.ok && data.subscribed) markNewsletterSubscribed();
         if (!response.ok || !data || !data.ok) {
           setMessages((prev) =>
             prev.map((m) =>

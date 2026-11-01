@@ -7,6 +7,7 @@ import {
   visitorId,
 } from "@/lib/chat/core";
 import { forCustomer } from "@/lib/chat/serialize";
+import { getKnownEmail } from "@/lib/chat/known-email";
 
 /**
  * The customer's live view of their conversation.
@@ -32,9 +33,13 @@ export async function GET(request: Request) {
   const visitor = await visitorId(false);
   const thread = await findThread(visitor);
 
+  // A visitor who already gave the site an email (the newsletter, an earlier chat)
+  // is not asked again: the chat reads it from their own browser's cookie.
+  const known = await getKnownEmail();
+
   if (!thread) {
     return NextResponse.json(
-      { messages: [], publicId: null, unread: 0, hasEmail: false },
+      { messages: [], publicId: null, unread: 0, hasEmail: Boolean(known) },
       { headers: { "Cache-Control": "no-store" } },
     );
   }
@@ -125,7 +130,7 @@ export async function GET(request: Request) {
       changes,
       receipts,
       publicId: thread.publicId,
-      hasEmail: Boolean(thread.email),
+      hasEmail: Boolean(thread.email || known),
       unread: open ? 0 : thread.unreadForCustomer,
     },
     { headers: { "Cache-Control": "no-store" } },

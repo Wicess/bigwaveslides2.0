@@ -3,6 +3,9 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { headers, cookies } from "next/headers";
+import { after } from "next/server";
+import { visitorId } from "@/lib/chat/core";
+import { sendOrderInvoiceToChat } from "@/lib/chat/order-invoice";
 import { prisma } from "@/lib/prisma";
 import { getCartCookie, clearCartCookie } from "@/lib/cart-session";
 import { orderNumber } from "@/lib/ref-number";
@@ -270,6 +273,12 @@ export async function createOrderRequest(
 
     // Sign this browser into the customer's account (passwordless, same device).
     if (customerId) await createCustomerSession(customerId, data.name);
+
+    // The invoice image, into the customer's chat on the site (owner, 2026-11-01).
+    // Their chat cookie is read now; the drawing and posting happen after the
+    // response, so placing the order is never slowed down or failed by it.
+    const chatVisitor = await visitorId(true).catch(() => null);
+    after(() => sendOrderInvoiceToChat(order.id, { visitor: chatVisitor }));
 
     // Mark cart converted and drop the session cookie.
     await prisma.cart.update({

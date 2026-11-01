@@ -35,9 +35,18 @@ export function SubscribePopup({ locale = "en" }: { locale?: string }) {
     };
     const first = window.setTimeout(show, INTERVAL_MS);
     const interval = window.setInterval(show, INTERVAL_MS);
+    // An email given in the live chat subscribes this visitor too: the chat sets
+    // the same flag and fires this, and the pop-up closes at once and stays away.
+    const subscribedElsewhere = () => {
+      setOpen(false);
+      window.clearTimeout(first);
+      window.clearInterval(interval);
+    };
+    window.addEventListener("bws:subscribed", subscribedElsewhere);
     return () => {
       window.clearTimeout(first);
       window.clearInterval(interval);
+      window.removeEventListener("bws:subscribed", subscribedElsewhere);
     };
   }, []);
 

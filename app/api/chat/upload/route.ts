@@ -17,6 +17,8 @@ import { checkReceipt } from "@/lib/chat/receipts";
 import { reportError } from "@/lib/chat/report-error";
 import { keys, putObject } from "@/lib/chat/storage";
 import { z } from "zod";
+import { getKnownEmail } from "@/lib/chat/known-email";
+import { subscribeNewsletter } from "@/server/actions/newsletter";
 
 const emailSchema = z.string().trim().toLowerCase().email().max(320);
 
@@ -70,7 +72,8 @@ export async function POST(request: Request) {
   const typedEmail = emailSchema.safeParse(form?.get("email") ?? "");
   const email = typedEmail.success ? typedEmail.data : null;
   const existing = await findThread(visitor);
-  if (!existing?.email && !email) {
+  const known = await getKnownEmail();
+  if (!existing?.email && !email && !known) {
     return NextResponse.json(
       {
         ok: false,
@@ -82,7 +85,15 @@ export async function POST(request: Request) {
   }
 
   try {
-    const thread = await ensureThread({ visitor, email });
+    const thread = await ensureThread({ visitor, email: email ?? known });
+    // A typed email subscribes it too, as in a typed message (api/chat/send).
+    let subscribed = false;
+    if (email && !existing?.email) {
+      subscribed = Boolean(
+        (await subscribeNewsletter({ email, source: "chat" }).catch(() => null))
+          ?.ok,
+      );
+    }
     const wasWaiting = thread.unreadForAdmin > 0;
     const previousCustomerAt = await lastCustomerMessageAt(thread.id);
 
@@ -137,6 +148,7 @@ export async function POST(request: Request) {
       ok: true,
       message: forCustomer(message),
       hasEmail: true,
+      subscribed,
     });
   } catch (error) {
     await reportError(error, {
