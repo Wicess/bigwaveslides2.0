@@ -33,7 +33,6 @@ export function AccountChip({ label }: { label: string }) {
   return (
     <Link
       href="/account/chat"
-      aria-label={label}
       className={cn(
         "relative grid size-9 place-items-center rounded-md border text-white transition-colors sm:size-11",
         signedIn
@@ -48,6 +47,7 @@ export function AccountChip({ label }: { label: string }) {
       ) : (
         <User className="size-4 sm:size-[18px]" />
       )}
+      <span className="sr-only">{label}</span>
       <ChatUnreadBadge className="-top-1.5 -right-1.5" />
     </Link>
   );

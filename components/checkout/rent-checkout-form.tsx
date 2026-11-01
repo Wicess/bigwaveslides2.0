@@ -19,6 +19,7 @@ import {
 } from "@/components/checkout/promo-field";
 import { OrderBreakdown } from "@/components/checkout/order-breakdown";
 import { ReservationConfirmed } from "@/components/checkout/reservation-confirmed";
+import { markHasThread } from "@/lib/chat/unread-store";
 
 type DateRange = { start: string | null; end: string | null };
 
@@ -118,6 +119,8 @@ export function RentCheckoutForm({
         website: String(fd.get("website") ?? ""),
       });
       if (res.ok) {
+        // The invoice is now in their chat: watch it for the team's replies.
+        markHasThread();
         setDone({
           orderNumber: res.orderNumber,
           dueCents: res.dueCents,

@@ -29,6 +29,7 @@ import {
 } from "@/components/checkout/promo-field";
 import { OrderBreakdown } from "@/components/checkout/order-breakdown";
 import { ReservationConfirmed } from "@/components/checkout/reservation-confirmed";
+import { markHasThread } from "@/lib/chat/unread-store";
 
 export type CartCheckoutLine = {
   productId: string;
@@ -209,6 +210,8 @@ export function CartCheckoutForm({
         website: String(fd.get("website") ?? ""),
       });
       if (res.ok) {
+        // The invoice is now in their chat: watch it for the team's replies.
+        markHasThread();
         setDone({
           orderNumber: res.orderNumber,
           dueCents: res.dueCents,

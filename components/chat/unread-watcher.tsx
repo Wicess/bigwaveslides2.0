@@ -17,6 +17,13 @@ import {
 const EVERY_MS = 30_000;
 const IDLE_AFTER_MS = 3 * 60_000;
 
+/** The profile (`/en/account…`), where the chat is a full-screen tab, not a pop-up. */
+function onProfile(): boolean {
+  return /^\/[a-z]{2}(-[A-Za-z]{2})?\/account(\/|$)/.test(
+    window.location.pathname,
+  );
+}
+
 /**
  * Keeps the unread badges current while the chat is closed, and when a new staff
  * message arrives, opens the chat pop-up onto it (owner, 2026-11-01) and pops a
@@ -29,13 +36,6 @@ const IDLE_AFTER_MS = 3 * 60_000;
  * come back to it. A web push the service worker receives while the site is open is
  * passed to the page (public/sw.js), so the check runs the moment a reply is sent.
  */
-/** The profile (`/en/account…`), where the chat is a full-screen tab, not a pop-up. */
-function onProfile(): boolean {
-  return /^\/[a-z]{2}(-[A-Za-z]{2})?\/account(\/|$)/.test(
-    window.location.pathname,
-  );
-}
-
 export function UnreadWatcher() {
   useEffect(() => {
     let lastActivity = Date.now();
@@ -63,8 +63,15 @@ export function UnreadWatcher() {
         }
         const before = getUnread();
         setUnread(data.unread);
-        if (data.unread > before && !onProfile()) openChat();
-        if (data.unread > before && storedNotificationsOn()) {
+        if (data.unread <= before) return;
+        // On the site, the pop-up opening IS the alert; a notification on top would
+        // announce the same message twice. On the profile, or a hidden tab, notify.
+        const popUp = !onProfile();
+        if (popUp) openChat();
+        if (
+          (!popUp || document.visibilityState !== "visible") &&
+          storedNotificationsOn()
+        ) {
           const n = data.unread;
           void showReplyNotification(
             n === 1

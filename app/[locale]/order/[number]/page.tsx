@@ -26,6 +26,7 @@ import { QuoteActions } from "@/components/order/quote-actions";
 import { InvoicePayment } from "@/components/order/invoice-payment";
 import { PendingOrderFlag } from "@/components/order/pending-order-flag";
 import { ClaimAccount } from "@/components/order/claim-account";
+import { RememberChatThread } from "@/components/chat/remember-thread";
 import { cn } from "@/lib/utils";
 
 const LOGO = brandLogoUrl(CANONICAL_ORIGIN);
@@ -127,6 +128,8 @@ export default async function OrderFlowPage({ params }: Props) {
           details land or the order is paid. Renders nothing. */}
       {/* Opening this emailed link signs the browser into the account. */}
       <ClaimAccount orderNumber={order.orderNumber} />
+      {/* Its invoice is in the customer's chat: watch that for replies. */}
+      <RememberChatThread />
       <PendingOrderFlag
         orderNumber={order.orderNumber}
         email={order.guestEmail ?? ""}
