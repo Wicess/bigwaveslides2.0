@@ -144,12 +144,12 @@ export function PaymentWatcher() {
     checkRef.current = check;
   }, [router]);
 
-  // Pauses on hidden/idle, resumes with an immediate check. See useLivePoll.
-  // idleMs is generous here (10 min) because a buyer genuinely waiting on
-  // payment details may sit still without touching the page.
+  // Pauses on hidden/idle (3 min without a touch, the site-wide rule), and
+  // resumes with an immediate check the moment they touch the page or come back
+  // to the tab, so a buyer who sat still sees the details on their first tap.
   useLivePoll(() => checkRef.current?.(), {
     intervalMs: POLL_MS,
-    idleMs: 10 * 60_000,
+    idleMs: 3 * 60_000,
   });
 
   return null;

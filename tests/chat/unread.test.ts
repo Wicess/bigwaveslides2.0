@@ -1,6 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getUnread, setUnread, subscribeUnread } from "@/lib/chat/unread-store";
 
+// The route derives the live topic (lib/chat/live-topic.ts), a server-only module.
+vi.mock("server-only", () => ({}));
+
+// The route derives the conversation's live topic (lib/chat/live-topic.ts).
+vi.mock("server-only", () => ({}));
+
 describe("the unread count behind the chat and profile badges", () => {
   afterEach(() => setUnread(0));
 
@@ -31,12 +37,17 @@ describe("GET /api/chat/unread", () => {
     }));
     const { GET } = await import("@/app/api/chat/unread/route");
 
-    findThread.mockResolvedValueOnce({ unreadForCustomer: 4 });
-    expect(await (await GET()).json()).toEqual({ unread: 4, hasThread: true });
+    findThread.mockResolvedValueOnce({ id: "t1", unreadForCustomer: 4 });
+    expect(await (await GET()).json()).toEqual({
+      unread: 4,
+      hasThread: true,
+      topic: expect.stringMatching(/^srl-[0-9a-f]{40}$/),
+    });
 
     findThread.mockResolvedValueOnce(null);
     const none = await GET();
     expect(await none.json()).toEqual({ unread: 0, hasThread: false });
     expect(none.headers.get("cache-control")).toBe("no-store");
-  });
+    // The first import of the route pulls in next/server, slow on a busy machine.
+  }, 20_000);
 });

@@ -27,7 +27,7 @@ export function useLivePoll(
   fn: () => void | Promise<void>,
   {
     intervalMs,
-    idleMs = 5 * 60_000,
+    idleMs = 3 * 60_000,
     enabled = true,
   }: { intervalMs: number; idleMs?: number; enabled?: boolean },
 ) {
@@ -82,8 +82,11 @@ export function useLivePoll(
     };
 
     // Passive listeners: these fire often and must never block scrolling.
+    // Never "scroll": the auto-moving carousels and smooth scroller fire it
+    // forever, which kept an untouched tab "active" and polling. A real person
+    // scrolling with a wheel or a finger still counts (wheel / touchstart).
     const opts = { passive: true } as const;
-    const events = ["pointerdown", "keydown", "scroll", "touchstart"] as const;
+    const events = ["pointerdown", "keydown", "touchstart", "wheel"] as const;
     for (const e of events) window.addEventListener(e, wake, opts);
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("focus", wake);

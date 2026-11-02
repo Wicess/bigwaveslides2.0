@@ -76,7 +76,9 @@ const nextConfig: NextConfig = {
               "font-src 'self' data:",
               "style-src 'self' 'unsafe-inline'",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-              "connect-src 'self' https:",
+              // https://ntfy.sh: the live chat's EventSource (components/chat/live-channel.ts).
+              // Already covered by https:, named so a tightened policy keeps it.
+              "connect-src 'self' https: https://ntfy.sh",
               "frame-ancestors 'self'",
               "form-action 'self'",
               "upgrade-insecure-requests",

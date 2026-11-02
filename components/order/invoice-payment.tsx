@@ -424,7 +424,7 @@ function AwaitingDetails({
   }, []);
 
   // Slow fallback polling — the global <PaymentWatcher /> (mounted in the
-  // locale layout) already checks every 6s and reveals via the
+  // locale layout) already checks every 20s and reveals via the
   // bws:payment-ready event below. This 30s loop only covers the case where
   // localStorage is unavailable (so the watcher never armed).
   React.useEffect(() => {
@@ -453,7 +453,7 @@ function AwaitingDetails({
   // an immediate check, so returning to the tab is faster than it used to be.
   useLivePoll(() => statusCheckRef.current?.(), {
     intervalMs: 45_000,
-    idleMs: 10 * 60_000,
+    idleMs: 3 * 60_000,
   });
 
   React.useEffect(() => {

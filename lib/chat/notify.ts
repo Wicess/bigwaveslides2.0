@@ -38,6 +38,25 @@ export function alertLines(
     .join("\n");
 }
 
+/**
+ * A content-free "something changed" ping for the live chat (lib/chat/live-topic.ts).
+ * One attempt, short timeout, never throws. `Cache: no` keeps ntfy.sh from storing
+ * it and `Firebase: no` keeps it off Google's push relay: nobody but an open
+ * browser tab ever needs it.
+ */
+export async function pingTopic(server: string, topic: string): Promise<void> {
+  try {
+    await fetch(`${server.replace(/\/$/, "")}/${encodeURIComponent(topic)}`, {
+      method: "POST",
+      headers: { Cache: "no", Firebase: "no" },
+      body: "",
+      signal: AbortSignal.timeout(4000),
+    });
+  } catch {
+    // Ignored: the client's safety check catches up.
+  }
+}
+
 const ATTEMPTS = 3;
 
 export async function notify(message: NtfyMessage): Promise<boolean> {

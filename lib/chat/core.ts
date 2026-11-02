@@ -15,10 +15,13 @@ import {
 } from "@/lib/chat/visitor-cookie";
 import { deleteObject } from "@/lib/chat/storage";
 import { absoluteUrl } from "@/lib/chat/routes";
+import { pingStaff, pingThread } from "@/lib/chat/live-topic";
 import {
   cleanBody,
   deriveDisplayName,
+  isRecent,
   newPublicId,
+  ONLINE_WINDOW_MS,
   previewLine,
 } from "./rules";
 
@@ -214,7 +217,7 @@ export async function postMessage(input: {
   readonly ip?: string | null;
 }) {
   const now = new Date();
-  return db.$transaction(async (tx) => {
+  const created = await db.$transaction(async (tx) => {
     const created = await tx.supportMessage.create({
       data: {
         threadId: input.threadId,
@@ -265,6 +268,13 @@ export async function postMessage(input: {
     });
     return created;
   }, TX_LIMITS);
+  // Wake whoever is waiting, after the commit (lib/chat/live-topic.ts). A customer's
+  // message wakes the inbox; the team's — a reply, a photo, the automatic invoice —
+  // wakes the customer's browser. The automatic welcome is posted in the customer's
+  // own request, which already fetches it.
+  if (input.fromCustomer) pingStaff();
+  else if (!input.isSystem) pingThread(input.threadId);
+  return created;
 }
 
 /**
@@ -325,6 +335,10 @@ export async function customerViewing(thread: {
   readonly unreadForCustomer: number;
   readonly customerLastSeenAt: Date | null;
 }): Promise<void> {
+  // The customer just opened their chat: the inbox shows them as here at once, and
+  // keeps their conversation on its quick refresh while they are (chat-inbox.tsx).
+  // Once per visit, not per poll: only when they had dropped out of the window.
+  if (!isRecent(thread.customerLastSeenAt, ONLINE_WINDOW_MS)) pingStaff();
   if (thread.unreadForCustomer > 0) {
     await markRead(thread.id, "CUSTOMER");
     return;
@@ -535,6 +549,8 @@ export async function deleteThreads(
   if (found.length === 0) return 0;
   // Messages cascade with their thread.
   await db.supportThread.deleteMany({ where: { id: { in: found } } });
+  // An open chat learns at once that its conversation is gone.
+  for (const id of found) pingThread(id);
 
   const keys = threads.flatMap((t) =>
     t.messages

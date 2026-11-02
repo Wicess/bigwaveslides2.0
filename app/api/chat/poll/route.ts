@@ -8,6 +8,7 @@ import {
 } from "@/lib/chat/core";
 import { forCustomer } from "@/lib/chat/serialize";
 import { getKnownEmail } from "@/lib/chat/known-email";
+import { threadTopic } from "@/lib/chat/live-topic";
 
 /**
  * The customer's live view of their conversation.
@@ -130,6 +131,8 @@ export async function GET(request: Request) {
       changes,
       receipts,
       publicId: thread.publicId,
+      // Where the team's replies are announced (lib/chat/live-topic.ts).
+      topic: threadTopic(thread.id),
       hasEmail: Boolean(thread.email || known),
       unread: open ? 0 : thread.unreadForCustomer,
     },

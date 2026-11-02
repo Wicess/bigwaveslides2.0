@@ -22,6 +22,13 @@ import {
   enablePushNotifications,
 } from "@/components/chat/push-client";
 import { openInstallGuide } from "@/components/chat/install-store";
+import {
+  getCustomerTopic,
+  holdLiveWhileHidden,
+  isLive,
+  setCustomerTopic,
+  watchCustomer,
+} from "@/components/chat/live-channel";
 
 /**
  * Customer-side chat state: history, live updates, optimistic sending.
@@ -35,7 +42,8 @@ import { openInstallGuide } from "@/components/chat/install-store";
  * poll against Neon would hold the database awake for every visitor with a tab open.
  * So:
  *
- *   · panel OPEN, tab visible, customer active  → every 3s
+ *   · panel OPEN, tab visible, customer active  → every 3s, and at once on a ping
+ *                                                 from the team (live-channel.ts)
  *   · panel closed                              → nothing at all
  *   · tab hidden                                → nothing, then one catch-up poll
  *   · no interaction for 3 minutes              → nothing, until they touch the page
@@ -73,9 +81,10 @@ const TYPING_THROTTLE_MS = 2500;
 /*
   Reply notifications. Polling normally stops while the tab is hidden, so a reply
   could never reach someone who switched away. With notifications on and the chat
-  open, a hidden tab checks slowly for a short while after their last activity,
+  open, a hidden tab keeps listening for a short while after their last activity,
   then stops — enough to catch a reply they are waiting for, never an open-ended
-  timer holding the database awake.
+  timer holding the database awake. It listens on the live stream (a ping, then one
+  poll); only when the stream is unavailable does it fall back to a slow poll.
 */
 const HIDDEN_POLL_MS = 30_000;
 const HIDDEN_NOTIFY_WINDOW_MS = 10 * 60_000;
@@ -161,6 +170,8 @@ export function useChat({ open }: { open: boolean }) {
         changes?: ChatMessage[];
         receipts?: { id: string; receipt: "delivered" }[];
         publicId: string | null;
+        /** The conversation's live topic (lib/chat/live-topic.ts). */
+        topic?: string | null;
         hasEmail?: boolean;
       };
 
@@ -199,6 +210,7 @@ export function useChat({ open }: { open: boolean }) {
         });
       }
       setPublicId(data.publicId);
+      setCustomerTopic(data.topic);
       if (data.hasEmail) setHasEmail(true);
       if (data.publicId) markHasThread();
       // An open chat has read everything on screen: the badges go to zero.
@@ -229,7 +241,9 @@ export function useChat({ open }: { open: boolean }) {
       const waitingForReply =
         !visible &&
         storedNotificationsOn() &&
-        Date.now() - lastActivityRef.current < HIDDEN_NOTIFY_WINDOW_MS;
+        Date.now() - lastActivityRef.current < HIDDEN_NOTIFY_WINDOW_MS &&
+        // The stream is holding on for them: a ping will bring the poll.
+        !isLive(getCustomerTopic());
       if ((visible && active) || waitingForReply) await poll();
       if (!cancelled)
         timer = window.setTimeout(tick, visible ? OPEN_MS : HIDDEN_POLL_MS);
@@ -244,10 +258,16 @@ export function useChat({ open }: { open: boolean }) {
     };
     const onVisible = () => {
       if (document.visibilityState === "visible") {
+        holdLiveWhileHidden(0);
         lastActivityRef.current = Date.now();
         void poll();
+      } else if (storedNotificationsOn()) {
+        // Keep hearing the team's replies for the notification window.
+        holdLiveWhileHidden(lastActivityRef.current + HIDDEN_NOTIFY_WINDOW_MS);
       }
     };
+    // The team wrote: fetch it now, not at the next tick.
+    const stopLive = watchCustomer(() => void poll());
 
     const ACTIVITY = ["pointerdown", "keydown", "touchstart", "wheel"] as const;
     for (const event of ACTIVITY)
@@ -257,6 +277,8 @@ export function useChat({ open }: { open: boolean }) {
     return () => {
       cancelled = true;
       if (timer) window.clearTimeout(timer);
+      stopLive();
+      holdLiveWhileHidden(0);
       for (const event of ACTIVITY)
         window.removeEventListener(event, markActive);
       document.removeEventListener("visibilitychange", onVisible);

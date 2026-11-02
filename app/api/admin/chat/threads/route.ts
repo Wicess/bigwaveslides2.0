@@ -5,6 +5,7 @@ import { deleteThreads } from "@/lib/chat/core";
 import { isRecent, ONLINE_WINDOW_MS, TYPING_WINDOW_MS } from "@/lib/chat/rules";
 import { reportError } from "@/lib/chat/report-error";
 import { requireChatAdmin } from "@/lib/chat/admin-guard";
+import { staffTopic } from "@/lib/chat/live-topic";
 
 /**
  * The inbox list.
@@ -115,6 +116,8 @@ export async function GET(request: Request) {
         };
       }),
       totalUnread: threads.reduce((sum, t) => sum + t.unreadForAdmin, 0),
+      // The inbox's silent live topic (lib/chat/live-topic.ts), admins only.
+      topic: staffTopic(),
     },
     { headers: { "Cache-Control": "no-store" } },
   );

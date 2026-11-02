@@ -20,6 +20,7 @@ import { requireChatAdmin } from "@/lib/chat/admin-guard";
 import { reportError } from "@/lib/chat/report-error";
 import { staffReplyNotification } from "@/lib/push/customer";
 import { sendPushToVisitor } from "@/lib/push/server";
+import { pingThread } from "@/lib/chat/live-topic";
 
 /**
  * One conversation, from the operator's side.
@@ -338,6 +339,8 @@ export async function POST(
           data: { body, editedAt: new Date() },
         });
         await refreshThreadSummary(id);
+        // The correction reaches an open chat at once (lib/chat/live-topic.ts).
+        pingThread(id);
         await recordAdminAction({
           entityType: "SupportMessage",
           entityId: message.id,
@@ -369,6 +372,7 @@ export async function POST(
           data: { deletedAt: new Date() },
         });
         await refreshThreadSummary(id);
+        pingThread(id);
         await recordAdminAction({
           entityType: "SupportMessage",
           entityId: message.id,

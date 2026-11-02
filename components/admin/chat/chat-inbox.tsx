@@ -7,6 +7,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type CSSProperties,
 } from "react";
 import {
@@ -30,6 +31,11 @@ import {
 import { EmojiTray } from "@/components/chat/emoji-tray";
 import { PresenceDot } from "@/components/chat/presence-dot";
 import { useActivePoll } from "@/components/chat/use-active-poll";
+import {
+  isLive,
+  subscribeLiveStatus,
+  watchLive,
+} from "@/components/chat/live-channel";
 import { useViewportHeight } from "@/components/chat/use-viewport-height";
 import { ConfirmDialog } from "./confirm-dialog";
 import {
@@ -69,9 +75,14 @@ import type {
  * WHAT IS DIFFERENT, and why:
  *
  *  · POLLING STOPS WHEN NOBODY IS THERE. WHAM polls the list every 8s and the thread
- *    every 3–8s for as long as the tab is visible. Here both also stop after three
- *    minutes without a touch — an inbox left open on a second monitor is exactly the
+ *    every 3–8s for as long as the tab is visible. Here both also stop after a
+ *    minute without a touch — an inbox left open on a second monitor is exactly the
  *    pattern the cost playbook exists to stop (useActivePoll).
+ *  · PUSHED, NOT POLLED, WHEN IT CAN BE. The server pings a silent staff topic on
+ *    ntfy.sh whenever a customer writes or opens their chat (lib/chat/live-topic.ts);
+ *    the inbox listens (live-channel.ts) and refreshes at once. While that stream is
+ *    up the timers slow to 30s, except while a customer is actually here (online or
+ *    typing), when the quick cadence stays for the typing preview and receipts.
  *  · BLOCK IS CHAT-ONLY. WHAM bans the IP from the whole site by mirroring the block
  *    list into Redis for its edge proxy. This site has no Redis, and a database
  *    lookup on every request would keep Neon awake around the clock.
@@ -87,6 +98,11 @@ const LIST_MS = 8000;
 /** While the customer is on screen or typing, the conversation deserves 3s. */
 const THREAD_FAST_MS = 3000;
 const THREAD_SLOW_MS = 8000;
+/**
+ * With the live stream up, new messages arrive by ping, so a quiet inbox only
+ * re-reads for what pings do not carry (a customer leaving, a receipt).
+ */
+const LIVE_SLOW_MS = 30_000;
 const MAX_FILE_BYTES = 15 * 1024 * 1024;
 
 type Confirm = null | "block" | "delete" | "bulk";
@@ -171,6 +187,8 @@ export function ChatInbox({
   const [query, setQuery] = useState("");
   const [searchBusy, setSearchBusy] = useState(false);
   const [signedOut, setSignedOut] = useState(false);
+  /** The inbox's silent ntfy topic, from the list response. */
+  const [liveTopic, setLiveTopic] = useState<string | null>(null);
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<ReadonlySet<string>>(
     () => new Set(),
@@ -238,8 +256,12 @@ export function ChatInbox({
         return;
       }
       if (!res.ok) return;
-      const data = (await res.json()) as { threads: InboxThread[] };
+      const data = (await res.json()) as {
+        threads: InboxThread[];
+        topic?: string | null;
+      };
       setThreads(data.threads);
+      if (data.topic) setLiveTopic(data.topic);
       setSignedOut(false);
     } catch {
       // Transient. The next tick retries.
@@ -336,7 +358,13 @@ export function ChatInbox({
   // the active timer. A search result is a deliberate lookup, not a live feed —
   // re-running a message-body search every 8 seconds would be the most expensive
   // thing the inbox does, and would reshuffle rows mid-read — so it does not repeat.
-  useActivePoll(loadThreads, LIST_MS, {
+  const live = useSyncExternalStore(
+    subscribeLiveStatus,
+    () => isLive(liveTopic),
+    () => false,
+  );
+  const someoneHere = threads.some((t) => t.online || t.typing);
+  useActivePoll(loadThreads, live && !someoneHere ? LIVE_SLOW_MS : LIST_MS, {
     immediate: true,
     key: `${filter}|${query}`,
     repeat: query.length < 2 && !signedOut,
@@ -347,10 +375,28 @@ export function ChatInbox({
     if (id) await loadThread(id, true);
   }, [loadThread]);
   const customerHere = Boolean(profile?.online || profile?.typing);
-  useActivePoll(pollThread, customerHere ? THREAD_FAST_MS : THREAD_SLOW_MS, {
-    enabled: Boolean(activeId) && !signedOut,
-    key: activeId ?? "",
-  });
+  useActivePoll(
+    pollThread,
+    customerHere ? THREAD_FAST_MS : live ? LIVE_SLOW_MS : THREAD_SLOW_MS,
+    {
+      enabled: Boolean(activeId) && !signedOut,
+      key: activeId ?? "",
+    },
+  );
+
+  // A customer wrote or opened their chat: refresh the list and the open
+  // conversation now. A search result is a lookup, not a live feed, so it stays.
+  const onPingRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    onPingRef.current = () => {
+      if (query.length < 2) void loadThreads();
+      void pollThread();
+    };
+  }, [query, loadThreads, pollThread]);
+  useEffect(() => {
+    if (!liveTopic || signedOut) return;
+    return watchLive(liveTopic, () => onPingRef.current());
+  }, [liveTopic, signedOut]);
 
   // 300ms after the last keystroke, and only from two characters up.
   useEffect(() => {
