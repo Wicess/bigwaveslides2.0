@@ -4,9 +4,14 @@ import { redirect } from "next/navigation";
 import { SignJWT, jwtVerify } from "jose";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import {
+  ADMIN_COOKIE,
+  ADMIN_SESSION_TTL_SECONDS,
+  adminSessionCookieOptions,
+  adminSessionSecret,
+} from "@/lib/admin-session-policy";
 
-export const ADMIN_COOKIE = "bws_admin";
-const SESSION_HOURS = 8;
+export { ADMIN_COOKIE };
 
 export type AdminSession = {
   id: string;
@@ -18,28 +23,24 @@ export type AdminSession = {
   superAdmin: boolean;
 };
 
-function secret(): Uint8Array {
-  return new TextEncoder().encode(
-    process.env.NEXTAUTH_SECRET ?? "dev-secret-change-me-in-production",
-  );
-}
+// 90 days, renewed by middleware while the device is in use; see
+// lib/admin-session-policy.ts.
+const secret = adminSessionSecret;
 
 export async function createAdminSession(payload: AdminSession): Promise<void> {
   const token = await new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(payload.id)
     .setIssuedAt()
-    .setExpirationTime(`${SESSION_HOURS}h`)
+    .setExpirationTime(
+      Math.floor(Date.now() / 1000) + ADMIN_SESSION_TTL_SECONDS,
+    )
     .sign(secret());
 
   const store = await cookies();
-  store.set(ADMIN_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: SESSION_HOURS * 60 * 60,
-  });
+  // Lax, not Strict: a tap on an ntfy notification opens the admin from
+  // another app, and Strict cookies are not sent then.
+  store.set(ADMIN_COOKIE, token, adminSessionCookieOptions());
 }
 
 export async function destroyAdminSession(): Promise<void> {
@@ -79,7 +80,9 @@ export function can(session: AdminSession, permission: string): boolean {
 }
 
 /** Guard requiring a specific permission. */
-export async function requirePermission(permission: string): Promise<AdminSession> {
+export async function requirePermission(
+  permission: string,
+): Promise<AdminSession> {
   const session = await requireAdmin();
   if (!can(session, permission)) redirect("/admin");
   return session;

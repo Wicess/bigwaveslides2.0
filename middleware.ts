@@ -3,6 +3,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { CANONICAL_HOST, isAliasHost } from "./lib/site";
 import { isBounceState } from "./lib/locations";
+import {
+  ADMIN_COOKIE,
+  adminSessionCookieOptions,
+  renewedAdminToken,
+} from "./lib/admin-session-policy";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -32,7 +37,31 @@ const RETIRED_POSTS: Record<string, string> = {
 // prefixing them with a locale would 404 the two files Google reads first.
 const UNLOCALIZED = new Set(["/sitemap.xml", "/robots.txt"]);
 
+/**
+ * Keep a device that uses the admin signed in. A valid admin session more than
+ * a day old is re-signed with a fresh 90 days (identity and permissions
+ * unchanged); see lib/admin-session-policy.ts. The admin area is not localized
+ * and was never host-redirected, so it skips every rule below.
+ */
+async function adminMiddleware(req: NextRequest) {
+  const res = NextResponse.next();
+  // Page loads only. Sign-in and sign-out are server-action POSTs that set or
+  // clear this cookie themselves; renewing alongside could undo a sign-out.
+  if (req.method !== "GET") return res;
+  const renewed = await renewedAdminToken(req.cookies.get(ADMIN_COOKIE)?.value);
+  if (renewed)
+    res.cookies.set(ADMIN_COOKIE, renewed, adminSessionCookieOptions());
+  return res;
+}
+
 export default function middleware(req: NextRequest) {
+  if (
+    req.nextUrl.pathname === "/admin" ||
+    req.nextUrl.pathname.startsWith("/admin/")
+  ) {
+    return adminMiddleware(req);
+  }
+
   // Every rule below rewrites some part of the URL, and until now each one
   // returned its own redirect. That built chains: http://splashrep.com/ cost
   // three hops (→ https, → www, → /en) before a byte of HTML was served.
@@ -173,5 +202,7 @@ export const config = {
     // next-intl by UNLOCALIZED.
     "/sitemap.xml",
     "/robots.txt",
+    // Admin pages, only so a signed-in session can be renewed (adminMiddleware).
+    "/admin/:path*",
   ],
 };
