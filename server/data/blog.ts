@@ -209,3 +209,52 @@ export const getPopularTags = unstable_cache(
   ["blog-tags"],
   { tags: ["blog"], revalidate: 3600 },
 );
+
+/** A tag page carrying this many posts or fewer is not worth indexing. */
+const THIN_TAG_POSTS = 2;
+
+/**
+ * Which tag pages are worth offering to a search engine.
+ *
+ * Seven tag slugs duplicate a category slug, and in every case the category is
+ * a SUBSET of the tag: every post in /blog/category/events also carries the
+ * events tag, so the two URLs list 86% the same posts. That is two addresses for
+ * one listing, which is the only genuine duplicate content measured anywhere on
+ * this site. The category is the primary taxonomy — one per post, in the URL
+ * hierarchy, linked from the blog nav — so the duplicate TAG is the one that
+ * gives way.
+ *
+ * Also drops tags down to a couple of posts, which is a listing page with
+ * nothing much to list.
+ *
+ * Both still render and still work for a reader clicking a chip; they are
+ * noindex and absent from the sitemap, not deleted. Nothing becomes
+ * unreachable, and the distinct tags (rentals, tips, parties...) are untouched.
+ *
+ * NOTE: no `.catch` here on purpose — see the note in server/data/rentals.ts.
+ * An error inside unstable_cache would cache an empty list, which would silently
+ * noindex every tag page for the whole revalidate window.
+ */
+export const getIndexableTagSlugs = unstable_cache(
+  async () => {
+    const [cats, tags] = await withRetry(() =>
+      Promise.all([
+        prisma.blogCategory.findMany({ select: { slug: true } }),
+        prisma.tag.findMany({
+          select: {
+            slug: true,
+            _count: { select: { posts: { where: { status: "PUBLISHED" } } } },
+          },
+        }),
+      ]),
+    );
+    const categorySlugs = new Set(cats.map((c) => c.slug));
+    return tags
+      .filter(
+        (t) => !categorySlugs.has(t.slug) && t._count.posts > THIN_TAG_POSTS,
+      )
+      .map((t) => t.slug);
+  },
+  ["blog-indexable-tags"],
+  { tags: ["blog"], revalidate: 3600 },
+);

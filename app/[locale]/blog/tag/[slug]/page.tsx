@@ -7,6 +7,7 @@ import {
   getPosts,
   getBlogCategories,
   getPopularTags,
+  getIndexableTagSlugs,
   getTagBySlug,
 } from "@/server/data/blog";
 import { getLocalized } from "@/lib/localized";
@@ -56,6 +57,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // lowercase word mid-title reads like a bug.
     title: `Water Slide Articles About ${name.charAt(0).toUpperCase()}${name.slice(1)}`,
     description: `Posts tagged ${name.toLowerCase()}: water slide and bounce house rental advice covering cost, space, safety, weather and booking across the US.`,
+    // Seven tag slugs duplicate a category slug and list up to 86% the same
+    // posts; those, and tags with barely anything to list, are not offered to
+    // search engines. The page still renders for anyone clicking the chip.
+    noindex: !(await getIndexableTagSlugs()).includes(slug),
   });
 }
 

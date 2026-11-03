@@ -7,6 +7,7 @@ import {
   getPostSlugs,
   getBlogCategories,
   getPopularTags,
+  getIndexableTagSlugs,
 } from "@/server/data/blog";
 import {
   BOUNCE_STATE_KEYS,
@@ -153,13 +154,15 @@ const BOUNCE_STATE_PATHS = BOUNCE_STATE_KEYS.map(
 const USE_CASE_PATHS = USE_CASES.map((u) => `/water-slides-for/${u.slug}`);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, rentals, posts, blogCats, tags] = await Promise.all([
-    getProductSlugs().catch(() => []),
-    getRentalSlugs().catch(() => []),
-    getPostSlugs().catch(() => []),
-    getBlogCategories().catch(() => []),
-    getPopularTags().catch(() => []),
-  ]);
+  const [products, rentals, posts, blogCats, tags, indexableTags] =
+    await Promise.all([
+      getProductSlugs().catch(() => []),
+      getRentalSlugs().catch(() => []),
+      getPostSlugs().catch(() => []),
+      getBlogCategories().catch(() => []),
+      getPopularTags().catch(() => []),
+      getIndexableTagSlugs(),
+    ]);
 
   // Per-URL lastModified where we genuinely know it. Bing's guidelines (§3)
   // ask for accurate lastmod because it is how it decides what to re-crawl,
@@ -228,7 +231,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // later, which is the safe direction to be wrong in.
     ...[
       ...blogCats.map((c) => `/blog/category/${c.slug}`),
-      ...tags.map((t) => `/blog/tag/${t.slug}`),
+      // Only the tag pages that are not a near-duplicate of a category page —
+      // see getIndexableTagSlugs. Listing a noindex URL in a sitemap asks a
+      // crawler to fetch something it is then told to ignore.
+      ...tags
+        .filter((t) => indexableTags.includes(t.slug))
+        .map((t) => `/blog/tag/${t.slug}`),
     ].map((path) => ({ path, lastModified: CONTENT_UPDATED })),
   ];
 
