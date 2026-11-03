@@ -106,7 +106,7 @@ export async function acceptQuote(
         ].join("\n"),
         clickUrl: siteUrl(`/admin/orders/${updated.id}`),
         tags: ["white_check_mark", "ocean"],
-        priority: 4,
+        priority: 5,
       }).catch(() => {});
     });
 
@@ -233,7 +233,7 @@ export async function choosePaymentPlan(
           : manualMode
             ? ["envelope", "ocean"]
             : ["warning", "rotating_light"],
-        priority: resolved ? 4 : manualMode ? 4 : 5,
+        priority: 5,
       }).catch(() => {});
     });
 

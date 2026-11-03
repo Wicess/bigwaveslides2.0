@@ -20,7 +20,7 @@ export async function notifyAdminNtfy(opts: {
   clickUrl?: string;
   /** ntfy emoji shortcodes shown on the notification, e.g. ["shopping_cart"]. */
   tags?: string[];
-  /** 1 (min) … 5 (urgent). 4 = "high" — vibrates but doesn't override DND. */
+  /** 1 (min) … 5 (urgent). Defaults to 5: every owner alert alarms (overrides DND). */
   priority?: 1 | 2 | 3 | 4 | 5;
 }): Promise<void> {
   const topic = env.NTFY_TOPIC;
@@ -43,7 +43,7 @@ export async function notifyAdminNtfy(opts: {
         message: opts.message,
         ...(opts.clickUrl ? { click: opts.clickUrl } : {}),
         tags: opts.tags ?? ["ocean"],
-        priority: opts.priority ?? 4,
+        priority: opts.priority ?? 5,
       }),
       signal: AbortSignal.timeout(5000),
     });

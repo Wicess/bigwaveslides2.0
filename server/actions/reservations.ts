@@ -281,7 +281,7 @@ async function placeReservation({
       ].join("\n"),
       clickUrl: adminOrderUrl(order.id),
       tags: [isRent ? "calendar" : "shopping_cart"],
-      priority: 4,
+      priority: 5,
     }).catch(() => {});
 
     const rows = [

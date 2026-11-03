@@ -220,7 +220,7 @@ export async function notifyOrderRequest(o: OrderEmailInput): Promise<void> {
       o.orderId ? `/admin/orders/${o.orderId}` : "/admin/orders",
     ),
     tags: ["shopping_cart", "ocean"],
-    priority: 4,
+    priority: 5,
   });
 }
 
@@ -366,7 +366,7 @@ export async function notifyBookingRequest(
     ].join("\n"),
     clickUrl: siteUrl("/admin"),
     tags: ["calendar", "ocean"],
-    priority: 4,
+    priority: 5,
   });
 }
 
@@ -408,7 +408,7 @@ export async function notifyQuoteRequest(q: {
     ),
     clickUrl: siteUrl("/admin/quotes"),
     tags: ["memo", "ocean"],
-    priority: 4,
+    priority: 5,
   });
 }
 
@@ -475,7 +475,7 @@ export async function notifyContact(c: {
     ].join("\n"),
     clickUrl: siteUrl("/admin/contacts"),
     tags: ["envelope", "ocean"],
-    priority: 4,
+    priority: 5,
   });
 }
 
@@ -554,8 +554,7 @@ export async function notifyNewsletterSignup(s: {
     ].join("\n"),
     clickUrl: siteUrl("/admin/newsletter"),
     tags: ["mailbox_with_mail", "ocean"],
-    // Lower priority than orders — a subscribe is nice, not urgent.
-    priority: 3,
+    priority: 5,
   });
 }
 
